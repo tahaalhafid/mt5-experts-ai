@@ -1,0 +1,149 @@
+FACTORY ARCHITECTURE IMPROVEMENT — PHASE 6
+FACTORY UTILITY ACCOUNTING CONTRACT
+
+contract_version=PHASE6_FACTORY_UTILITY_ACCOUNTING_CONTRACT_V1
+artifact_role=FACTORY_UTILITY_ACCOUNTING_CONTRACT
+artifact_authority_class=CONTROL_PLANE_CONTRACT
+phase_name=UTILITY_ACCOUNTING_LAYER
+
+1) PURPOSE
+
+This contract defines what utility means inside the factory.
+Utility accounting exists to describe bounded downstream usefulness of factory structure and analytical work.
+
+Utility accounting in this factory may express:
+- contradiction exposure
+- ambiguity exposure
+- false precision exposure
+- structural classification clarity
+- routing clarity
+- early rejection support
+- review load reduction potential
+- candidate packaging clarity
+- explicit no-additional-downstream-utility states
+- support-only / zero-emission utility truth
+
+Utility accounting in this factory must NOT imply:
+- review happened
+- validation succeeded
+- experiment succeeded
+- canon eligibility
+- runtime permission
+- live trading value
+- profitability
+- real-world edge proof
+
+2) DIFFERENCE FROM OTHER FACTORY LAYERS
+
+Lifecycle truth answers:
+- where a material currently is
+
+Routing truth answers:
+- where a material is currently routed next and why
+
+Internal intelligence truth answers:
+- what bounded analytical delta is claimed beyond decomposition
+
+Utility truth answers:
+- what bounded downstream usefulness is being claimed
+- what type of practical structural/analytical value is present
+- what no-impact state applies if no additional downstream utility is observable
+
+Utility accounting does NOT replace lifecycle, routing, internal intelligence, review, or validation truth.
+
+3) UTILITY CLAIM CATEGORIES
+
+Defined categories:
+- CONTRADICTION_EXPOSURE
+- AMBIGUITY_EXPOSURE
+- FALSE_PRECISION_EXPOSURE
+- STRUCTURAL_CLASSIFICATION_CLARITY
+- ROUTING_CLARITY
+- EARLY_REJECTION_SUPPORT
+- REVIEW_LOAD_REDUCTION_POTENTIAL
+- CANDIDATE_PACKAGING_CLARITY
+- NO_ADDITIONAL_DOWNSTREAM_UTILITY
+- SUPPORT_ONLY_NO_EMITTED_UTILITY
+
+These are utility categories only.
+They are not proof of downstream success, review success, experiment success, canon value, or trading value.
+
+4) NO-IMPACT / LOW-IMPACT STATES
+
+Defined states:
+- NO_IMPACT_DETECTED
+- SUPPORT_ONLY_NO_EMISSION
+- STRUCTURAL_ONLY_NO_DOWNSTREAM_EFFECT
+- UTILITY_NOT_YET_OBSERVABLE
+- INSUFFICIENT_DOWNSTREAM_EVIDENCE
+
+These states are conservative.
+They preserve zero-state honesty and prevent architectural richness from being mistaken for emitted usefulness.
+
+5) UTILITY BASIS MODEL
+
+Defined basis categories:
+- MATERIAL_STRUCTURE_ONLY
+- DECOMPOSITION_CLARITY
+- NORMALIZED_RECORD_CLARITY
+- INTERNAL_INTELLIGENCE_DELTA
+- ROUTING_DISCIPLINE
+- MIXED_FACTORY_DISCIPLINE
+- ZERO_STATE_TRUTH_PRESERVATION
+
+Every utility claim should be able to state its basis.
+Utility basis must remain interpretable without guessing.
+
+6) BLOCKER INTERPRETATION DISCIPLINE
+
+Routing blockers may mean either:
+- blocker to the current downstream route
+or
+- blocker to progression beyond the current downstream route
+
+This phase does NOT redesign routing semantics.
+For utility clarity only, the architecture may distinguish:
+- current_route_blocker_interpretation
+- onward_progression_blocker_interpretation
+
+Unless explicitly stated otherwise, listed blockers on a material with an emitted current route are interpreted conservatively as blockers to progression beyond the emitted current route.
+
+7) BOUNDARY RULES
+
+Utility accounting remains:
+- non-runtime
+- non-mutative
+- non-authoritative
+- non-validating
+- non-promotional
+- non-executing
+
+A utility claim may improve clarity or accountability.
+It does not approve action by itself.
+
+8) ZERO-STATE HONESTY
+
+If emitted utility records are absent in a given layer:
+- utility_supported may still be true
+- utility_visibility_enabled may still be true
+- utility_record_emitted must remain false
+- a no-impact state such as SUPPORT_ONLY_NO_EMISSION or UTILITY_NOT_YET_OBSERVABLE must remain available
+
+No utility record should be fabricated merely to populate the model.
+
+9) CONTROL / DATA PLANE DISCIPLINE
+
+This contract is control-plane truth.
+Per-record utility claims are data-plane truth.
+Mixed surfaces must state explicitly that they summarize rather than redefine record truth.
+
+10) INTERPRETATION RULE
+
+No utility claim may be interpreted as:
+- proof of trading edge
+- proof of profitability
+- proof of runtime usefulness
+- proof of canon worthiness
+- proof of experiment success
+
+Utility accounting is bounded architectural accountability only.

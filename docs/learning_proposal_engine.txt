@@ -1,0 +1,127 @@
+AI LEARNING PROPOSAL ENGINE
+document_role=AUTHORITATIVE_LEARNING_PROPOSAL_ENGINE_POLICY
+document_version=L3_LEARNING_PROPOSAL_ENGINE_V1
+authority_scope=BOUNDED_LEARNING_PROPOSAL_FORMATION_AND_PACKAGING_ONLY
+linked_learning_contract=docs/learning_governance_contract.txt
+linked_learning_scope_boundaries=docs/learning_scope_boundaries.txt
+linked_learning_prohibited_mutation_paths=docs/learning_prohibited_mutation_paths.txt
+linked_evidence_pipeline=docs/learning_evidence_pipeline.txt
+linked_evidence_catalog=docs/learning_evidence_catalog.txt
+linked_evidence_quality_policy=docs/learning_evidence_quality_policy.txt
+linked_human_review_workflow=docs/ai_human_review_workflow.txt
+linked_review_decision_matrix=docs/ai_review_decision_matrix.txt
+linked_learning_proposal_types=docs/learning_proposal_types.txt
+linked_learning_proposal_risk_policy=docs/learning_proposal_risk_policy.txt
+trust_rule=defines_how_governed_learning_evidence_may_become_bounded_reviewable_proposals_without_creating_runtime_mutation_or_self_authorized_optimization
+policy_note=This phase formalizes proposal formation, boundedness, packaging, and pre-review discipline for governed learning. It does not implement a runtime proposal engine, proposal auto-generation, experiments, or live change application.
+non_goal=no_runtime_proposal_engine
+non_goal=no_automatic_proposal_generator
+non_goal=no_live_mutation
+non_goal=no_experiment_launcher
+non_goal=no_repository_writer
+non_goal=no_scheduler_orchestrator
+non_goal=no_authority_expansion
+
+LEARNING PROPOSAL PURPOSE
+A learning proposal is a bounded review artifact that translates governed evidence into a clearly scoped suggestion for further human review.
+It is not a runtime instruction, not a plan overwrite, and not a direct mutation request.
+Every learning proposal remains non-authoritative, review-governed, and non-mutative by default.
+
+PROPOSAL FORMATION LOGIC
+1. A governed evidence bundle exists and remains traceable.
+2. Evidence sufficiency and quality are checked against the claim being made.
+3. Proposal family is matched to the narrowest valid proposal type.
+4. Boundedness is checked for scope, target domain, limitations, validation intent, and rollback note.
+5. Prohibited mutation path check is performed conceptually.
+6. Proposal risk class is assigned.
+7. Proposal is packaged for review as a bounded non-authoritative artifact.
+
+PROPOSAL ELIGIBILITY RULES
+A governed evidence bundle may become a learning proposal only when all of the following are true:
+- evidence bundle type is appropriate for the intended proposal family
+- evidence sufficiency is adequate for the claim being made
+- evidence quality is acceptable for the proposal scope
+- proposal scope is explicit and bounded
+- target subsystem or policy area is named
+- mutation prohibition note is explicit
+- no authority elevation implication exists
+- no narrative-confidence-only promotion is being used
+- limitations are disclosed
+- validation intent is stated
+- required review level is identified
+
+PRE-REVIEW DISQUALIFICATION RULES
+A proposal draft must not proceed to review packaging when any of the following is true:
+- source evidence is THIN_EVIDENCE for the claimed scope
+- unresolved ambiguity remains too high for the claim
+- linkage to source evidence bundle is missing or weak
+- proposal scope jumps across unrelated zones, families, or policy layers without bounded support
+- rationale depends mainly on AI-derived narrative without stronger evidence support
+- direct or hidden mutation intent is present
+- boundedness note is missing
+- validation intent is missing
+- rollback note is missing where risk class requires one
+- risk framing is unsupported or misleading
+- proposal packaging omits non_authoritative_notice
+
+BOUNDEDNESS RULES
+Each learning proposal must define:
+- exact proposal scope
+- intended review scope
+- target subsystem or policy area
+- expected benefit
+- expected risk
+- limitations
+- evidence basis
+- validation intent
+- rollback note
+- mutation prohibition note
+
+Boundedness exists to prevent:
+- broad "optimize the system" proposals
+- vague global performance-improvement claims
+- unspecified multi-layer mutation proposals
+- hidden runtime change requests
+- authority-expanding requests disguised as learning suggestions
+
+RELATIONSHIP TO PRIOR AND LATER PHASES
+- L3 depends on L1 for learning-governance contract and prohibited mutation rules.
+- L3 depends on L2 for evidence families, source hierarchy, sufficiency, and quality rules.
+- L3 feeds later review-governed learning decisions in L4 and later phases.
+- L3 does not authorize experiments by itself.
+- L3 does not authorize promotion, rollback, activation, or live runtime change.
+- L3 proposals remain review artifacts only.
+
+TRACEABILITY EXPECTATIONS
+Each packaged learning proposal should conceptually track:
+- learning_proposal_id
+- source_evidence_bundle_ids
+- proposal_family_name
+- proposal_risk_class
+- proposal_scope
+- proposal_status_pre_review
+- required_review_level
+- proposal_limitations
+- downstream_review_relevance
+
+AI ROLE IN PROPOSAL FORMATION
+AI may:
+- suggest proposal family
+- summarize evidence
+- draft bounded rationale
+- package proposal fields
+- identify limitations and uncertainty
+
+AI may not:
+- self-authorize proposal approval
+- convert a draft proposal into runtime change
+- bypass evidence sufficiency or quality rules
+- conceal ambiguity
+- inflate confidence to simulate stronger evidence
+- create implicit authority expansion
+
+FINAL RULE
+A learning proposal is a bounded review package, not a control surface.
+direct_apply_allowed=false
+auto_apply_allowed=false
+runtime_mutation_authorized=false

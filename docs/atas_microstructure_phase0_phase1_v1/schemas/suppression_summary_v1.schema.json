@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "atas.suppression_summary.v1",
+  "title": "ATAS Suppression Summary V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_family",
+    "suppression_id",
+    "packet_id",
+    "suppression_scope",
+    "suppressed_field_families",
+    "suppression_reason_codes",
+    "suppression_timestamp_utc"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "ATAS_SUPPRESSION_SUMMARY_V1"
+    },
+    "packet_family": {
+      "const": "suppression_summary"
+    },
+    "suppression_id": {
+      "type": "string"
+    },
+    "packet_id": {
+      "type": "string"
+    },
+    "suppression_scope": {
+      "type": "string",
+      "enum": [
+        "FIELD_LEVEL",
+        "FAMILY_LEVEL",
+        "PACKET_LEVEL"
+      ]
+    },
+    "suppressed_field_families": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "suppression_reason_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "suppression_timestamp_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

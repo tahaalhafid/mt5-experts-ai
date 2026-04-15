@@ -1,0 +1,95 @@
+EDGE TRIGGER ARCHETYPES
+Authority: Institutional Edge Factory trigger archetype design only.
+Truth posture: Trigger archetype definitions only. No runtime behavior change.
+
+============================================================
+TRIGGER ARCHETYPES
+============================================================
+- SWEEP_THEN_RECLAIM
+  A liquidity sweep or raid is followed by reclaim/acceptance behavior that turns the sweep into a timing event.
+
+- BREAK_THEN_ACCEPT
+  A structural break occurs, then price shows acceptance beyond the break rather than only momentary excursion.
+
+- BREAK_THEN_RETEST_ACCEPT
+  A break is followed by retest and renewed acceptance. This archetype requires more patience than immediate breakout chase logic.
+
+- PULLBACK_HOLD_THEN_EXPAND
+  Trend structure holds during pullback, then re-expands in the trend direction.
+
+- FAILED_BREAK_RETURN
+  A break attempt fails and price returns into the prior structure with sufficient rejection/acceptance quality.
+
+- RANGE_EDGE_REJECTION
+  A range edge interaction rejects and rotates away from the edge with enough quality to matter.
+
+- COMPRESSION_RELEASE
+  Compressed structure releases into directional expansion.
+
+- MICRO_EXPANSION_RELEASE
+  Small local structure releases into micro expansion; highly late-sensitive and easily degraded by noise.
+
+- MOMENTUM_CONTINUATION_CONFIRM
+  Continuation thesis requires visible continuation confirmation via expansion/close/follow-through quality.
+
+- POST_DISPLACEMENT_REENTRY
+  Displacement already occurred; timing becomes valid when the reentry/reload condition preserves initiative quality.
+
+============================================================
+CURRENT E5 CONSERVATIVE FAMILY-TO-ARCHETYPE READ
+============================================================
+- LIQUIDITY_REVERSAL
+  Primary archetype:
+  - SWEEP_THEN_RECLAIM
+
+- MEAN_RECLAIM
+  Primary archetype:
+  - RANGE_EDGE_REJECTION
+  Secondary reversal-context archetype:
+  - FAILED_BREAK_RETURN
+
+- TREND_CONTINUATION
+  Primary archetype:
+  - MOMENTUM_CONTINUATION_CONFIRM
+  Pullback-context secondary archetype:
+  - POST_DISPLACEMENT_REENTRY
+
+- TREND_PULLBACK_CONTINUATION
+  Primary archetype:
+  - PULLBACK_HOLD_THEN_EXPAND
+
+- COMPRESSION_BREAKOUT
+  Primary archetype:
+  - COMPRESSION_RELEASE
+  Secondary expansion-context archetype:
+  - BREAK_THEN_ACCEPT
+
+- VOL_BREAKOUT
+  Primary archetype:
+  - BREAK_THEN_ACCEPT
+
+- EXPANSION_CONTINUATION
+  Primary archetype:
+  - POST_DISPLACEMENT_REENTRY
+  Secondary continuation archetype:
+  - MOMENTUM_CONTINUATION_CONFIRM
+
+- MICRO_RANGE_BREAK
+  Primary archetype:
+  - MICRO_EXPANSION_RELEASE
+
+============================================================
+BOUNDARY NOTE
+============================================================
+These archetypes remain:
+- factory-level timing categories
+- non-runtime
+- non-executing
+- non-licensing
+
+They are intentionally earlier than:
+- invalidation architecture
+- risk geometry
+- exit design
+- scorecards
+- governance export

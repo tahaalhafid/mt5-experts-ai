@@ -1,0 +1,96 @@
+LEARNING REVIEW MATRIX
+document_role=AUTHORITATIVE_LEARNING_PROPOSAL_TO_REVIEWER_MAPPING
+document_version=L4_LEARNING_REVIEW_MATRIX_V1
+authority_scope=LEARNING_PROPOSAL_REVIEWER_ASSIGNMENT_AND_DECISION_PATH_MAPPING_ONLY
+linked_workflow=docs/learning_review_decision_workflow.txt
+linked_decision_outcomes=docs/learning_decision_outcomes.txt
+linked_learning_proposal_types=docs/learning_proposal_types.txt
+linked_learning_proposal_risk_policy=docs/learning_proposal_risk_policy.txt
+linked_roles_policy=docs/ai_review_roles_and_responsibilities.txt
+trust_rule=maps_learning_proposal_families_to_human_review_roles_without_creating_runtime_authority
+policy_note=This matrix defines who normally reviews each learning proposal family, how escalation works, and which roles are prohibited from approval.
+
+REVIEW ROLE BASELINE
+- OPERATOR = may view and flag only; may not approve any learning proposal.
+- ADMIN_REVIEWER = default triage role and first-line reviewer for lower-risk bounded proposals.
+- REVIEW_BOARD = formal reviewer for higher-risk, structured, and governance-sensitive learning proposals.
+- COMMITTEE_REVIEWER = exceptional reviewer for justified governance-sensitive escalations only.
+
+FAMILY TO REVIEWER MAPPING
+
+- OBSERVATION_ONLY_PROPOSAL
+  primary_reviewer_role=ADMIN_REVIEWER
+  optional_escalation_role=REVIEW_BOARD
+  prohibited_reviewer_roles=OPERATOR
+  rationale=Observation-only proposals are usually low-risk and often close, defer, or support later stronger packages rather than proceed directly.
+  normal_decision_path=DEFER,REJECT,CLOSE_NO_ACTION,REQUIRE_MORE_EVIDENCE
+
+- INSTRUMENTATION_PROPOSAL
+  primary_reviewer_role=ADMIN_REVIEWER
+  optional_escalation_role=REVIEW_BOARD
+  prohibited_reviewer_roles=OPERATOR
+  rationale=Instrumentation proposals are commonly narrow and lower risk but still require governed review for scope and side effects.
+  normal_decision_path=ACCEPT_FOR_GOVERNED_ACTION_PREPARATION,DEFER,REJECT,REQUIRE_MORE_EVIDENCE
+
+- INVESTIGATION_PROPOSAL
+  primary_reviewer_role=ADMIN_REVIEWER
+  optional_escalation_role=REVIEW_BOARD
+  prohibited_reviewer_roles=OPERATOR
+  rationale=Investigation proposals often need triage first and may escalate if uncertainty, cross-scope implications, or repeated unresolved patterns appear.
+  normal_decision_path=REQUIRE_MORE_EVIDENCE,DEFER,ACCEPT_FOR_EXPERIMENT,ESCALATE,REJECT
+
+- EXPERIMENT_CANDIDATE_PROPOSAL
+  primary_reviewer_role=REVIEW_BOARD
+  optional_escalation_role=COMMITTEE_REVIEWER
+  prohibited_reviewer_roles=OPERATOR
+  rationale=Experiment candidates require stronger evidence, clearer risk framing, and formal governed consideration before any later experiment phase may even be considered.
+  normal_decision_path=ACCEPT_FOR_EXPERIMENT,REQUIRE_MORE_EVIDENCE,DEFER,REJECT,ESCALATE
+
+- BOUNDED_POLICY_REVIEW_PROPOSAL
+  primary_reviewer_role=REVIEW_BOARD
+  optional_escalation_role=COMMITTEE_REVIEWER
+  prohibited_reviewer_roles=OPERATOR
+  rationale=Policy review proposals can affect governance handling and therefore require structured board-level review and occasional committee escalation.
+  normal_decision_path=ACCEPT_FOR_GOVERNED_ACTION_PREPARATION,REQUIRE_MORE_EVIDENCE,DEFER,REJECT,ESCALATE
+
+- BOUNDED_THRESHOLD_REVIEW_PROPOSAL
+  primary_reviewer_role=REVIEW_BOARD
+  optional_escalation_role=COMMITTEE_REVIEWER
+  prohibited_reviewer_roles=OPERATOR
+  rationale=Threshold review proposals are more sensitive because they can point toward later constrained change planning and must not be handled casually.
+  normal_decision_path=ACCEPT_FOR_EXPERIMENT,ACCEPT_FOR_GOVERNED_ACTION_PREPARATION,REQUIRE_MORE_EVIDENCE,REJECT,ESCALATE
+
+- BOUNDED_GATING_REVIEW_PROPOSAL
+  primary_reviewer_role=REVIEW_BOARD
+  optional_escalation_role=COMMITTEE_REVIEWER
+  prohibited_reviewer_roles=OPERATOR
+  rationale=Gating review proposals are governance-sensitive because they can affect future bounded control surfaces or review boundaries.
+  normal_decision_path=ACCEPT_FOR_GOVERNED_ACTION_PREPARATION,REQUIRE_MORE_EVIDENCE,DEFER,REJECT,ESCALATE
+
+- LEARNING_SCOPE_TIGHTENING_PROPOSAL
+  primary_reviewer_role=REVIEW_BOARD
+  optional_escalation_role=COMMITTEE_REVIEWER
+  prohibited_reviewer_roles=OPERATOR
+  rationale=Scope tightening proposals affect what future learning may consider and are therefore governance-sensitive even when conservative.
+  normal_decision_path=ACCEPT_FOR_GOVERNED_ACTION_PREPARATION,DEFER,REQUIRE_MORE_EVIDENCE,ESCALATE,REJECT
+
+- LEARNING_SCOPE_NARROWING_PROPOSAL
+  primary_reviewer_role=REVIEW_BOARD
+  optional_escalation_role=COMMITTEE_REVIEWER
+  prohibited_reviewer_roles=OPERATOR
+  rationale=Scope narrowing proposals may shape future learning boundaries and require careful governance review before any later planning action.
+  normal_decision_path=ACCEPT_FOR_GOVERNED_ACTION_PREPARATION,DEFER,REQUIRE_MORE_EVIDENCE,ESCALATE,REJECT
+
+ROLE PROHIBITIONS
+- OPERATOR may not issue ACCEPT_FOR_EXPERIMENT.
+- OPERATOR may not issue ACCEPT_FOR_GOVERNED_ACTION_PREPARATION.
+- OPERATOR may not approve or promote any learning proposal.
+- ADMIN_REVIEWER may not treat acceptance as runtime activation.
+- REVIEW_BOARD may not convert a reviewed proposal into live mutation.
+- COMMITTEE_REVIEWER may not create direct execution authority through review.
+
+MAPPING PRINCIPLES
+- Proposal family mapping must remain conservative and risk-aware.
+- Governance-sensitive or higher-risk proposals default upward toward REVIEW_BOARD rather than downward toward fast approval.
+- Committee involvement is exceptional, not routine.
+- Weak proposals should not escalate merely to avoid rejection.

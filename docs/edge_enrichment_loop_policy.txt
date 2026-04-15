@@ -1,0 +1,42 @@
+EDGE ENRICHMENT LOOP POLICY
+phase_id=E10
+policy_role=CONTINUOUS_EDGE_ENRICHMENT_GOVERNANCE_ONLY
+
+1) PURPOSE
+Continuous enrichment means governed re-entry of new evidence, new market-native findings, new raw sources, scorecard/governance outputs, and bounded internal findings back into the factory.
+It does NOT mean live self-modification.
+It does NOT mean automatic runtime mutation.
+It does NOT mean authority expansion.
+
+2) WHAT ENRICHMENT IS
+- controlled continuation of the factory lifecycle
+- bounded re-entry into intake, decomposition, review, governance, rescoping, research, or archive paths
+- evidence-based refinement without bypassing factory stages
+
+3) WHAT ENRICHMENT IS NOT
+- runtime mutation
+- direct promotion
+- direct suppression
+- direct runtime export
+- live parameter rewriting
+- autonomous self-learning control
+
+4) ALLOWED ENRICHMENT INPUTS
+- new market-native findings
+- new raw sources
+- new decomposition outputs
+- scorecard review signals
+- runtime accounting findings
+- deterioration signals
+- suppression or narrowing signals
+- governance review outcomes
+- internal post-trade / post-decision findings
+- AI decomposition or research outputs only within current bounded authority
+
+5) ANTI-MUTATION RULE
+All E10 enrichment remains non-runtime, non-mutative, non-executing, and non-licensing.
+Any enrichment signal must re-enter through a governed factory stage, not bypass it.
+
+6) ANTI-BLOAT RULE
+More loop signals do not equal more edge value.
+Repeated low-value re-entry should remain visible as loop noise rather than being reframed as progress.

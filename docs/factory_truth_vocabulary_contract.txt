@@ -1,0 +1,49 @@
+artifact_role=FACTORY_TRUTH_VOCABULARY_CONTRACT
+contract_version=PHASE1_TRUTH_VOCAB_DISCIPLINE_V1
+phase_name=TRUTH_AND_VOCABULARY_DISCIPLINE_LAYER
+
+purpose=Define exact factory truth-surface terminology so architecture support, emitted-record reality, and review/validation posture cannot be confused.
+
+term=defined
+meaning=The schema, contract, field family, or branch structure is formally declared.
+must_not_imply=enabled,emitted,linked,reviewed,validated,experiment_ready,canon_eligible
+
+term=supported
+meaning=The current architecture can carry, preserve, or reference the field family or capability without schema contradiction.
+must_not_imply=emitted,reviewed,validated,practical_usefulness,runtime_use
+
+term=enabled
+meaning=A detection, audit, or processing switch is configured to run if inputs exist.
+must_not_imply=records_emitted,records_reviewed,records_validated,records_useful,runtime_permission
+
+term=emitted
+meaning=A snapshot, artifact, or record set has actually been written in the current version.
+must_not_imply=reviewed,validated,experiment_ready,canon_eligible
+
+term=linked
+meaning=An emitted record contains explicit downstream or upstream references that connect it to other factory records.
+must_not_imply=reviewed,validated,approved
+
+term=reviewed
+meaning=An explicit human or governance review step has occurred and is recorded.
+must_not_imply=validated,experiment_ready,canon_eligible,runtime_permission
+
+term=validated
+meaning=The reviewed record has passed an explicit validation standard appropriate to its layer.
+must_not_imply=experiment_ready,canon_eligible,runtime_permission
+
+term=experiment_ready
+meaning=The reviewed and validated record is specifically suitable for later bounded experimentation consideration.
+must_not_imply=canon_eligible,runtime_permission,live_use
+
+term=canon_eligible
+meaning=The record is eligible for later canon consideration under governance.
+must_not_imply=canon_promoted,runtime_licensed,live_use
+
+term=archived
+meaning=The record or family is intentionally retained as historical or non-active reference.
+must_not_imply=deleted,unsupported,forgotten
+
+legacy_ready_field_rule=Legacy *_ready fields are retained only for backward continuity unless removed explicitly. In this phase they must be interpreted as architecture_defined_and_structurally_supported_only unless a more specific note says otherwise.
+legacy_available_field_rule=Legacy *_available fields must be interpreted as support_defined_only unless the file also states emitted-record truth explicitly.
+truth_surface_rule=Every touched truth-surface file should answer separately whether a capability is defined, supported, enabled, emitted, linked, reviewed, validated, experiment_ready, or canon_eligible.

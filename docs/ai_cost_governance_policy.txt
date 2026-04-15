@@ -1,0 +1,179 @@
+AI COST GOVERNANCE POLICY
+document_role=AUTHORITATIVE_AI_COST_GOVERNANCE_POLICY
+policy_version=A4_AI_COST_GOVERNANCE_POLICY_V1
+authority_scope=AI_COST_AND_SCHEDULING_GOVERNANCE_ONLY
+linked_authority_gate=H6_AI_ACTIVATION_READINESS_GATE
+linked_input_policy=docs/ai_access_policy.txt
+linked_task_registry=docs/ai_task_registry.txt
+linked_trigger_matrix=docs/ai_trigger_matrix.txt
+linked_output_contract=docs/ai_output_contract.txt
+policy_note=This policy defines bounded workload, budget intent, suppression intent, and depth downgrade rules only. It does not implement runtime counters or a scheduler.
+
+GOVERNING PRINCIPLES
+
+1)
+policy_name=SUMMARY_FIRST_COST_DISCIPLINE
+policy_purpose=Keep routine AI work low-cost by starting from summaries before any broader retrieval.
+enforcement_intent=Summaries are the default entry point for all eligible tasks. Raw slices are escalation-only.
+severity_if_violated=STANDARD
+related_task_families=ALL
+
+2)
+policy_name=SELECTIVE_ESCALATION_ONLY
+policy_purpose=Prevent broad unbounded retrieval and always-on deep analysis.
+enforcement_intent=Escalate from SUMMARY_ONLY to TARGETED_RETRIEVAL or DEEP_INVESTIGATION only when trigger strength and task policy allow.
+severity_if_violated=HIGH
+related_task_families=ALL
+
+3)
+policy_name=COOLDOWN_CONTROL
+policy_purpose=Prevent noisy reruns from repeated triggers with no material state change.
+enforcement_intent=Same-trigger and same-family cooldown must suppress redundant reruns within the defined window.
+severity_if_violated=STANDARD
+related_task_families=FORENSIC_ANALYSIS|DRIFT_ANALYSIS|ROOT_CAUSE_INVESTIGATION|COUNCIL_CONTEXTUAL_ADVISORY
+
+4)
+policy_name=DUPLICATE_TRIGGER_SUPPRESSION
+policy_purpose=Avoid repeated investigation of the same incident scope when no stronger evidence exists.
+enforcement_intent=Prefer suppression or lightweight update note instead of full rerun for the same incident scope.
+severity_if_violated=STANDARD
+related_task_families=FORENSIC_ANALYSIS|ROOT_CAUSE_INVESTIGATION|COVERAGE_GAP_ANALYSIS|LEARNING_GOVERNANCE_SUPPORT
+
+5)
+policy_name=HOURLY_AND_DAILY_HARD_CAP_DISCIPLINE
+policy_purpose=Keep AI workload bounded and operationally sane.
+enforcement_intent=Honor AIHourlyRunCap and AIDeepInvestigationDailyCap as hard policy ceilings, not soft suggestions.
+severity_if_violated=CRITICAL
+related_task_families=ALL
+
+6)
+policy_name=DEPTH_DOWNGRADE_UNDER_PRESSURE
+policy_purpose=Reduce cost when budget pressure rises.
+enforcement_intent=Downgrade DEEP_INVESTIGATION to TARGETED_RETRIEVAL or SUMMARY_ONLY under conservative or restricted pressure modes.
+severity_if_violated=HIGH
+related_task_families=ALL
+
+7)
+policy_name=NO_ALWAYS_ON_DEEP_ANALYSIS
+policy_purpose=Explicitly forbid continuous broad deep analysis behavior.
+enforcement_intent=Deep investigation must remain rare, trigger-justified, and daily-cap limited.
+severity_if_violated=CRITICAL
+related_task_families=FORENSIC_ANALYSIS|ROOT_CAUSE_INVESTIGATION|LEARNING_GOVERNANCE_SUPPORT|BOUNDED_PROPOSAL_GENERATION
+
+8)
+policy_name=COMPACT_OUTPUT_DISCIPLINE
+policy_purpose=Treat output length and detail as a cost-governed resource.
+enforcement_intent=Follow A3 compactness rules and downgrade output verbosity under budget pressure.
+severity_if_violated=STANDARD
+related_task_families=ALL
+
+9)
+policy_name=NO_BACKGROUND_BUDGET_FOR_UNREQUESTED_COPILOT
+policy_purpose=Keep operator copilot from consuming background budget.
+enforcement_intent=Operator copilot remains ON_DEMAND_ONLY and must not occupy routine background execution budget.
+severity_if_violated=STANDARD
+related_task_families=OPERATOR_COPILOT
+
+10)
+policy_name=ADVISORY_PROPOSAL_BUDGET_DISCIPLINE
+policy_purpose=Prevent proposal generation from becoming high-frequency noise.
+enforcement_intent=Bounded proposal generation remains advisory-only, cadence-limited, and budget-sensitive.
+severity_if_violated=HIGH
+related_task_families=BOUNDED_PROPOSAL_GENERATION
+
+RUNTIME BUDGET PRIMITIVES
+AIHourlyRunCap=Maximum total AI task runs intended within one hour window across all task families.
+AIDeepInvestigationDailyCap=Maximum number of DEEP_INVESTIGATION runs intended within one day window across all task families.
+AITriggerCooldownMinutes=Minimum trigger cooldown window before rerunning the same trigger family for the same scope.
+max_same_family_runs_per_hour=Per-family hourly run budget used to prevent one task family from starving the others.
+max_same_family_deep_runs_per_day=Per-family daily deep-investigation cap.
+max_incident_reports_per_window=Maximum incident-style report reruns allowed within one incident window before suppression or downgrade.
+max_three_day_reviews_per_window=Maximum institutional review generation frequency within its intended review window.
+max_council_advisory_runs_per_bar_or_cycle=Maximum advisory packet generation intent for one candidate/bar/cycle.
+budget_pressure_mode=Operational policy mode that controls downgrade aggressiveness and non-critical task deferral.
+
+BUDGET CLASSES
+LOW_COST
+typical_retrieval_depth=SUMMARY_ONLY
+typical_scope_expectation=compact summaries and narrow status surfaces only
+cadence_restrictions=may run more frequently within per-family caps
+escalation_restrictions=no deep retrieval by default
+expected_output_compactness=compact_or_concise
+approval_sensitivity=low
+
+MEDIUM_COST
+typical_retrieval_depth=SUMMARY_ONLY_or_TARGETED_RETRIEVAL
+typical_scope_expectation=summary-first with bounded raw slices only when justified
+cadence_restrictions=moderate cooldown discipline required
+escalation_restrictions=deep retrieval not default
+expected_output_compactness=bounded_medium
+approval_sensitivity=medium
+
+HIGH_COST
+typical_retrieval_depth=TARGETED_RETRIEVAL_or_DEEP_INVESTIGATION
+typical_scope_expectation=multi-slice bounded investigation for high-value review use
+cadence_restrictions=rare and cooldown-heavy
+escalation_restrictions=deep retrieval only on stronger evidence and within daily caps
+expected_output_compactness=bounded_structured_detail
+approval_sensitivity=high
+
+CRITICAL_COST
+typical_retrieval_depth=reserved_for_rare_critical_incident_investigation
+typical_scope_expectation=highest-cost bounded analysis under strongest trigger conditions only
+cadence_restrictions=hard-capped and strongly suppressed
+escalation_restrictions=never routine, never always-on
+expected_output_compactness=incident_focused_structured_detail
+approval_sensitivity=very_high
+
+BUDGET PRESSURE MODES
+NORMAL
+intended_behavior=Use default task budgets, standard cooldowns, and normal escalation discipline.
+
+CONSERVATIVE
+intended_behavior=Reduce deep investigation frequency, favor summary-only or targeted retrieval, postpone non-critical cadence work to next window where practical.
+
+RESTRICTED
+intended_behavior=Allow only critical event-driven work, compact council advisory, and explicit operator/admin request tasks. Defer non-critical cadence work and proposal work.
+
+DEPTH DOWNGRADE POLICY
+- Under CONSERVATIVE pressure, DEEP_INVESTIGATION should downgrade to TARGETED_RETRIEVAL unless the incident is CRITICAL.
+- Under RESTRICTED pressure, TARGETED_RETRIEVAL should downgrade to SUMMARY_ONLY where task policy allows.
+- Non-critical cadence tasks should defer to the next intended window before rerunning under pressure.
+- Proposal generation should defer before consuming deep-investigation budget when advisory budget is tight.
+- Council contextual advisory must remain compact and summary-only regardless of pressure mode.
+- Output verbosity should shorten under pressure according to A3 compactness rules.
+
+EVENT VS CADENCE PRECEDENCE RULES
+- Critical event-driven incident work may bypass normal cadence timing, but must still respect hard daily deep-investigation caps.
+- Council contextual advisory may run per candidate event, but only in compact summary-only mode and within per-candidate suppression limits.
+- Drift analysis should not rerun full analysis on minor events if the daily cadence window already covers the same scope.
+- Governance audit should remain cadence-led and should not be promoted by routine noise already covered by weekly review.
+- Operator copilot remains on-request and should not be suppressed by cadence windows when explicitly requested.
+- Learning-governance and proposal tasks should prefer cadence/review windows unless a stronger explicit review trigger exists.
+
+TASK PRIORITY ORDER UNDER PRESSURE
+1=CRITICAL safety or incident-linked forensic tasks
+2=COUNCIL_CONTEXTUAL_ADVISORY compact packets only
+3=OPERATOR_COPILOT on explicit request
+4=ROOT_CAUSE_INVESTIGATION
+5=DRIFT_ANALYSIS
+6=LEARNING_GOVERNANCE_SUPPORT
+7=GOVERNANCE_AUDIT
+8=COVERAGE_GAP_ANALYSIS
+9=BOUNDED_PROPOSAL_GENERATION
+
+OUTPUT COMPACTNESS GOVERNANCE
+operator_copilot=concise_by_default
+council_contextual_advisory=compact_mandatory
+incident_reports=bounded_medium_detail
+daily_operating_reports=bounded_medium_detail
+three_day_reviews=broad_but_capped
+executive_briefs=concise_executive_summary
+reviewable_proposals=bounded_structured_detail_only
+
+NON-GOALS
+- no_runtime_budget_counter_implementation
+- no_runtime_scheduler_implementation
+- no_task_queue_or_orchestrator
+- no_report_repository_or_delivery_layer
+- no_authority_expansion_beyond_H6

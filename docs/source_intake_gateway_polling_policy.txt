@@ -1,0 +1,41 @@
+SOURCE INTAKE GATEWAY POLLING POLICY
+version=V1
+
+purpose:
+- provide safe periodic detection of gateway updates
+- maintain truthful status artifacts
+- avoid runtime mutation
+
+detection_mode=DETECTION_ONLY
+
+required_detection_behavior:
+- detect file existence
+- detect update changes using update_id and/or content hash
+- tolerate full replacement snapshots
+- tolerate temporary malformed JSON during writes
+- retry later without crashing
+- avoid duplicate spam for same unchanged update
+- write one clear INFO log on new update detection
+- update gateway status artifacts
+
+truthfulness_rules:
+- gateway_last_seen_modified_time must not claim a real filesystem modified time when it is not actually captured
+- when filesystem modified time is unavailable, the status field must state UNAVAILABLE_NOT_CAPTURED
+- gateway_snapshot_updated_at should carry the logical producer timestamp when present
+- gateway_snapshot_identity and gateway_producer_role should reflect observed gateway metadata when present
+
+required_status_outputs:
+- MQL5/Files/AI/edge_factory/registry/source_intake_gateway_status.txt
+- MQL5/Files/AI/edge_factory/registry/source_intake_gateway_status.json
+
+forbidden_polling_behavior:
+- auto-import into source_registry
+- auto-write into material_registry
+- auto-decomposition
+- auto-canon mutation
+- runtime trading impact
+- authority elevation
+
+gateway_pending_review_rule:
+- successful detection may set pending_review visibility
+- pending review does not imply automatic commit or processing

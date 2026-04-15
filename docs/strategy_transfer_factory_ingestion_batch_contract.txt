@@ -1,0 +1,53 @@
+STRATEGY TRANSFER — PACKAGE 3 LEGACY INGESTION BATCH CONTRACT
+Authority: Strategy-transfer Package 3 execution contract.
+Truth posture: Actual bounded legacy-to-factory ingestion contract. Not runtime authority.
+
+Purpose:
+- Define what an ingestion batch means.
+- Define what actual factory ingestion means in Package 3.
+- Define what non-ingested prepared legacy elements remain outside actual ingestion.
+- Preserve Package 1 freeze and Package 2 preparation truth.
+
+Batch meaning:
+- An ingestion batch is a bounded, explicit, truth-tracked set of prepared legacy elements selected for actual factory ingestion.
+- Batch ingestion is not global migration.
+- Batch ingestion is not canon admission.
+- Batch ingestion is not primitive extraction.
+- Batch ingestion is not archive finalization.
+- Batch ingestion is not controlled runtime re-admission.
+
+Actual factory ingestion means:
+- the selected legacy-prepared elements are represented inside factory-owned record surfaces as legacy-derived records or as legacy-derived links to already-existing factory records
+- lineage to inventory_id and legacy_intake_prep_id is preserved
+- first-pass reclassification may be applied only to ingested elements
+
+Non-ingested prepared elements remain:
+- prepared-only
+- not actually ingested
+- not actually reclassified in Package 3
+- not archived
+- not re-admitted
+
+Bounded Package 3 prioritization:
+1) runtime plan shell
+2) runtime council families
+3) runtime council strategies
+4) library strategy identities
+5) indicator / entry-pattern / risk-model / filter fragments
+6) orphaned legacy composition surface
+
+Package 3 actual ingestion scope:
+- first-wave bounded runtime-critical wave only
+- preferred size = 27
+- 1 runtime plan shell
+- 9 runtime council families
+- 17 runtime council strategies
+
+Truth rules:
+- An already-existing factory record may be linked as an actually ingested legacy element without duplicating it.
+- Non-ingested prepared elements must remain visible as prepared-only.
+- Primitive extraction has not yet occurred.
+- Shell collapse has not yet occurred.
+- Archive finalization has not yet occurred.
+- Controlled re-admission has not yet occurred.
+- Execution freeze from Package 1 remains active.

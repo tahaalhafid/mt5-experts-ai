@@ -1,0 +1,215 @@
+AI INTELLIGENCE REPOSITORY DESIGN
+document_role=AUTHORITATIVE_AI_INTELLIGENCE_REPOSITORY_DESIGN
+design_version=A5_AI_INTELLIGENCE_REPOSITORY_DESIGN_V1
+authority_scope=AI_REPOSITORY_ARCHITECTURE_AND_STORAGE_GOVERNANCE_ONLY
+linked_authority_gate=H6_AI_ACTIVATION_READINESS_GATE
+linked_input_policy=docs/ai_access_policy.txt
+linked_task_registry=docs/ai_task_registry.txt
+linked_output_contract=docs/ai_output_contract.txt
+linked_cost_governance=docs/ai_cost_governance_policy.txt
+repository_role=AI_INTELLIGENCE_ARCHIVE
+repository_authority_class=NON_AUTHORITATIVE_DERIVED_INTELLIGENCE_REPOSITORY
+trust_rule=repository_is_derived_review_intelligence_not_runtime_truth_not_plan_truth_not_control_surface
+design_note=This document defines repository object families, storage scopes, current-vs-historical roles, retention intent, and repository relationships only.
+non_goal=no_runtime_archive_writer
+non_goal=no_delivery_integration
+non_goal=no_search_engine
+non_goal=no_review_workflow_engine
+
+REPOSITORY OBJECT FIELD FORMAT
+- repository_object_name
+- source_task_families
+- source_output_class
+- expected_visibility_tier
+- storage_scope
+- current_vs_historical_role
+- index_priority
+- retention_intent
+- non_authoritative_status
+
+STORAGE SCOPE TAXONOMY
+- CURRENT_ACTIVE_SUMMARY = current active intelligence surface with short rolling recency.
+- INCIDENT_HISTORY = incident-linked forensic and anomaly history.
+- DAILY_HISTORY = cadence-driven daily intelligence history.
+- REVIEW_HISTORY = broader periodic institutional review history.
+- PROPOSAL_HISTORY = bounded proposals pending/reviewed history.
+- ADVISORY_HISTORY = council advisory packet history.
+- AUDIT_HISTORY = governance and compliance audit history.
+- LEARNING_HISTORY = learning-governance evidence and supporting review history.
+- OPERATOR_QUERY_HISTORY = operator-requested copilot response history.
+
+CURRENT VS HISTORICAL DISTINCTION
+- CURRENT_ACTIVE_SUMMARY records are current-facing, rolling, and supersedable by newer records of the same scope.
+- INCIDENT/DAILY/REVIEW/PROPOSAL/ADVISORY/AUDIT/LEARNING/QUERY history records are historical records with explicit time/scope keys.
+- PROPOSAL records may be current_pending_review or historical_reviewed; both remain non-authoritative.
+- Superseded/stale records remain historical unless later retention policy marks them purge-eligible.
+- Repository objects never become runtime-truth or active-plan truth merely by being the latest intelligence artifact.
+
+REPOSITORY OBJECT FAMILIES
+
+1)
+repository_object_name=HOURLY_WATCH_RECORD
+source_task_families=FORENSIC_ANALYSIS|DRIFT_ANALYSIS
+source_output_class=PERIODIC_REPORTS|DIAGNOSTIC_FINDINGS
+expected_visibility_tier=INTERNAL_SHADOW_ONLY|OPERATOR_VISIBLE
+storage_scope=CURRENT_ACTIVE_SUMMARY
+current_vs_historical_role=current_active_summary_with_short_rolling_history
+index_priority=HIGH
+retention_intent=ROLLING_SHORT
+non_authoritative_status=true
+
+2)
+repository_object_name=INCIDENT_REPORT_RECORD
+source_task_families=FORENSIC_ANALYSIS|ROOT_CAUSE_INVESTIGATION
+source_output_class=DIAGNOSTIC_FINDINGS|STRUCTURED_ANOMALIES
+expected_visibility_tier=OPERATOR_VISIBLE|ADMIN_VISIBLE|REVIEW_BOARD_VISIBLE
+storage_scope=INCIDENT_HISTORY
+current_vs_historical_role=historical_forensic_record
+index_priority=VERY_HIGH
+retention_intent=INCIDENT_FORENSIC_HISTORY
+non_authoritative_status=true
+
+3)
+repository_object_name=DAILY_INTELLIGENCE_RECORD
+source_task_families=DRIFT_ANALYSIS|LEARNING_GOVERNANCE_SUPPORT
+source_output_class=PERIODIC_REPORTS|LEARNING_GOVERNANCE_EVIDENCE
+expected_visibility_tier=OPERATOR_VISIBLE|ADMIN_VISIBLE
+storage_scope=DAILY_HISTORY
+current_vs_historical_role=rolling_recent_intelligence_then_historical
+index_priority=HIGH
+retention_intent=ROLLING_MEDIUM
+non_authoritative_status=true
+
+4)
+repository_object_name=THREE_DAY_REVIEW_RECORD
+source_task_families=DRIFT_ANALYSIS|LEARNING_GOVERNANCE_SUPPORT|GOVERNANCE_AUDIT
+source_output_class=PERIODIC_REPORTS|LEARNING_GOVERNANCE_EVIDENCE
+expected_visibility_tier=ADMIN_VISIBLE|REVIEW_BOARD_VISIBLE|COMMITTEE_VISIBLE
+storage_scope=REVIEW_HISTORY
+current_vs_historical_role=periodic_review_history
+index_priority=HIGH
+retention_intent=LONG_REVIEW_HISTORY
+non_authoritative_status=true
+
+5)
+repository_object_name=EXECUTIVE_BRIEF_RECORD
+source_task_families=GOVERNANCE_AUDIT|LEARNING_GOVERNANCE_SUPPORT
+source_output_class=PERIODIC_REPORTS|RECOMMENDATIONS
+expected_visibility_tier=ADMIN_VISIBLE|COMMITTEE_VISIBLE
+storage_scope=REVIEW_HISTORY
+current_vs_historical_role=current_brief_plus_historical_review_briefs
+index_priority=MEDIUM
+retention_intent=LONG_REVIEW_HISTORY
+non_authoritative_status=true
+
+6)
+repository_object_name=REVIEWABLE_PROPOSAL_RECORD
+source_task_families=BOUNDED_PROPOSAL_GENERATION
+source_output_class=REVIEWABLE_PROPOSALS
+expected_visibility_tier=REVIEW_BOARD_VISIBLE|ADMIN_VISIBLE
+storage_scope=PROPOSAL_HISTORY
+current_vs_historical_role=current_pending_review_or_historical_reviewed_proposal
+index_priority=VERY_HIGH
+retention_intent=PROPOSAL_AUDIT_HISTORY
+non_authoritative_status=true
+
+7)
+repository_object_name=GOVERNANCE_AUDIT_RECORD
+source_task_families=GOVERNANCE_AUDIT
+source_output_class=DIAGNOSTIC_FINDINGS|PERIODIC_REPORTS
+expected_visibility_tier=ADMIN_VISIBLE|REVIEW_BOARD_VISIBLE
+storage_scope=AUDIT_HISTORY
+current_vs_historical_role=historical_audit_record_with_latest_summary_reference
+index_priority=HIGH
+retention_intent=LONG_REVIEW_HISTORY
+non_authoritative_status=true
+
+8)
+repository_object_name=LEARNING_EVIDENCE_RECORD
+source_task_families=LEARNING_GOVERNANCE_SUPPORT|DRIFT_ANALYSIS|ROOT_CAUSE_INVESTIGATION
+source_output_class=LEARNING_GOVERNANCE_EVIDENCE
+expected_visibility_tier=REVIEW_BOARD_VISIBLE|ADMIN_VISIBLE
+storage_scope=LEARNING_HISTORY
+current_vs_historical_role=evidence_history_supporting_review_governance
+index_priority=VERY_HIGH
+retention_intent=PROPOSAL_AUDIT_HISTORY
+non_authoritative_status=true
+
+9)
+repository_object_name=COUNCIL_ADVISORY_RECORD
+source_task_families=COUNCIL_CONTEXTUAL_ADVISORY
+source_output_class=COUNCIL_CONTEXTUAL_ADVISORY
+expected_visibility_tier=OPERATOR_VISIBLE|ADMIN_VISIBLE
+storage_scope=ADVISORY_HISTORY
+current_vs_historical_role=compact_candidate_advisory_history
+index_priority=HIGH
+retention_intent=ROLLING_MEDIUM
+non_authoritative_status=true
+
+10)
+repository_object_name=OPERATOR_COPILOT_RECORD
+source_task_families=OPERATOR_COPILOT
+source_output_class=OPERATOR_ANSWERS
+expected_visibility_tier=OPERATOR_VISIBLE|ADMIN_VISIBLE
+storage_scope=OPERATOR_QUERY_HISTORY
+current_vs_historical_role=bounded_query_response_history
+index_priority=MEDIUM
+retention_intent=REVIEW_CYCLE
+non_authoritative_status=true
+
+11)
+repository_object_name=ANOMALY_RECORD
+source_task_families=FORENSIC_ANALYSIS|DRIFT_ANALYSIS|ROOT_CAUSE_INVESTIGATION
+source_output_class=STRUCTURED_ANOMALIES
+expected_visibility_tier=INTERNAL_SHADOW_ONLY|OPERATOR_VISIBLE|ADMIN_VISIBLE
+storage_scope=INCIDENT_HISTORY
+current_vs_historical_role=historical_anomaly_record_may_link_to_incident_or_drift_record
+index_priority=VERY_HIGH
+retention_intent=INCIDENT_FORENSIC_HISTORY
+non_authoritative_status=true
+
+12)
+repository_object_name=DRIFT_RECORD
+source_task_families=DRIFT_ANALYSIS
+source_output_class=DIAGNOSTIC_FINDINGS|LEARNING_GOVERNANCE_EVIDENCE
+expected_visibility_tier=INTERNAL_SHADOW_ONLY|ADMIN_VISIBLE|REVIEW_BOARD_VISIBLE
+storage_scope=DAILY_HISTORY
+current_vs_historical_role=rolling_drift_history_supporting_reviews
+index_priority=HIGH
+retention_intent=LONG_REVIEW_HISTORY
+non_authoritative_status=true
+
+13)
+repository_object_name=ROOT_CAUSE_RECORD
+source_task_families=ROOT_CAUSE_INVESTIGATION
+source_output_class=DIAGNOSTIC_FINDINGS|HYPOTHESES
+expected_visibility_tier=ADMIN_VISIBLE|REVIEW_BOARD_VISIBLE
+storage_scope=INCIDENT_HISTORY
+current_vs_historical_role=historical_root_cause_record_linked_to_incident_window
+index_priority=VERY_HIGH
+retention_intent=INCIDENT_FORENSIC_HISTORY
+non_authoritative_status=true
+
+REPOSITORY RELATIONSHIP RULES
+- Repository records store derived intelligence outputs and references, not live runtime control data.
+- Repository current summaries are read-oriented views; they do not mutate runtime truth.
+- Repository object families should link back to source task family, output class, and source report identifiers where available.
+- Duplicate incident outputs should resolve into one indexed incident lineage rather than uncontrolled duplicate records.
+- Council advisory records remain compact and candidate-scoped.
+- Proposal records remain reviewable only and never become auto-apply surfaces by storage alone.
+
+RELATIONSHIP TO DELIVERY LAYERS
+- Future delivery layers must read from repository-managed outputs, not from ad hoc raw AI text.
+- Telegram/email/admin delivery is deferred and not implemented in A5.
+- Repository-first design is required before any external delivery integration.
+
+RELATIONSHIP TO LEARNING GOVERNANCE
+- LEARNING_EVIDENCE_RECORD and REVIEWABLE_PROPOSAL_RECORD are primary repository supports for later L1-L7 learning-governance phases.
+- THREE_DAY_REVIEW_RECORD and GOVERNANCE_AUDIT_RECORD support review-board traceability.
+- Future post-change impact records may link back to repository proposal and review identifiers; this is not implemented in A5.
+
+ANTI-SPAM AND COMPACTNESS DISCIPLINE
+- Repository storage must remain structured, indexed, and bounded.
+- Duplicate incident outputs must not create uncontrolled duplicate repository entries.
+- Rolling summary scopes must remain capped and supersedable.
+- Compactness expectations from A3 and suppression/dedupe expectations from A4 apply to repository object creation intent.

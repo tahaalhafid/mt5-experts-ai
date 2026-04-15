@@ -1,0 +1,223 @@
+CURRENT CANON AUDIT REPORT
+Authority: Canon audit and reclassification reference for pre-intake control only.
+Truth posture: Documentation/inventory only. No runtime behavior change.
+
+============================================================
+PHASE IDENTITY
+============================================================
+Phase:
+- E-1 — Current Canon Audit & Reclassification
+
+Purpose:
+- Audit what edge/strategy/family/pattern/indicator material currently exists.
+- Reclassify current materials into a controlled canon structure before Institutional Edge Factory intake.
+- Prevent old strategy-library identity from competing directly with the runtime council canon without review.
+
+Non-goals:
+- No runtime family change
+- No code behavior change
+- No strategy/governor/execution mutation
+- No edge-family intake yet
+
+============================================================
+AUDIT METHOD
+============================================================
+Primary audited sources:
+- MQL5/Experts/AI/council_strategies.mqh
+- MQL5/Experts/AI/strategy_compiler.mqh
+- MQL5/Experts/AI/main_ea.mq5
+- MQL5/Experts/AI/LIBRARIES/library_strategies.mqh
+- MQL5/Experts/AI/LIBRARIES/library_indicators.mqh
+- MQL5/Experts/AI/LIBRARIES/library_entry_patterns.mqh
+- MQL5/Experts/AI/LIBRARIES/library_risk_models.mqh
+- MQL5/Experts/AI/LIBRARIES/library_filters.mqh
+- MQL5/Files/AI/ai_current_plan.json
+- MQL5/Files/AI/ai_build_zone.json
+- MQL5/Experts/AI/docs/zone_family_strategy_map.txt
+
+Audit rules used:
+1) Runtime-active material was recognized only when directly referenced in the council runtime or the compiled runtime-plan path.
+2) Passive library/reference material was not upgraded merely because it exists or is loaded at startup.
+3) Indicator / pattern / risk / filter items were treated as primitives by default unless there was strong evidence they truly act as independent family identity.
+4) Assist / detector / confirmation / context items were downgraded conservatively into primitive/support roles unless they already behave as durable runtime family drivers.
+5) Non-referenced or non-authoritative composition artifacts were treated as legacy/reference only.
+
+============================================================
+WHAT CURRENTLY DRIVES RUNTIME
+============================================================
+Primary runtime edge driver:
+- COUNCIL runtime in council_strategies.mqh
+
+Direct runtime council family inventory:
+- 9 runtime families
+- 17 runtime strategy implementations
+
+Direct runtime council families:
+- LIQUIDITY_REVERSAL
+- MEAN_RECLAIM
+- TREND_CONTINUATION
+- TREND_PULLBACK_CONTINUATION
+- MOMENTUM_REVERSAL_ASSIST
+- COMPRESSION_BREAKOUT
+- VOL_BREAKOUT
+- EXPANSION_CONTINUATION
+- MICRO_RANGE_BREAK
+
+Direct runtime strategy implementations:
+- sweep_reversal
+- fake_break_reversal
+- bollinger_reclaim
+- mean_reversion_bounce
+- range_edge_fade
+- trend_momentum
+- momentum_breakout_cont_v1
+- micro_structure_reentry_v1
+- breakdown_momentum_v1
+- lower_high_rejection_v1
+- trend_pullback_cont_v1
+- mfi_reversal_assist
+- range_compression_breakout
+- volatility_squeeze_release
+- volatility_breakout
+- expansion_continuation
+- micro_range_expansion
+
+Compiled runtime-plan primitives also active:
+- main trigger: sweep_detector
+- strong confirmations: bollinger_reclaim_trigger, candle_rejection_validation
+- medium confirmations: mfi_momentum, ema_trend_alignment
+- required filters: atr_volatility_filter
+- entry patterns: pullback_entry, breakout_entry
+- runtime risk models compiled in practice: atr_stop_rr_exit, time_exit_with_move_sl
+
+Critical distinction:
+- library_strategies.mqh is initialized at startup, but the active CompileRuntimePlan path resolves indicators / filters / entry patterns / risk models, not StrategyDefinition identities.
+- Therefore the old strategy-library catalog exists, but it is not the current primary runtime strategy-identity driver.
+
+============================================================
+INVENTORY BY CLASS
+============================================================
+Runtime council families:
+- total: 9
+- role: active runtime family layer
+
+Runtime council strategy implementations:
+- total: 17
+- role: active runtime strategy set under council families
+
+Strategy-library definitions:
+- total: 6
+- role: reference-era strategy identities, not the current primary runtime driver
+
+Indicator definitions:
+- total: 13
+- role: trigger / confirmation / context / filter primitives
+
+Entry-pattern definitions:
+- total: 9
+- role: execution-pattern primitives
+
+Risk-model definitions:
+- total: 7
+- role: exit / risk primitives
+
+Filter definitions:
+- total: 9
+- role: hard/soft gating primitives
+
+Supporting analytical/runtime primitives audited for canon relevance:
+- total: 13
+- examples:
+  - council_environment.mqh
+  - market_regime.mqh
+  - regime_classification_layer_v1.mqh
+  - council_aggregator.mqh
+  - unified_confidence.mqh
+  - strategy_intelligence_layer_v1.mqh
+  - level_awareness_brake.mqh
+  - execution_estimator_v1.mqh
+  - exit_intelligence.mqh
+  - correlation_engine.mqh
+  - council_pre_ai_filter.mqh
+  - council_pre_ai_gate.mqh
+  - council_attribution_intelligence.mqh
+
+Legacy/non-authoritative edge-composition artifact identified:
+- total: 1
+- artifact: MQL5/Files/AI/ai_build_zone.json
+
+============================================================
+CORE CANON SEED RECOMMENDATION
+============================================================
+Recommended initial Core Canon seed:
+- LIQUIDITY_REVERSAL
+- MEAN_RECLAIM
+- TREND_CONTINUATION
+- COMPRESSION_BREAKOUT
+
+Why these four:
+- They are already real runtime council families.
+- They map cleanly to structural market states already represented in the runtime zone model.
+- They are less dependent on single-indicator identity than the old strategy-library catalog.
+- They cover reversal, reclaim, continuation, and breakout without forcing micro-specializations to hold equal status immediately.
+
+Conservative Conditional Candidates:
+- TREND_PULLBACK_CONTINUATION
+- VOL_BREAKOUT
+- EXPANSION_CONTINUATION
+- MICRO_RANGE_BREAK
+- trend_pullback (library strategy blueprint)
+- breakout_continuation (library strategy blueprint)
+- dual_timeframe_reclaim (library strategy blueprint)
+
+Primitive-layer downgrade recommendation:
+- MOMENTUM_REVERSAL_ASSIST
+- all indicator definitions
+- all entry-pattern definitions
+- all risk-model definitions
+- all filter definitions
+- supporting analytical/runtime primitive modules
+
+Legacy/archive recommendation:
+- bollinger_mean_reversion (library strategy identity)
+- bollinger_reclaim_reversal (library strategy identity)
+- sweep_reversal (library strategy identity copy, not the runtime family itself)
+- ai_build_zone.json free-composition architecture artifact
+
+============================================================
+OVERLAP / REDUNDANCY / DOWNGRADE FINDINGS
+============================================================
+Observed overlap:
+- TREND_PULLBACK_CONTINUATION overlaps materially with TREND_CONTINUATION and should not hold equal canon weight by default.
+- VOL_BREAKOUT, COMPRESSION_BREAKOUT, and EXPANSION_CONTINUATION occupy adjacent breakout/expansion territory and should not all be treated as equal core canon without later evidence.
+- MEAN_RECLAIM and Bollinger-first library identities overlap heavily; old Bollinger strategy naming should not remain equal to family-level canon.
+- LIQUIDITY_REVERSAL overlaps with sweep-oriented library strategy identity; the family should remain primary, not the old single-strategy label.
+- MOMENTUM_REVERSAL_ASSIST is assist-style and indicator-centric; it is better treated as support logic than as a first-class canon family.
+- Most indicators, patterns, and risk models are reusable primitives, not strategy identity.
+
+Too-generic or downgrade-prone materials:
+- Bollinger-only strategy identities
+- assist-style momentum identities
+- reclaim/sweep detectors when treated as standalone strategy identity
+- generic entry-pattern names
+- generic exit/risk recipes
+
+============================================================
+TRUTHFUL RUNTIME VS REFERENCE DISTINCTION
+============================================================
+Runtime-active canon competition should be grounded in:
+- current council families
+- current runtime strategy implementations
+- active compiled plan primitives
+- bounded runtime context already present in the code
+
+Merely existing but not equal-status runtime canon:
+- library strategy definitions
+- reference architecture docs
+- ai_build_zone.json free-composition artifact
+- historical or design-only naming from earlier strategy-library style work
+
+Conclusion:
+- The project already contains a viable canon seed, but it is smaller than the raw material inventory.
+- Old library strategy identity should no longer compete directly with the emerging Institutional Edge Factory canon.
+- Indicators/patterns/risk recipes/support modules should now be treated primarily as primitive/support layers unless later evidence justifies elevation.

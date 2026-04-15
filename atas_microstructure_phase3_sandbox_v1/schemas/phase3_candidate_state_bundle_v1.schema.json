@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "atas.microstructure.phase3.candidate.bundle.v1",
+  "title": "ATAS Microstructure Phase3 Candidate State Bundle V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "bundle_classification",
+    "candidate_bundle_id",
+    "generated_at_utc",
+    "governance_flags",
+    "source_snapshot_lineage",
+    "families",
+    "candidate_quality_summary",
+    "boundary_checks"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "ATAS_MICROSTRUCTURE_PHASE3_CANDIDATE_BUNDLE_V1"
+    },
+    "bundle_classification": {
+      "const": "CANDIDATE_PRE_GOVERNANCE_PRE_COMPOSER_NON_AUTHORITATIVE"
+    },
+    "candidate_bundle_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "governance_flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "non_authoritative",
+        "pre_governance",
+        "pre_export_composer",
+        "mt5_authority_unchanged"
+      ],
+      "properties": {
+        "non_authoritative": { "const": true },
+        "pre_governance": { "const": true },
+        "pre_export_composer": { "const": true },
+        "mt5_authority_unchanged": { "const": true }
+      }
+    },
+    "source_snapshot_lineage": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "families": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "OrderFlowState",
+        "LiquidityState",
+        "LevelInteractionState",
+        "MicrostructureEnvironmentEvidence",
+        "QualityValidityState"
+      ],
+      "properties": {
+        "OrderFlowState": { "$ref": "#/$defs/familyState" },
+        "LiquidityState": { "$ref": "#/$defs/familyState" },
+        "LevelInteractionState": { "$ref": "#/$defs/familyState" },
+        "MicrostructureEnvironmentEvidence": { "$ref": "#/$defs/familyState" },
+        "QualityValidityState": { "$ref": "#/$defs/familyState" }
+      }
+    },
+    "candidate_quality_summary": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "boundary_checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "final_regime_leakage",
+        "canonical_level_ownership_leakage",
+        "tradability_verdict_leakage",
+        "decision_package_leakage"
+      ],
+      "properties": {
+        "final_regime_leakage": { "type": "boolean" },
+        "canonical_level_ownership_leakage": { "type": "boolean" },
+        "tradability_verdict_leakage": { "type": "boolean" },
+        "decision_package_leakage": { "type": "boolean" },
+        "boundary_reason_codes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "familyState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family_name",
+        "candidate_fields",
+        "metadata",
+        "reason_codes",
+        "trace_summary"
+      ],
+      "properties": {
+        "family_name": { "type": "string" },
+        "candidate_fields": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "trace_summary": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}

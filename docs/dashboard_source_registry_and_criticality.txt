@@ -1,0 +1,292 @@
+dashboard_source_registry_and_criticality
+document_version=MT5_DASHBOARD_PHASE0_SOURCE_REGISTRY_AND_CRITICALITY_V1
+document_role=FORMAL_DASHBOARD_SOURCE_REGISTRY_AND_CRITICALITY_CLASSIFICATION
+authority_class=NON_RUNTIME_DASHBOARD_SOURCE_GOVERNANCE_CONTRACT
+scope=CURATED_DASHBOARD_SOURCES_ONLY
+
+CRITICALITY CLASSES
+- TIER_A_PRIMARY_VISIBILITY = curated status sources safe to drive top-level posture and page-primary widgets
+- TIER_B_STRUCTURAL_STATUS = structural or summary support sources safe for bounded secondary detail
+- TIER_C_CONTEXTUAL_OPTIONAL = contextual help or fallback sources only, never dominant truth
+- TIER_D_NEVER_RENDER_DIRECTLY = raw, sensitive, control, or misleading surfaces that must never be rendered directly
+
+REGISTERED DASHBOARD SOURCES
+
+source_id=SRC_RUNTIME_GOVERNANCE_STATUS
+path=MQL5/Files/AI/runtime_governance_status.json
+tier=TIER_A_PRIMARY_VISIBILITY
+authority_type=AUTHORITATIVE_RUNTIME_GOVERNANCE_STATUS
+direct_render=true
+notes=Primary runtime freeze/trading/startup posture source.
+
+source_id=SRC_AI_ACTIVATION_READINESS
+path=MQL5/Files/AI/ai_activation_readiness_status.json
+tier=TIER_A_PRIMARY_VISIBILITY
+authority_type=NON_AUTHORITATIVE_DERIVED_AI_GOVERNANCE
+direct_render=true
+notes=Primary AI authority/readiness posture source for bounded display language.
+
+source_id=SRC_EXPORT_RELEASE_GATE_STATUS
+path=MQL5/Files/AI/export_release_gate_status.json
+tier=TIER_A_PRIMARY_VISIBILITY
+authority_type=NON_AUTHORITATIVE_RELEASE_GATE_STATUS
+direct_render=true
+notes=Primary export-block posture source.
+
+source_id=SRC_TRANSFER_PACKAGE5_STATUS
+path=MQL5/Files/AI/strategy_transfer_package5_status.json
+tier=TIER_A_PRIMARY_VISIBILITY
+authority_type=PACKAGE_LEVEL_TRANSFER_STATUS
+direct_render=true
+notes=Primary package 5 transfer posture source.
+
+source_id=SRC_TRANSFER_PACKAGE5_PILOT_CYCLE
+path=MQL5/Files/AI/strategy_transfer_package5_pilot_cycle.json
+tier=TIER_A_PRIMARY_VISIBILITY
+authority_type=PACKAGE_LEVEL_TRANSFER_PILOT_CYCLE
+direct_render=true
+notes=Primary pilot-cycle definition source; still bounded to not-live posture.
+
+source_id=SRC_TRANSFER_PACKAGEC_STATUS
+path=MQL5/Files/AI/strategy_transfer_packageC_status.json
+tier=TIER_A_PRIMARY_VISIBILITY
+authority_type=NON_RUNTIME_STATUS_VISIBILITY
+direct_render=true
+notes=Primary package C truth-reconciliation and pilot-evidence summary source.
+
+source_id=SRC_TRANSFER_PACKAGEC_PILOT_EVIDENCE
+path=MQL5/Files/AI/strategy_transfer_packageC_pilot_evidence_design.json
+tier=TIER_A_PRIMARY_VISIBILITY
+authority_type=NON_RUNTIME_GOVERNANCE_DESIGN
+direct_render=true
+notes=Primary pilot-evidence design summary source for bounded evidence-first posture.
+
+source_id=SRC_DIAGNOSTIC_RUNTIME_SUMMARY
+path=MQL5/Files/AI/diagnostic_runtime_summary.json
+tier=TIER_A_PRIMARY_VISIBILITY
+authority_type=NON_AUTHORITATIVE_DERIVED_DIAGNOSTIC
+direct_render=true
+notes=Primary startup/diagnostic summary source; never used to override runtime governance.
+
+source_id=SRC_FACTORY_INTAKE_STATUS
+path=MQL5/Files/AI/edge_factory/registry/factory_intake_status.json
+tier=TIER_A_PRIMARY_VISIBILITY
+authority_type=AUTHORITATIVE_EDGE_FACTORY_INTAKE_STATUS
+direct_render=true
+notes=Primary factory intake posture source.
+
+source_id=SRC_SOURCE_INTAKE_GATEWAY_STATUS
+path=MQL5/Files/AI/edge_factory/registry/source_intake_gateway_status.json
+tier=TIER_A_PRIMARY_VISIBILITY
+authority_type=NON_AUTHORITATIVE_GATEWAY_DETECTION_STATUS
+direct_render=true
+notes=Primary zero-record/placeholder gateway posture source.
+
+source_id=SRC_EDGE_FACTORY_DECOMPOSITION_STATUS
+path=MQL5/Files/AI/edge_factory/decomposition/decomposition_status.json
+tier=TIER_B_STRUCTURAL_STATUS
+authority_type=AUTHORITATIVE_EDGE_FACTORY_DECOMPOSITION_STATUS
+direct_render=bounded_secondary_only
+notes=Supports factory partial/normalized/decomposition visibility.
+
+source_id=SRC_EDGE_FACTORY_MANIFEST
+path=MQL5/Files/AI/edge_factory/edge_factory_manifest.json
+tier=TIER_B_STRUCTURAL_STATUS
+authority_type=AUTHORITATIVE_EDGE_FACTORY_INTAKE_INDEX_WITH_MIXED_PLANE_SUMMARY_FIELDS
+direct_render=bounded_secondary_only
+notes=Summary-only mixed-plane manifest; must carry mixed-plane badge.
+
+source_id=SRC_EDGE_FACTORY_SOURCE_REGISTRY
+path=MQL5/Files/AI/edge_factory/registry/source_registry.json
+tier=TIER_B_STRUCTURAL_STATUS
+authority_type=AUTHORITATIVE_EDGE_FACTORY_SOURCE_SUBREGISTRY
+direct_render=bounded_secondary_only
+notes=Supports source counts and source-class detail only.
+
+source_id=SRC_EDGE_GOVERNANCE_STATUS
+path=MQL5/Files/AI/edge_factory/governance/edge_governance_status.json
+tier=TIER_B_STRUCTURAL_STATUS
+authority_type=AUTHORITATIVE_EDGE_FACTORY_GOVERNANCE_STATUS
+direct_render=bounded_secondary_only
+notes=Supports factory governance secondary panels only.
+
+source_id=SRC_EDGE_REVIEW_BOARD_STATUS
+path=MQL5/Files/AI/edge_factory/review_board/edge_review_board_status.json
+tier=TIER_B_STRUCTURAL_STATUS
+authority_type=AUTHORITATIVE_EDGE_FACTORY_REVIEW_BOARD_STATUS
+direct_render=bounded_secondary_only
+notes=Supports review-pending secondary detail only.
+
+source_id=SRC_EDGE_RUNTIME_ACCOUNTING_STATUS
+path=MQL5/Files/AI/edge_factory/scorecards/runtime_accounting_status.json
+tier=TIER_B_STRUCTURAL_STATUS
+authority_type=AUTHORITATIVE_EDGE_FACTORY_RUNTIME_ACCOUNTING_STATUS
+direct_render=bounded_secondary_only
+notes=Supports bounded accounting posture detail only.
+
+source_id=SRC_EDGE_FACTORY_INTERNAL_INTELLIGENCE_STATUS
+path=MQL5/Files/AI/edge_factory/internal_intelligence/internal_factory_intelligence_status.json
+tier=TIER_B_STRUCTURAL_STATUS
+authority_type=NON_AUTHORITATIVE_INTERNAL_ANALYTICAL_STATUS
+direct_render=bounded_secondary_only
+notes=Supports zero-record and non-authority internal-intelligence detail only.
+
+source_id=SRC_DASHBOARD_PHASE0_STATUS
+path=MQL5/Files/AI/dashboard_phase0_status.json
+tier=TIER_B_STRUCTURAL_STATUS
+authority_type=NON_RUNTIME_DASHBOARD_PHASE0_STATUS
+direct_render=bounded_secondary_only
+notes=Dashboard architecture/design-lock status source; may drive Architecture Defined, Not Operationally Active only.
+
+source_id=SRC_STRATEGY_TRANSFER_RUNTIME_FREEZE_STATUS
+path=MQL5/Files/AI/strategy_transfer_runtime_freeze_status.json
+tier=TIER_B_STRUCTURAL_STATUS
+authority_type=NON_AUTHORITATIVE_PACKAGE_STATUS
+direct_render=bounded_secondary_only
+notes=Supports historical runtime-freeze provenance only.
+
+source_id=SRC_TXT_RUNTIME_GOVERNANCE_STATUS
+path=MQL5/Files/AI/runtime_governance_status.txt
+tier=TIER_C_CONTEXTUAL_OPTIONAL
+authority_type=TEXT_MIRROR
+direct_render=fallback_text_only
+notes=Fallback text mirror; never dominant if JSON exists.
+
+source_id=SRC_TXT_AI_ACTIVATION_READINESS
+path=MQL5/Files/AI/ai_activation_readiness_status.txt
+tier=TIER_C_CONTEXTUAL_OPTIONAL
+authority_type=TEXT_MIRROR
+direct_render=fallback_text_only
+notes=Fallback text mirror; never dominant if JSON exists.
+
+source_id=SRC_TXT_EXPORT_RELEASE_GATE_STATUS
+path=MQL5/Files/AI/export_release_gate_status.txt
+tier=TIER_C_CONTEXTUAL_OPTIONAL
+authority_type=TEXT_MIRROR
+direct_render=fallback_text_only
+notes=Fallback text mirror; never dominant if JSON exists.
+
+source_id=SRC_TXT_PACKAGE5_STATUS
+path=MQL5/Files/AI/strategy_transfer_package5_status.txt
+tier=TIER_C_CONTEXTUAL_OPTIONAL
+authority_type=TEXT_MIRROR
+direct_render=fallback_text_only
+notes=Fallback text mirror.
+
+source_id=SRC_TXT_PACKAGE5_PILOT_CYCLE
+path=MQL5/Files/AI/strategy_transfer_package5_pilot_cycle.txt
+tier=TIER_C_CONTEXTUAL_OPTIONAL
+authority_type=TEXT_MIRROR
+direct_render=fallback_text_only
+notes=Fallback text mirror.
+
+source_id=SRC_TXT_PACKAGEC_STATUS
+path=MQL5/Files/AI/strategy_transfer_packageC_status.txt
+tier=TIER_C_CONTEXTUAL_OPTIONAL
+authority_type=TEXT_MIRROR
+direct_render=fallback_text_only
+notes=Fallback text mirror.
+
+source_id=SRC_DOC_EXPORT_RELEASE_GATE_CONTRACT
+path=MQL5/Experts/AI/docs/export_release_gate_contract.txt
+tier=TIER_C_CONTEXTUAL_OPTIONAL
+authority_type=CONTRACT_CONTEXT
+direct_render=context_help_only
+notes=Help/reference only.
+
+source_id=SRC_DOC_PILOT_EVIDENCE_DESIGN_CONTRACT
+path=MQL5/Experts/AI/docs/strategy_transfer_pilot_evidence_design_contract.txt
+tier=TIER_C_CONTEXTUAL_OPTIONAL
+authority_type=CONTRACT_CONTEXT
+direct_render=context_help_only
+notes=Help/reference only.
+
+source_id=SRC_DOC_SECRET_HYGIENE_REMEDIATION
+path=MQL5/Experts/AI/docs/security_containment_secret_hygiene_remediation.txt
+tier=TIER_C_CONTEXTUAL_OPTIONAL
+authority_type=CONTRACT_CONTEXT
+direct_render=context_help_only
+notes=Help/reference only.
+
+source_id=SRC_DOC_FACTORY_CONTROL_DATA_PLANE_CONTRACT
+path=MQL5/Experts/AI/docs/factory_control_plane_data_plane_contract.txt
+tier=TIER_C_CONTEXTUAL_OPTIONAL
+authority_type=CONTRACT_CONTEXT
+direct_render=context_help_only
+notes=Help/reference only.
+
+source_id=SRC_DOC_FACTORY_TRUTH_VOCABULARY_CONTRACT
+path=MQL5/Experts/AI/docs/factory_truth_vocabulary_contract.txt
+tier=TIER_C_CONTEXTUAL_OPTIONAL
+authority_type=CONTRACT_CONTEXT
+direct_render=context_help_only
+notes=Help/reference only.
+
+source_id=SRC_DOC_SOURCE_INTAKE_GATEWAY_CONTRACT
+path=MQL5/Experts/AI/docs/source_intake_gateway_contract.txt
+tier=TIER_C_CONTEXTUAL_OPTIONAL
+authority_type=CONTRACT_CONTEXT
+direct_render=context_help_only
+notes=Help/reference only.
+
+source_id=SRC_EDGE_FACTORY_MATERIAL_REGISTRY
+path=MQL5/Files/AI/edge_factory/registry/material_registry.json
+tier=TIER_D_NEVER_RENDER_DIRECTLY
+authority_type=AUTHORITATIVE_EDGE_FACTORY_INTAKE_SUBREGISTRY_RAW_RECORD_SURFACE
+direct_render=false
+notes=Large raw material registry; use only pre-aggregated counts or derived safe summaries.
+
+source_id=SRC_SOURCE_INTAKE_GATEWAY_RAW
+path=MQL5/Files/AI/edge_factory/registry/source_intake_gateway.json
+tier=TIER_D_NEVER_RENDER_DIRECTLY
+authority_type=NON_AUTHORITATIVE_ANALYTICAL_INBOX
+direct_render=false
+notes=Raw inbox; never render directly.
+
+source_id=SRC_AI_RUNTIME_SECRETS
+path=MQL5/Files/AI/ai_runtime_secrets.json
+tier=TIER_D_NEVER_RENDER_DIRECTLY
+authority_type=SENSITIVE_SECRET_SURFACE
+direct_render=false
+notes=Never render.
+
+source_id=SRC_AI_STRATEGY_MEMORY
+path=MQL5/Files/AI/ai_strategy_memory.json
+tier=TIER_D_NEVER_RENDER_DIRECTLY
+authority_type=SENSITIVE_INTERNAL_MEMORY_SURFACE
+direct_render=false
+notes=Never render.
+
+source_id=SRC_AI_CURRENT_PLAN
+path=MQL5/Files/AI/ai_current_plan.json
+tier=TIER_D_NEVER_RENDER_DIRECTLY
+authority_type=CONTROL_SURFACE
+direct_render=false
+notes=Never render directly; export-blocking control surface.
+
+source_id=SRC_AI_EXECUTION_CONTRACT
+path=MQL5/Files/AI/ai_execution_contract.json
+tier=TIER_D_NEVER_RENDER_DIRECTLY
+authority_type=CONTROL_SURFACE
+direct_render=false
+notes=Never render directly.
+
+source_id=SRC_AI_ROLLBACK_STATE
+path=MQL5/Files/AI/ai_rollback_state.json
+tier=TIER_D_NEVER_RENDER_DIRECTLY
+authority_type=CONTROL_SURFACE
+direct_render=false
+notes=Never render directly.
+
+source_id=SRC_AI_PREVIOUS_PLAN_BACKUP
+path=MQL5/Files/AI/ai_previous_plan_backup.json
+tier=TIER_D_NEVER_RENDER_DIRECTLY
+authority_type=CONTROL_SURFACE_OR_HISTORY_RAW
+direct_render=false
+notes=Never render directly.
+
+TIER INTERPRETATION RULE
+Tier A may drive posture.
+Tier B may support bounded secondary detail.
+Tier C may support tooltips/help/fallback text only.
+Tier D is blocked from direct rendering and from visible snapshot export.

@@ -1,0 +1,161 @@
+AI LEARNING EVIDENCE PIPELINE
+document_role=AUTHORITATIVE_LEARNING_EVIDENCE_PIPELINE_POLICY
+document_version=L2_LEARNING_EVIDENCE_PIPELINE_V1
+authority_scope=GOVERNED_LEARNING_EVIDENCE_ARCHITECTURE_ONLY
+linked_learning_contract=docs/learning_governance_contract.txt
+linked_learning_scope_boundaries=docs/learning_scope_boundaries.txt
+linked_learning_prohibited_mutation_paths=docs/learning_prohibited_mutation_paths.txt
+linked_output_contract=docs/ai_output_contract.txt
+linked_repository_design=docs/ai_intelligence_repository_design.txt
+linked_human_review_workflow=docs/ai_human_review_workflow.txt
+linked_effectiveness_review_framework=docs/ai_effectiveness_review_framework.txt
+linked_evidence_catalog=docs/learning_evidence_catalog.txt
+linked_evidence_quality_policy=docs/learning_evidence_quality_policy.txt
+trust_rule=defines_how_evidence_enters_governed_learning_without_creating_runtime_learning_or_mutation_authority
+policy_note=This phase formalizes learning evidence intake, hierarchy, sufficiency, and bundle composition. It does not implement runtime evidence engines, automatic scorers, experiments, or learning mutation.
+non_goal=no_runtime_evidence_engine
+non_goal=no_automatic_evidence_scoring
+non_goal=no_dashboard
+non_goal=no_repository_writer_implementation
+non_goal=no_experiment_engine
+non_goal=no_learning_mutation_engine
+non_goal=no_authority_expansion
+
+LEARNING EVIDENCE PIPELINE PURPOSE
+Learning evidence in this project must be explicit, attributable, bounded, and reviewable.
+Learning evidence is used to support governed understanding, proposal quality, and future controlled experimentation.
+Learning evidence is not a hidden mutation path and does not authorize direct runtime changes.
+
+PIPELINE STAGES
+- STAGE_1_SOURCE_IDENTIFICATION
+  purpose=Identify admissible evidence families and source artifacts that are within the learning governance contract.
+  output=Scoped candidate evidence members with source references and time/scope labels.
+
+- STAGE_2_SOURCE_CLASSIFICATION
+  purpose=Classify evidence by family, source hierarchy level, authority class, and reliability posture.
+  output=Evidence members tagged for later sufficiency and quality review.
+
+- STAGE_3_NORMALIZATION_INTENT
+  purpose=Normalize evidence where possible by scope, time window, family, regime, zone, and attributable source linkage.
+  output=Comparable evidence members with explicit limitations and unresolved gaps recorded.
+
+- STAGE_4_SUFFICIENCY_ASSESSMENT
+  purpose=Determine whether evidence is THIN_EVIDENCE, MINIMAL_EVIDENCE, SUFFICIENT_EVIDENCE, or STRONG_CORROBORATED_EVIDENCE.
+  output=Sufficiency state with justification and disclosure of missing corroboration.
+
+- STAGE_5_QUALITY_GRADING
+  purpose=Assign LOW_QUALITY, MODERATE_QUALITY, or HIGH_QUALITY based on source strength, linkage quality, corroboration breadth, recency, and review support.
+  output=Quality grade with positive and negative drivers disclosed.
+
+- STAGE_6_BUNDLE_COMPOSITION
+  purpose=Assemble bounded evidence members into LEARNING_EVIDENCE_BUNDLE, PROPOSAL_SUPPORT_BUNDLE, or EXPERIMENT_CANDIDATE_SUPPORT_BUNDLE.
+  output=Evidence package with required families, limitations, and downstream review relevance.
+
+- STAGE_7_REVIEW_READINESS
+  purpose=Prepare evidence bundles for governed review use without claiming mutative authority.
+  output=Review-ready evidence package linked to repository/review/effectiveness artifacts where available.
+
+EVIDENCE NORMALIZATION INTENT
+Normalization intent in this project means:
+- evidence should be attributable to identifiable source artifacts where possible
+- evidence should be bounded by time_window, scope_label, strategy_family, zone, regime, or incident context when relevant
+- evidence should preserve whether it is runtime-derived, review-derived, repository-derived, or AI-derived analytic support
+- evidence should disclose linkage gaps, stale status, ambiguity, duplicate-noise concerns, and scope mismatch
+- evidence should not claim comparability that is not actually supported
+
+Normalization intent does not mean:
+- building an automatic normalization engine in this phase
+- forcing false precision on partial evidence
+- upgrading weak evidence into strong evidence by formatting
+
+EVIDENCE SOURCE HIERARCHY APPLICATION RULE
+Evidence hierarchy must be respected during learning review.
+AI-derived analytic evidence may support interpretation and packaging, but should not outrank stronger runtime-linked normalized evidence by default.
+Weaker contextual evidence may enrich understanding but ordinarily requires corroboration before supporting strong proposal claims.
+
+EVIDENCE SUFFICIENCY RULES
+- THIN_EVIDENCE
+  meaning=Evidence is too narrow, weak, ambiguous, stale, or uncorroborated for meaningful learning conclusions.
+  allowed_use=Archival reference, weak context, or explicit insufficiency disclosure only.
+  forbidden_use=Strong proposal support or strong experiment recommendation.
+
+- MINIMAL_EVIDENCE
+  meaning=Evidence is usable for preliminary review but remains narrow or insufficiently corroborated.
+  allowed_use=Early review framing, bounded watchlist support, or request-for-more-evidence support.
+  caution=Must not be overstated.
+
+- SUFFICIENT_EVIDENCE
+  meaning=Evidence is materially usable, scope-bounded, and has enough corroboration or repeat support to inform a governed proposal or review decision.
+  allowed_use=Proposal support and learning review discussion.
+  caution=Still does not authorize runtime mutation.
+
+- STRONG_CORROBORATED_EVIDENCE
+  meaning=Evidence is well-linked, sufficiently broad for its stated claim, supported across multiple strong or complementary evidence families, and limitations are disclosed.
+  allowed_use=High-confidence proposal support, experiment-candidate support, and stronger governance conclusions.
+  caution=Even strong evidence remains review-governed only.
+
+THIN-EVIDENCE DISCIPLINE
+A single weak signal is not enough.
+A narrow time window cannot support strong general learning claims.
+Repeated review outcomes may strengthen evidence only when linkage and scope are explicit.
+Ambiguity must reduce quality and may prevent sufficiency upgrades.
+Narrative confidence must not override thin evidence status.
+
+EVIDENCE BUNDLE COMPOSITION RULE
+Bundles remain evidence packages only.
+A bundle may support later proposal, review, or controlled experiment planning, but it may never become:
+- direct runtime mutation
+- direct live threshold change
+- direct plan overwrite
+- direct authority elevation
+- direct execution permission
+
+DOWNSTREAM LINKAGE RULE
+Learning evidence may link to:
+- A3 output classes
+- A5 repository object families
+- A6 advisory effectiveness artifacts
+- A7 review outcomes
+- A8 effectiveness review outputs
+
+These links strengthen traceability and context only.
+They do not create an automatic control path.
+
+REQUIRED BUNDLE LIMITATION DISCLOSURES
+Every governed bundle should disclose:
+- scope boundaries
+- source hierarchy mix
+- sufficiency state
+- quality grade
+- unresolved ambiguity
+- linkage gaps
+- stale or partial status if present
+- downstream review relevance
+
+TRACEABILITY EXPECTATIONS
+Each evidence bundle should conceptually track:
+- evidence_bundle_id
+- evidence_family_members
+- source_artifact_refs
+- source_time_window
+- scope_label
+- affected_zone_or_family
+- sufficiency_state
+- quality_grade
+- corroboration_note
+- limitations_note
+- downstream_review_relevance
+
+RELATION TO LATER PHASES
+This phase supports:
+- proposal formation
+- review prioritization
+- experiment-candidate selection
+- later learning-governance phases
+- effectiveness-informed tightening or narrowing
+
+This phase does not:
+- authorize runtime mutation
+- authorize direct control
+- authorize auto-apply
+- authorize hidden learning adaptation

@@ -1,0 +1,103 @@
+export_release_gate_contract
+document_version=POST_AUDIT_PACKAGE_B_EXPORT_RELEASE_GATE_V1
+document_role=FORMAL_PRE_EXPORT_RELEASE_GATE_AND_DELIVERY_SANITIZATION_CONTRACT
+authority_class=NON_AUTHORITATIVE_GOVERNANCE_AND_RELEASE_CONTROL_DOCUMENT
+scope=PRE_EXPORT_RELEASE_GATE_ONLY
+
+PURPOSE
+Define a deterministic pre-export release gate that blocks unsafe package delivery unless all required package-safety checks pass.
+
+CORE RULE
+default_release_gate_mode=BLOCK_UNTIL_ALL_REQUIRED_CHECKS_PASS
+default_external_delivery_allowed=false
+
+WHAT THE RELEASE GATE IS ALLOWED TO EXPRESS
+- whether a transportable project package is currently export-safe
+- which safety checks are required
+- which checks pass or fail
+- which blocked-delivery conditions remain active
+- whether delivery sanitization is still required before any external export
+
+WHAT THE RELEASE GATE MUST NOT IMPLY
+- runtime reactivation
+- live pilot execution
+- investor readiness
+- productization readiness
+- broad external delivery clearance merely because one category passes
+- authority expansion
+- runtime privilege restoration
+
+DETERMINISTIC PACKAGE-SAFETY CHECK CATEGORIES
+1) SECRETS_HYGIENE_CHECK
+Meaning:
+- no raw live secret material may remain in transportable package surfaces
+Pass condition:
+- no raw live secret embedded in code or packaged runtime-secret files
+Non-pass implication:
+- any remaining raw secret blocks export immediately
+
+2) CONTROL_SURFACE_EXCLUSION_CHECK
+Meaning:
+- authoritative runtime/control artifacts must not be included in an external deliverable package
+Representative blocking surfaces:
+- MQL5/Files/AI/ai_current_plan.json
+- MQL5/Files/AI/ai_execution_contract.json
+- MQL5/Files/AI/runtime_governance_status.json
+- MQL5/Files/AI/runtime_governance_status.txt
+- rollback and control-state surfaces
+Pass condition:
+- explicit exclusion or sanitized replacement verified
+Current package posture:
+- blocking until proven excluded or sanitized
+
+3) RAW_DIAGNOSTICS_EXCLUSION_CHECK
+Meaning:
+- raw diagnostic artifacts must not be exported without sanitization
+Representative blocking surfaces:
+- MQL5/Files/AI/diagnostic_runtime_summary.json
+- MQL5/Files/AI/diagnostic_runtime_summary.txt
+Pass condition:
+- exclusion or verified sanitized derivative only
+
+4) RAW_MEMORY_EXCLUSION_CHECK
+Meaning:
+- raw memory/journal/history artifacts must not be exported in raw operational form
+Representative blocking surfaces:
+- MQL5/Files/AI/ai_strategy_memory.json
+- MQL5/Files/AI/council_memory.txt
+- MQL5/Files/AI/ai_performance_journal.jsonl
+Pass condition:
+- exclusion or verified sanitized derivative only
+
+5) ROLLBACK_SURFACE_EXCLUSION_CHECK
+Meaning:
+- rollback state and rollback-capable operational surfaces must not be externally delivered in raw form
+Representative blocking surfaces:
+- MQL5/Files/AI/ai_rollback_state.json
+- rollback-related operational references
+Pass condition:
+- exclusion or verified sanitized derivative only
+
+6) NON_DELIVERABLE_OPERATIONAL_SURFACE_CHECK
+Meaning:
+- project packages must exclude other operational-only, control-only, or review-only raw artifacts
+Representative blocking surfaces:
+- unsanitized strategy-transfer operational state files
+- raw review/governance records
+- raw factory status surfaces that remain operational rather than delivery-safe
+Pass condition:
+- verified allowlist/denylist export discipline and sanitized package proof
+
+RELEASE GATE RESULT RULE
+overall_gate_result=PASS only if every required check passes
+if any required check fails or remains unverified, overall_gate_result=BLOCKED
+
+DELIVERY SANITIZATION RULE
+A transportable internal project package and an externally deliverable package are not the same thing.
+External delivery remains blocked until a sanitized export subset is explicitly proven.
+
+PRESERVED BOUNDARIES
+- runtime freeze remains intact
+- runtime execution privilege remains frozen
+- no live pilot execution starts through this package
+- no external delivery is enabled by default

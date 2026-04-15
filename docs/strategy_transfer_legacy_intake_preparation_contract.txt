@@ -1,0 +1,53 @@
+LEGACY INTAKE PREPARATION CONTRACT
+Package:
+- Strategy Transfer to Factory — Package 2
+- Package name: Master Inventory + Legacy Intake Preparation
+
+Authority posture:
+- Preparation truth only
+- Non-runtime
+- Non-mutative
+- Non-destructive
+- Not a factory registry ingestion record
+- Not a reclassification record
+- Not an archive-finalization record
+- Not a runtime approval record
+
+Purpose:
+- Represent current strategy-bearing elements as internal legacy source material prepared for later governed factory ingestion
+- Preserve Package 1 freeze truth
+- Preserve lineage and transferability
+- Make later ingestion possible without performing it now
+
+Legacy intake preparation means:
+- internal legacy source material preparation only
+- not yet ingested into factory registries
+- not yet reclassified
+- not yet archived
+- not yet approved
+- not yet re-admitted to execution
+
+Preparation fields may express:
+- source type
+- source reference
+- transfer preparation status
+- whether future factory ingestion remains pending
+- whether reclassification remains pending
+- whether primitive extraction remains pending
+- whether archive finalization has not yet happened
+- whether runtime reactivation remains forbidden
+
+Preparation fields must NOT imply:
+- this element is already inside material_registry.json
+- this element is already inside decomposition_registry.json
+- this element is already normalized inside the factory
+- this element has been reclassified
+- this element has been archived
+- this element has been approved for execution
+- this element has been re-admitted
+
+Recommended status semantics:
+- PREPARED_RUNTIME_FROZEN_SOURCE = runtime-linked element preserved and frozen for later governed transfer
+- PREPARED_LIBRARY_LEGACY_SOURCE = library identity preserved for later governed transfer
+- PREPARED_FRAGMENT_LEGACY_SOURCE = fragment/module preserved for later governed transfer
+- PREPARED_ORPHANED_LEGACY_SOURCE = non-active reference/orphaned surface preserved for later governed transfer

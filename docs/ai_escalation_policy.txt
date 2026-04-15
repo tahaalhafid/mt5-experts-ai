@@ -1,0 +1,148 @@
+AI ESCALATION POLICY
+document_role=AI_ESCALATION_POLICY
+document_authority_class=AUTHORITATIVE_AI_ESCALATION_REFERENCE
+policy_version=A2_AI_ESCALATION_POLICY_V1
+linked_registry=docs/ai_task_registry.txt
+linked_trigger_matrix=docs/ai_trigger_matrix.txt
+linked_authority_gate=H6_AI_ACTIVATION_READINESS_GATE
+policy_note=This policy defines severity tiers, investigation depth, cadence intent, cooldown/suppression discipline, and escalation rules only. It does not implement scheduling.
+
+SEVERITY TIERS
+- LIGHT
+  Meaning=Routine visibility, explanation, or governance review.
+- STANDARD
+  Meaning=Material but non-critical incident, drift, or repeated operational pattern.
+- HIGH
+  Meaning=Strong incident needing structured investigation, likely root-cause work, or repeated quality/safety concern.
+- CRITICAL
+  Meaning=Safety, rollback, truth, diagnostics, or repeated execution issue with strong operator review need.
+
+INVESTIGATION DEPTH TIERS
+- SUMMARY_ONLY
+  Meaning=ALWAYS_VISIBLE_SUMMARIES first; no raw retrieval unless explicitly escalated by policy.
+- TARGETED_RETRIEVAL
+  Meaning=Summaries first, then bounded ON_DEMAND_RETRIEVAL slices scoped by decision_id, position_id, deal_id, incident window, or bounded time range.
+- DEEP_INVESTIGATION
+  Meaning=Multiple bounded slices and cross-artifact reconstruction under stronger trigger conditions and daily-cap constraints. Never broad unbounded raw-all-data mode.
+
+CADENCE INTENT
+- PER_EVENT
+- PER_CANDIDATE_EVENT
+- HOURLY
+- DAILY
+- THREE_DAY
+- WEEKLY
+- ON_REQUEST
+- ON_REVIEW
+- PHASE_CHANGE
+- NONE_BY_DEFAULT
+
+TASK ESCALATION MAP
+
+1)
+task_family=FORENSIC_ANALYSIS
+default_severity_tier=STANDARD
+max_allowed_severity_tier=HIGH
+default_investigation_depth=TARGETED_RETRIEVAL
+max_investigation_depth=TARGETED_RETRIEVAL
+deep_investigation_requires_stronger_trigger=false
+escalation_rule=Escalate toward HIGH only when loss cluster, repeated execution failure, rollback linkage, or multi-layer anomaly exists.
+
+2)
+task_family=DRIFT_ANALYSIS
+default_severity_tier=STANDARD
+max_allowed_severity_tier=HIGH
+default_investigation_depth=SUMMARY_ONLY
+max_investigation_depth=TARGETED_RETRIEVAL
+deep_investigation_requires_stronger_trigger=true
+escalation_rule=Escalate beyond SUMMARY_ONLY only when drift threshold, regime shift, or block-distribution anomaly exceeds normal periodic review significance.
+
+3)
+task_family=ROOT_CAUSE_INVESTIGATION
+default_severity_tier=HIGH
+max_allowed_severity_tier=CRITICAL
+default_investigation_depth=TARGETED_RETRIEVAL
+max_investigation_depth=DEEP_INVESTIGATION
+deep_investigation_requires_stronger_trigger=true
+escalation_rule=Permit DEEP_INVESTIGATION only for repeated strong incidents, rollback/safety events, or explicit operator escalation with evidence need.
+
+4)
+task_family=BOUNDED_PROPOSAL_GENERATION
+default_severity_tier=STANDARD
+max_allowed_severity_tier=HIGH
+default_investigation_depth=SUMMARY_ONLY
+max_investigation_depth=TARGETED_RETRIEVAL
+deep_investigation_requires_stronger_trigger=true
+escalation_rule=Proposal generation requires prior evidence bundle and remains reviewable only. No deep investigation by default.
+
+5)
+task_family=COVERAGE_GAP_ANALYSIS
+default_severity_tier=STANDARD
+max_allowed_severity_tier=HIGH
+default_investigation_depth=SUMMARY_ONLY
+max_investigation_depth=TARGETED_RETRIEVAL
+deep_investigation_requires_stronger_trigger=true
+escalation_rule=Escalate when repeated unknown/unattributed outcomes or repeated environment gaps persist across review windows.
+
+6)
+task_family=GOVERNANCE_AUDIT
+default_severity_tier=LIGHT
+max_allowed_severity_tier=STANDARD
+default_investigation_depth=SUMMARY_ONLY
+max_investigation_depth=SUMMARY_ONLY
+deep_investigation_requires_stronger_trigger=false
+escalation_rule=Remain summary-only. Use docs/status/snapshots, not deep runtime investigation.
+
+7)
+task_family=OPERATOR_COPILOT
+default_severity_tier=LIGHT
+max_allowed_severity_tier=HIGH
+default_investigation_depth=SUMMARY_ONLY
+max_investigation_depth=TARGETED_RETRIEVAL
+deep_investigation_requires_stronger_trigger=true
+escalation_rule=Escalate retrieval depth only when operator request clearly asks for specific incident, replay, or root-cause review.
+
+8)
+task_family=LEARNING_GOVERNANCE_SUPPORT
+default_severity_tier=STANDARD
+max_allowed_severity_tier=HIGH
+default_investigation_depth=SUMMARY_ONLY
+max_investigation_depth=TARGETED_RETRIEVAL
+deep_investigation_requires_stronger_trigger=true
+escalation_rule=Remain evidence/proposal support only. Escalate on repeated validation/drift concerns across review windows.
+
+9)
+task_family=COUNCIL_CONTEXTUAL_ADVISORY
+default_severity_tier=LIGHT
+max_allowed_severity_tier=STANDARD
+default_investigation_depth=SUMMARY_ONLY
+max_investigation_depth=SUMMARY_ONLY
+deep_investigation_requires_stronger_trigger=false
+escalation_rule=Remain compact-candidate-packet plus latest summaries only. No raw deep investigation in advisory path.
+
+OUTPUT MODE MAP
+- FORENSIC_ANALYSIS => INCIDENT_REPORT|INTERNAL_SHADOW_FINDING
+- DRIFT_ANALYSIS => DAILY_INTELLIGENCE_NOTE|THREE_DAY_REVIEW_INPUT
+- ROOT_CAUSE_INVESTIGATION => INCIDENT_REPORT|ADVISORY_REPORT
+- BOUNDED_PROPOSAL_GENERATION => REVIEWABLE_PROPOSAL
+- COVERAGE_GAP_ANALYSIS => ADVISORY_REPORT|STRUCTURED_ANOMALIES
+- GOVERNANCE_AUDIT => PERIODIC_REPORTS|ADVISORY_REPORT
+- OPERATOR_COPILOT => OPERATOR_ANSWER
+- LEARNING_GOVERNANCE_SUPPORT => LEARNING_GOVERNANCE_EVIDENCE|THREE_DAY_REVIEW_INPUT
+- COUNCIL_CONTEXTUAL_ADVISORY => COUNCIL_ADVISORY_PACKET
+
+SUPPRESSION AND COOLDOWN DISCIPLINE
+- duplicate_incident_suppression=enabled
+- same_family_cooldown=required_when_policy_marks_cooldown_required
+- stronger_repeat_evidence_required_for_escalation=true
+- deep_investigation_daily_cap=respect_H6_AIDeepInvestigationDailyCap
+- family_run_frequency_cap=respect_H6_AIHourlyRunCap
+- trigger_cooldown_minutes=respect_H6_AITriggerCooldownMinutes
+- same_candidate_repeat_advisory_should_be_suppressed=true
+- same_review_window_repeat_processing_should_be_suppressed=true
+
+GLOBAL NON-CONTROL RULES
+- No severity tier authorizes direct trading control.
+- No investigation depth authorizes direct runtime mutation.
+- No proposal output authorizes auto-apply.
+- No council advisory output authorizes direct candidate veto in A2.

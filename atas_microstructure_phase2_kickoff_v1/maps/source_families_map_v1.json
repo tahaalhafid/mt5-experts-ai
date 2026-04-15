@@ -1,0 +1,175 @@
+{
+  "version": "ATAS_MICROSTRUCTURE_SOURCE_FAMILIES_V1",
+  "phase": "PHASE_2_KICKOFF",
+  "non_operative": true,
+  "source_families": [
+    {
+      "family_id": "observation_event_stream",
+      "class": "EVENT_DRIVEN",
+      "authority_class": "ATAS_EXTERNAL_NON_AUTHORITATIVE",
+      "owner": "atas_indicator_exporter_chain",
+      "paths": [
+        "MQL5/Files/AI/external_adapter/atas_semantic_adapter/future_exporter/runtime/acquisition_source/atas_observation_export.json"
+      ],
+      "freshness_keys": [
+        "packet_id",
+        "event_time",
+        "fresh_until",
+        "created_time"
+      ],
+      "staleness_risk": "MEDIUM",
+      "read_mode": "LATEST_SNAPSHOT_WITH_EVENT_LINEAGE"
+    },
+    {
+      "family_id": "acquisition_input_snapshot",
+      "class": "SNAPSHOT_DRIVEN",
+      "authority_class": "ATAS_EXTERNAL_NON_AUTHORITATIVE",
+      "owner": "future_exporter",
+      "paths": [
+        "MQL5/Files/AI/external_adapter/atas_semantic_adapter/future_exporter/runtime/acquisition_input/acquisition_input_payload.json"
+      ],
+      "freshness_keys": [
+        "packet_id",
+        "event_time",
+        "fresh_until",
+        "created_time"
+      ],
+      "staleness_risk": "MEDIUM_HIGH",
+      "read_mode": "LATEST_SNAPSHOT"
+    },
+    {
+      "family_id": "producer_input_snapshot",
+      "class": "SNAPSHOT_DRIVEN",
+      "authority_class": "ATAS_EXTERNAL_NON_AUTHORITATIVE",
+      "owner": "future_exporter",
+      "paths": [
+        "MQL5/Files/AI/external_adapter/atas_semantic_adapter/runtime/producer_input/atas_export_payload.json"
+      ],
+      "freshness_keys": [
+        "packet_id",
+        "event_time",
+        "fresh_until",
+        "created_time"
+      ],
+      "staleness_risk": "MEDIUM_HIGH",
+      "read_mode": "LATEST_SNAPSHOT"
+    },
+    {
+      "family_id": "exporter_snapshot_status",
+      "class": "SNAPSHOT_DRIVEN",
+      "authority_class": "EXTERNAL_DERIVED_STATUS",
+      "owner": "future_exporter",
+      "paths": [
+        "MQL5/Files/AI/external_adapter/atas_semantic_adapter/future_exporter/runtime/exporter_status.json"
+      ],
+      "freshness_keys": [
+        "last_run_timestamp",
+        "packet_id"
+      ],
+      "staleness_risk": "HIGH",
+      "read_mode": "LATEST_SNAPSHOT_WITH_MTIME_GUARD"
+    },
+    {
+      "family_id": "adapter_snapshot_status",
+      "class": "SNAPSHOT_DRIVEN",
+      "authority_class": "EXTERNAL_DERIVED_STATUS",
+      "owner": "semantic_adapter",
+      "paths": [
+        "MQL5/Files/AI/external_adapter/atas_semantic_adapter/runtime/adapter_status.json"
+      ],
+      "freshness_keys": [
+        "last_run_timestamp",
+        "last_packet_id",
+        "packet_age_ms"
+      ],
+      "staleness_risk": "HIGH",
+      "read_mode": "LATEST_SNAPSHOT_WITH_MTIME_GUARD"
+    },
+    {
+      "family_id": "runtime_context_snapshot",
+      "class": "SNAPSHOT_DRIVEN",
+      "authority_class": "ATAS_EXTERNAL_NON_AUTHORITATIVE",
+      "owner": "semantic_adapter_output",
+      "paths": [
+        "MQL5/Files/AI/atas_runtime_context.json"
+      ],
+      "freshness_keys": [
+        "packet_id",
+        "event_time",
+        "fresh_until",
+        "created_time"
+      ],
+      "staleness_risk": "MEDIUM",
+      "read_mode": "LATEST_SNAPSHOT_WITH_LINEAGE_GUARD"
+    },
+    {
+      "family_id": "runtime_context_status_cached",
+      "class": "CACHED_STATE",
+      "authority_class": "MT5_DERIVED_RUNTIME_STATUS",
+      "owner": "mt5_intake_layer",
+      "paths": [
+        "MQL5/Files/AI/atas_runtime_context_status.json"
+      ],
+      "freshness_keys": [
+        "status_timestamp_utc",
+        "evaluated_at",
+        "packet_id",
+        "packet_age_ms"
+      ],
+      "staleness_risk": "MEDIUM_HIGH",
+      "read_mode": "LATEST_STATE_WITH_FRESHNESS_CLASSIFICATION"
+    },
+    {
+      "family_id": "advisory_status_cached",
+      "class": "CACHED_STATE",
+      "authority_class": "MT5_DERIVED_RUNTIME_STATUS",
+      "owner": "mt5_governed_advisory_layer",
+      "paths": [
+        "MQL5/Files/AI/atas_governed_advisory_status.json",
+        "MQL5/Files/AI/atas_governed_advisory_effectiveness.json"
+      ],
+      "freshness_keys": [
+        "evaluated_at",
+        "advisory_packet_id",
+        "advisory_eligible",
+        "gate_reason_code"
+      ],
+      "staleness_risk": "MEDIUM_HIGH",
+      "read_mode": "LATEST_STATE_WITH_ELIGIBILITY_GATES"
+    },
+    {
+      "family_id": "capture_telemetry_cadence",
+      "class": "CADENCE_DRIVEN",
+      "authority_class": "EVIDENCE_AND_FORENSICS_ONLY",
+      "owner": "local_validation_runner",
+      "paths": [
+        "MQL5/Files/AI/atas_live_capture/atas_propagation_runner_status.json",
+        "MQL5/Files/AI/atas_live_capture/atas_live_chain_status.json"
+      ],
+      "freshness_keys": [
+        "generated_at_utc",
+        "last_cycle_utc"
+      ],
+      "staleness_risk": "LOW_MEDIUM",
+      "read_mode": "CADENCE_POLLED"
+    },
+    {
+      "family_id": "diagnostic_event_streams",
+      "class": "EVENT_DRIVEN",
+      "authority_class": "EVIDENCE_AND_FORENSICS_ONLY",
+      "owner": "local_validation_runner",
+      "paths": [
+        "MQL5/Files/AI/atas_live_capture/atas_propagation_runner_events.jsonl",
+        "MQL5/Files/AI/atas_live_capture/periodic_validation_cycles_latest.jsonl",
+        "MQL5/Files/AI/atas_live_capture/atas_live_event_stream.jsonl"
+      ],
+      "freshness_keys": [
+        "cycle_started_at_utc",
+        "cycle_finished_at_utc",
+        "stage_timestamp_utc"
+      ],
+      "staleness_risk": "LOW_MEDIUM",
+      "read_mode": "TAIL_WINDOW"
+    }
+  ]
+}

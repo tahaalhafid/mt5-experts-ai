@@ -1,0 +1,37 @@
+dashboard_update_cadence_policy
+document_version=MT5_DASHBOARD_PHASE0_UPDATE_CADENCE_POLICY_V1
+document_role=FORMAL_DASHBOARD_UPDATE_CADENCE_POLICY
+authority_class=NON_RUNTIME_VIEW_REFRESH_CONTRACT
+scope=VIEW_REFRESH_ONLY
+
+REFRESH CLASS=BOOT_ONLY
+meaning=Read once when dashboard bootstraps and refresh only on explicit user reload or page re-entry.
+typical_use=Static contracts, design-lock surfaces, local layout defaults.
+freshness_policy=Do not mark stale during the same local session unless timestamp is missing or contradictory.
+
+REFRESH CLASS=SLOW_POLL
+meaning=Low-frequency polling for structural/status sources.
+typical_use=Factory structural status, export gate, pilot package summaries.
+suggested_window_seconds=60
+
+REFRESH CLASS=NORMAL_POLL
+meaning=Normal-frequency polling for curated runtime visibility sources.
+typical_use=Runtime governance, AI readiness, diagnostic summary.
+suggested_window_seconds=15
+
+REFRESH CLASS=ON_DEMAND
+meaning=Refresh only on explicit operator local action.
+typical_use=Copy summary, snapshot export, deep detail reload.
+
+REFRESH CLASS=PAGE_ENTRY_ONLY
+meaning=Refresh when the page is entered and hold constant until leave or explicit reload.
+typical_use=Heavy secondary detail panels and optional contextual documents.
+
+RENDER-PATH PROTECTION RULES
+- do not parse raw Tier D files in render path
+- do not scan large registries in render path
+- do not perform broad file-system enumeration in render path
+- use curated Tier A sources for primary widgets
+- use pre-collected bounded summaries for Tier B detail
+- parse contextual docs only on demand or page entry
+- keep snapshot export derived from current view model, not direct raw file reads

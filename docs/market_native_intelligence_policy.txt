@@ -1,0 +1,199 @@
+MARKET-NATIVE INTELLIGENCE POLICY
+Authority: Institutional Edge Factory market-native raw intelligence governance policy.
+Truth posture: Raw intelligence design layer only. No runtime behavior change.
+
+============================================================
+PHASE IDENTITY
+============================================================
+Phase:
+- E2 — Market-Native Intelligence Upgrade
+
+Purpose:
+- define the market-native raw intelligence spine of the edge factory
+- make market-derived structure/liquidity/displacement/session/volatility behavior the highest-priority raw source layer
+- represent market-native intelligence in normalized factory objects
+- preserve provisional zone/regime affinity without granting canon or runtime authority
+
+Non-goals:
+- no runtime signal engine
+- no trigger approval
+- no canon admission
+- no codifiability approval
+- no testing approval
+- no runtime export
+- no runtime activation
+- no code behavior change
+
+============================================================
+MARKET-NATIVE BRANCH
+============================================================
+Authoritative market-native branch:
+- MQL5/Files/AI/edge_factory/market_native/
+
+Authoritative market-native files:
+- market_native/market_native_manifest.json
+- market_native/market_native_taxonomy.json
+- market_native/market_native_objects.json
+
+Rule:
+- These files are authoritative for market-native factory structure, taxonomy, and raw-object representation only.
+- They are not runtime strategy authority.
+- They are not canon-promotion authority.
+- They are not trigger-approval authority.
+- They are not codifiability/testing/export authority.
+
+============================================================
+WHAT MARKET-NATIVE INTELLIGENCE MEANS
+============================================================
+Market-native intelligence means:
+- raw intelligence derived from the market itself
+- price behavior, structure, liquidity interaction, displacement behavior, volatility behavior, and session behavior
+- a higher-priority raw source layer than external playbooks, community ideas, or indicator-first narratives
+- a factory layer that describes what the market is doing before deciding what should later become an edge
+
+Market-native intelligence is NOT:
+- a rebranding of indicator identity
+- an inherited strategy name
+- a runtime family by itself
+- a trigger license
+- a canon admission result
+
+Boundary rules:
+1) market-native intelligence is a raw source layer, not runtime strategy authority
+2) market-native intelligence does not imply canon admission
+3) market-native intelligence does not imply trigger approval
+4) market-native intelligence does not bypass decomposition, codifiability, testing, or later governance gates
+5) market-native intelligence may carry provisional zone/regime affinity only
+
+============================================================
+SOURCE PRIORITY POSTURE
+============================================================
+Source-priority order inside the factory:
+1) MARKET_NATIVE_SOURCE
+2) INTERNAL_RUNTIME_SOURCE
+3) INTERNAL_ANALYTICS_SOURCE
+4) RESEARCH_SOURCE / PLAYBOOK_SOURCE / HUMAN_REVIEW_SOURCE
+5) SCRIPT_SOURCE / COMMUNITY_IDEA_SOURCE
+
+Interpretation:
+- the market itself is the primary raw teacher
+- internal runtime and internal analytics remain high-value supporting evidence
+- external playbooks and community sources remain supportive, not sovereign
+- quantity of external material must never outrank clear market-native structure
+
+
+============================================================
+RELATIONSHIP TO OTHER SOURCE TYPES
+============================================================
+Market-native intelligence differs from:
+- external playbooks/research/scripts
+  These are interpretation layers or imported idea layers. They may support later comparison, but they do not outrank the market itself.
+
+- internal self-data / runtime findings
+  These are high-value internal observations about what the current system has done or discovered. They remain important, but they are not the same thing as raw market-native object identity.
+
+- indicator primitives
+  Indicators may later support confirmation, timing, or filtering. They do not define market-native object identity.
+
+Rule:
+- the market teaches first
+- internal self-data helps verify, compare, and sharpen
+- external materials may support, challenge, or inspire
+- none of these may bypass later factory gates
+
+============================================================
+ANTI-INDICATOR-IDENTITY RULE
+============================================================
+Rule:
+- market-native intelligence must be rooted in market behavior itself, not in indicator naming.
+- indicator primitives may support later codification or confirmation logic.
+- indicator primitives must not be allowed to masquerade as market-native object identity.
+
+Examples:
+- "sweep and reclaim at range edge" may be market-native
+- "RSI oversold reversal" is not market-native identity; at most it may later become a support primitive
+- "volatility contraction followed by acceptance after break" may be market-native
+- "Bollinger touch mean reversion" is not automatically market-native identity
+
+============================================================
+OBJECT ROLE MODEL
+============================================================
+Approved market-native object roles:
+- RAW_MARKET_EVENT
+- STRUCTURAL_CONTEXT_OBJECT
+- LIQUIDITY_CONTEXT_OBJECT
+- DISPLACEMENT_CONTEXT_OBJECT
+- VOLATILITY_CONTEXT_OBJECT
+- SESSION_CONTEXT_OBJECT
+- TOXICITY_SUPPRESSION_OBJECT
+
+Role rule:
+- roles describe what type of raw market intelligence object is being represented.
+- roles do not grant runtime licensing.
+- one object may emphasize one primary role while still carrying secondary context notes.
+
+============================================================
+PROVISIONAL AFFINITY RULE
+============================================================
+At E2, market-native objects may carry only:
+- provisional_zone_fit
+- provisional_regime_fit
+- directional_bias_hint
+
+At E2, market-native objects may NOT carry:
+- canon admission
+- runtime licensing
+- final trigger authority
+- execution permission
+- direct family promotion
+
+============================================================
+ANTI-BLOAT RULE
+============================================================
+Rules:
+1) taxonomy classes must remain operationally useful for later decomposition, codifiability, and testing work
+2) market-native objects must describe meaningful market behavior, not cosmetic renaming
+3) raw source accumulation is not success
+4) object count inflation is not edge quality
+5) placeholder objects are acceptable for design scaffolding, but they must remain clearly marked as placeholders
+6) ambiguous market behavior should remain ambiguous rather than be forced into false precision
+
+============================================================
+PLACEHOLDER OBJECT SEED RULE
+============================================================
+E2 may seed a small number of placeholder market-native objects to:
+- demonstrate the intended object schema
+- demonstrate the intended role taxonomy
+- demonstrate provisional zone/regime affinity handling
+
+Constraints:
+- placeholders must be clearly marked as factory-layer placeholders
+- placeholders must not be described as runtime-active
+- placeholders must not be described as empirically validated
+- placeholders must not bypass later decomposition/codifiability/testing gates
+
+============================================================
+RELATIONSHIP TO LATER FACTORY PHASES
+============================================================
+E2 feeds later factory work by providing:
+- raw market-native object language
+- a compact taxonomy for liquidity/structure/displacement/session/volatility/toxicity
+- comparable raw market-behavior objects for later zone/regime canon building
+
+E2 does NOT:
+- create live triggers
+- rewrite strategy logic
+- replace codifiability audit
+- replace testing
+- replace canon governance
+- change runtime behavior
+
+============================================================
+TRUTH DISCIPLINE
+============================================================
+Required truth posture:
+- market-native intelligence is high-priority raw source material
+- market-native intelligence is not self-validating
+- descriptive clarity is not runtime proof
+- provisional affinity is not activation authority
+- raw market objects must still survive later factory gates

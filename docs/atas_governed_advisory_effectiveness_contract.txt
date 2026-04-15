@@ -1,0 +1,38 @@
+ATAS Governed Advisory Effectiveness Contract (Level 3)
+Version: 1
+Language: English only
+
+Purpose
+- Provide bounded, auditable observability for advisory behavior.
+- Support governance review without creating execution authority.
+
+What is measured
+- advisory_total
+- advisory_ok_total
+- advisory_caution_total
+- advisory_strong_caution_total
+- advisory_insufficient_evidence_total
+- advisory_hold_total
+- advisory_flag_total
+- advisory_display_only_total
+- advisory_semantic_only_total
+- advisory_translation_applied_total
+- advisory_translation_suppressed_total
+- advisory_contradiction_total
+- advisory_confirmation_total
+
+What is not measured here
+- trade execution authority outcomes
+- direct risk envelope control
+- governor decisions
+- AI authority changes
+
+Interpretation boundary
+- Effectiveness counters are evidence-only derived surfaces.
+- They must not be consumed as execution authority.
+- They must not auto-enable stronger rollout behavior.
+
+Review use
+- Governance can use counters to evaluate advisory utility and safety.
+- Any rollout escalation must remain explicit and controlled.
+

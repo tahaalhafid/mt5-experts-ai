@@ -1,0 +1,41 @@
+INTERNAL FACTORY SEMANTIC PROJECTION POLICY
+version=PHASE4_INTERNAL_FACTORY_SEMANTIC_PROJECTION_POLICY_V1
+
+semantic_projection purpose:
+- project richer internal semantic understanding from gateway and decomposition inputs
+- clarify structure without overwriting source meaning
+- add analytical value only where a meaningful delta beyond decomposition exists
+- keep unresolved ambiguity and limitations explicit
+
+semantic_projection may add:
+- semantic clarification
+- projected factor linkage
+- projected zone/regime refinement hypothesis
+- projected role refinement hypothesis
+- structural packaging posture
+
+semantic_projection must not:
+- restate decomposition with inflated confidence
+- erase ambiguity dishonestly
+- imply validation
+- imply canon eligibility
+- imply runtime permission
+
+required projection areas:
+- projected_market_thesis
+- projected_setup_archetype
+- projected_trigger_logic
+- projected_timing_logic
+- projected_invalidation_logic
+- projected_risk_logic
+- projected_exit_logic
+- projected_confirmation_logic
+- projected_context_logic
+- projected_session_logic
+- projected_volatility_logic
+- projected_zone_fit_refinement
+- projected_regime_fit_refinement
+- projected_factory_role_refinement
+- semantic_projection_confidence
+- semantic_projection_limitations
+

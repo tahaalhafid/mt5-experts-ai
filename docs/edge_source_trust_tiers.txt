@@ -1,0 +1,88 @@
+EDGE SOURCE TRUST TIERS
+Authority: Trust-tier policy for Institutional Edge Factory source intake.
+Truth posture: Trust policy only. No runtime behavior change.
+
+============================================================
+TRUST TIER DEFINITIONS
+============================================================
+
+TIER_1_HIGH_TRUST
+- Highest bounded trust tier used for:
+  - MARKET_NATIVE_SOURCE
+  - INTERNAL_RUNTIME_SOURCE
+- Typical examples:
+  - current council runtime families
+  - current runtime strategy implementations
+  - active compiled runtime-plan primitives
+  - future properly attributed market-native observations
+- Strength:
+  - strongest candidate starting point for later decomposition
+- Limitation:
+  - still not self-promoting, not self-canonizing, and not runtime-authoritative by intake alone
+
+TIER_2_STRUCTURED_TRUST
+- Strong structured trust tier used for:
+  - INTERNAL_ANALYTICS_SOURCE
+  - some HUMAN_REVIEW_SOURCE material
+- Typical examples:
+  - regime/context/confidence/validation support modules
+  - bounded internal reviewer synthesis
+- Strength:
+  - well-formed structured support material
+- Limitation:
+  - often primitive/support by role rather than standalone edge identity
+
+TIER_3_CURATED_BUT_PARTIAL
+- Curated but incomplete tier used for:
+  - LEGACY_IMPORTED_SOURCE
+  - RESEARCH_SOURCE
+  - PLAYBOOK_SOURCE
+- Typical examples:
+  - legacy library strategy identities
+  - imported research notes
+  - discretionary playbooks
+- Strength:
+  - useful as structured intake inventory
+- Limitation:
+  - requires later corroboration and decomposition before any serious canon consideration
+
+TIER_4_LOW_TRUST_IDEATION_ONLY
+- Lowest trust tier used for:
+  - COMMUNITY_IDEA_SOURCE
+  - SCRIPT_SOURCE
+  - restricted weak legacy artifacts
+- Typical examples:
+  - community suggestions
+  - informal scripts
+  - non-authoritative composition artifacts
+- Strength:
+  - may occasionally seed a useful research question
+- Limitation:
+  - default ideation/research-only posture; frequently early-rejection eligible
+
+============================================================
+DEFAULT TIERING RULES
+============================================================
+1) market-native and internal runtime sources rank highest by default
+2) internal analytics/support sources rank high but usually as primitive/support material
+3) research/playbook sources may be valuable but are not automatically candidate-worthy
+4) community ideas/scripts default to low trust and must not drive intake inflation
+5) legacy imported material is preserved institutionally, but legacy presence alone does not justify equal canon standing
+
+============================================================
+ANTI-INFLATION RULES
+============================================================
+Forbidden mistakes:
+- equating trust tier with runtime permission
+- equating high trust with canon promotion
+- equating low trust with historical deletion
+- using confidence of wording to override source trust
+- allowing low-trust source volume to crowd out higher-quality sources
+
+Trust tier is:
+- a routing and intake-discipline aid
+
+Trust tier is not:
+- a runtime authority grant
+- a direct promotion license
+- a substitute for decomposition/testing/governance

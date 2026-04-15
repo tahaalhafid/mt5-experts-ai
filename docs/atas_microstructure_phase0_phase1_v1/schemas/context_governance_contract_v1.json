@@ -1,0 +1,36 @@
+{
+  "schema_version": "ATAS_CONTEXT_GOVERNANCE_CONTRACT_V1",
+  "program_posture": "RESEARCH_BUILD_TRACK_ONLY",
+  "authority_lock": {
+    "mt5_runtime_authority_owner": true,
+    "external_non_authoritative_only": true,
+    "semantic_adapter_required": true,
+    "raw_external_to_mt5_forbidden": true
+  },
+  "packet_split_rules": {
+    "core_packet_required": true,
+    "extended_packet_optional": true,
+    "core_only_candidate_for_future_bounded_mt5_consumption": true,
+    "extended_non_binding": true
+  },
+  "freshness_rules": {
+    "baseline_timezone": "UTC",
+    "required_fields": [
+      "event_time_utc",
+      "fresh_until_utc",
+      "evaluated_at_utc"
+    ],
+    "expiry_condition": "evaluated_at_utc > fresh_until_utc"
+  },
+  "confidence_rules": {
+    "extended_interpretive_confidence_ceiling_max": 0.49
+  },
+  "forbidden_semantics": [
+    "final_regime_ownership",
+    "final_canonical_level_ownership",
+    "final_tradability_ownership",
+    "final_decision_packaging",
+    "execution_command_surfaces",
+    "risk_governor_override_surfaces"
+  ]
+}

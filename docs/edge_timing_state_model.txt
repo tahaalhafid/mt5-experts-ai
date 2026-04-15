@@ -1,0 +1,65 @@
+EDGE TIMING STATE MODEL
+Authority: Institutional Edge Factory timing-state model only.
+Truth posture: Timing-state interpretation only. No runtime behavior change.
+
+============================================================
+TIMING STATES
+============================================================
+- PRE_TRIGGER
+  Structural setup is plausible, but timing trigger conditions are not yet mature.
+
+- TRIGGER_READY
+  Timing is approaching validity and key conditions are aligning, but full validation is not yet claimed.
+
+- TRIGGER_VALIDATED
+  Timing conditions are sufficiently aligned for the factory to treat the trigger as structurally valid.
+
+- TRIGGER_INCOMPLETE_CONFIRMATION
+  The thesis may be plausible, but confirmation quality remains incomplete.
+
+- TRIGGER_LATE
+  The trigger may have been valid earlier, but timing freshness is now degraded.
+
+- TRIGGER_EXHAUSTED
+  The move or setup has already spent most of its fresh edge energy.
+
+- TRIGGER_FAILED
+  The expected trigger progression broke down materially.
+
+- TRIGGER_RECLAIM_VALID
+  Reclaim/return behavior is the specific validation mode.
+
+- TRIGGER_POST_SWEEP_VALID
+  Post-sweep behavior is the specific validation mode.
+
+- TRIGGER_BREAK_ACCEPT_VALID
+  Break-and-accept behavior is the specific validation mode.
+
+- TRIGGER_NOT_APPLICABLE
+  Under the current regime posture, timing should not be interpreted as currently applicable.
+
+============================================================
+STATE DISCIPLINE
+============================================================
+- PRE_TRIGGER is not TRIGGER_READY.
+- TRIGGER_READY is not TRIGGER_VALIDATED.
+- TRIGGER_VALIDATED is not execution permission.
+- TRIGGER_LATE and TRIGGER_EXHAUSTED must remain explicit and may coexist with otherwise attractive structure.
+- TRIGGER_NOT_APPLICABLE overrides familiar visual patterns when regime posture is structurally suppressive.
+
+============================================================
+AMBIGUITY DISCIPLINE
+============================================================
+When timing specificity is weak, the factory should prefer:
+- PRE_TRIGGER
+- TRIGGER_INCOMPLETE_CONFIRMATION
+- TRIGGER_NOT_APPLICABLE
+
+instead of prematurely claiming:
+- TRIGGER_VALIDATED
+
+This applies especially to:
+- generic continuation language
+- breakout language without acceptance quality
+- micro-expansion patterns without follow-through
+- reversal language without reclaim/rejection quality

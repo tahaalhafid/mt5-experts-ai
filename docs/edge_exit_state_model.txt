@@ -1,0 +1,55 @@
+artifact_role=EDGE_EXIT_STATE_MODEL
+artifact_authority_class=AUTHORITATIVE_FACTORY_EXIT_STATE_MODEL
+state_model_version=E7_EDGE_EXIT_STATE_MODEL_V1
+phase_id=E7
+
+exit_states_defined:
+- EXIT_NOT_APPLICABLE
+- EXIT_TARGET_1_ELIGIBLE
+- EXIT_TARGET_2_ELIGIBLE
+- EXIT_PARTIAL_REDUCTION_ELIGIBLE
+- EXIT_TIME_STOP_ELIGIBLE
+- EXIT_FAILURE_TO_EXPAND_ELIGIBLE
+- EXIT_PROTECTIVE_TIGHTENING_ELIGIBLE
+- EXIT_STRUCTURAL_TRAIL_ELIGIBLE
+- EXIT_MOMENTUM_DECAY_ELIGIBLE
+- EXIT_EXHAUSTION_PROTECTIVE_ELIGIBLE
+
+state_meanings:
+
+EXIT_NOT_APPLICABLE:
+- use when regime posture is suppressed or the family should not be modeled as structurally active in that context
+
+EXIT_TARGET_1_ELIGIBLE:
+- first meaningful harvesting objective is conceptually available
+
+EXIT_TARGET_2_ELIGIBLE:
+- secondary/stretched objective may be justified if the path remains structurally healthy
+
+EXIT_PARTIAL_REDUCTION_ELIGIBLE:
+- reduce exposure without declaring thesis failure
+
+EXIT_TIME_STOP_ELIGIBLE:
+- the edge may still be alive, but time efficiency has degraded enough to justify exit consideration
+
+EXIT_FAILURE_TO_EXPAND_ELIGIBLE:
+- trigger/entry occurred, but the move failed to travel as the thesis path required
+
+EXIT_PROTECTIVE_TIGHTENING_ELIGIBLE:
+- tighten protection while thesis remains partially intact
+
+EXIT_STRUCTURAL_TRAIL_ELIGIBLE:
+- use structure-aware trailing/holding logic rather than fixed profit harvesting only
+
+EXIT_MOMENTUM_DECAY_ELIGIBLE:
+- continuation or expansion quality has decayed enough to justify more defensive management
+
+EXIT_EXHAUSTION_PROTECTIVE_ELIGIBLE:
+- exhaustion or snapback risk justifies faster protective behavior even before full invalidation
+
+state_discipline:
+- exit state eligibility does not equal runtime order behavior
+- protective states are not the same as invalidation
+- time-stop eligibility is not proof of thesis failure
+- failure-to-expand eligibility is especially important for breakout/release and micro-expansion structures
+- not every family should rely on target-1/target-2 only

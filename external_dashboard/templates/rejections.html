@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="panel">
+  <h2>Recent Rejections / Non-Entry ({{ payload.limit }})</h2>
+  <div class="toolbar">
+    <a href="/rejections?limit=20">20</a>
+    <a href="/rejections?limit=50">50</a>
+    <a href="/rejections?limit=100">100</a>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ts</th>
+          <th>decision_id</th>
+          <th>symbol</th>
+          <th>strategy</th>
+          <th>dir</th>
+          <th>dir_state</th>
+          <th>outcome</th>
+          <th>regime</th>
+          <th>posture</th>
+          <th>advisory</th>
+          <th>sr_bucket</th>
+          <th>link_state</th>
+          <th>zone/layer</th>
+          <th>reason</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in payload.rows %}
+        <tr>
+          <td>{{ r.ts }}</td>
+          <td class="mono">{{ r.decision_id }}</td>
+          <td>{{ r.symbol }}</td>
+          <td>{{ r.strategy_id }}</td>
+          <td>{{ r.direction }}</td>
+          <td><span class="badge {{ r.direction_state|lower }}">{{ r.direction_state }}</span></td>
+          <td>{{ r.outcome }}</td>
+          <td>{{ r.regime_label }}</td>
+          <td>{{ r.decision_acceptance_posture }}</td>
+          <td>{{ r.advisory_usage_state }}</td>
+          <td>{{ r.sr_interaction_bucket }}</td>
+          <td><span class="badge {{ r.context_link_state|lower }}">{{ r.context_link_state }}</span></td>
+          <td>{{ r.zone_semantic }}</td>
+          <td>{{ r.reason }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

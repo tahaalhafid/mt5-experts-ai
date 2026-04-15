@@ -1,0 +1,28 @@
+artifact_role=EDGE_REVIEW_ESCALATION_RULES
+artifact_authority_class=AUTHORITATIVE_FACTORY_EDGE_REVIEW_ESCALATION_RULES
+rules_version=E9_EDGE_REVIEW_ESCALATION_RULES_V1
+phase_id=E9
+
+purpose:
+- define when later review escalation is conceptually required for edge families
+- preserve governance-only behavior in E9
+
+escalation_triggers:
+- strong suppression signal with meaningful strategic value
+- promotion ambiguity in a family that still appears strategically important
+- repeated tightening and narrowing pressure without clean resolution
+- downgrade pressure combined with still-material factory relevance
+- poor geometry interacting with attractive trigger logic in a current core family
+- vague timing, invalidation, or exit logic that persists in a family otherwise carrying strategic weight
+
+escalation_guidance:
+- escalate rather than silently promote when structural coherence conflicts with weak evidence depth
+- escalate rather than silently suppress when the family may still justify narrower or tighter use
+- escalate when current core status and current evidence posture visibly diverge
+- escalate conditional families when repeated fragility is present but strategic theme value remains non-trivial
+
+hard_boundaries:
+- escalation in E9 is only a review signal
+- escalation does not disable runtime behavior
+- escalation does not promote or suppress live
+- escalation does not bypass later review governance

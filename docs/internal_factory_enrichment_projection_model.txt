@@ -1,0 +1,27 @@
+INTERNAL FACTORY ENRICHMENT PROJECTION MODEL
+version=PHASE4_INTERNAL_FACTORY_ENRICHMENT_PROJECTION_MODEL_V1
+
+factory_enrichment_projection purpose:
+- suggest likely downstream usefulness
+- not commit, promote, suppress, or mutate
+
+supported projection outputs:
+- likely_usefulness_as_family_candidate
+- likely_usefulness_as_primitive
+- likely_usefulness_as_enrichment
+- likely_usefulness_as_context_module
+- likely_research_only_posture
+- likely_structural_rewrite_need
+- likely_factory_route_refinement
+- likely_commit_readiness_posture
+- strategic_value_note
+- caution_note
+
+rules:
+- projection only
+- non-authoritative
+- review required
+- no direct runtime use
+- no direct canon promotion
+- projection must state value claim and caution, not just optimism
+

@@ -1,0 +1,20 @@
+SOURCE INTAKE GATEWAY OPERATIONAL ALIGNMENT AUDIT
+version=V1
+
+audit_scope:
+- gateway contract alignment
+- schema operational usefulness
+- downstream carry-forward readiness
+- detection status truthfulness
+
+findings:
+- gateway contract benefits from explicit producer_role, snapshot_identity, gateway_version, and updated_at handling
+- detection status must distinguish logical snapshot timestamps from unavailable filesystem modified time
+- downstream layers need richer compatibility notes than hybrid_intake_compatible alone
+- semantic-over-code hierarchy should be restated consistently across contract, schema, preservation policy, and manifests
+
+reconciliation_direction:
+- preserve backward compatibility where practical
+- prefer operationally truthful field semantics
+- add downstream richness utilization readiness metadata
+- keep the phase strictly non-runtime and non-mutative

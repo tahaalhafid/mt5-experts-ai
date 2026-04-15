@@ -1,0 +1,149 @@
+LEARNING_IMPACT_AUDIT_FRAMEWORK
+document_version=L7_LEARNING_IMPACT_AUDIT_FRAMEWORK_V1
+document_role=FORMAL_GOVERNED_LEARNING_IMPACT_AUDIT_FRAMEWORK
+authority_class=NON_AUTHORITATIVE_GOVERNANCE_POLICY
+scope=LEARNING_IMPACT_AUDIT_GOVERNANCE_ONLY
+live_runtime_activation_allowed=false
+auto_apply_allowed=false
+runtime_mutation_authorized=false
+
+PURPOSE
+Define how governed learning outcomes are audited for real impact under prior H/A and L1-L6 constraints.
+This framework judges impact by measured or reviewable outcome, not by implementation effort, narrative sophistication, or procedural momentum.
+
+CORE INTERPRETATION RULES
+- learning impact must be judged conservatively
+- no strong success claim from thin evidence windows
+- no success claim based solely on approval counts
+- no success claim based solely on promotion readiness
+- no success claim based solely on narrative clarity or polished packaging
+- governance compliance and boundedness matter as much as apparent insight
+- review activity alone does not prove usefulness
+- side-effects and burden must be reviewed alongside upside
+
+IMPACT_INTERPRETATION_STATES
+- POSITIVE_IMPACT
+  purpose=governed learning outputs improved usefulness, review quality, bounded experiment readiness, or future planning discipline without material burden, boundary pressure, or rollback concern
+- MIXED_IMPACT
+  purpose=learning outputs showed some useful value but also introduced meaningful noise, burden, ambiguity, or side-effect concern
+- INSUFFICIENT_EVIDENCE
+  purpose=evidence windows are too thin, traceability is incomplete, or impact claims remain premature
+- NEGATIVE_IMPACT
+  purpose=learning outputs created weak proposals, boundary pressure, burden, noise, repeated disqualification, rollback pressure, or misleading confidence
+
+OPTIONAL_RATING_BANDS
+- LOW
+- MODERATE
+- HIGH
+
+AUDIT_WINDOWS
+- DAILY_OBSERVATION
+  what_may_be_reviewed=early output quality, traceability completeness, immediate burden/noise signals
+  acceptable_conclusions=light observations only
+  premature_conclusions=strong trust increase, strong success claims, strong scope expansion claims
+  thin_evidence_condition=default high
+- THREE_DAY_AUDIT
+  what_may_be_reviewed=early pattern consistency, review usefulness, repeated disqualification, boundedness discipline
+  acceptable_conclusions=preliminary mixed/insufficient/early positive or negative patterns
+  premature_conclusions=strong long-horizon success claims
+  thin_evidence_condition=still material
+- WEEKLY_AUDIT
+  what_may_be_reviewed=multi-cycle review value, experiment-design readiness quality, repeated side-effects, burden trends
+  acceptable_conclusions=moderate governance conclusions when traceability is complete
+  premature_conclusions=permanent trust inflation or broad scope expansion
+  thin_evidence_condition=depends on volume and linkage quality
+- PHASE_AUDIT
+  what_may_be_reviewed=full governed learning cycle impact across proposal, review, experimentation-design, promotion-readiness, and rollback discipline
+  acceptable_conclusions=best available governed impact judgment under bounded evidence
+  premature_conclusions=runtime mutation authorization or auto-promotion
+  thin_evidence_condition=applies if phase volume or traceability remains weak
+
+IMPACT_DIMENSIONS
+- LEARNING_USEFULNESS
+  impact_purpose=judge whether governed learning improved understanding, structured reasoning, or bounded next-step readiness
+  typical_evidence_sources=learning proposals, review outcomes, impact notes, repository history
+  review_audience=ADMIN_REVIEWER|REVIEW_BOARD
+  audit_relevance=PRIMARY
+- PROPOSAL_USEFULNESS
+  impact_purpose=judge whether learning proposals were relevant, bounded, review-worthy, and not procedural noise
+  typical_evidence_sources=L3 proposals, L4 decisions, proposal history
+  review_audience=ADMIN_REVIEWER|REVIEW_BOARD
+  audit_relevance=PRIMARY
+- EXPERIMENT_USEFULNESS
+  impact_purpose=judge whether experiment designs improved validation readiness and bounded decision quality without hidden rollout pressure
+  typical_evidence_sources=L5 experiment designs, validation notes, rollback readiness notes
+  review_audience=REVIEW_BOARD
+  audit_relevance=PRIMARY
+- REVIEW_VALUE
+  impact_purpose=judge whether learning artifacts improved reviewer clarity, prioritization, or decision quality
+  typical_evidence_sources=review decisions, require-more-evidence patterns, closure notes
+  review_audience=ADMIN_REVIEWER|REVIEW_BOARD
+  audit_relevance=HIGH
+- RISK_REDUCTION_OR_RISK_INCREASE
+  impact_purpose=judge whether governed learning reduced guesswork and unmanaged risk, or created new risk pressure
+  typical_evidence_sources=promotion reviews, rollback notes, governance notes
+  review_audience=REVIEW_BOARD|COMMITTEE_REVIEWER
+  audit_relevance=HIGH
+- NOISE_IMPACT
+  impact_purpose=judge whether learning created low-value proposal inflation, repetitive packaging, or weak-evidence traffic
+  typical_evidence_sources=proposal volume, closure patterns, repeated disqualification
+  review_audience=ADMIN_REVIEWER|REVIEW_BOARD
+  audit_relevance=HIGH
+- GOVERNANCE_BURDEN
+  impact_purpose=judge review burden, escalation pressure, and governance overhead introduced by learning
+  typical_evidence_sources=review queue history, escalation history, closure patterns
+  review_audience=ADMIN_REVIEWER|REVIEW_BOARD
+  audit_relevance=HIGH
+- SIDE_EFFECT_EMERGENCE
+  impact_purpose=judge unintended consequences such as review fatigue, scope pressure, or hidden boundary stress
+  typical_evidence_sources=side-effect notes, burden notes, disqualification patterns
+  review_audience=REVIEW_BOARD|COMMITTEE_REVIEWER
+  audit_relevance=HIGH
+- ROLLBACK_PRESSURE
+  impact_purpose=judge whether learning outputs increase concern about future rollback needs or insufficient rollback preparation
+  typical_evidence_sources=rollback discipline notes, promotion reviews, disqualification reasons
+  review_audience=REVIEW_BOARD
+  audit_relevance=HIGH
+- LEARNING_SCOPE_FIT
+  impact_purpose=judge whether learning remains within appropriate bounded scope rather than pressing for unjustified expansion
+  typical_evidence_sources=scope proposals, trust adjustment notes, governance review
+  review_audience=REVIEW_BOARD|COMMITTEE_REVIEWER
+  audit_relevance=HIGH
+
+FORMAL_SIDE_EFFECT_REVIEW_POLICY
+The following must be audited explicitly:
+- governance burden increase
+- review fatigue
+- proposal inflation
+- weak evidence packaging
+- rollback pressure increase
+- scope drift pressure
+- repeated disqualification patterns
+- narrative sophistication masking weak value
+- hidden boundary pressure
+
+Explicit rule:
+well_written_learning_outputs_are_not_automatically_high_value_learning_outputs=true
+
+TRACEABILITY_EXPECTATIONS
+A learning impact audit record should conceptually capture:
+- learning_impact_audit_record_id
+- source_learning_proposal_ids
+- source_promotion_records
+- source_experiment_design_refs
+- source_review_outcomes
+- impact_dimensions_evaluated
+- impact_signal
+- impact_limitations
+- trust_adjustment_recommendation
+- linked_repository_records
+- reviewer_role
+- audit_timestamp
+
+RELATIONSHIP_TO_LATER_ACTION
+- L7 informs future learning-scope governance
+- L7 may justify tighter requirements or narrower scope
+- L7 may justify stronger rollback-preparedness expectations
+- L7 does NOT activate runtime changes
+- L7 does NOT replace implementation governance
+- L7 does NOT authorize authority expansion

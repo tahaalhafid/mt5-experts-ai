@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="panel">
+  <h2>ATAS Live Chain Status</h2>
+  <p class="subtle">Diagnostic-only telemetry. Read-only, non-authoritative.</p>
+  <div class="toolbar">
+    <a href="/atas-live?limit=60">60 events</a>
+    <a href="/atas-live?limit=120">120 events</a>
+    <a href="/atas-live?limit=240">240 events</a>
+  </div>
+  <div>
+    <span class="badge {{ payload.state|lower }}">{{ payload.state }}</span>
+    <span class="subtle">{{ payload.reason }}</span>
+  </div>
+</section>
+
+{% if payload.chain %}
+<section class="panel">
+  <h3>Chain Verdict</h3>
+  <table>
+    <tbody>
+      <tr>
+        <th>Captured (UTC)</th>
+        <td class="mono">{{ payload.chain.captured_at_utc }}</td>
+      </tr>
+      <tr>
+        <th>Chain Live Valid</th>
+        <td><span class="badge {{ 'live_valid' if payload.chain.chain_live_valid else 'blocked' }}">{{ payload.chain.chain_live_valid }}</span></td>
+      </tr>
+      <tr>
+        <th>First Failing Gate</th>
+        <td class="mono">
+          stage={{ payload.chain.first_failing_gate.stage }} |
+          state=<span class="badge {{ payload.chain.first_failing_gate.state|lower }}">{{ payload.chain.first_failing_gate.state }}</span> |
+          reason={{ payload.chain.first_failing_gate.reason_code }}
+        </td>
+      </tr>
+      <tr>
+        <th>Packet IDs</th>
+        <td class="mono">
+          obs={{ payload.chain.observation_packet_id }} |
+          exp={{ payload.chain.exporter_packet_id }} |
+          adp={{ payload.chain.adapter_packet_id }} |
+          ctx={{ payload.chain.context_packet_id }} |
+          ctx_status={{ payload.chain.context_status_packet_id }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="panel">
+  <h3>Stage-by-Stage</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Stage</th>
+          <th>State</th>
+          <th>Reason</th>
+          <th>Highlights</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in payload.chain.stages %}
+        <tr>
+          <td class="mono">{{ s.stage }}</td>
+          <td><span class="badge {{ s.state|lower }}">{{ s.state }}</span></td>
+          <td class="mono">{{ s.reason_code }}</td>
+          <td class="mono">
+            packet={{ s.details.packet_id if s.details.packet_id is defined else s.details.context_packet_id if s.details.context_packet_id is defined else 'UNAVAILABLE' }}
+            {% if s.details.last_acceptance_state is defined %}| accept={{ s.details.last_acceptance_state }}{% endif %}
+            {% if s.details.freshness_state is defined %}| freshness={{ s.details.freshness_state }}{% endif %}
+            {% if s.details.rejection_reason is defined %}| reject={{ s.details.rejection_reason }}{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+
+{% if payload.inventory and payload.inventory.stages %}
+<section class="panel">
+  <h3>Field Inventory</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Stage</th>
+          <th>Required Present</th>
+          <th>Required Missing</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for name, st in payload.inventory.stages.items() %}
+        <tr>
+          <td class="mono">{{ name }}</td>
+          <td class="mono">{{ st.required_keys_present|join(', ') if st.required_keys_present else 'NONE' }}</td>
+          <td class="mono">{{ st.required_keys_missing|join(', ') if st.required_keys_missing else 'NONE' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+
+{% if payload.events %}
+<section class="panel">
+  <h3>Recent Event Stream ({{ payload.event_limit }})</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Captured UTC</th>
+          <th>First Failing Gate</th>
+          <th>States</th>
+          <th>Summary</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in payload.events %}
+        <tr>
+          <td class="mono">{{ e.captured_at_utc }}</td>
+          <td class="mono">
+            {{ e.first_failing_gate.stage if e.first_failing_gate is defined else 'UNAVAILABLE' }} |
+            <span class="badge {{ e.first_failing_gate.state|lower if e.first_failing_gate is defined and e.first_failing_gate.state is defined else 'unavailable' }}">
+              {{ e.first_failing_gate.state if e.first_failing_gate is defined else 'UNAVAILABLE' }}
+            </span>
+          </td>
+          <td class="mono">
+            obs={{ e.observation_state }} |
+            exp={{ e.exporter_state }} |
+            adp={{ e.adapter_state }} |
+            intake={{ e.intake_state }} |
+            adv={{ e.advisory_state }}
+          </td>
+          <td>{{ e.summary }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
+

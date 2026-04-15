@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="grid cards">
+  {% for card in payload.cards %}
+  <article class="card">
+    <h3>{{ card.title }}</h3>
+    <div class="value">{{ card.value }}</div>
+    <div class="badge">{{ card.badge }}</div>
+    <p class="subtle">{{ card.sub }}</p>
+  </article>
+  {% endfor %}
+</section>
+
+<section class="panel">
+  <h2>Last Meaningful Runtime Event</h2>
+  <table>
+    <tbody>
+      <tr><th>Type</th><td>{{ payload.event.type }}</td></tr>
+      <tr><th>Time</th><td>{{ payload.event.time }}</td></tr>
+      <tr><th>Decision ID</th><td>{{ payload.event.decision_id }}</td></tr>
+      <tr><th>Reason</th><td>{{ payload.event.reason }}</td></tr>
+      <tr><th>Note</th><td>{{ payload.event.note }}</td></tr>
+    </tbody>
+  </table>
+</section>
+{% endblock %}

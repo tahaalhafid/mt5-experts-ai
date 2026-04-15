@@ -1,0 +1,77 @@
+FACTORY DOWNSTREAM CARRYFORWARD RULES
+version=V1
+
+source_level_only_fields:
+- source_author_if_known
+- source_date_if_known
+- source_language
+- source_origin_kind
+- source_quality_note
+- source_context
+- intended_use
+- marketing_or_hype_risk
+- backtest_evidence_present
+- live_evidence_present
+
+must_carry_into_source_registry:
+- source reference/origin metadata
+- source class
+- trust tier
+- intended use
+- source quality note
+- major limitations
+- ambiguity summary
+- discretion dependency summary
+- evidence presence flags
+- gateway update id
+- gateway intake record id
+- gateway lineage reference
+- source-level codification awareness presence
+- producer_role where observed
+- snapshot_identity linkage where observed
+
+must_carry_into_material_registry:
+- raw thesis/archetype/trigger/timing/invalidation/risk/exit logic
+- confirmation/suppression/session/volatility/context logic
+- provisional zone/regime fit
+- trigger/invalidation/exit family mapping
+- codifiability/discretion/confidence
+- structural clarity / falsifiability / boundedness
+- implementation / overfitting / false precision risk
+- limitations
+- missing_components
+- ambiguity_flags
+- contradiction_flags
+- recommended factory route
+- recommended next stage
+- gateway lineage references
+- durable codification payload
+- semantic priority over code enforcement note
+
+must_feed_decomposition:
+- rich upstream linkage
+- raw-to-normalized linkage
+- ambiguity visibility
+- contradiction visibility
+- missing component visibility
+- codifiability/discretion hints
+- codification reference or projection summary
+
+reference_only_downstream:
+- full raw code candidate text should remain referenced or summarized where practical
+- downstream layers should preserve codification references without blind mass duplication
+- full source-package boilerplate should remain reference-only when not materially useful downstream
+
+downstream_utilization_goal:
+- richness must remain usable for later decomposition quality
+- richness must remain usable for semantic projection
+- richness must remain usable for codifiability assessment
+- richness must remain usable for contradiction visibility
+- richness must remain usable for ambiguity handling
+- richness must remain usable for zone/regime/timing/risk/exit refinement
+- richness must remain usable for scorecards/governance/enrichment/review-board context
+
+anti_collapse_rule:
+- rich gateway input must not collapse into title + route only
+- semantic layer and codification layer must coexist through lineage
+- weak codifiability and strong ambiguity are informative, not disposable

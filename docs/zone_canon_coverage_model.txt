@@ -1,0 +1,73 @@
+ZONE CANON COVERAGE MODEL
+Authority: Institutional Edge Factory coverage model only.
+Truth posture: Structural canon coverage only. No runtime behavior change.
+
+============================================================
+COVERAGE STATES
+============================================================
+- STRONG_COVERAGE
+  At least one clear zone-primary family seed exists, with meaningful support/context around it.
+
+- MODERATE_COVERAGE
+  A zone is structurally represented, but either seed depth, support depth, or boundary clarity is still limited.
+
+- SPARSE_COVERAGE
+  A zone exists conceptually but is underseeded or thinly supported.
+
+- OVERCROWDED_COVERAGE
+  Too many similar labels compete inside a zone. This is a clutter warning, not a quality signal.
+
+- OVERLAP_HEAVY
+  A zone shares too much territory with adjacent zones and needs sharper future separation.
+
+- COVERAGE_GAP_PRESENT
+  A zone has visible structural weakness, missing seed depth, or over-reliance on primitives/placeholders.
+
+============================================================
+HOW TO READ COVERAGE
+============================================================
+Coverage does NOT mean:
+- proven edge quality
+- profitability
+- runtime approval
+- execution permission
+
+Coverage means only:
+- how well the current canon structure is populated and separated
+
+============================================================
+CURRENT E3 COVERAGE READ
+============================================================
+STRONG_COVERAGE
+- TREND_CONTINUATION
+- RANGE_MEAN_RECLAIM
+
+MODERATE_COVERAGE
+- REVERSAL_EXHAUSTION
+- COMPRESSION
+- EXPANSION_BREAKOUT
+
+SPARSE_COVERAGE
+- TREND_PULLBACK
+- EXPANSION_CONTINUATION
+- MICRO_RANGE_EXPANSION
+
+OVERLAP_HEAVY visibility is especially present in:
+- RANGE_MEAN_RECLAIM <-> REVERSAL_EXHAUSTION
+- TREND_CONTINUATION <-> TREND_PULLBACK
+- TREND_CONTINUATION <-> EXPANSION_CONTINUATION
+- EXPANSION_BREAKOUT <-> MICRO_RANGE_EXPANSION
+
+Crowding / label-clutter risk is most visible in:
+- EXPANSION_BREAKOUT
+
+Coverage gaps are visible in:
+- TREND_PULLBACK
+- EXPANSION_CONTINUATION
+- MICRO_RANGE_EXPANSION
+
+============================================================
+ANTI-OVERCLAIM RULE
+============================================================
+Coverage status is structural only.
+It must not be used as a proxy for live runtime superiority, licensing, or activation readiness.

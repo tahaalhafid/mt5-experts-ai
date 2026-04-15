@@ -1,0 +1,135 @@
+AI EFFECTIVENESS DECISION POLICY
+document_role=AUTHORITATIVE_AI_EFFECTIVENESS_DECISION_POLICY
+document_version=A8_AI_EFFECTIVENESS_DECISION_POLICY_V1
+authority_scope=AI_EFFECTIVENESS_REVIEW_OUTCOMES_AND_GOVERNANCE_ACTIONS_ONLY
+linked_framework=docs/ai_effectiveness_review_framework.txt
+linked_metrics_catalog=docs/ai_effectiveness_metrics_catalog.txt
+linked_human_review_workflow=docs/ai_human_review_workflow.txt
+trust_rule=defines_effectiveness_review_conclusions_outcomes_and_false_positive_false_cost_discipline_without_automation
+policy_note=All outcomes in this document are governance conclusions only. They do not automatically mutate runtime logic, AI authority state, or trading behavior.
+
+EFFECTIVENESS CONCLUSION OUTCOMES
+- CONTINUE_AS_IS
+  meaning=Current task family or AI layer remains justified under present bounded policy.
+  direct_runtime_mutation=false
+
+- CONTINUE_WITH_TIGHTER_BUDGETS
+  meaning=Value exists, but budget or depth consumption should be reduced in later policy handling.
+  direct_runtime_mutation=false
+
+- CONTINUE_WITH_NARROWER_SCOPE
+  meaning=Value exists, but triggers, cadence, or output families should be narrowed in future governed tuning.
+  direct_runtime_mutation=false
+
+- ADVISORY_ONLY_KEEP
+  meaning=Keep bounded advisory usefulness where shadow/proposal/evidence value is weaker.
+  direct_runtime_mutation=false
+
+- SHADOW_ONLY_DOWNGRADE
+  meaning=Usefulness is insufficient for current advisory layer, but observational/shadow value may still justify retention.
+  direct_runtime_mutation=false
+
+- HOLD_FEATURE_EXPANSION
+  meaning=Do not widen AI responsibilities until stronger effectiveness evidence exists.
+  direct_runtime_mutation=false
+
+- REQUIRE_MORE_EVIDENCE
+  meaning=Evidence is too thin or mixed for a stable governance conclusion.
+  direct_runtime_mutation=false
+
+- PREPARE_CONTROLLED_EXPERIMENT
+  meaning=Evidence may justify designing a later tightly bounded experiment, subject to separate governance and not auto-enabled here.
+  direct_runtime_mutation=false
+
+- DISABLE_SPECIFIC_TASK_FAMILY
+  meaning=A specific task family is not sufficiently justified and should be considered for disablement through later governed change process.
+  direct_runtime_mutation=false
+
+- DISABLE_SPECIFIC_ADVISORY_MODE
+  meaning=A specific advisory severity pattern or advisory handling mode should be considered for disablement through later governed change process.
+  direct_runtime_mutation=false
+
+OUTCOME SELECTION PRINCIPLES
+- CONTINUE_AS_IS requires positive usefulness with acceptable burden, cost, and boundary compliance.
+- CONTINUE_WITH_TIGHTER_BUDGETS applies when value exists but budget pressure or investigation depth is too costly.
+- CONTINUE_WITH_NARROWER_SCOPE applies when a task family is helpful only under a more selective trigger set.
+- ADVISORY_ONLY_KEEP applies when advisory retains value but broader AI surface does not yet justify more ambitious continuation.
+- SHADOW_ONLY_DOWNGRADE applies when advisory usefulness is weak or noisy but passive observation still has review value.
+- HOLD_FEATURE_EXPANSION is the default when evidence is mixed and governance confidence is not strong.
+- REQUIRE_MORE_EVIDENCE is mandatory when windows are thin, review coverage is incomplete, or counterfactual claims are too speculative.
+- PREPARE_CONTROLLED_EXPERIMENT may be recommended only when evidence is positive enough to justify later tightly bounded study.
+- DISABLE_* outcomes are appropriate when repeated low value, governance concern, or burden-cost imbalance materially outweighs benefit.
+
+EVALUATION RULES BY SIGNAL
+- POSITIVE_SIGNAL -> eligible outcomes: CONTINUE_AS_IS, CONTINUE_WITH_TIGHTER_BUDGETS, CONTINUE_WITH_NARROWER_SCOPE, PREPARE_CONTROLLED_EXPERIMENT
+- MIXED_SIGNAL -> eligible outcomes: CONTINUE_WITH_TIGHTER_BUDGETS, CONTINUE_WITH_NARROWER_SCOPE, HOLD_FEATURE_EXPANSION, REQUIRE_MORE_EVIDENCE, SHADOW_ONLY_DOWNGRADE
+- INSUFFICIENT_EVIDENCE -> eligible outcomes: REQUIRE_MORE_EVIDENCE, HOLD_FEATURE_EXPANSION
+- NEGATIVE_SIGNAL -> eligible outcomes: SHADOW_ONLY_DOWNGRADE, DISABLE_SPECIFIC_TASK_FAMILY, DISABLE_SPECIFIC_ADVISORY_MODE, HOLD_FEATURE_EXPANSION
+
+COUNCIL ADVISORY EFFECTIVENESS POLICY
+- Council advisory is effective when it improves decision handling quality without creating excessive delay, caution inflation, or procedural drag.
+- Useful holds should be evidenced by better post-fact handling quality, plausible deterioration avoidance, or more disciplined reevaluation.
+- Strong caution is not automatically effective simply because it sounds prudent; it must show measured benefit or at least credible review value.
+- Block-eligible classification should be reviewed as severity evidence only while block mode remains disabled by default.
+- Repeated false caution, repeated blocked-win penalty, or repetitive hold-without-value patterns justify MIXED_SIGNAL or NEGATIVE_SIGNAL findings.
+- Even strong positive advisory evidence does not auto-enable block mode. At most it may support PREPARE_CONTROLLED_EXPERIMENT for later separate governance study.
+
+PROPOSAL EFFECTIVENESS POLICY
+- Proposal quality is positive when proposals are bounded, clear, evidence-linked, review-worthy, and selectively useful.
+- High rejection or defer rates do not automatically imply failure, but repeated vagueness, repetition, or weak evidence does.
+- Proposal fatigue is a negative signal even when some proposals appear intelligent.
+- Proposal usefulness should be judged by review value, prioritization clarity, and experiment/action planning readiness under governance.
+- A proposal accepted for experiment is a governance usefulness signal, not proof of live profitability or runtime correctness.
+
+LEARNING-GOVERNANCE EFFECTIVENESS POLICY
+- Learning evidence is effective when it improves reviewer understanding, strengthens proposal quality, and reduces guesswork.
+- Evidence bundles that remain archival but materially clarify review decisions can still be positive.
+- Evidence bundles that merely restate obvious observations or create review clutter are mixed or negative signals.
+- Learning-governance usefulness must remain bounded and non-mutative; a mutative tendency is a governance problem, not a sign of effectiveness.
+- Too few reviewed evidence bundles require REQUIRE_MORE_EVIDENCE rather than optimistic assumptions.
+
+FALSE-POSITIVE AND FALSE-COST DISCIPLINE
+- false_caution discipline: repeated caution without corresponding risk-prevention value counts against advisory usefulness.
+- false_block discipline: repeated block-eligible severity without meaningful post-fact justification counts against future block-mode credibility.
+- excessive_hold discipline: repeated holds that mainly create delay without improved handling quality count against advisory value.
+- repeated_low_value_alert discipline: drift/anomaly/root-cause outputs that repeat without new review value count as noise.
+- proposal_spam discipline: proposal volume without bounded review value counts as negative signal.
+- review_fatigue discipline: when reviewers spend time closing low-value items repeatedly, review burden must weigh heavily in conclusions.
+- cost_without_insight discipline: expensive or deep investigations that add little decision value count against continuation.
+- intelligent_text_is_not_enough rule: polished narrative quality does not offset weak value, excessive noise, or governance friction.
+
+AUTHORITY AND GOVERNANCE DISCIPLINE
+- SHADOW outputs should not be penalized merely for not becoming action items.
+- ADVISORY outputs must be assessed for both usefulness and boundary compliance.
+- Governance compliance is a hard constraint. An output family with repeated authority boundary breaches cannot be judged strongly effective.
+- No effectiveness conclusion authorizes direct control, auto-apply, direct BUY/SELL generation, or silent plan mutation.
+- No effectiveness conclusion in A8 changes trading logic, activation status, or block-mode state automatically.
+
+EVIDENCE SUFFICIENCY RULES
+- Thin daily evidence should usually lead to observation notes or REQUIRE_MORE_EVIDENCE.
+- Strong phase conclusions require reviewed artifacts across relevant families, not isolated anecdotes.
+- Counterfactual claims such as prevented loss or blocked win should be framed conservatively.
+- When review completion is sparse, usefulness certainty must remain low.
+- Severe governance breaches are one of the few cases that may justify strong negative action even with thinner evidence.
+
+TRACEABILITY REQUIREMENTS
+- effectiveness_review_id
+- review_window
+- evaluated_task_family
+- evaluated_output_class
+- effectiveness_signal
+- evidence_basis
+- metric_bundle_reference
+- review_conclusion
+- recommended_governance_outcome
+- linked_repository_records
+- reviewer_role
+- review_timestamp
+- thin_evidence_note
+- false_positive_or_cost_note
+- governance_compliance_note
+
+RELATIONSHIP TO LATER PHASES
+- This policy may inform future A6 tuning, later learning-governance phases L1-L7, review-board prioritization, and future controlled experimentation design.
+- This policy may justify narrowing, tightening, downgrade, or disable preparation for specific task families in later governed phases.
+- This policy does not authorize runtime mutation, direct control, automatic advisory expansion, automatic block-mode enablement, or automatic rollback execution.

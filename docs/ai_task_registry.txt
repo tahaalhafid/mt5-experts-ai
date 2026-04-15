@@ -1,0 +1,171 @@
+AI TASK REGISTRY
+document_role=AI_TASK_REGISTRY
+document_authority_class=AUTHORITATIVE_AI_TASK_REGISTRY_REFERENCE
+registry_version=A2_AI_TASK_REGISTRY_V1
+linked_authority_gate=H6_AI_ACTIVATION_READINESS_GATE
+linked_input_policy=docs/ai_access_policy.txt
+linked_input_catalog=docs/ai_input_catalog.txt
+linked_task_input_matrix=docs/ai_task_input_matrix.txt
+linked_trigger_matrix=docs/ai_trigger_matrix.txt
+linked_escalation_policy=docs/ai_escalation_policy.txt
+registry_note=This registry defines task families, purpose, authority mapping, retrieval depth discipline, expected outputs, and non-control constraints only.
+policy_constraint=No authority expansion beyond H6. No direct control. No scheduler/orchestrator implemented in A2.
+
+FIELD FORMAT
+- task_family_name
+- task_purpose
+- task_category
+- allowed_authority_states
+- trigger_type
+- cadence_type
+- default_severity_tier
+- max_investigation_depth
+- required_input_classes
+- expected_output_classes
+- operator_visibility
+- proposal_allowed
+- direct_control_allowed
+
+1)
+task_family_name=FORENSIC_ANALYSIS
+task_purpose=Investigate a recent materially relevant decision/block/trade chain after an incident or notable outcome.
+task_category=INCIDENT_REVIEW
+allowed_authority_states=AI_SHADOW_ONLY|AI_ADVISORY_ONLY
+trigger_type=EVENT_DRIVEN
+cadence_type=PER_EVENT
+default_severity_tier=STANDARD
+max_investigation_depth=TARGETED_RETRIEVAL
+required_input_classes=ALWAYS_VISIBLE_SUMMARIES|ON_DEMAND_RETRIEVAL|SNAPSHOT_ONLY
+expected_output_classes=DIAGNOSTIC_FINDINGS|STRUCTURED_ANOMALIES|INCIDENT_REPORT
+operator_visibility=VISIBLE_TO_OPERATOR_REVIEW
+proposal_allowed=false
+direct_control_allowed=false
+
+2)
+task_family_name=DRIFT_ANALYSIS
+task_purpose=Assess regime drift, behavioral drift, and distribution changes using summary-first review and bounded historical slices.
+task_category=PERIODIC_INTELLIGENCE
+allowed_authority_states=AI_SHADOW_ONLY|AI_ADVISORY_ONLY
+trigger_type=CADENCE_DRIVEN
+cadence_type=DAILY|THREE_DAY
+default_severity_tier=STANDARD
+max_investigation_depth=TARGETED_RETRIEVAL
+required_input_classes=ALWAYS_VISIBLE_SUMMARIES|ON_DEMAND_RETRIEVAL|SNAPSHOT_ONLY
+expected_output_classes=DIAGNOSTIC_FINDINGS|STRUCTURED_ANOMALIES|DAILY_INTELLIGENCE_NOTE|THREE_DAY_REVIEW_INPUT
+operator_visibility=VISIBLE_TO_OPERATOR_REVIEW
+proposal_allowed=false
+direct_control_allowed=false
+
+3)
+task_family_name=ROOT_CAUSE_INVESTIGATION
+task_purpose=Investigate stronger incidents such as rollback events, repeated failures, or multi-layer blocking anomalies to isolate likely root causes.
+task_category=INCIDENT_INVESTIGATION
+allowed_authority_states=AI_SHADOW_ONLY|AI_ADVISORY_ONLY
+trigger_type=EVENT_DRIVEN
+cadence_type=NONE_BY_DEFAULT
+default_severity_tier=HIGH
+max_investigation_depth=DEEP_INVESTIGATION
+required_input_classes=ALWAYS_VISIBLE_SUMMARIES|ON_DEMAND_RETRIEVAL|SNAPSHOT_ONLY
+expected_output_classes=DIAGNOSTIC_FINDINGS|STRUCTURED_ANOMALIES|HYPOTHESES|INCIDENT_REPORT
+operator_visibility=VISIBLE_TO_OPERATOR_REVIEW
+proposal_allowed=false
+direct_control_allowed=false
+
+4)
+task_family_name=BOUNDED_PROPOSAL_GENERATION
+task_purpose=Generate bounded reviewable proposals only after evidence exists from prior investigations, diagnostics, validation, or review cycles.
+task_category=REVIEWABLE_PROPOSAL
+allowed_authority_states=AI_ADVISORY_ONLY
+trigger_type=HYBRID
+cadence_type=ON_REVIEW|NONE_BY_DEFAULT
+default_severity_tier=STANDARD
+max_investigation_depth=TARGETED_RETRIEVAL
+required_input_classes=ALWAYS_VISIBLE_SUMMARIES|ON_DEMAND_RETRIEVAL|SNAPSHOT_ONLY
+expected_output_classes=REVIEWABLE_PROPOSALS
+operator_visibility=VISIBLE_TO_OPERATOR_REVIEW
+proposal_allowed=true
+direct_control_allowed=false
+
+5)
+task_family_name=COVERAGE_GAP_ANALYSIS
+task_purpose=Identify weakly covered environments, missing diagnostics, repeated unattributed outcomes, or policy blind spots.
+task_category=COVERAGE_REVIEW
+allowed_authority_states=AI_SHADOW_ONLY|AI_ADVISORY_ONLY
+trigger_type=HYBRID
+cadence_type=THREE_DAY|ON_REQUEST
+default_severity_tier=STANDARD
+max_investigation_depth=TARGETED_RETRIEVAL
+required_input_classes=ALWAYS_VISIBLE_SUMMARIES|ON_DEMAND_RETRIEVAL|SNAPSHOT_ONLY
+expected_output_classes=DIAGNOSTIC_FINDINGS|STRUCTURED_ANOMALIES|ADVISORY_REPORT
+operator_visibility=VISIBLE_TO_OPERATOR_REVIEW
+proposal_allowed=false
+direct_control_allowed=false
+
+6)
+task_family_name=GOVERNANCE_AUDIT
+task_purpose=Audit baseline/release/governance/readiness consistency using authoritative docs, status artifacts, and limited runtime snapshots.
+task_category=GOVERNANCE_CONTROL
+allowed_authority_states=AI_SHADOW_ONLY|AI_ADVISORY_ONLY
+trigger_type=CADENCE_DRIVEN
+cadence_type=WEEKLY|PHASE_CHANGE
+default_severity_tier=LIGHT
+max_investigation_depth=SUMMARY_ONLY
+required_input_classes=ALWAYS_VISIBLE_SUMMARIES|SNAPSHOT_ONLY
+expected_output_classes=DIAGNOSTIC_FINDINGS|ADVISORY_REPORT|PERIODIC_REPORTS
+operator_visibility=VISIBLE_TO_OPERATOR_REVIEW
+proposal_allowed=false
+direct_control_allowed=false
+
+7)
+task_family_name=OPERATOR_COPILOT
+task_purpose=Answer operator questions, explain current state, and guide review using summaries first and narrow retrieval only when needed.
+task_category=OPERATOR_SUPPORT
+allowed_authority_states=AI_SHADOW_ONLY|AI_ADVISORY_ONLY
+trigger_type=ON_DEMAND
+cadence_type=ON_REQUEST
+default_severity_tier=LIGHT
+max_investigation_depth=TARGETED_RETRIEVAL
+required_input_classes=ALWAYS_VISIBLE_SUMMARIES|ON_DEMAND_RETRIEVAL|SNAPSHOT_ONLY
+expected_output_classes=OPERATOR_ANSWERS|DIAGNOSTIC_FINDINGS
+operator_visibility=DIRECT_OPERATOR_VISIBLE
+proposal_allowed=false
+direct_control_allowed=false
+
+8)
+task_family_name=LEARNING_GOVERNANCE_SUPPORT
+task_purpose=Provide evidence and reviewable learning-governance inputs without direct live mutation or autonomous optimization.
+task_category=LEARNING_GOVERNANCE
+allowed_authority_states=AI_SHADOW_ONLY|AI_ADVISORY_ONLY
+trigger_type=HYBRID
+cadence_type=DAILY|THREE_DAY|ON_REVIEW
+default_severity_tier=STANDARD
+max_investigation_depth=TARGETED_RETRIEVAL
+required_input_classes=ALWAYS_VISIBLE_SUMMARIES|ON_DEMAND_RETRIEVAL|SNAPSHOT_ONLY
+expected_output_classes=LEARNING_GOVERNANCE_EVIDENCE|ADVISORY_REPORT|THREE_DAY_REVIEW_INPUT
+operator_visibility=VISIBLE_TO_OPERATOR_REVIEW
+proposal_allowed=false
+direct_control_allowed=false
+
+9)
+task_family_name=COUNCIL_CONTEXTUAL_ADVISORY
+task_purpose=Provide non-directional post-candidate contextual advisory using a compact candidate packet and latest summaries only.
+task_category=COUNCIL_SUPPORT
+allowed_authority_states=AI_SHADOW_ONLY|AI_ADVISORY_ONLY
+trigger_type=EVENT_DRIVEN
+cadence_type=PER_CANDIDATE_EVENT
+default_severity_tier=LIGHT
+max_investigation_depth=SUMMARY_ONLY
+required_input_classes=ALWAYS_VISIBLE_SUMMARIES|SNAPSHOT_ONLY
+expected_output_classes=COUNCIL_CONTEXTUAL_ADVISORY|COUNCIL_ADVISORY_PACKET
+operator_visibility=VISIBLE_TO_OPERATOR_REVIEW
+proposal_allowed=false
+direct_control_allowed=false
+
+GLOBAL CONSTRAINTS
+- AI_OFF permits no task execution.
+- AI_SHADOW_ONLY permits shadow/internal/review-facing outputs only.
+- AI_ADVISORY_ONLY may additionally permit REVIEWABLE_PROPOSALS via BOUNDED_PROPOSAL_GENERATION.
+- No task family may issue direct trading commands.
+- No task family may auto-apply changes.
+- No task family may mutate strategy, governor, execution, thresholds, or live runtime behavior.
+- COUNCIL_CONTEXTUAL_ADVISORY remains contextual and non-directional only.

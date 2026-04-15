@@ -1,0 +1,50 @@
+learning_promotion_traceability
+document_version=L6_LEARNING_PROMOTION_TRACEABILITY_V1
+document_scope=PROMOTION_AND_ROLLBACK_TRACEABILITY_REQUIREMENTS_ONLY
+authority_class=NON_AUTHORITATIVE_GOVERNANCE_POLICY
+purpose=DEFINE_CONCEPTUAL_TRACEABILITY_FIELDS_FOR_PROMOTION_READINESS_AND_ROLLBACK_DISCIPLINE_WITHOUT_BUILDING_STORAGE_TOOLING
+non_goals=NO_STORAGE_ENGINE|NO_REPOSITORY_WRITER|NO_AUTOMATION|NO_RUNTIME_CONTROL
+
+1. REQUIRED PROMOTION TRACEABILITY FIELDS
+learning_promotion_record_id=REQUIRED
+source_learning_proposal_id=REQUIRED
+source_evidence_bundle_ids=REQUIRED
+source_review_outcomes=REQUIRED
+source_experiment_design_refs=OPTIONAL_WHEN_APPLICABLE
+promotion_readiness_state=REQUIRED
+promotion_rationale=REQUIRED
+promotion_limitations=REQUIRED
+required_signoff_level=REQUIRED
+rollback_readiness_reference=REQUIRED
+linked_repository_records=OPTIONAL_BUT_RECOMMENDED
+promotion_timestamp=REQUIRED
+
+2. REQUIRED ROLLBACK TRACEABILITY FIELDS
+rollback_owner_role=REQUIRED
+rollback_scope=REQUIRED
+rollback_trigger_conditions=REQUIRED
+rollback_feasibility_note=REQUIRED
+rollback_boundary_note=REQUIRED
+rollback_signoff_expectation=REQUIRED
+rollback_traceability_reference=REQUIRED
+
+3. TRACEABILITY QUALITY EXPECTATIONS
+Traceability must preserve a clear chain from evidence to proposal to review outcome to experiment-design support where applicable to promotion-readiness assessment.
+Traceability must make it possible to explain why a learning output was or was not considered promotion-ready.
+Traceability must surface remaining limitations and unresolved ambiguity honestly.
+Traceability must remain bounded and must not be repurposed as a hidden mutation or implementation channel.
+
+4. RELATIONSHIP TO LATER IMPLEMENTATION
+This phase may only prepare governed promotion readiness.
+This phase does not activate runtime change.
+This phase does not write into the active plan.
+This phase does not bypass future implementation governance.
+This phase feeds later L7 impact audit and future implementation planning outside this phase.
+
+5. AI ROLE BOUNDARY AT PROMOTION STAGE
+AI may summarize promotion rationale, remaining limitations, and rollback readiness references.
+AI may not self-promote outputs.
+AI may not self-signoff.
+AI may not convert promotion readiness into implementation.
+AI may not weaken rollback discipline.
+AI may not create implicit authority elevation.

@@ -1,0 +1,133 @@
+dashboard_design_lock_contract
+document_version=MT5_DASHBOARD_PHASE0_DESIGN_LOCK_V1
+document_role=FORMAL_DASHBOARD_DESIGN_LOCK_CONTRACT
+authority_class=NON_RUNTIME_ARCHITECTURAL_GOVERNANCE_CONTRACT
+scope=PHASE0_DESIGN_LOCK_ONLY_NO_RENDERING_NO_CONTROL_LAYER
+
+PURPOSE
+Lock the MT5 dashboard architecture, page map, display-state vocabulary, source registry boundaries,
+button model, widget contracts, cadence rules, and governance guardrails before any Phase 1 rendering work.
+
+PHASE 0 HARD BOUNDARY
+- no chart object rendering
+- no live chart buttons
+- no runtime action dispatch
+- no request queue
+- no mutation path
+- no strategy/runtime/pilot/export posture change
+- no authority expansion
+- no operator intent creation
+
+PRESERVED BASELINE TRUTHS
+- runtime_posture=RUNTIME_FROZEN
+- trading_posture=TRADING_BLOCKED
+- governance_posture=GOVERNANCE_HELD
+- export_posture=EXPORT_BLOCKED
+- pilot_posture=PILOT_DEFINED_NOT_LIVE
+- pilot_execution_started=false
+- ai_current_dominant_posture=AI_OFF
+- ai_bounded_architecture_only=AI_SHADOW_ONLY_OR_AI_ADVISORY_ONLY_WHEN_FUTURE_GOVERNANCE_PERMITS
+- factory_posture=STRUCTURALLY_DEFINED_AND_VISIBLE_ONLY
+- external_delivery_allowed=false
+
+FORMAL V1 PAGE MAP
+1. page_id=system_posture_overview
+   title=System Posture Overview
+   purpose=One bounded top-level summary of runtime, export, pilot, AI, and factory posture.
+2. page_id=runtime_governance
+   title=Runtime / Governance
+   purpose=Display runtime freeze, trade blocking, startup posture, and governance reasons.
+3. page_id=ai_authority_readiness
+   title=AI Authority & Readiness
+   purpose=Display AI authority state, readiness gate posture, and bounded role language.
+4. page_id=ai_advisory_review_governance
+   title=AI Advisory / Review / Governance
+   purpose=Display AI advisory boundaries, review gating, allowed outputs, and review posture.
+5. page_id=factory_state
+   title=Factory State
+   purpose=Display structural factory intake/decomposition/governance visibility without runtime implication.
+6. page_id=transfer_pilot_cohort
+   title=Transfer / Pilot / Cohort
+   purpose=Display bounded package 5 / package C pilot-definition posture only.
+7. page_id=export_release_gate
+   title=Export / Release Gate
+   purpose=Display export block posture, gate result, and sanitization requirement only.
+8. page_id=startup_diagnostics
+   title=Startup / Diagnostics
+   purpose=Display startup and diagnostic summary posture without implying readiness.
+9. page_id=alerts_reasons_holds
+   title=Alerts / Reasons / Holds
+   purpose=Aggregate blocking reasons, holds, and transitional warnings.
+10. page_id=market_operational_context
+    title=Market Operational Context
+    purpose=Display current bounded context/diagnostic summary only if present, without authority escalation.
+
+TOP-LEVEL POSTURE PRIORITY RULE
+The primary posture banner must render, in order:
+1. runtime posture
+2. export posture
+3. pilot posture
+4. AI authority posture
+5. factory posture
+
+If multiple truths are simultaneously true, a higher-priority blocking or holding posture must remain visually dominant.
+Positive bounded surfaces must never visually override runtime freeze, trade blocking, export blocking, or governance holds.
+
+GLOBAL MIXED-PLANE WARNING RULE
+If any page or widget mixes authoritative, derived, or placeholder/transitional states in one visible composition:
+- show a page-level mixed-plane warning
+- attach Authority Badge, Source Badge, and Freshness Badge
+- mark summary-only surfaces as non-primary truth
+- forbid any healthy/ready interpretation that hides blocking posture
+
+PERMANENT WATERMARK
+watermark_text=INTERNAL OPERATIONAL VIEW — NON-EXPORT SAFE
+Watermark must remain visible on the dashboard and on any visible-snapshot export.
+
+MANDATORY BADGES
+- Authority Badge
+- Source Badge
+- Freshness Badge
+Optional badges:
+- State Class Badge
+- Summary / Placeholder Badge
+
+MANDATORY PHASE 1 ARCHITECTURE LOCK
+The following contract surfaces are reserved and locked for later implementation:
+- MQL5/Experts/AI/dashboard_contract.mqh
+- MQL5/Experts/AI/dashboard_source_registry.mqh
+- MQL5/Experts/AI/dashboard_state_collector.mqh
+- MQL5/Experts/AI/dashboard_state_classifier.mqh
+- MQL5/Experts/AI/dashboard_view_model.mqh
+- MQL5/Experts/AI/dashboard_renderer.mqh
+- MQL5/Experts/AI/dashboard_navigation_controller.mqh
+- MQL5/Experts/AI/dashboard_guardrails.mqh
+- MQL5/Experts/AI/dashboard_snapshot_exporter.mqh
+- MQL5/Files/AI/dashboard_local_ui_state.json
+
+INTERPRETATION LOCK
+- dashboard_is_control_layer=false
+- dashboard_is_parallel_truth_source=false
+- dashboard_is_readiness_authority=false
+- dashboard_is_runtime_authority=false
+- dashboard_is_export_authority=false
+- dashboard_is_pilot_authority=false
+
+REFERENCE DOCUMENTS
+- display_state_model=MQL5/Experts/AI/docs/dashboard_display_state_model.txt
+- state_precedence_matrix=MQL5/Experts/AI/docs/dashboard_state_precedence_matrix.txt
+- derived_state_rules=MQL5/Experts/AI/docs/dashboard_derived_state_rules.txt
+- button_policy=MQL5/Experts/AI/docs/dashboard_button_policy.txt
+- source_registry=MQL5/Experts/AI/docs/dashboard_source_registry_and_criticality.txt
+- source_failure_policy=MQL5/Experts/AI/docs/dashboard_source_failure_policy.txt
+- badge_model=MQL5/Experts/AI/docs/dashboard_badge_model.txt
+- snapshot_sanitization=MQL5/Experts/AI/docs/dashboard_snapshot_sanitization_policy.txt
+- text_vocabulary_lock=MQL5/Experts/AI/docs/dashboard_text_vocabulary_lock.txt
+- severity_copy_standards=MQL5/Experts/AI/docs/dashboard_severity_and_copy_standards.txt
+- update_cadence_policy=MQL5/Experts/AI/docs/dashboard_update_cadence_policy.txt
+- page_non_goals=MQL5/Experts/AI/docs/dashboard_page_non_goals.txt
+- widget_contract_catalog=MQL5/Experts/AI/docs/dashboard_widget_contract_catalog.txt
+
+PHASE 0 COMPLETION RULE
+Phase 0 is complete when the dashboard architecture is fully locked in contract/status surfaces only,
+with no runtime mutation, no rendering, no control buttons, and no authority semantics change.

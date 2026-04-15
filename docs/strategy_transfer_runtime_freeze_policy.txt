@@ -1,0 +1,32 @@
+STRATEGY TRANSFER RUNTIME FREEZE POLICY
+version=PACKAGE1_STRATEGY_TRANSFER_RUNTIME_FREEZE_POLICY_V1
+policy_role=RUNTIME_FREEZE_CONTROL
+authority_class=NON_RUNTIME_GOVERNANCE_POLICY_WITH_RUNTIME_EFFECT
+
+purpose
+- freeze active execution privilege safely at the real runtime-control layer
+- preserve compile integrity, diagnostics, observability, journaling, and lineage
+- prevent council/runtime identities and compiled-plan runtime paths from continuing to authorize execution
+
+freeze rules
+- freeze is active when strategy_transfer_runtime_freeze_active=true
+- freeze is enforced centrally through the runtime policy gate
+- freeze blocks new strategy execution privilege for BUY and SELL decisions before execution open calls
+- freeze is non-destructive
+- freeze is reversible only through later governed strategy-transfer packages
+- freeze does not delete, archive, ingest, reclassify, or migrate strategies by itself
+
+freeze does not imply
+- migration complete
+- factory ingestion complete
+- legacy inventory complete
+- archive complete
+- runtime redesign
+- compile removal of strategy files
+
+integrity guarantees
+- observability remains intact
+- diagnostics remain intact
+- journaling remains intact
+- family/strategy attribution surfaces remain readable
+- lineage remains preserved for later transfer work

@@ -1,0 +1,294 @@
+CURRENT TRUTH / AUTHORITY MAP
+Authority: Documentation clarification only.
+Purpose: Clarify the current truth hierarchy, authority boundaries, execution chain, and posture distinctions without changing runtime meaning.
+
+============================================================
+1) SURFACE CLASSIFICATION MAP
+============================================================
+
+EXECUTION_AUTHORITY
+- Live runtime code and in-memory gate chain in:
+  - main_ea.mq5
+  - RuntimeGovernanceAllowsTrading(...)
+  - EvaluateRuntimeGovernanceState(...)
+  - RuntimeOperatingCohortAdmissionAllowsExecution(...)
+  - RuntimePolicyAllowsTrade(...)
+  - late entry-path blockers after routing
+- Meaning:
+  - This is the actual internal allow/deny path for live runtime execution.
+  - Runtime-emitted status files describe this authority posture, but the code path remains the final execution mechanism.
+
+RUNTIME_AUTHORITATIVE_STATUS
+- runtime_governance_status.json / .txt
+- execution_authority_status.json / .txt
+- active_operating_cohort.json / .txt
+- Meaning:
+  - These are runtime-emitted current-status surfaces describing the active internal execution posture.
+  - They are authoritative current runtime status surfaces for posture reporting.
+  - They are not merely dashboard summaries.
+
+PLAN_OR_CONFIGURATION_AUTHORITY
+- ai_current_plan.json
+- ai_personality_profile.json
+- ai_runtime_secrets.json
+- Meaning:
+  - These are plan/configuration truth surfaces used by runtime.
+  - They shape runtime mode, compiled-plan inputs, thresholds, and configuration behavior.
+  - They are not automatically identical to final execution authority.
+
+POLICY / RUNTIME INPUT ARTIFACT CONSUMED BY RUNTIME
+- strategy_transfer_runtime_freeze_status.json
+- Meaning:
+  - This is a runtime-consumed policy input artifact.
+  - Runtime reads it and incorporates its freeze / policy fields into governance evaluation.
+  - It is not equivalent in role to ai_current_plan.json.
+  - ai_current_plan.json is the authoritative active plan/config truth surface.
+  - strategy_transfer_runtime_freeze_status.json is instead a transfer/freeze policy input surface consumed by runtime governance logic.
+
+HISTORICAL_LINEAGE_OR_EVIDENCE
+- strategy_transfer_package5_status.json / .txt
+- strategy_transfer_package5_pilot_cycle.json / .txt
+- strategy_transfer_packageC_status.json / .txt
+- strategy_transfer_packageC_pilot_evidence_design.json / .txt
+- edge-factory lineage/evidence/pilot/review artifacts where the file itself is not a live execution gate
+- Meaning:
+  - These preserve transfer history, pilot posture, evidence design, or governance lineage.
+  - They do not by themselves grant live runtime execution privilege.
+
+RUNTIME-EMITTED BOUNDED STATUS SURFACE, NON-EXECUTION-AUTHORITATIVE
+- ai_activation_readiness_status.json / .txt
+- Meaning:
+  - This is runtime-emitted and operationally meaningful.
+  - It expresses current bounded AI readiness / authority posture.
+  - It is not final execution authority.
+  - It does not replace runtime_governance_status or execution_authority_status in the live execution chain.
+
+DERIVED_OR_VISIBILITY_ONLY
+- export_release_gate_status.json / .txt
+- ai_evolution_state.json
+- ai_repository_manifest.json / .txt
+- diagnostic and dashboard-facing summaries where the file is explicitly non-authoritative for runtime control
+- dashboard visible snapshots and local dashboard UI state
+- Meaning:
+  - These may be operationally useful and meaningful.
+  - They do not outrank live execution authority or active runtime truth anchors.
+
+JOURNAL_OR_SUPPORT_ARTIFACT
+- ai_performance_journal.jsonl
+- council_feedback.json
+- council_memory.txt
+- council_report.txt
+- ai_strategy_memory.json
+- ai_strategy_memory_events.jsonl
+- related journals, memories, feedback traces, and support files
+- Meaning:
+  - These support analysis, memory, review, and observability.
+  - They are not final execution authority.
+
+============================================================
+2) CURRENT EXECUTION AUTHORITY CHAIN
+============================================================
+
+The current internal execution chain is:
+
+1. Runtime governance posture
+   - RuntimeGovernanceAllowsTrading(...)
+   - EvaluateRuntimeGovernanceState(...)
+   - Current emitted posture:
+     - governance_state=COHORT_GOVERNED_ACTIVE
+     - trading_allowed=true
+
+2. Active execution authority cutover posture
+   - execution_authority_source=ACTIVE_OPERATING_COHORT_FACTORY_GOVERNED_ADMISSION
+   - execution_authority_cutover_state=CUTOVER_ACTIVE
+   - legacy_identity_execution_authority_active=false
+   - factory_governed_execution_authority_active=true
+
+3. Active operating cohort admission boundary
+   - active_operating_cohort_id=O3_FIRST_OPERATING_COHORT_V1
+   - execution_allowed_only_through_active_operating_cohort=true
+   - operating_cohort_admission_semantics=FAMILY_LEVEL
+   - admitted families:
+     - LIQUIDITY_REVERSAL
+     - MEAN_RECLAIM
+     - TREND_CONTINUATION
+     - COMPRESSION_BREAKOUT
+
+4. Runtime policy / envelope gating
+   - RuntimePolicyAllowsTrade(...)
+   - RuntimeOperatingEnvelopeAllowsTrade(...)
+   - Current emitted posture:
+     - operating_risk_envelope_state=ENVELOPE_CLEAR
+
+5. Late runtime blockers after policy
+   - level awareness brake
+   - any enabled optional late council gates
+   - bounded AI advisory hold/block path only if authority conditions permit
+
+6. Trade execution path
+   - ExecuteRuntimeBuy / ExecuteRuntimeSell after all prior gates pass
+
+What currently has final internal allow/deny power:
+- the live runtime gate chain above
+
+What currently configures or shapes execution but is not by itself the final execution gate:
+- ai_current_plan.json
+- strategy compiler outputs
+- plan-derived thresholds and guards
+- strategy_transfer_runtime_freeze_status.json as runtime-consumed policy input
+
+What is historical lineage only:
+- Package 5 pilot surfaces
+- Package C pilot-evidence surfaces
+- transfer lineage artifacts
+
+What is visibility only or non-execution-authoritative:
+- export_release_gate_status.json
+- dashboard surfaces
+- ai_activation_readiness_status.json
+- repository manifests
+- derived diagnostics
+
+============================================================
+3) EXACT CURRENT POSITION OF plan_v076
+============================================================
+
+Primary classification:
+- PLAN_OR_CONFIGURATION_AUTHORITY
+
+Why:
+- plan_v076 is the current active plan/config truth via ai_current_plan.json.
+- Runtime loads it as active plan truth and compiles plan primitives from it.
+
+Secondary nuance:
+- It is an active runtime plan shell with bounded live influence.
+- It shapes compiled trigger/confirmation/filter/pattern/risk support.
+- It does not itself possess the final right to allow live execution once runtime governance and cohort authority are applied.
+
+Additional lineage nuance:
+- In Package 5 pilot lineage, the legacy runtime plan shell for plan_v076 is preserved as research-only lineage material.
+- That lineage posture does not override its current role as active plan/config truth.
+- It also does not convert plan_v076 into current final execution authority.
+
+Therefore:
+- plan_v076 is not the current final execution authority.
+- plan_v076 is the current active plan/config truth with bounded runtime influence under the current council + cohort-governed runtime.
+
+============================================================
+4) CONFLICT / PREFERENCE ORDER
+============================================================
+
+For internal live execution meaning, prefer in this order:
+
+1. Live runtime code / actual runtime gate logic
+2. runtime_governance_status.json
+3. execution_authority_status.json
+4. active_operating_cohort.json
+5. ai_current_plan.json
+6. strategy_transfer_runtime_freeze_status.json as runtime-consumed policy input
+7. Package 5 / Package C transfer and pilot surfaces
+8. export_release_gate_status.json
+9. dashboard / derived visibility / support surfaces
+
+Clarifications:
+- ai_current_plan.json is authoritative active plan truth, but not automatically the final execution authority.
+- runtime_governance_status.json and execution_authority_status.json describe the active internal execution posture after governance/cutover evaluation.
+- active_operating_cohort.json defines the currently admitted execution family boundary for the active cutover model.
+- Package 5 / Package C surfaces are not preferred over current runtime authority surfaces.
+- export_release_gate_status.json is parallel export posture, not internal execution authority.
+- dashboard surfaces never outrank runtime authority surfaces.
+
+============================================================
+5) CURRENT EXECUTION AUTHORITY VS OTHER SURFACES
+============================================================
+
+CURRENT EXECUTION AUTHORITY
+- live runtime gate chain
+- current cohort-governed cutover posture
+- current operating cohort family admission
+- current envelope / guardrail / late blocker path
+
+PLAN / CONFIG TRUTH
+- ai_current_plan.json
+- plan_v076 / COUNCIL active plan/mode truth
+- runtime-consumed personality/secrets/config inputs
+
+HISTORICAL LINEAGE / EVIDENCE
+- package5 transfer status
+- package5 pilot cycle
+- packageC reconciliation status
+- packageC pilot evidence design
+- edge-factory lineage/evidence artifacts not used as live execution gates
+
+DASHBOARD / VISIBILITY / SUPPORT SURFACES
+- dashboard source registry and visible projections
+- ai_activation_readiness_status.json as runtime-emitted bounded status, non-execution-authoritative
+- export_release_gate_status.json as export posture visibility
+- risk_safety_status.json as runtime-emitted bounded safety/status visibility
+- journals, feedback, memory, repository manifests, snapshots
+
+============================================================
+6) RUNTIME POSTURE VS EXPORT POSTURE
+============================================================
+
+These two postures are parallel, not identical.
+
+CURRENT RUNTIME POSTURE
+- internally active
+- cohort-governed
+- trading_allowed=true
+- execution cutover active
+- active operating cohort defined
+- envelope currently clear
+
+CURRENT EXPORT / RELEASE POSTURE
+- external delivery blocked
+- export_release_gate_status overall_gate_result=BLOCKED
+- external_delivery_allowed=false
+
+Critical distinction:
+- Export/release posture is parallel to runtime posture.
+- It is not part of the internal execution chain itself.
+- It may block external delivery while runtime remains internally active.
+
+Therefore:
+- export blocking does not by itself disable internal runtime execution
+- internal runtime authority still depends on runtime governance, execution authority cutover, active cohort admission, and runtime policy/envelope gates
+
+============================================================
+7) CURRENT PACKAGE5 / PACKAGEC POSITION
+============================================================
+
+Package 5 / Package C pilot surfaces are:
+- historical lineage / evidence / governance surfaces
+- bounded pilot/evidence posture only
+- not current live execution authority
+
+Supporting truth:
+- runtime_reactivation_performed=false
+- live_pilot_execution_started=false
+- pilot_runtime_execution_allowed=false on Package C pilot evidence records
+
+Therefore:
+- Package 5 / Package C surfaces may explain provenance, candidate families, and pilot/evidence posture
+- They do not themselves admit live execution
+
+============================================================
+8) CURRENT PRACTICAL SUMMARY
+============================================================
+
+The system is currently operating under:
+- active plan/config truth from ai_current_plan.json
+- current runtime governance truth from runtime_governance_status.json
+- active execution cutover truth from execution_authority_status.json
+- active family-level cohort admission from active_operating_cohort.json
+- current envelope/guardrail posture from live runtime gating and emitted support status
+
+The system is not currently operating under:
+- Package 5 pilot authority
+- Package C evidence-design authority
+- export-release authority
+- dashboard authority
+- AI direct execution authority
+
+End of current truth / authority map.

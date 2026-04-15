@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell.exe -NoProfile -Command ':*)",
+      "Bash(powershell.exe -NonInteractive -Command \"ls 'C:\\\\Users\\\\INFINTY GROUP\\\\AppData\\\\Roaming\\\\MetaQuotes\\\\Terminal\\\\D0E8209F77C8CF37AD8BF550E51FF075\\\\backup_archives' | Select-Object Name,Length,LastWriteTime | Sort LastWriteTime -Desc | Select -First 5\")",
+      "Bash(powershell.exe -NonInteractive -Command ':*)",
+      "Bash(py -c ':*)"
+    ]
+  }
+}

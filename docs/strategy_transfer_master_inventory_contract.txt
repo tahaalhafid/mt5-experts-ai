@@ -1,0 +1,60 @@
+MASTER INVENTORY CONTRACT
+Package:
+- Strategy Transfer to Factory — Package 2
+- Package name: Master Inventory + Legacy Intake Preparation
+
+Authority posture:
+- Documentation / transition contract only
+- Non-runtime
+- Non-mutative
+- Non-destructive
+- Not a factory ingestion surface
+- Not a reclassification surface
+- Not an archive-finalization surface
+- Not an execution authority surface
+
+Purpose:
+- Build one truthful master inventory of all current strategy-bearing elements
+- Record where each element lives
+- Record how each element is referenced
+- Preserve Package 1 freeze truth
+- Preserve lineage for later transfer into the factory
+
+What counts as inventory material here:
+- strategy
+- strategy shell
+- family definition
+- strategy module
+- strategy fragment
+- runtime-linked strategy-bearing element
+- library-linked strategy-bearing element
+- config-linked strategy-bearing element
+- compiler-linked strategy-bearing element
+- orphaned legacy strategy-bearing surface
+- transferable legacy source candidate
+
+Definitions:
+- strategy = a named executable or conceptual trading identity carrying setup/thesis/behavior semantics
+- strategy shell = a plan/config composition surface that assembles multiple strategy-bearing fragments into a runtime-capable structure
+- family definition = a higher-level council/runtime family container that groups strategy implementations
+- strategy module = a strategy-bearing implementation unit or reusable strategy-bearing component
+- strategy fragment = a reusable trigger / confirmation / filter / entry / risk fragment that contributes to strategy composition
+- runtime-linked strategy = currently connected to the active runtime path or active runtime plan path
+- orphaned strategy-bearing surface = present and attributable, but not part of the current active runtime reference path
+- legacy transfer candidate = a preserved current element that may later be ingested into the factory through governed future packages
+
+Master inventory is allowed to express:
+- where an element lives
+- how it is referenced
+- whether Package 1 froze its execution privilege
+- whether lineage is preserved
+- whether it is a future legacy transfer candidate
+
+Master inventory must NOT imply:
+- factory ingestion already happened
+- reclassification already happened
+- primitive extraction already happened
+- archive finalization already happened
+- runtime reactivation is allowed
+- migration is complete
+- deletion occurred

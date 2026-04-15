@@ -1,0 +1,58 @@
+experiment_traceability_requirements
+document_version=L5_EXPERIMENT_TRACEABILITY_REQUIREMENTS_V1
+document_scope=CONTROLLED_EXPERIMENT_DESIGN_TRACEABILITY_EXPECTATIONS
+authority_class=NON_AUTHORITATIVE_GOVERNANCE_POLICY
+
+1. PURPOSE
+This document defines the conceptual traceability requirements for controlled experiment designs.
+It does not implement storage tooling or repository writers.
+
+2. REQUIRED TRACEABILITY FIELDS
+- learning_experiment_design_id
+- source_learning_proposal_id
+- source_evidence_bundle_ids
+- experiment_class_name
+- proposal_family_name
+- proposal_risk_class
+- validation_expectation_note
+- rollback_readiness_note
+- review_approval_reference
+- experiment_scope
+- target_subsystem_or_policy_domain
+- observation_window
+- evaluated_change_hypothesis
+- explicit_non_change_scope
+- expected_upside
+- expected_downside
+- exit_criteria
+- experiment_status_design_only
+- linked_repository_records
+
+3. TRACEABILITY DISCIPLINE
+Every experiment design must remain attributable to:
+- a reviewed learning proposal
+- linked evidence bundles
+- a declared experiment class
+- a declared risk posture
+- a declared validation expectation
+- a declared rollback readiness note
+- a declared non-live status
+
+4. MINIMUM DESIGN-STATE DISCLOSURES
+Each design record should clearly disclose:
+- design_only_status=true
+- live_runtime_activation_allowed=false
+- direct_apply_allowed=false
+- auto_apply_allowed=false
+- mutation_prohibition_note=EXPERIMENT_DESIGN_ONLY_NOT_RUNTIME_CHANGE
+
+5. REVIEW AND HANDOFF LINKAGE
+A design record should preserve conceptual references to:
+- L4 decision outcome that enabled experiment consideration
+- reviewer role or approval reference
+- later L6 promotion or rollback governance linkage if such later phases occur
+- later L7 impact audit linkage if such later phases occur
+
+6. AI ROLE BOUNDARY
+AI may help organize traceability fields and summarize rationale.
+AI may not create fake certainty, suppress limitations, erase rollback needs, or convert traceability into launch authority.

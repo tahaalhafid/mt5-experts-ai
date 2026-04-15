@@ -1,0 +1,152 @@
+AI REPOSITORY INDEX POLICY
+document_role=AUTHORITATIVE_AI_REPOSITORY_INDEX_POLICY
+policy_version=A5_AI_REPOSITORY_INDEX_POLICY_V1
+authority_scope=AI_REPOSITORY_INDEX_AND_CROSS_REFERENCE_POLICY_ONLY
+linked_repository_design=docs/ai_intelligence_repository_design.txt
+linked_output_contract=docs/ai_output_contract.txt
+linked_cost_governance=docs/ai_cost_governance_policy.txt
+policy_note=Defines repository identifiers, required index keys, cross-reference rules, current-vs-historical linkage, and link-back intent only. No runtime index engine is implemented in A5.
+
+INDEX KEY TAXONOMY
+required_common_index_keys=
+repository_record_id,
+report_id,
+repository_object_name,
+source_task_family,
+report_type,
+generated_at,
+storage_scope,
+visibility_tier
+
+optional_common_index_keys=
+target_scope,
+symbol_scope,
+decision_id_reference,
+position_id_reference,
+close_deal_id_reference,
+proposal_id_reference,
+incident_window_reference,
+review_window_reference,
+advisory_packet_id_reference,
+root_cause_record_reference,
+drift_record_reference,
+source_report_reference,
+supersedes_record_id,
+related_record_ids
+
+CROSS-REFERENCE RULES
+- repository_record_id is the repository primary identifier.
+- report_id is the source output/report identifier when one exists.
+- One repository record may reference multiple related record ids, but one record must still have one primary repository_record_id.
+- Incident-linked records should cross-reference incident_window_reference whenever applicable.
+- Proposal-linked records should cross-reference proposal_id_reference whenever applicable.
+- Advisory-linked records should cross-reference advisory_packet_id_reference whenever applicable.
+- Decision/trade linked records should use decision_id_reference and/or position_id_reference when applicable.
+- A record that supersedes an earlier current-summary record should set supersedes_record_id and move the earlier record into historical/superseded role.
+- Link-back to source report identifiers is required when a repository object is derived from a prior output contract artifact.
+
+REQUIRED INDEX KEYS BY OBJECT FAMILY
+
+1)
+repository_object_name=HOURLY_WATCH_RECORD
+required_index_keys=repository_record_id,report_id,generated_at,storage_scope,target_scope
+optional_index_keys=symbol_scope,incident_window_reference,related_record_ids
+cross_reference_rule=May supersede a prior current hourly watch record for the same target_scope.
+link_back_rule=Link back to source report_id and source_task_family.
+
+2)
+repository_object_name=INCIDENT_REPORT_RECORD
+required_index_keys=repository_record_id,report_id,generated_at,incident_window_reference,source_task_family
+optional_index_keys=decision_id_reference,position_id_reference,symbol_scope,related_record_ids,root_cause_record_reference
+cross_reference_rule=Incident report is the primary incident lineage anchor when incident_window_reference exists.
+link_back_rule=Link to source report_id and any related anomaly/root-cause/drift records.
+
+3)
+repository_object_name=DAILY_INTELLIGENCE_RECORD
+required_index_keys=repository_record_id,report_id,generated_at,review_window_reference,storage_scope
+optional_index_keys=symbol_scope,target_scope,drift_record_reference,related_record_ids
+cross_reference_rule=Daily records may roll into three-day review references.
+link_back_rule=Link to source report_id and relevant drift/learning evidence records.
+
+4)
+repository_object_name=THREE_DAY_REVIEW_RECORD
+required_index_keys=repository_record_id,report_id,generated_at,review_window_reference,storage_scope
+optional_index_keys=proposal_id_reference,related_record_ids,drift_record_reference
+cross_reference_rule=Three-day review may reference daily records and proposals in scope.
+link_back_rule=Link to source review report and referenced daily/intelligence records.
+
+5)
+repository_object_name=EXECUTIVE_BRIEF_RECORD
+required_index_keys=repository_record_id,report_id,generated_at,review_window_reference
+optional_index_keys=related_record_ids,proposal_id_reference
+cross_reference_rule=Executive briefs summarize other review-layer records rather than replace them.
+link_back_rule=Link to source review/brief report ids.
+
+6)
+repository_object_name=REVIEWABLE_PROPOSAL_RECORD
+required_index_keys=repository_record_id,report_id,proposal_id_reference,generated_at,source_task_family
+optional_index_keys=review_window_reference,related_record_ids,target_scope
+cross_reference_rule=Proposal records must remain traceable to evidence and later review outcomes.
+link_back_rule=Link to source proposal report_id and evidence/reference records.
+
+7)
+repository_object_name=GOVERNANCE_AUDIT_RECORD
+required_index_keys=repository_record_id,report_id,generated_at,review_window_reference,storage_scope
+optional_index_keys=related_record_ids,target_scope
+cross_reference_rule=Audit records may reference repository design/output policy versions in scope.
+link_back_rule=Link to source audit report_id.
+
+8)
+repository_object_name=LEARNING_EVIDENCE_RECORD
+required_index_keys=repository_record_id,report_id,generated_at,source_task_family,storage_scope
+optional_index_keys=proposal_id_reference,review_window_reference,target_scope,related_record_ids
+cross_reference_rule=Learning evidence may point to proposal ids but never acts as direct mutation authority.
+link_back_rule=Link to source evidence bundle report_id.
+
+9)
+repository_object_name=COUNCIL_ADVISORY_RECORD
+required_index_keys=repository_record_id,report_id,advisory_packet_id_reference,generated_at
+optional_index_keys=decision_id_reference,target_scope,symbol_scope,related_record_ids
+cross_reference_rule=Advisory records remain candidate-scoped and must not claim execution authority.
+link_back_rule=Link to source advisory packet id and source task family.
+
+10)
+repository_object_name=OPERATOR_COPILOT_RECORD
+required_index_keys=repository_record_id,report_id,generated_at,storage_scope,target_scope
+optional_index_keys=symbol_scope,incident_window_reference,related_record_ids
+cross_reference_rule=Copilot records are query-response history and may reference other repository objects.
+link_back_rule=Link to source response report_id and any cited repository record ids.
+
+11)
+repository_object_name=ANOMALY_RECORD
+required_index_keys=repository_record_id,report_id,generated_at,source_task_family,storage_scope
+optional_index_keys=incident_window_reference,decision_id_reference,position_id_reference,related_record_ids
+cross_reference_rule=Anomaly records should attach to an incident lineage when one exists.
+link_back_rule=Link to source anomaly report_id.
+
+12)
+repository_object_name=DRIFT_RECORD
+required_index_keys=repository_record_id,report_id,generated_at,review_window_reference,storage_scope
+optional_index_keys=target_scope,symbol_scope,related_record_ids
+cross_reference_rule=Drift records may bridge daily history into learning/review history.
+link_back_rule=Link to source drift report_id.
+
+13)
+repository_object_name=ROOT_CAUSE_RECORD
+required_index_keys=repository_record_id,report_id,generated_at,incident_window_reference,storage_scope
+optional_index_keys=decision_id_reference,position_id_reference,related_record_ids
+cross_reference_rule=Root-cause records must reference their primary incident lineage when available.
+link_back_rule=Link to source investigation report_id.
+
+CURRENT VS HISTORICAL INDEXING RULES
+- CURRENT_ACTIVE_SUMMARY records must be indexable by current scope and supersedable by newer scope-equivalent records.
+- Historical records must retain original generated_at and scope references.
+- Superseded records are historical, not deleted by index policy alone.
+- Proposal records may transition from current_pending_review to historical_reviewed, but repository_record_id remains stable.
+- A record promoted in visibility tier does not become a new truth source; it remains the same repository lineage with updated review status metadata in future implementations.
+
+INDEX PRIORITY INTENT
+- VERY_HIGH = incident, proposal, learning evidence, root-cause, anomaly lineages.
+- HIGH = current summaries, daily intelligence, drift, three-day reviews, governance audits, council advisory.
+- MEDIUM = executive briefs and operator query history.
+- Index priority affects future retrieval/index design intent only; no engine is implemented in A5.

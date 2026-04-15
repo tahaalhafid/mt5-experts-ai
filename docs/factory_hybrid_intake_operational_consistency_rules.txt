@@ -1,0 +1,16 @@
+FACTORY HYBRID INTAKE OPERATIONAL CONSISTENCY RULES
+version=V1
+
+required_consistency_rules:
+- semantic_priority_over_code_enforced=true where hybrid compatibility is declared
+- ambiguity_preservation_supported=true where downstream richness is claimed
+- contradiction_visibility_supported=true where downstream richness is claimed
+- codification_runtime_authority=false in all downstream compatibility layers
+- codification_review_required_by_default=true in all downstream compatibility layers
+- rich_intake_source_awareness_supported=true where source-level carry-forward is relevant
+- rich_material_detail_awareness_supported=true where material-level carry-forward is relevant
+- downstream_richness_utilization_ready=true only when the layer can consume preserved richness later without silent collapse
+
+non_runtime_rule:
+- compatibility metadata never implies runtime authority
+- compatibility metadata never implies automatic import, decomposition, promotion, or activation

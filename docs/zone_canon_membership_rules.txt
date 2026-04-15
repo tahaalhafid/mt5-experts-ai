@@ -1,0 +1,61 @@
+ZONE CANON MEMBERSHIP RULES
+Authority: Institutional Edge Factory zone membership rules only.
+Truth posture: Canon membership mapping only. No runtime behavior change.
+
+============================================================
+MEMBERSHIP ROLES
+============================================================
+- ZONE_PRIMARY_EDGE_FAMILY
+  Main canonical family seed for the zone.
+
+- ZONE_SECONDARY_EDGE_FAMILY
+  Related family with meaningful overlap or relevance to the zone, but not treated as the zone's main seed.
+
+- ZONE_SUPPORTING_PRIMITIVE
+  Primitive, detector, filter, entry pattern, exit model, or support module that helps describe or support a zone without becoming family identity.
+
+- ZONE_MARKET_NATIVE_SUPPORT_OBJECT
+  Market-native raw context object linked to a zone as support, suppression, or context only.
+
+- ZONE_RESEARCH_ONLY_REFERENCE
+  A useful reference or candidate that should remain under review and not be treated as active canon driver.
+
+- ZONE_LEGACY_REFERENCE
+  Historical or downgraded material that remains attached for reference only and must not compete directly with active canon.
+
+============================================================
+MAPPING DISCIPLINE
+============================================================
+1) Core runtime family seeds may become zone-primary only where structure is clear.
+2) Conditional families normally enter as zone-secondary unless there is exceptional reason to promote them.
+3) Primitive materials do not receive family status.
+4) Legacy library identities remain legacy/reference unless later phases explicitly re-evaluate them.
+5) Market-native objects may support or suppress a zone, but do not become runtime families in E3.
+6) A material may be attached secondarily to another zone when overlap is real, but primary home must stay explicit.
+
+============================================================
+CURRENT CONSERVATIVE MEMBERSHIP DECISIONS
+============================================================
+Primary edge families:
+- TREND_CONTINUATION -> TREND_CONTINUATION
+- RANGE_MEAN_RECLAIM -> MEAN_RECLAIM
+- REVERSAL_EXHAUSTION -> LIQUIDITY_REVERSAL
+- COMPRESSION -> COMPRESSION_BREAKOUT
+
+Secondary edge families:
+- TREND_PULLBACK -> TREND_PULLBACK_CONTINUATION
+- EXPANSION_BREAKOUT -> VOL_BREAKOUT
+- EXPANSION_CONTINUATION -> EXPANSION_CONTINUATION
+- MICRO_RANGE_EXPANSION -> MICRO_RANGE_BREAK
+
+Important overlap assignments:
+- LIQUIDITY_REVERSAL also appears secondarily in RANGE_MEAN_RECLAIM overlap territory.
+- MEAN_RECLAIM also appears secondarily in REVERSAL_EXHAUSTION overlap territory.
+- TREND_CONTINUATION appears secondarily in TREND_PULLBACK and EXPANSION_CONTINUATION.
+- COMPRESSION_BREAKOUT appears secondarily in EXPANSION_BREAKOUT.
+
+============================================================
+BOUNDARY NOTE
+============================================================
+Membership role assignment is organizational only.
+It does not create runtime permission, final regime approval, or trigger authority.

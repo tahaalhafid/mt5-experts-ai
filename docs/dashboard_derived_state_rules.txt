@@ -1,0 +1,75 @@
+dashboard_derived_state_rules
+document_version=MT5_DASHBOARD_PHASE0_DERIVED_STATE_RULES_V1
+document_role=FORMAL_DASHBOARD_DERIVED_STATE_COMPUTATION_RULES
+authority_class=NON_RUNTIME_DERIVED_VIEW_LOGIC_CONTRACT
+scope=DERIVED_DISPLAY_STATES_ONLY
+
+DERIVED_STATE=STALE_STATE
+source_ids=ANY_VISIBLE_CURATED_SOURCE
+source_fields=evaluated_at|last_state_change|last_detection_time|gateway_snapshot_updated_at|last_refresh_time|refresh_class
+activation_conditions=Activate when the visible source timestamp is missing, unparseable, explicitly unavailable after emission, or older than the allowed freshness window for its refresh class.
+priority=READINESS_LIMITATION
+severity_class=WARNING
+fallback_text=Status freshness could not be confirmed safely.
+badge_class=FRESHNESS_BADGE:STALE
+empty_or_partial_behavior=If timestamp field is absent but the source otherwise parses, emit STALE_STATE rather than a healthy interpretation.
+
+DERIVED_STATE=SOURCE_PARTIAL
+source_ids=PAGE_REQUIRED_SOURCE_SET
+source_fields=source_present|parse_ok|required_source_count|available_source_count|partial_flags|placeholder_flags
+activation_conditions=Activate when at least one required source for a widget/page is missing, parse-failed, flagged partial, or only available through fallback/placeholder representation while at least one required source still exists.
+priority=READINESS_LIMITATION
+severity_class=CAUTION
+fallback_text=Some required dashboard sources are unavailable or partial.
+badge_class=SOURCE_BADGE:PARTIAL
+empty_or_partial_behavior=If all required sources are missing, suppress healthy rendering and escalate to page-level hold text plus missing-source warning.
+
+DERIVED_STATE=STARTUP_PARTIAL
+source_ids=SRC_RUNTIME_GOVERNANCE_STATUS|SRC_DIAGNOSTIC_RUNTIME_SUMMARY
+source_fields=governance_state|truth_ready|diagnostics_ready|final_decision|final_blocked
+activation_conditions=Activate when startup-related fields are present and at least one startup sub-signal is true while at least one required startup sub-signal remains false and STARTUP_BLOCKED is not already dominant for that widget.
+priority=READINESS_LIMITATION
+severity_class=CAUTION
+fallback_text=Startup signals are partially populated but remain incomplete.
+badge_class=STATE_CLASS_BADGE:DERIVED
+empty_or_partial_behavior=If startup fields are absent, treat as SOURCE_PARTIAL instead of STARTUP_PARTIAL.
+
+DERIVED_STATE=NOT_READY
+source_ids=SRC_AI_ACTIVATION_READINESS|SRC_RUNTIME_GOVERNANCE_STATUS|SRC_FACTORY_INTAKE_STATUS
+source_fields=readiness_state|ai_bridge_ready|truth_ready|diagnostics_ready|replay_ready|validation_ready|safety_ready|runtime_governance_allows_ai|edge_factory_intake_ready
+activation_conditions=Activate when an authoritative source explicitly reports NOT_READY, or when required readiness booleans for the displayed surface remain materially incomplete.
+priority=READINESS_LIMITATION
+severity_class=WARNING
+fallback_text=Required readiness conditions are incomplete or blocked.
+badge_class=STATE_CLASS_BADGE:DERIVED
+empty_or_partial_behavior=If readiness inputs are incomplete, combine NOT_READY with SOURCE_PARTIAL and never show ready language.
+
+DERIVED_STATE=ARCHITECTURE_DEFINED_NOT_OPERATIONALLY_ACTIVE
+source_ids=SRC_DASHBOARD_PHASE0_STATUS|LOCAL_DASHBOARD_CONTRACT_SET
+source_fields=phase0_design_lock_defined|phase1_rendering_performed|runtime_behavior_changed|control_layer_introduced
+activation_conditions=Activate when dashboard Phase 0 design lock is defined, architecture files are reserved/emitted, and rendering/control behavior is not active.
+priority=POSITIVE_BUT_BOUNDED
+severity_class=INFO
+fallback_text=Dashboard architecture is defined, but the operational view layer is not active.
+badge_class=STATE_CLASS_BADGE:DERIVED
+empty_or_partial_behavior=If Phase 0 status artifact is absent, omit this state rather than inferring it.
+
+DERIVED_STATE=MIXED_PLANE_SUMMARY_ONLY
+source_ids=SRC_EDGE_FACTORY_MANIFEST|ANY_WIDGET_WITH_MIXED_STATE_CLASSES
+source_fields=artifact_plane_role|mixed_plane_artifact_note|top_level_summary_counts_only|material_lifecycle_current_state_counts_summary_only|contract_truth_location|record_truth_location
+activation_conditions=Activate when a visible source declares MIXED_PLANE_TRANSITIONAL or summary-only continuity fields, or when widget composition merges authoritative and derived/transitional states.
+priority=TRANSITIONAL_VISIBILITY
+severity_class=NOTICE
+fallback_text=This view mixes summary and primary-truth layers; use badges for authority context.
+badge_class=SUMMARY_PLACEHOLDER_BADGE:SUMMARY_ONLY
+empty_or_partial_behavior=If mixed-plane metadata is absent, do not infer mixed-plane status from layout alone.
+
+DERIVED_STATE=ZERO_RECORD_STATE
+source_ids=SRC_SOURCE_INTAKE_GATEWAY_STATUS|SRC_EDGE_FACTORY_INTERNAL_INTELLIGENCE_STATUS
+source_fields=gateway_record_count|gateway_snapshot_emitted|intelligence_record_count|artifact_snapshot_emitted|truth_surface_note
+activation_conditions=Activate when a source snapshot/status artifact is present and parses, but emitted record count is zero in a way that remains semantically inconclusive for readiness or health.
+priority=TRANSITIONAL_VISIBILITY
+severity_class=CAUTION
+fallback_text=Status artifact exists, but current record count is zero and should not be read as healthy.
+badge_class=SUMMARY_PLACEHOLDER_BADGE:ZERO_RECORD
+empty_or_partial_behavior=If the snapshot itself is missing, use SOURCE_PARTIAL instead of ZERO_RECORD_STATE.

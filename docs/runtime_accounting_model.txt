@@ -1,0 +1,45 @@
+artifact_role=RUNTIME_ACCOUNTING_MODEL
+artifact_authority_class=AUTHORITATIVE_FACTORY_RUNTIME_ACCOUNTING_MODEL
+model_version=E8_RUNTIME_ACCOUNTING_MODEL_V1
+phase_id=E8
+
+purpose:
+- define how runtime evidence may later feed edge scorecards conceptually
+- keep runtime accounting separate from live control in this phase
+
+what_runtime_accounting_means:
+- runtime accounting means attributing observed decision and outcome evidence back to specific edge families and family-zone contexts over time.
+- it answers not only whether a family trades, but how often it attempts, how often it is rejected or held, how often it executes, how it behaves by regime/session, and whether its health is improving or degrading.
+
+conceptual_runtime_evidence_inputs:
+- decision attempts
+- candidate counts
+- actual executions
+- close outcomes
+- reject reasons
+- hold reasons
+- execution-open failures
+- regime-specific concentration
+- session concentration
+- family-specific deterioration patterns
+- execution-quality drag or support
+- geometry-sensitive degradation after attractive trigger appearance
+
+accounting_windows:
+- micro observation windows may later track attempt density and rapid degradation
+- rolling windows may later track expectancy, mae, mfe, and concentration
+- phase windows may later track deterioration and suppression pressure
+- no window is activated in E8; only the model is defined
+
+measurement_discipline:
+- lack of executions is not automatically failure; it may reflect rarity or overblocking
+- executions without quality are not evidence of edge health
+- holds and rejects matter because they can reveal suppression pressure and overblocking risk
+- regime/session concentration must remain visible because a family can look healthy overall while being narrowly dependent on one context
+- execution quality interaction must remain visible because family health can be harmed by slippage, poor fill posture, or open failure patterns
+
+non_runtime_boundary:
+- runtime accounting in E8 does not compute live scores
+- runtime accounting in E8 does not trigger suppression
+- runtime accounting in E8 does not alter runtime journaling
+- runtime accounting in E8 only defines the later accounting spine

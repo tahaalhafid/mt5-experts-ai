@@ -1,0 +1,71 @@
+{
+  "version": "ATAS_PHASE3_FIELD_POPULATION_CONTRACT_V1",
+  "families": {
+    "OrderFlowState": {
+      "direct": [
+        "aggression_state",
+        "passivity_state",
+        "absorption_state",
+        "exhaustion_state",
+        "imbalance_state",
+        "initiative_response_state",
+        "reaction_quality_state",
+        "field_group_quality"
+      ],
+      "provisional": [],
+      "derived_later": []
+    },
+    "LiquidityState": {
+      "direct": [
+        "liquidity_pressure_state",
+        "density_void_state",
+        "book_asymmetry_state",
+        "local_microstructure_stability",
+        "field_group_quality"
+      ],
+      "provisional": [],
+      "derived_later": [
+        "pull_stack_behavior"
+      ]
+    },
+    "LevelInteractionState": {
+      "direct": [
+        "candidate_area_interaction_state",
+        "defended_failed_area_behavior",
+        "rejection_acceptance_character",
+        "absorption_near_area",
+        "pressure_around_band",
+        "local_interaction_state",
+        "field_group_quality"
+      ],
+      "provisional": [],
+      "derived_later": []
+    },
+    "MicrostructureEnvironmentEvidence": {
+      "direct": [
+        "compression_expansion_evidence",
+        "order_disorder_evidence",
+        "contradiction_evidence",
+        "microstructure_cleanliness_evidence",
+        "local_instability_markers",
+        "field_group_quality"
+      ],
+      "provisional": [],
+      "derived_later": []
+    },
+    "QualityValidityState": {
+      "direct": [
+        "degradation_state",
+        "suppression_flags",
+        "suppression_reason_codes",
+        "confidence_ceiling_candidate",
+        "field_group_quality",
+        "invalid_or_missing_family_indicators"
+      ],
+      "provisional": [
+        "export_eligibility_candidate"
+      ],
+      "derived_later": []
+    }
+  }
+}

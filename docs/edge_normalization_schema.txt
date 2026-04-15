@@ -1,0 +1,116 @@
+EDGE NORMALIZATION SCHEMA
+Authority: Normalized internal edge-language schema for Institutional Edge Factory decomposition.
+Truth posture: Normalization contract only. No runtime behavior change.
+
+============================================================
+SCHEMA PURPOSE
+============================================================
+Every decomposed material must target one normalized internal representation so that:
+- current imported canon materials
+- current runtime-proven materials
+- legacy imported materials
+- future PDF / URL / text / script / playbook / research sources
+- internal runtime findings
+- human review submissions
+
+can all become structurally comparable without bypassing later factory gates.
+
+============================================================
+REQUIRED NORMALIZED FIELDS
+============================================================
+- normalized_material_id
+  Unique normalized-record identifier.
+
+- material_id
+  Back-reference to material_registry.json.
+
+- source_id
+  Back-reference to source_registry.json.
+
+- source_class
+  Registered source class.
+
+- trust_tier
+  Registered trust tier carried forward from intake.
+
+- decomposition_status
+  Current decomposition state from the approved status model.
+
+- decomposition_quality_note
+  Conservative note on normalization depth/quality.
+
+- market_thesis_normalized
+  Structured thesis statement or preserved bounded placeholder.
+
+- setup_archetype_normalized
+  Structured setup/archetype statement or bounded placeholder.
+
+- primary_zone_candidate
+  Provisional zone candidate only.
+
+- secondary_zone_candidates
+  Additional provisional zone candidates only.
+
+- primary_regime_fit
+  Provisional primary regime fit only.
+
+- secondary_regime_fits
+  Additional provisional regime fits only.
+
+- trigger_logic_normalized
+  Structured trigger-role statement or bounded placeholder.
+
+- invalidation_logic_normalized
+  Structured invalidation-role statement or bounded placeholder.
+
+- risk_logic_normalized
+  Structured risk-role statement or bounded placeholder.
+
+- exit_logic_normalized
+  Structured exit-role statement or bounded placeholder.
+
+- timing_logic_normalized
+  Timing role or dependency statement.
+
+- confirmation_logic_normalized
+  Confirmation/context logic statement.
+
+- suppression_logic_preliminary
+  Preliminary suppression/filter logic statement where applicable.
+
+- execution_style_hint
+  High-level execution-style hint only.
+
+- timeframe_dependency_normalized
+  Bounded timeframe dependency note.
+
+- asset_suitability_note
+  Bounded asset-scope suitability note.
+
+- discretion_load_normalized
+  LOW / LOW_TO_MODERATE / MODERATE / HIGH / UNKNOWN
+
+- ambiguity_flags
+  Honest ambiguity markers carried forward.
+
+- decomposition_limitations
+  Limitations that prevent over-claiming.
+
+- lineage_reference
+  Must include:
+  - material_registry_record
+  - source_registry_record
+  - origin_reference
+
+- pre_codifiability_hint
+  Preliminary pre-audit hint only.
+
+============================================================
+SCHEMA USAGE RULES
+============================================================
+1) The schema must support both precise and partial records.
+2) Unknown detail must remain marked unknown or preliminary.
+3) Primitive materials may normalize primarily as support roles rather than strategy identities.
+4) Family-level materials may normalize at family abstraction level while preserving member-level dependency as a limitation.
+5) Legacy and weak materials may remain ambiguous without forced false precision.
+6) A normalized record is still non-runtime and non-canon by default.

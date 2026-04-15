@@ -1,0 +1,27 @@
+2026-04-09 02:29:00 +03:00 | compile_attempt | tool=MetaEditor64
+command: & 'C:\Program Files\MetaTrader 5\metaeditor64.exe' /portable /compile:"C:\Users\INFINTY GROUP\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Experts\AI\main_ea.mq5" /log:"C:\Users\INFINTY GROUP\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Experts\AI\compile_lineage_fidelity_repair.log"
+result: process_exit_code=0
+artifact_check: MetaEditor did not emit/update the requested compile log in this environment.
+artifact_check: main_ea.ex5 timestamp unchanged from pre-run baseline in this session.
+compile_verification_state: NOT_CONFIRMED_BY_TOOL_OUTPUT
+
+2026-04-09 02:30:00 +03:00 | compile_attempt_variant | tool=MetaEditor64
+command: & 'C:\Program Files\MetaTrader 5\metaeditor64.exe' /compile:'C:\Users\INFINTY GROUP\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Experts\AI\main_ea.mq5' /log:'C:\Users\INFINTY GROUP\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Experts\AI\compile_lineage_fidelity_repair.log'
+result: process_exit_code=0
+artifact_check: compile log/ex5 timestamp still not updated by tool in this environment.
+compile_verification_state: NOT_CONFIRMED_BY_TOOL_OUTPUT
+
+2026-04-09 02:31:00 +03:00 | static_compile_impact_checks
+- verified signature alignment:
+  - ExecuteRuntimeBuy/ExecuteRuntimeSell now accept UnifiedDecisionConfidence by const reference and all call sites match.
+  - Correlation_RegisterTradeOpenV5 extended signature matches main_ea call sites.
+  - JournalAppendTradeOpenV5 extended signature matches correlation_engine call site.
+- verified new confidence fields exist in UnifiedDecisionConfidence and are initialized.
+- verified trade feedback enrichment uses JA_ExtractJsonDouble/Bool extractor overloads present in journal_analytics.mqh.
+- verified decision envelope trace append call is invoked after JournalAppendDecisionV3 in validation path.
+- verified no direct edits to execution admission gates, risk formulas, governor authority routing, Databento/Fusion activation paths.
+static_check_state: PASSED
+
+final_compile_state: SOURCE_PATCH_APPLIED_WITH_STATIC_SYMBOL_CONSISTENCY_ONLY
+note: run an interactive compile from MetaEditor terminal instance to obtain definitive compiler diagnostics in this environment.
+

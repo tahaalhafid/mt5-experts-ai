@@ -1,0 +1,134 @@
+LEARNING PROPOSAL TYPES
+document_role=AUTHORITATIVE_LEARNING_PROPOSAL_FAMILIES
+document_version=L3_LEARNING_PROPOSAL_TYPES_V1
+authority_scope=LEARNING_PROPOSAL_FAMILIES_AND_PACKAGING_REQUIREMENTS_ONLY
+linked_engine=docs/learning_proposal_engine.txt
+linked_risk_policy=docs/learning_proposal_risk_policy.txt
+linked_learning_contract=docs/learning_governance_contract.txt
+linked_evidence_pipeline=docs/learning_evidence_pipeline.txt
+trust_rule=defines_bounded_learning_proposal_families_without_creating_live_mutation_or_auto_learning_authority
+policy_note=Proposal families are defined here so that governed learning proposals remain narrow, reviewable, and non-mutative.
+
+PROPOSAL FAMILIES
+
+- OBSERVATION_ONLY_PROPOSAL
+  proposal_purpose=Record a bounded learning observation that is review-relevant but not yet appropriate for change-oriented handling.
+  allowed_evidence_bundle_types=LEARNING_EVIDENCE_BUNDLE
+  direct_apply_allowed=false
+  auto_apply_allowed=false
+  required_review_level=ADMIN_REVIEWER
+  expected_risk_class=LOW_RISK_REVIEW
+  boundedness_requirements=Explicit observation scope, limitation disclosure, and no implied change request.
+  prohibited_usage=May not disguise a mutation request or broad optimization claim.
+
+- INSTRUMENTATION_PROPOSAL
+  proposal_purpose=Suggest bounded instrumentation or observability refinement for better governed understanding.
+  allowed_evidence_bundle_types=LEARNING_EVIDENCE_BUNDLE,PROPOSAL_SUPPORT_BUNDLE
+  direct_apply_allowed=false
+  auto_apply_allowed=false
+  required_review_level=ADMIN_REVIEWER
+  expected_risk_class=LOW_RISK_REVIEW
+  boundedness_requirements=Must name the exact instrumentation gap, expected review value, and validation intent.
+  prohibited_usage=May not imply live strategy tuning or direct execution control.
+
+- INVESTIGATION_PROPOSAL
+  proposal_purpose=Request a bounded deeper review, replay, or root-cause investigation where evidence is meaningful but not yet sufficient for stronger action.
+  allowed_evidence_bundle_types=LEARNING_EVIDENCE_BUNDLE,PROPOSAL_SUPPORT_BUNDLE
+  direct_apply_allowed=false
+  auto_apply_allowed=false
+  required_review_level=ADMIN_REVIEWER
+  expected_risk_class=MEDIUM_RISK_REVIEW
+  boundedness_requirements=Must define investigation scope, unanswered question, and why current evidence is not enough.
+  prohibited_usage=May not be framed as a hidden implementation request.
+
+- EXPERIMENT_CANDIDATE_PROPOSAL
+  proposal_purpose=Prepare a tightly bounded candidate for later controlled experiment consideration.
+  allowed_evidence_bundle_types=PROPOSAL_SUPPORT_BUNDLE,EXPERIMENT_CANDIDATE_SUPPORT_BUNDLE
+  direct_apply_allowed=false
+  auto_apply_allowed=false
+  required_review_level=REVIEW_BOARD
+  expected_risk_class=HIGH_RISK_REVIEW
+  boundedness_requirements=Must define experiment purpose, evidence basis, caution note, validation intent, and rollback note.
+  prohibited_usage=May not authorize experiment launch or live enablement by itself.
+
+- BOUNDED_POLICY_REVIEW_PROPOSAL
+  proposal_purpose=Suggest a governed review of a specific learning-related policy boundary, handling rule, or review policy.
+  allowed_evidence_bundle_types=PROPOSAL_SUPPORT_BUNDLE,EXPERIMENT_CANDIDATE_SUPPORT_BUNDLE
+  direct_apply_allowed=false
+  auto_apply_allowed=false
+  required_review_level=REVIEW_BOARD
+  expected_risk_class=GOVERNANCE_SENSITIVE_REVIEW
+  boundedness_requirements=Must name the exact policy area, bounded concern, review rationale, and mutation prohibition note.
+  prohibited_usage=May not request authority expansion or direct trading-control changes.
+
+- BOUNDED_THRESHOLD_REVIEW_PROPOSAL
+  proposal_purpose=Suggest review of a narrowly identified threshold or tolerance area as a governed subject for later human handling only.
+  allowed_evidence_bundle_types=PROPOSAL_SUPPORT_BUNDLE,EXPERIMENT_CANDIDATE_SUPPORT_BUNDLE
+  direct_apply_allowed=false
+  auto_apply_allowed=false
+  required_review_level=REVIEW_BOARD
+  expected_risk_class=HIGH_RISK_REVIEW
+  boundedness_requirements=Must remain threshold-review only, with exact scope, evidence support, validation intent, and rollback note.
+  prohibited_usage=May not become a direct threshold mutation request.
+
+- BOUNDED_GATING_REVIEW_PROPOSAL
+  proposal_purpose=Suggest review of a narrowly bounded gating rule, readiness rule, or escalation-handling boundary.
+  allowed_evidence_bundle_types=PROPOSAL_SUPPORT_BUNDLE,EXPERIMENT_CANDIDATE_SUPPORT_BUNDLE
+  direct_apply_allowed=false
+  auto_apply_allowed=false
+  required_review_level=REVIEW_BOARD
+  expected_risk_class=GOVERNANCE_SENSITIVE_REVIEW
+  boundedness_requirements=Must specify gating scope, exact concern, expected governance value, and non-authoritative notice.
+  prohibited_usage=May not directly enable, disable, block, or allow live behavior.
+
+- LEARNING_SCOPE_TIGHTENING_PROPOSAL
+  proposal_purpose=Recommend tighter learning scope, stricter evidence requirements, narrower output handling, or stronger governance discipline.
+  allowed_evidence_bundle_types=PROPOSAL_SUPPORT_BUNDLE,EXPERIMENT_CANDIDATE_SUPPORT_BUNDLE
+  direct_apply_allowed=false
+  auto_apply_allowed=false
+  required_review_level=REVIEW_BOARD
+  expected_risk_class=GOVERNANCE_SENSITIVE_REVIEW
+  boundedness_requirements=Must specify which learning scope is being tightened and why measured evidence justifies it.
+  prohibited_usage=May not silently disable unrelated capabilities or alter live trading logic.
+
+- LEARNING_SCOPE_NARROWING_PROPOSAL
+  proposal_purpose=Recommend narrowing a task family, evidence family usage pattern, or advisory-learning coupling when usefulness is low or governance cost is high.
+  allowed_evidence_bundle_types=PROPOSAL_SUPPORT_BUNDLE,EXPERIMENT_CANDIDATE_SUPPORT_BUNDLE
+  direct_apply_allowed=false
+  auto_apply_allowed=false
+  required_review_level=REVIEW_BOARD
+  expected_risk_class=GOVERNANCE_SENSITIVE_REVIEW
+  boundedness_requirements=Must define the exact scope being narrowed, expected burden reduction, and limitation note.
+  prohibited_usage=May not become a hidden rollback or live disablement instruction.
+
+PROPOSAL PACKAGING TEMPLATE
+Required fields:
+- learning_proposal_id
+- proposal_family_name
+- proposal_scope
+- target_domain
+- evidence_bundle_references
+- evidence_sufficiency_state
+- evidence_quality_grade
+- rationale
+- expected_benefit
+- expected_risk
+- boundedness_note
+- limitation_note
+- required_review_level
+- suggested_next_step
+- validation_intent
+- rollback_note
+- direct_apply_allowed=false
+- auto_apply_allowed=false
+- non_authoritative_notice
+
+Optional fields:
+- affected_zone_or_family
+- relevant_review_window
+- related_repository_records
+- related_proposal_history_refs
+
+PACKAGING RULE
+A proposal package must remain a review artifact only.
+Any package that omits scope, evidence linkage, limitations, or non-authoritative notice is incomplete by definition.

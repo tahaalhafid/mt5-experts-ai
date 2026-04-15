@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ title }} | MT5 External Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">MT5 External Dashboard</div>
+      <div class="sub">Read-only, non-authoritative</div>
+      <nav class="nav">
+        <a class="{{ 'active' if active_page == 'overview' else '' }}" href="/">System Overview</a>
+        <a class="{{ 'active' if active_page == 'context' else '' }}" href="/context">Runtime Context</a>
+        <a class="{{ 'active' if active_page == 'trades' else '' }}" href="/trades">Last Trades</a>
+        <a class="{{ 'active' if active_page == 'rejections' else '' }}" href="/rejections">Rejections</a>
+        <a class="{{ 'active' if active_page == 'forensics' else '' }}" href="/forensics">Forensics</a>
+        <a class="{{ 'active' if active_page == 'levels' else '' }}" href="/levels">Levels</a>
+        <a class="{{ 'active' if active_page == 'inspect' else '' }}" href="/inspect">Inspect</a>
+        <a class="{{ 'active' if active_page == 'atas_live' else '' }}" href="/atas-live">ATAS Live Chain</a>
+      </nav>
+      <div class="roots">
+        <div><span>Files/AI</span><code>{{ files_ai_root }}</code></div>
+        <div><span>Adapter</span><code>{{ adapter_root }}</code></div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <h1>{{ title }}</h1>
+        <div class="actions">
+          <button id="btnRefresh">Refresh</button>
+          <button id="btnAuto">Auto: ON</button>
+        </div>
+      </header>
+      <div class="notice">{{ read_only_notice }}</div>
+      {% block body %}{% endblock %}
+    </main>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

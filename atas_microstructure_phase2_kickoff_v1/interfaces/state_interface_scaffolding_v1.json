@@ -1,0 +1,138 @@
+{
+  "version": "ATAS_PHASE2_STATE_INTERFACE_SCAFFOLDING_V1",
+  "phase": "PHASE_2_KICKOFF",
+  "non_operative": true,
+  "global_forbidden_fields": [
+    "final_market_meaning_owner",
+    "final_regime_owner",
+    "final_canonical_level_owner",
+    "final_tradability_owner",
+    "decision_package",
+    "execution_command",
+    "risk_override",
+    "governor_override"
+  ],
+  "families": {
+    "OrderFlowState": {
+      "intent": "Non-authoritative order-flow evidence snapshot for future bounded intelligence engines.",
+      "authority_class": "ATAS_EXTERNAL_NON_AUTHORITATIVE",
+      "fields": [
+        { "name": "packet_id", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "trace_id", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "event_time_utc", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "execution_symbol", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "liquidity_sweep_state", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "absorption_state", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "delta_bias_state", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "imbalance_state", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "continuation_exhaustion_hint", "type": "string", "status": "optional", "source_kind": "direct" },
+        { "name": "signal_stability_window_sec", "type": "integer", "status": "optional", "source_kind": "direct" },
+        { "name": "orderflow_confidence_band", "type": "string", "status": "provisional", "source_kind": "derived_later" },
+        { "name": "sweep_persistence_score", "type": "number", "status": "derived_later", "source_kind": "derived_later" }
+      ],
+      "forbidden_fields": [
+        "final_regime_verdict",
+        "tradability_verdict",
+        "send_buy",
+        "send_sell"
+      ]
+    },
+    "LiquidityState": {
+      "intent": "Bounded liquidity context with nearest-level and stability evidence only.",
+      "authority_class": "ATAS_EXTERNAL_NON_AUTHORITATIVE",
+      "fields": [
+        { "name": "packet_id", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "event_time_utc", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "execution_symbol", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "liquidity_stability_state", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "level_candidate_count", "type": "integer", "status": "optional", "source_kind": "direct" },
+        { "name": "nearest_support_price", "type": "number", "status": "optional", "source_kind": "direct" },
+        { "name": "nearest_resistance_price", "type": "number", "status": "optional", "source_kind": "direct" },
+        { "name": "nearest_support_distance_points", "type": "integer", "status": "optional", "source_kind": "direct" },
+        { "name": "nearest_resistance_distance_points", "type": "integer", "status": "optional", "source_kind": "direct" },
+        { "name": "depth_quality_state", "type": "string", "status": "provisional", "source_kind": "derived_later" },
+        { "name": "spread_pressure_state", "type": "string", "status": "derived_later", "source_kind": "derived_later" },
+        { "name": "liquidity_void_presence", "type": "string", "status": "derived_later", "source_kind": "derived_later" }
+      ],
+      "forbidden_fields": [
+        "position_size_instruction",
+        "risk_override",
+        "governor_override"
+      ]
+    },
+    "LevelInteractionState": {
+      "intent": "Support/resistance and level-interaction evidence, non-binding for canonical ownership.",
+      "authority_class": "ATAS_EXTERNAL_NON_AUTHORITATIVE",
+      "fields": [
+        { "name": "packet_id", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "event_time_utc", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "execution_symbol", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "nearest_support_price", "type": "number", "status": "optional", "source_kind": "direct" },
+        { "name": "nearest_resistance_price", "type": "number", "status": "optional", "source_kind": "direct" },
+        { "name": "nearest_support_distance_points", "type": "integer", "status": "optional", "source_kind": "direct" },
+        { "name": "nearest_resistance_distance_points", "type": "integer", "status": "optional", "source_kind": "direct" },
+        { "name": "level_interaction_type", "type": "string", "status": "optional", "source_kind": "direct" },
+        { "name": "support_resistance_confluence_state", "type": "string", "status": "optional", "source_kind": "direct" },
+        { "name": "level_context_supportive", "type": "boolean", "status": "optional", "source_kind": "direct" },
+        { "name": "level_context_obstructive", "type": "boolean", "status": "optional", "source_kind": "direct" },
+        { "name": "level_context_degraded", "type": "boolean", "status": "optional", "source_kind": "direct" },
+        { "name": "canonical_near_flag", "type": "boolean", "status": "provisional", "source_kind": "derived_later" },
+        { "name": "rejection_risk_flag", "type": "boolean", "status": "provisional", "source_kind": "derived_later" },
+        { "name": "continuation_obstructed_flag", "type": "boolean", "status": "provisional", "source_kind": "derived_later" },
+        { "name": "conflicted_flag", "type": "boolean", "status": "derived_later", "source_kind": "derived_later" }
+      ],
+      "forbidden_fields": [
+        "canonical_level_owner",
+        "final_level_verdict",
+        "trade_block_command"
+      ]
+    },
+    "MicrostructureEnvironmentEvidence": {
+      "intent": "Contextual evidence family for environment diagnostics without final regime ownership.",
+      "authority_class": "ATAS_EXTERNAL_NON_AUTHORITATIVE",
+      "fields": [
+        { "name": "packet_id", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "event_time_utc", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "execution_symbol", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "market_state_class", "type": "string", "status": "optional", "source_kind": "direct" },
+        { "name": "session_context", "type": "string", "status": "optional", "source_kind": "direct" },
+        { "name": "price_space_relation", "type": "string", "status": "optional", "source_kind": "direct" },
+        { "name": "basis_capture_state", "type": "string", "status": "optional", "source_kind": "direct" },
+        { "name": "cross_instrument_translation_applied", "type": "boolean", "status": "optional", "source_kind": "direct" },
+        { "name": "contradiction_flag", "type": "boolean", "status": "optional", "source_kind": "direct" },
+        { "name": "semantic_only_mode", "type": "boolean", "status": "optional", "source_kind": "direct" },
+        { "name": "environment_cleanliness_state", "type": "string", "status": "provisional", "source_kind": "derived_later" },
+        { "name": "regime_hint_nonbinding", "type": "string", "status": "derived_later", "source_kind": "derived_later" }
+      ],
+      "forbidden_fields": [
+        "final_regime_verdict",
+        "final_tradability_verdict",
+        "decision_package_owner"
+      ]
+    },
+    "QualityValidityState": {
+      "intent": "Cross-stage quality/freshness/attachment diagnostics for guarded consumption readiness checks.",
+      "authority_class": "EXTERNAL_DERIVED_STATUS",
+      "fields": [
+        { "name": "packet_id", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "event_time_utc", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "fresh_until_utc", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "evaluated_at_utc", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "freshness_state", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "quality_state", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "packet_age_ms", "type": "integer", "status": "optional", "source_kind": "direct" },
+        { "name": "attachment_state", "type": "string", "status": "mandatory", "source_kind": "direct" },
+        { "name": "advisory_eligibility_state", "type": "string", "status": "optional", "source_kind": "direct" },
+        { "name": "suppression_reason_codes", "type": "array", "status": "optional", "source_kind": "direct" },
+        { "name": "provenance_complete", "type": "boolean", "status": "provisional", "source_kind": "derived_later" },
+        { "name": "classification", "type": "string", "status": "provisional", "source_kind": "derived_later" },
+        { "name": "first_failing_gate", "type": "string", "status": "optional", "source_kind": "direct" }
+      ],
+      "forbidden_fields": [
+        "force_attach",
+        "force_eligible",
+        "freshness_gate_bypass"
+      ]
+    }
+  }
+}

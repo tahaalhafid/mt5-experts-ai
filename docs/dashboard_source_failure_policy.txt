@@ -1,0 +1,72 @@
+dashboard_source_failure_policy
+document_version=MT5_DASHBOARD_PHASE0_SOURCE_FAILURE_POLICY_V1
+document_role=FORMAL_DASHBOARD_SOURCE_FAILURE_POLICY
+authority_class=NON_RUNTIME_SOURCE_INTERPRETATION_CONTRACT
+scope=VISIBLE_SOURCE_FAILURE_HANDLING_ONLY
+
+GENERAL RULE
+The dashboard must never show a misleading healthy, green, ready, enabled, or clear interpretation when a source is missing,
+parse-failed, stale, zero-but-inconclusive, partial, or placeholder-only.
+
+CASE=SOURCE_MISSING
+required_action=
+- mark affected widget/page as SOURCE_PARTIAL
+- show Source Badge with missing-source posture
+- suppress any healthy summary
+- display bounded text: Required source unavailable
+tier_rule=
+- Tier A missing: primary widget cannot render healthy state
+- Tier B missing: secondary detail suppressed; page may remain if Tier A survives
+- Tier C missing: no impact unless currently used as explicit fallback
+- Tier D: never rendered, no user-facing missing alert required
+
+CASE=PARSING_FAILS
+required_action=
+- mark affected widget/page as SOURCE_PARTIAL
+- show parse-failure warning
+- use no data-derived positive language
+- do not silently fall back to stale prior values unless explicitly tagged as cached
+copy_rule=Use short text such as Source parse failed; view is incomplete.
+
+CASE=TIMESTAMP_IS_STALE
+required_action=
+- emit STALE_STATE
+- show Freshness Badge=STALE
+- keep blocking/hold postures visible
+- prohibit healthy/ready/clear copy
+copy_rule=Use bounded text such as Status age exceeds freshness policy.
+
+CASE=VALUE_IS_ZERO_BUT_SEMANTICALLY_INCONCLUSIVE
+required_action=
+- emit ZERO_RECORD_STATE
+- do not convert zero into pass or ready
+- show Summary/Placeholder Badge=ZERO_RECORD
+examples=
+- gateway_record_count=0 with emitted status
+- intelligence_record_count=0 with emitted status
+
+CASE=SOURCE_IS_PARTIAL
+required_action=
+- emit SOURCE_PARTIAL
+- list available subfields only if clearly labeled partial
+- do not fill missing values with implied defaults
+copy_rule=Use Some required fields are unavailable.
+
+CASE=SOURCE_IS_PLACEHOLDER_ONLY
+required_action=
+- emit PLACEHOLDER_STATE or SUMMARY_ONLY_NOT_PRIMARY_TRUTH
+- visually mute the widget or show reserved-layout text
+- prohibit positive readiness implication
+
+CROSS-SOURCE CONFLICT RULE
+If one source is blocking and another source is positive bounded:
+- blocking or held posture dominates
+- positive bounded posture becomes secondary note only
+
+TXT FALLBACK RULE
+Text mirrors may be used only as bounded fallback text when the paired JSON source is missing or parse-failed.
+Text fallback must remain non-dominant and must carry a fallback/source-partial badge.
+
+RAW-SOURCE RULE
+Tier D surfaces are never used as direct visible fallback.
+They may be consumed only by later curated collectors that emit safe derived summaries outside the render path.

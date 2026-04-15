@@ -1,0 +1,123 @@
+FACTORY ROUTING CONTRACT
+version=PHASE5_FACTORY_ROUTING_CONTRACT_V1
+artifact_role=FACTORY_ROUTING_CONTRACT
+authority_class=ARCHITECTURAL_GOVERNANCE_REFERENCE_ONLY
+
+PURPOSE
+This contract defines how downstream routing is expressed in the factory without turning routing into runtime control, approval, validation, experiment readiness, or canon eligibility.
+
+WHAT ROUTING MEANS
+Routing in this factory means a bounded downstream handoff destination expressed from currently emitted material/decomposition/normalized truth.
+Routing is:
+- non-runtime
+- non-mutative
+- non-authoritative
+- non-approving
+- non-validating
+
+ROUTING IS NOT
+- lifecycle state
+- review outcome
+- validation
+- experiment approval
+- canon eligibility
+- runtime permission
+
+DISTINCTION FROM LIFECYCLE
+Lifecycle answers:
+- what stage or disposition a material is currently in
+
+Routing answers:
+- where a material is allowed to be handed next
+- why that handoff is the bounded next destination
+- what blockers or handoff posture apply
+
+A lifecycle state alone does NOT imply a downstream route.
+Examples:
+- FAMILY_CANDIDATE_CLASSIFIED does not imply ROUTE_EXPERIMENT_PACKAGING
+- NORMALIZED does not imply ROUTE_REVIEW_BOARD
+- ARCHIVED does not replace routing truth; it constrains it
+
+ALLOWED DOWNSTREAM DESTINATIONS
+- ROUTE_NONE
+  meaning=No bounded downstream handoff is currently emitted
+  must_not_imply=unknown_runtime_action
+- ROUTE_RESEARCH_ONLY
+  meaning=Material is bounded to research/reference use only
+  minimum_truth=emitted_material_truth + research_only_disposition_or_research_only_posture
+  must_not_imply=weakness_by_itself,rejection,deletion
+- ROUTE_PRIMITIVE_CLASSIFICATION
+  meaning=Material is handed as primitive/support/module scope only
+  minimum_truth=emitted_material_truth + primitive_classified_or_equivalent_scope_truth
+  must_not_imply=experiment_readiness,canon_eligibility
+- ROUTE_FAMILY_CANDIDATE_CLASSIFICATION
+  meaning=Material is handed for family-candidate classification or bounded family packaging interpretation
+  minimum_truth=emitted_material_truth + decomposition_or_normalization_truth + family_candidate_scope_truth
+  must_not_imply=review_happened,canon_eligibility
+- ROUTE_REVIEW_BOARD
+  meaning=Material is handed for bounded downstream review-board attention
+  minimum_truth=emitted_material_truth + family_candidate_classified_or_equivalent_structural_family_truth
+  must_not_imply=review_started,review_completed,validation
+- ROUTE_GOVERNANCE_HOLD
+  meaning=Material is held for governance posture rather than advanced downstream movement
+  minimum_truth=emitted_material_truth + governance_hold_reason_truth
+  must_not_imply=rejection
+- ROUTE_EXPERIMENT_PACKAGING
+  meaning=Material is bounded for experiment-packaging consideration only
+  minimum_truth=explicit_packaging_truth_beyond_lifecycle_alone
+  must_not_imply=experiment_approval,runtime_permission
+- ROUTE_ARCHIVE
+  meaning=Material is bounded to archive disposition
+  minimum_truth=emitted_material_truth + archive_disposition_truth
+  must_not_imply=deleted
+
+ROUTING REASONS
+- STRUCTURAL_INSUFFICIENCY
+- RESEARCH_ONLY_POSTURE
+- PRIMITIVE_SCOPE_ONLY
+- FAMILY_CANDIDATE_SCOPE
+- INTELLIGENCE_REVIEW_REQUIRED
+- INSUFFICIENT_EVIDENCE
+- GOVERNANCE_HOLD_REQUIRED
+- PACKAGING_READY_BUT_NOT_APPROVED
+- ARCHIVE_DISPOSITION
+- ZERO_EMISSION_OR_SUPPORT_ONLY
+
+ROUTING BLOCKERS
+- BLOCKER_NO_EMITTED_MATERIAL_TRUTH
+- BLOCKER_INSUFFICIENT_DECOMPOSITION_TRUTH
+- BLOCKER_UNRESOLVED_AMBIGUITY_HIGH
+- BLOCKER_NO_INTELLIGENCE_EMISSION_SUPPORT
+- BLOCKER_STRUCTURAL_ONLY_POSTURE
+- BLOCKER_SUPPORT_DEFINED_ONLY
+- BLOCKER_PRIMITIVE_SCOPE_ONLY
+- BLOCKER_FAMILY_SCOPE_NOT_YET_CLASSIFIED
+- BLOCKER_ARCHIVE_DISPOSITION_ACTIVE
+- BLOCKER_RESEARCH_ONLY_POSTURE_ACTIVE
+
+HANDOFF POSTURES
+- HANDOFF_STRUCTURAL_ONLY
+- HANDOFF_REVIEW_REQUIRED
+- HANDOFF_LIMITED_SCOPE
+- HANDOFF_PACKAGING_ONLY
+- HANDOFF_HELD_PENDING_GOVERNANCE
+- HANDOFF_ARCHIVE_ONLY
+- HANDOFF_NO_ROUTE
+
+TRUTH RULES
+- routing_supported does not imply routing_emitted
+- routing_emitted does not imply reviewed
+- routing_emitted does not imply validated
+- routing_emitted does not imply experiment_ready
+- routing_emitted does not imply canon_eligible
+- internal intelligence may inform routing notes or blockers, but does not authorize routing
+- zero emitted records must remain zero-state honest
+- route destinations are bounded handoff expressions only
+
+FORBIDDEN INTERPRETATIONS
+- ROUTE_EXPERIMENT_PACKAGING from lifecycle alone
+- ROUTE_REVIEW_BOARD implying review already happened
+- ROUTE_PRIMITIVE_CLASSIFICATION implying experiment readiness
+- ROUTE_FAMILY_CANDIDATE_CLASSIFICATION implying canon eligibility
+- ROUTE_GOVERNANCE_HOLD implying rejection
+- ROUTE_ARCHIVE implying deletion

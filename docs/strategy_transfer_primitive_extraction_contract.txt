@@ -1,0 +1,28 @@
+STRATEGY TRANSFER PACKAGE 4 — PRIMITIVE EXTRACTION CONTRACT
+
+Purpose:
+Primitive extraction converts legacy-ingested first-wave shells into bounded primitive records only where the shell clearly contains support, trigger, invalidation, context, filter, risk-model, or support logic that can be represented more honestly as a primitive than as a full strategy shell.
+
+Primitive extraction in Package 4:
+- applies only to the 27 Package 3 actually ingested first-wave legacy elements
+- remains non-runtime
+- remains non-admissive
+- remains lineage-preserving
+- does not imply execution privilege
+- does not imply canon admission
+- does not imply primitive quality proof
+- does not imply primitive extraction for the remaining prepared-only 45 elements
+
+Primitive types in this package may include:
+- TRIGGER_PRIMITIVE
+- INVALIDATION_PRIMITIVE
+- CONTEXT_PRIMITIVE
+- FILTER_PRIMITIVE
+- RISK_MODEL_PRIMITIVE
+- SUPPORT_PRIMITIVE
+
+Boundaries:
+- no primitive may silently replace its source shell without explicit shell outcome truth
+- no primitive may imply runtime reactivation
+- no primitive may imply live edge proof
+- primitive extraction must preserve lineage from inventory -> preparation -> ingestion -> extracted primitive

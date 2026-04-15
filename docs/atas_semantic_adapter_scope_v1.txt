@@ -1,0 +1,33 @@
+ATAS Semantic Adapter Scope v1 (Phase 0.5)
+
+Pipeline
+- ATAS -> External Semantic Adapter -> MQL5/Files/AI/atas_runtime_context.json -> MT5 Shadow Intake
+
+Adapter Responsibilities
+- Normalize:
+  - Map heterogeneous ATAS outputs into the bounded runtime shadow schema.
+- Sanitize:
+  - Remove unsafe/ambiguous fields and normalize text states.
+- Bound:
+  - Enforce strict candidate cap (max 3 level candidates).
+  - Enforce bounded freshness window and temporal metadata quality.
+- Export evidence only:
+  - Emit context and level behavior evidence, never execution directives.
+- Prevent authority leakage:
+  - Exclude all authority/risk/governor/AI/entry/exit semantics from exported payload.
+
+Ownership Boundaries
+- ATAS side:
+  - Raw microstructure/level observations and source-native signals.
+- Semantic Adapter side:
+  - Schema translation, quality/freshness normalization, bounded export contract.
+- MT5 side:
+  - Runtime authority, decision/governance/risk/execution, canonical level meaning.
+
+Non-Goals in Phase 0.5
+- No live influence from adapter output.
+- No direct ATAS-to-MT5 decision channel.
+- No support/resistance authority transfer.
+
+Required Adapter Output Mode
+- consumption_mode must be SHADOW_ONLY.

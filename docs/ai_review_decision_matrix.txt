@@ -1,0 +1,234 @@
+AI REVIEW DECISION MATRIX
+document_role=AUTHORITATIVE_AI_REVIEW_DECISION_MATRIX
+document_version=A7_AI_REVIEW_DECISION_MATRIX_V1
+authority_scope=AI_REVIEW_DECISIONS_OUTPUT_MAPPING_AND_TRANSITIONS_ONLY
+linked_workflow=docs/ai_human_review_workflow.txt
+linked_roles_policy=docs/ai_review_roles_and_responsibilities.txt
+linked_output_contract=docs/ai_output_contract.txt
+trust_rule=defines_review_decision_types_output_to_review_mapping_and_governed_paths_only
+policy_note=This matrix does not implement workflow tooling and does not create runtime control authority.
+
+DECISION TYPES
+- ACKNOWLEDGE
+  allowed_roles=OPERATOR,ADMIN_REVIEWER,REVIEW_BOARD,COMMITTEE_REVIEWER
+  meaning=Item has been seen and recorded without implying approval for runtime change.
+  typical_next_state=INFORMATIONAL_ONLY or CLOSED_NO_ACTION
+
+- REQUEST_MORE_EVIDENCE
+  allowed_roles=ADMIN_REVIEWER,REVIEW_BOARD,COMMITTEE_REVIEWER
+  meaning=Current evidence is insufficient for governed next-step acceptance.
+  typical_next_state=DEFERRED or UNDER_REVIEW
+
+- DEFER
+  allowed_roles=ADMIN_REVIEWER,REVIEW_BOARD,COMMITTEE_REVIEWER
+  meaning=Item remains potentially relevant but is postponed pending timing, data, or priority.
+  typical_next_state=DEFERRED
+
+- REJECT
+  allowed_roles=ADMIN_REVIEWER,REVIEW_BOARD,COMMITTEE_REVIEWER
+  meaning=No governed next step should proceed from the current artifact.
+  typical_next_state=REJECTED
+
+- ACCEPT_FOR_MONITORING
+  allowed_roles=ADMIN_REVIEWER,REVIEW_BOARD,COMMITTEE_REVIEWER
+  meaning=Item is accepted as watchlist or monitoring context only, without runtime mutation.
+  typical_next_state=ACCEPTED_FOR_ACTION or CLOSED_NO_ACTION
+
+- ACCEPT_FOR_EXPERIMENT
+  allowed_roles=REVIEW_BOARD,COMMITTEE_REVIEWER
+  meaning=Bounded experiment or bounded implementation-planning handoff is acceptable.
+  typical_next_state=ACCEPTED_FOR_EXPERIMENT
+
+- ESCALATE_TO_ADMIN
+  allowed_roles=OPERATOR
+  meaning=Item should move to ADMIN_REVIEWER because informational handling is insufficient.
+  typical_next_state=ESCALATED
+
+- ESCALATE_TO_REVIEW_BOARD
+  allowed_roles=ADMIN_REVIEWER
+  meaning=Item exceeds admin-only review scope and needs formal board review.
+  typical_next_state=ESCALATED
+
+- ESCALATE_TO_COMMITTEE
+  allowed_roles=ADMIN_REVIEWER,REVIEW_BOARD
+  meaning=Item has major governance significance or institutional contradiction.
+  typical_next_state=ESCALATED
+
+- CLOSE_NO_ACTION
+  allowed_roles=ADMIN_REVIEWER,REVIEW_BOARD,COMMITTEE_REVIEWER
+  meaning=Review cycle is complete with no further governed next step for the current item.
+  typical_next_state=CLOSED_NO_ACTION
+
+DECISION SAFETY RULES
+- ACCEPT_FOR_MONITORING does not create live control authority.
+- ACCEPT_FOR_EXPERIMENT does not auto-apply and does not equal runtime activation.
+- No decision type in A7 authorizes direct BUY/SELL generation, direct execution override, direct plan mutation, or silent governor mutation.
+- Escalation decisions change review venue only.
+
+OUTPUT TYPE TO REVIEW MATRIX
+
+1)
+output_type=HOURLY_WATCH_REPORT
+default_review_mode=INFORMATIONAL_ONLY
+operator_reviewable=true
+admin_reviewable=flagged_only
+review_board_required=false
+committee_visible=false
+escalation_eligible=when_repeated_material_signal_exists
+default_action_source=false
+notes=Operational watch artifact; acknowledgment or archival is usually sufficient.
+
+2)
+output_type=EVENT_TRIGGERED_INCIDENT_REPORT
+default_review_mode=OPERATOR_OR_ADMIN_REVIEWABLE
+operator_reviewable=true
+admin_reviewable=true
+review_board_required=false
+committee_visible=by_escalation_only
+escalation_eligible=high_or_repeated_or_governance_relevant
+default_action_source=false
+notes=Material incidents may escalate into root-cause, evidence, or proposal workflows.
+
+3)
+output_type=DAILY_OPERATING_INTELLIGENCE_REPORT
+default_review_mode=INFORMATIONAL_ONLY
+operator_reviewable=true
+admin_reviewable=selective
+review_board_required=false
+committee_visible=summary_only
+escalation_eligible=when_material_pattern_or_contradiction_exists
+default_action_source=false
+notes=Daily intelligence is usually reviewable context, not direct approval source.
+
+4)
+output_type=THREE_DAY_INSTITUTIONAL_REVIEW
+default_review_mode=ADMIN_REVIEWABLE
+operator_reviewable=summary_visible
+admin_reviewable=true
+review_board_required=when_structured_change_candidate_exists
+committee_visible=selective
+escalation_eligible=true
+default_action_source=false
+notes=Used for institutional synthesis and may feed proposal/evidence review.
+
+5)
+output_type=EXECUTIVE_ADMIN_BRIEF
+default_review_mode=COMMITTEE_VISIBLE_INFORMATIONAL
+operator_reviewable=summary_optional
+admin_reviewable=true
+review_board_required=false
+committee_visible=true
+escalation_eligible=when_major_governance_issue_exists
+default_action_source=false
+notes=Not a direct approval object by default.
+
+6)
+output_type=REVIEWABLE_PROPOSAL_TEMPLATE
+default_review_mode=PENDING_REVIEW
+operator_reviewable=visible_not_approvable
+admin_reviewable=true
+review_board_required=true
+committee_visible=when_major_or_escalated
+escalation_eligible=true
+default_action_source=false
+notes=direct_apply_allowed=false; auto_apply_allowed=false; approval_means_governed_next_step_only.
+
+7)
+output_type=OPERATOR_COPILOT_RESPONSE_TEMPLATE
+default_review_mode=INFORMATIONAL_ONLY
+operator_reviewable=true
+admin_reviewable=by_flag_only
+review_board_required=false
+committee_visible=false
+escalation_eligible=when_response_reveals_incident_or_governance_issue
+default_action_source=false
+notes=Answer artifact only; not a proposal or approval source.
+
+8)
+output_type=COUNCIL_ADVISORY_PACKET_TEMPLATE
+default_review_mode=INFORMATIONAL_ONLY_POST_FACT_REVIEWABLE
+operator_reviewable=true
+admin_reviewable=true
+review_board_required=false
+committee_visible=effectiveness_summary_only
+escalation_eligible=when_recurring_measurable_effect_pattern_exists
+default_action_source=false
+notes=Not a proposal object; no formal live-moment approval required.
+
+9)
+output_type=LEARNING_GOVERNANCE_EVIDENCE_TEMPLATE
+default_review_mode=PENDING_REVIEW
+operator_reviewable=summary_visible
+admin_reviewable=true
+review_board_required=true
+committee_visible=when_major_governance_relevance_exists
+escalation_eligible=true
+default_action_source=false
+notes=Evidence-driven only; no direct runtime mutation.
+
+10)
+output_type=GOVERNANCE_AUDIT_OUTPUT
+default_review_mode=ADMIN_REVIEWABLE
+operator_reviewable=summary_visible
+admin_reviewable=true
+review_board_required=when_material_governance_gap_exists
+committee_visible=when_major_gap_exists
+escalation_eligible=true
+default_action_source=false
+notes=May close with no action, or escalate for policy review.
+
+11)
+output_type=ROOT_CAUSE_OUTPUT
+default_review_mode=ADMIN_REVIEWABLE
+operator_reviewable=summary_visible
+admin_reviewable=true
+review_board_required=when_linked_to_structured_change_candidate
+committee_visible=when_major_governance_or_risk_issue_exists
+escalation_eligible=true
+default_action_source=false
+notes=Often feeds evidence/proposal decisions rather than direct action.
+
+12)
+output_type=ANOMALY_OUTPUT
+default_review_mode=OPERATOR_OR_ADMIN_REVIEWABLE
+operator_reviewable=true
+admin_reviewable=true
+review_board_required=when_repeated_or_governance_relevant
+committee_visible=rare
+escalation_eligible=true
+default_action_source=false
+notes=Can remain informational when isolated and low materiality.
+
+13)
+output_type=DRIFT_OUTPUT
+default_review_mode=ADMIN_REVIEWABLE
+operator_reviewable=summary_visible
+admin_reviewable=true
+review_board_required=when_deterioration_repeats_or_links_to_learning_governance
+committee_visible=when_institutionally_material
+escalation_eligible=true
+default_action_source=false
+notes=May expire and close without action when significance does not persist.
+
+GOVERNED PATH SUMMARIES
+- Proposal path = AI output -> PENDING_REVIEW -> ADMIN_REVIEWER triage -> REVIEW_BOARD required -> reject/defer/accept for experiment or governed action preparation -> handoff outside runtime auto-apply.
+- Learning evidence path = evidence bundle -> review -> acknowledge/defer/reject/escalate/accept for experiment -> optional linkage to proposal -> no direct mutation.
+- Incident path = incident/anomaly/drift/root-cause -> informational or pending review -> admin triage -> optional escalation -> close or link to evidence/proposal.
+- Council advisory path = advisory packet -> visible/archive -> optional post-fact effectiveness review -> optional evidence linkage -> no live approval bureaucracy.
+
+ESCALATION TRIGGERS
+- repeated HIGH/CRITICAL incidents
+- repeated drift deterioration
+- anomaly clusters crossing multiple operational layers
+- proposal/evidence artifacts with governance significance
+- major governance contradiction
+- recurring advisory hold patterns with measurable effect
+
+CLOSURE CONDITIONS
+- acknowledged informational artifact archived
+- incident investigated and no action required
+- proposal rejected and archived
+- proposal accepted for experiment or governed action handoff and recorded
+- evidence superseded by newer evidence
+- drift signal expired without further significance
+- escalated item received terminal decision from target reviewer role

@@ -1,0 +1,25 @@
+{
+  "version": "QUALITY_VALIDITY_STATE_INTERFACE_V1",
+  "family": "QualityValidityState",
+  "non_operative": true,
+  "fields": [
+    { "name": "packet_id", "type": "string", "status": "mandatory" },
+    { "name": "event_time_utc", "type": "string", "status": "mandatory" },
+    { "name": "fresh_until_utc", "type": "string", "status": "mandatory" },
+    { "name": "evaluated_at_utc", "type": "string", "status": "mandatory" },
+    { "name": "freshness_state", "type": "string", "status": "mandatory" },
+    { "name": "quality_state", "type": "string", "status": "mandatory" },
+    { "name": "packet_age_ms", "type": "integer", "status": "optional" },
+    { "name": "attachment_state", "type": "string", "status": "mandatory" },
+    { "name": "advisory_eligibility_state", "type": "string", "status": "optional" },
+    { "name": "suppression_reason_codes", "type": "array", "status": "optional" },
+    { "name": "provenance_complete", "type": "boolean", "status": "provisional" },
+    { "name": "classification", "type": "string", "status": "provisional" },
+    { "name": "first_failing_gate", "type": "string", "status": "optional" }
+  ],
+  "forbidden_fields": [
+    "force_attach",
+    "force_eligible",
+    "freshness_gate_bypass"
+  ]
+}

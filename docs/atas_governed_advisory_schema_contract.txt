@@ -1,0 +1,47 @@
+ATAS Governed Advisory Schema Contract (Level 3)
+Version: 1
+Language: English only
+
+Primary runtime artifacts under MQL5/Files/AI:
+- atas_governed_advisory_status.txt
+- atas_governed_advisory_status.json
+- atas_governed_advisory_effectiveness.txt
+- atas_governed_advisory_effectiveness.json
+- atas_governed_advisory_last_packet.json
+
+Status artifact semantics
+- artifact_role=ATAS_GOVERNED_ADVISORY_STATUS
+- artifact_authority_class=NON_AUTHORITATIVE_DERIVED_ATAS_ADVISORY
+- trust_rule explicitly states advisory-only non-authoritative behavior
+- includes:
+  - advisory_state
+  - advisory_outcome
+  - advisory_relevance_score
+  - advisory_confluence_score
+  - contradiction_flag
+  - hold_bias_active
+  - support_resistance_confluence_state
+  - translation_state_summary
+  - source/execution symbol identity
+  - source_reference_price / execution_reference_price / basis value
+  - semantic-only and suppression flags
+
+Effectiveness artifact semantics
+- artifact_role=ATAS_GOVERNED_ADVISORY_EFFECTIVENESS
+- non-authoritative evidence counters only
+- does not represent execution authority
+- tracks distribution of advisory states/outcomes and translation/suppression observations
+
+Last packet artifact semantics
+- artifact_role=ATAS_GOVERNED_ADVISORY_LAST_PACKET
+- stores latest bounded advisory packet and gate outputs for audit/replay
+- includes lineage to shadow packet id / trace id
+- includes support/resistance confluence summary and translation state summary
+
+Schema discipline
+- Advisory interpretation artifacts are separated from:
+  - external packet truth (atas_runtime_context.json)
+  - shadow status truth (atas_runtime_context_status.json)
+  - runtime authority truth (execution/governance surfaces)
+- All fields remain bounded and deterministic.
+

@@ -1,0 +1,62 @@
+artifact_role=EDGE_SCORECARD_POLICY
+artifact_authority_class=AUTHORITATIVE_FACTORY_SCORECARD_POLICY
+policy_version=E8_EDGE_SCORECARD_POLICY_V1
+phase_id=E8
+
+purpose:
+- define edge scorecards as the formal measurement layer for edge families inside the factory
+- define runtime accounting as the later evidence-feed model for attempts, executions, rejects, holds, and outcome quality
+- preserve a non-runtime, non-governing posture in this phase
+
+core_definition:
+- an edge scorecard is the structured measurement record for a family or family-zone context.
+- runtime accounting is the later process by which runtime evidence is attributed back into those scorecards over time.
+- scorecards describe how an edge should be measured; they do not yet compute live scores, suppress families, or promote families.
+
+hard_boundaries:
+- E8 is non-runtime
+- E8 is non-executing
+- E8 is non-governing
+- E8 does not rewrite current journaling behavior
+- E8 does not create live suppression behavior
+- E8 does not replace later promotion/suppression governance
+
+required_scorecard_categories:
+- attempts
+- candidates
+- executions
+- rejects
+- holds
+- win_loss_outcomes
+- expectancy
+- mae
+- mfe
+- regime_fit_quality
+- session_fit_quality
+- deterioration_signal
+- suppression_pressure
+- overblocking_risk
+- execution_quality_interaction
+
+core_principles:
+- edge families must be measured, not merely described
+- structural elegance alone is not evidence of edge health
+- one attractive trigger does not cancel poor geometry
+- one good narrative does not cancel concentration or deterioration risk
+- runtime evidence must later feed scorecards through governed attribution, not through uncontrolled self-promotion
+
+anti_control_rule:
+- scorecards do not directly suppress families in E8
+- scorecards do not directly promote families in E8
+- scorecards do not imply runtime permission
+- scorecards prepare the evidence base for later governance only
+
+status_model_intent:
+- SCORECARD_PLACEHOLDER_ONLY is reserved for architecture that has not yet been made feed-ready
+- SCORECARD_READY_FOR_RUNTIME_FEED means the scorecard structure is coherent and can accept later accounting inputs
+- SCORECARD_RUNTIME_FEED_PENDING means the family/context is structurally known but still weak enough that later feed quality must be treated carefully
+- SCORECARD_ACTIVE_ACCOUNTING_READY means the family/context is structurally mature enough to anchor later runtime accounting without implying current live scoring
+- SCORECARD_REVIEW_SIGNAL_PRESENT means the family/context already carries ambiguity, crowding, or fragility signals that later governance should watch closely
+
+boundary_note:
+- scorecards remain measurement architecture only until later phases integrate governance, exports, and approved runtime use.

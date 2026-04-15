@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "atas.microstructure.phase2.kickoff.state_bundle.v1",
+  "title": "ATAS Microstructure Phase2 Kickoff State Bundle V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "generated_at_utc",
+    "states"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "ATAS_MICROSTRUCTURE_STATE_BUNDLE_PHASE2_KICKOFF_V1"
+    },
+    "candidate_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source_lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "packet_id": { "type": "string" },
+        "trace_id": { "type": "string" },
+        "source_symbol": { "type": "string" },
+        "execution_symbol": { "type": "string" }
+      }
+    },
+    "states": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "OrderFlowState",
+        "LiquidityState",
+        "LevelInteractionState",
+        "MicrostructureEnvironmentEvidence",
+        "QualityValidityState"
+      ],
+      "properties": {
+        "OrderFlowState": { "$ref": "#/$defs/orderFlowState" },
+        "LiquidityState": { "$ref": "#/$defs/liquidityState" },
+        "LevelInteractionState": { "$ref": "#/$defs/levelInteractionState" },
+        "MicrostructureEnvironmentEvidence": { "$ref": "#/$defs/environmentEvidenceState" },
+        "QualityValidityState": { "$ref": "#/$defs/qualityValidityState" }
+      }
+    }
+  },
+  "$defs": {
+    "orderFlowState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_id",
+        "trace_id",
+        "event_time_utc",
+        "execution_symbol",
+        "liquidity_sweep_state",
+        "absorption_state",
+        "delta_bias_state",
+        "imbalance_state"
+      ],
+      "properties": {
+        "packet_id": { "type": "string" },
+        "trace_id": { "type": "string" },
+        "event_time_utc": { "type": "string" },
+        "execution_symbol": { "type": "string" },
+        "liquidity_sweep_state": { "type": "string" },
+        "absorption_state": { "type": "string" },
+        "delta_bias_state": { "type": "string" },
+        "imbalance_state": { "type": "string" },
+        "continuation_exhaustion_hint": { "type": "string" },
+        "signal_stability_window_sec": { "type": "integer" },
+        "orderflow_confidence_band": { "type": "string" },
+        "sweep_persistence_score": { "type": "number" }
+      }
+    },
+    "liquidityState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_id",
+        "event_time_utc",
+        "execution_symbol",
+        "liquidity_stability_state"
+      ],
+      "properties": {
+        "packet_id": { "type": "string" },
+        "event_time_utc": { "type": "string" },
+        "execution_symbol": { "type": "string" },
+        "liquidity_stability_state": { "type": "string" },
+        "level_candidate_count": { "type": "integer" },
+        "nearest_support_price": { "type": "number" },
+        "nearest_resistance_price": { "type": "number" },
+        "nearest_support_distance_points": { "type": "integer" },
+        "nearest_resistance_distance_points": { "type": "integer" },
+        "depth_quality_state": { "type": "string" },
+        "spread_pressure_state": { "type": "string" },
+        "liquidity_void_presence": { "type": "string" }
+      }
+    },
+    "levelInteractionState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_id",
+        "event_time_utc",
+        "execution_symbol"
+      ],
+      "properties": {
+        "packet_id": { "type": "string" },
+        "event_time_utc": { "type": "string" },
+        "execution_symbol": { "type": "string" },
+        "nearest_support_price": { "type": "number" },
+        "nearest_resistance_price": { "type": "number" },
+        "nearest_support_distance_points": { "type": "integer" },
+        "nearest_resistance_distance_points": { "type": "integer" },
+        "level_interaction_type": { "type": "string" },
+        "support_resistance_confluence_state": { "type": "string" },
+        "level_context_supportive": { "type": "boolean" },
+        "level_context_obstructive": { "type": "boolean" },
+        "level_context_degraded": { "type": "boolean" },
+        "canonical_near_flag": { "type": "boolean" },
+        "rejection_risk_flag": { "type": "boolean" },
+        "continuation_obstructed_flag": { "type": "boolean" },
+        "conflicted_flag": { "type": "boolean" }
+      }
+    },
+    "environmentEvidenceState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_id",
+        "event_time_utc",
+        "execution_symbol"
+      ],
+      "properties": {
+        "packet_id": { "type": "string" },
+        "event_time_utc": { "type": "string" },
+        "execution_symbol": { "type": "string" },
+        "market_state_class": { "type": "string" },
+        "session_context": { "type": "string" },
+        "price_space_relation": { "type": "string" },
+        "basis_capture_state": { "type": "string" },
+        "cross_instrument_translation_applied": { "type": "boolean" },
+        "contradiction_flag": { "type": "boolean" },
+        "semantic_only_mode": { "type": "boolean" },
+        "environment_cleanliness_state": { "type": "string" },
+        "regime_hint_nonbinding": { "type": "string" }
+      }
+    },
+    "qualityValidityState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_id",
+        "event_time_utc",
+        "fresh_until_utc",
+        "evaluated_at_utc",
+        "freshness_state",
+        "quality_state",
+        "attachment_state"
+      ],
+      "properties": {
+        "packet_id": { "type": "string" },
+        "event_time_utc": { "type": "string" },
+        "fresh_until_utc": { "type": "string" },
+        "evaluated_at_utc": { "type": "string" },
+        "freshness_state": {
+          "type": "string",
+          "enum": [
+            "FRESH",
+            "STALE",
+            "EXPIRED",
+            "UNKNOWN"
+          ]
+        },
+        "quality_state": { "type": "string" },
+        "packet_age_ms": { "type": "integer" },
+        "attachment_state": {
+          "type": "string",
+          "enum": [
+            "SHADOW_ATTACHED",
+            "SHADOW_NOT_ATTACHED",
+            "UNKNOWN"
+          ]
+        },
+        "advisory_eligibility_state": { "type": "string" },
+        "suppression_reason_codes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "provenance_complete": { "type": "boolean" },
+        "classification": { "type": "string" },
+        "first_failing_gate": { "type": "string" }
+      }
+    }
+  }
+}

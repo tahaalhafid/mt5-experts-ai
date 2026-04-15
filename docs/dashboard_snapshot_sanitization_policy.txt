@@ -1,0 +1,55 @@
+dashboard_snapshot_sanitization_policy
+document_version=MT5_DASHBOARD_PHASE0_SNAPSHOT_SANITIZATION_POLICY_V1
+document_role=FORMAL_DASHBOARD_VISIBLE_SNAPSHOT_SANITIZATION_POLICY
+authority_class=NON_RUNTIME_INTERNAL_EXPORT_BOUNDARY_CONTRACT
+scope=VISIBLE_DASHBOARD_SNAPSHOT_ONLY
+
+EXPORT_VISIBLE_SNAPSHOT DEFINITION
+Export Visible Snapshot is:
+- internal-only
+- sanitized
+- non-authoritative
+- timestamped
+- derived
+- bounded to currently visible dashboard content only
+
+REQUIRED SNAPSHOT MARKERS
+- watermark=INTERNAL OPERATIONAL VIEW — NON-EXPORT SAFE
+- generated_at_timestamp
+- snapshot_scope=VISIBLE_DASHBOARD_ONLY
+- authority_note=DERIVED_NON_AUTHORITATIVE_VIEW
+- sanitization_note=INTERNAL_ONLY_NOT_RELEASE_TRUTH
+
+REQUIRED SANITIZATION RULES
+- exclude secrets or credentials
+- exclude raw internal memory references
+- exclude raw gateway payloads
+- exclude raw registry records
+- exclude sensitive raw paths when not required for understanding
+- exclude investor-facing language
+- exclude live-ready, product-ready, performance-ready, production-ready claims
+- exclude any language that could be mistaken for runtime or release approval
+- exclude hidden control affordances or reserved request metadata
+- exclude direct file-system paths unless needed for internal traceability and already safe
+
+ALLOWED SNAPSHOT CONTENT
+- visible page title
+- visible dominant state labels
+- visible bounded reasons and warnings
+- visible badges
+- visible generated timestamp
+- visible page-level non-goal note
+- visible watermark
+- visible sanitized source identifiers if needed
+
+FORBIDDEN INTERPRETATION
+A visible snapshot must not be representable as:
+- an authoritative truth artifact
+- a runtime approval
+- a release-gate pass
+- a pilot activation
+- an external delivery approval
+- an investor-facing product artifact
+
+OUTPUT RULE
+Snapshot export, when later implemented, must remain local/read-only and must not create or update canonical project truth.

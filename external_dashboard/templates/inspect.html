@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="panel">
+  <h2>Search / Inspect</h2>
+  <form class="search-form" method="get" action="/inspect">
+    <input type="text" name="q" value="{{ payload.query }}" placeholder="decision_id / ticket / position_id" maxlength="120" />
+    <button type="submit">Search</button>
+  </form>
+  <p class="subtle">Matches: {{ payload.match_count }} | Supported identifiers: {{ payload.supported_identifiers|join(', ') }}</p>
+  <p class="subtle">State legend: {% for s in payload.state_legend %}<span class="badge {{ s|lower }}">{{ s }}</span>{% endfor %}</p>
+</section>
+
+{% if payload.matches %}
+{% for m in payload.matches %}
+<section class="panel">
+  <h3>Decision {{ m.identity.decision_id }}</h3>
+  <div class="grid two">
+    <div>
+      <h4>Identity</h4>
+      <table><tbody>{% for k,v in m.identity.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody></table>
+    </div>
+    <div>
+      <h4>Strategy</h4>
+      <table><tbody>{% for k,v in m.strategy.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody></table>
+    </div>
+  </div>
+  <div class="grid two">
+    <div>
+      <h4>Regime</h4>
+      <table><tbody>{% for k,v in m.regime.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody></table>
+    </div>
+    <div>
+      <h4>Support / Resistance</h4>
+      <table><tbody>{% for k,v in m.support_resistance.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody></table>
+    </div>
+  </div>
+  <div class="grid two">
+    <div>
+      <h4>Advisory + Attribution</h4>
+      <table><tbody>{% for k,v in m.advisory.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}{% for k,v in m.attribution.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody></table>
+    </div>
+    <div>
+      <h4>Learning + Posture + Timing</h4>
+      <table><tbody>{% for k,v in m.learning.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}{% for k,v in m.decision_posture.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}{% for k,v in m.timing.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody></table>
+    </div>
+  </div>
+</section>
+{% endfor %}
+{% elif payload.decision_records %}
+{% for m in payload.decision_records %}
+<section class="panel">
+  <h3>Decision {{ m.identity.decision_id }} (Decision-Record Fallback)</h3>
+  <div class="grid two">
+    <div>
+      <h4>Identity</h4>
+      <table><tbody>{% for k,v in m.identity.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody></table>
+    </div>
+    <div>
+      <h4>Strategy</h4>
+      <table><tbody>{% for k,v in m.strategy.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody></table>
+    </div>
+  </div>
+  <div class="grid two">
+    <div>
+      <h4>Regime</h4>
+      <table><tbody>{% for k,v in m.regime.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody></table>
+    </div>
+    <div>
+      <h4>Support / Resistance</h4>
+      <table><tbody>{% for k,v in m.support_resistance.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody></table>
+    </div>
+  </div>
+  <div class="grid two">
+    <div>
+      <h4>Advisory + Attribution</h4>
+      <table><tbody>{% for k,v in m.advisory.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}{% for k,v in m.attribution.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody></table>
+    </div>
+    <div>
+      <h4>Learning + Posture + Timing</h4>
+      <table><tbody>{% for k,v in m.learning.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}{% for k,v in m.decision_posture.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}{% for k,v in m.timing.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody></table>
+    </div>
+  </div>
+</section>
+{% endfor %}
+{% else %}
+<section class="panel">
+  <p>No matches for the current query.</p>
+</section>
+{% endif %}
+{% endblock %}

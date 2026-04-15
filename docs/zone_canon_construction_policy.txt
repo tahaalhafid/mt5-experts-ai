@@ -1,0 +1,84 @@
+ZONE CANON CONSTRUCTION POLICY
+Authority: Institutional Edge Factory zone-canon construction policy only.
+Truth posture: Factory canon organization only. No runtime behavior change.
+
+============================================================
+PHASE IDENTITY
+============================================================
+Phase:
+- E3 — Zone-Based Canon Construction
+
+Purpose:
+- Construct the first formal zone-based canon inside the edge factory.
+- Organize current canon seeds, normalized materials, and market-native objects by zone.
+- Distinguish zone membership from later regime licensing and runtime permissions.
+
+Non-goals:
+- No runtime licensing
+- No regime permissioning
+- No execution approval
+- No trigger authority
+- No runtime behavior change
+
+============================================================
+WHAT ZONE-BASED CANON MEANS
+============================================================
+Zone-based canon means:
+- edge material is organized into canonical market-behavior zones rather than kept in one undifferentiated pool
+- each zone acts as an organizational container for related edge families, support primitives, market-native context, and reference material
+- zones describe behavioral neighborhoods, not executable runtime permissions
+
+Zone-based canon does NOT mean:
+- final runtime licensing
+- regime permission
+- execution approval
+- trigger approval
+- automatic canon permanence
+- profitability proof
+
+============================================================
+CANONICAL ZONES
+============================================================
+The formal canonical zones in E3 are:
+- TREND_CONTINUATION
+- TREND_PULLBACK
+- RANGE_MEAN_RECLAIM
+- REVERSAL_EXHAUSTION
+- COMPRESSION
+- EXPANSION_BREAKOUT
+- EXPANSION_CONTINUATION
+- MICRO_RANGE_EXPANSION
+
+Contextual semantic states such as RANGE_BALANCED, RANGE_DIRTY, UNKNOWN, or NO_TRADE are not promoted here as canonical factory zones.
+They remain contextual or reference-only descriptors rather than primary canon containers.
+
+============================================================
+CONSTRUCTION RULES
+============================================================
+1) A material may have one primary zone and zero or more secondary zones.
+2) Primary zone membership should stay conservative and sparse.
+3) Not every material deserves primary family membership.
+4) Primitive support must remain primitive support.
+5) Market-native objects may support zones as raw context objects only.
+6) Legacy and research-only references may remain attached to zones without becoming canon drivers.
+7) Zone membership organizes behavior families around market logic; it does not determine runtime permission.
+
+============================================================
+ANTI-BLOAT / ANTI-DUPLICATION
+============================================================
+- One zone may legitimately have only one strong family seed.
+- Overlapping family names should not multiply canon clutter.
+- Old library identities should not compete directly with current family seeds unless re-validated later.
+- Primitives must not masquerade as families.
+- Crowded labels are not a sign of canon strength.
+
+============================================================
+CURRENT E3 STRUCTURAL POSITION
+============================================================
+Conservative E3 reading:
+- Strongest current structural zones: TREND_CONTINUATION, RANGE_MEAN_RECLAIM
+- Moderately covered zones: REVERSAL_EXHAUSTION, COMPRESSION, EXPANSION_BREAKOUT
+- Sparse/underseeded zones: TREND_PULLBACK, EXPANSION_CONTINUATION, MICRO_RANGE_EXPANSION
+
+This is a structural reading only.
+It is NOT a runtime ranking or performance claim.

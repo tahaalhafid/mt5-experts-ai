@@ -1,0 +1,79 @@
+LEARNING SCOPE BOUNDARIES
+document_role=AUTHORITATIVE_LEARNING_SCOPE_BOUNDARIES
+document_version=L1_LEARNING_SCOPE_BOUNDARIES_V1
+authority_scope=LEARNING_SCOPE_BOUNDARY_DEFINITION_ONLY
+linked_contract=docs/learning_governance_contract.txt
+linked_human_review_workflow=docs/ai_human_review_workflow.txt
+linked_effectiveness_decision_policy=docs/ai_effectiveness_decision_policy.txt
+trust_rule=defines_what_learning_may_influence_indirectly_and_what_it_may_never_mutate_directly
+policy_note=These boundaries keep learning governed, bounded, and institutionally reviewable.
+
+BOUNDARY PRINCIPLES
+- Learning scope is indirect, review-governed, and non-autonomous.
+- Learning is allowed to improve institutional understanding and governed change planning.
+- Learning is not allowed to create silent authority, hidden mutation, or live optimization loops.
+- No learning boundary in this document modifies trading behavior.
+
+WHAT LEARNING MAY INFLUENCE INDIRECTLY
+- evidence_quality_for_review
+- proposal_quality_for_review
+- experiment_candidate_selection
+- prioritization_of_future_investigation
+- governed_understanding_of_patterns_and_failures
+- review_board_context_for_bounded_change_consideration
+- impact_audit_quality
+- future_scope_tightening_or_narrowing_decisions
+
+WHAT LEARNING MAY NOT INFLUENCE DIRECTLY
+- live_strategy_logic
+- live_entry_logic
+- live_exit_logic
+- live_governor_formulas
+- live_failure_detector_formulas
+- live_execution_quality_formulas
+- dirty_environment_logic
+- trend_continuation_reinforcement_logic
+- live_risk_thresholds
+- live_runtime_weights
+- direct_ai_authority_state
+- direct_trade_permission
+- direct_buy_sell_direction
+- direct_order_execution_behavior
+- truth_source_overwrite
+
+GOVERNED LEARNING BOUNDARIES
+boundary_class=EVIDENCE_BOUNDARY
+boundary_rule=Learning may collect and structure evidence only from allowed inputs and review-governed artifacts.
+
+boundary_class=ANALYSIS_BOUNDARY
+boundary_rule=Learning analysis may identify patterns, anomalies, drift, or root-cause hypotheses, but analysis does not itself become a mutative command.
+
+boundary_class=PROPOSAL_BOUNDARY
+boundary_rule=Learning may produce bounded proposals or experiment candidates only as review objects under A7 governance.
+
+boundary_class=REVIEW_BOUNDARY
+boundary_rule=Learning-related outputs enter review and may be accepted, deferred, rejected, escalated, or closed without action. Review acceptance is not runtime activation.
+
+boundary_class=PLANNING_BOUNDARY
+boundary_rule=Controlled change planning may be prepared from accepted learning outputs, but planning remains distinct from runtime mutation and must be separately governed later.
+
+boundary_class=VALIDATION_BOUNDARY
+boundary_rule=Replay, validation, and impact review may strengthen or weaken learning conclusions, but do not self-authorize deployment.
+
+boundary_class=AUDIT_BOUNDARY
+boundary_rule=Learning usefulness, burden, and governance compliance must remain subject to A8 effectiveness review.
+
+SELF-LEARNING TERMINOLOGY CLARIFICATION
+- In this project, the phrase self-learning means a governed institutional loop that studies evidence and supports future review.
+- It does not mean autonomous runtime adaptation.
+- It does not mean self-modifying thresholds, formulas, strategies, or live execution behavior.
+- It does not mean direct AI optimization of trading logic.
+
+DECISION HANDOFF RULE
+- Learning outputs may hand off into review-governed recommendations, experiment candidates, or bounded proposals.
+- That handoff does not create direct mutation rights.
+- Any downstream change remains outside L1 and must be explicitly governed in later phases.
+
+TRACEABILITY EXPECTATION
+- Learning artifacts should remain linkable to evidence sources, review decisions, validation context, and impact findings conceptually.
+- L1 defines the boundary requirement, not the runtime storage engine.

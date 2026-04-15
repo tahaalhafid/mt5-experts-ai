@@ -1,0 +1,28 @@
+{
+  "version": "LEVEL_INTERACTION_STATE_INTERFACE_V1",
+  "family": "LevelInteractionState",
+  "non_operative": true,
+  "fields": [
+    { "name": "packet_id", "type": "string", "status": "mandatory" },
+    { "name": "event_time_utc", "type": "string", "status": "mandatory" },
+    { "name": "execution_symbol", "type": "string", "status": "mandatory" },
+    { "name": "nearest_support_price", "type": "number", "status": "optional" },
+    { "name": "nearest_resistance_price", "type": "number", "status": "optional" },
+    { "name": "nearest_support_distance_points", "type": "integer", "status": "optional" },
+    { "name": "nearest_resistance_distance_points", "type": "integer", "status": "optional" },
+    { "name": "level_interaction_type", "type": "string", "status": "optional" },
+    { "name": "support_resistance_confluence_state", "type": "string", "status": "optional" },
+    { "name": "level_context_supportive", "type": "boolean", "status": "optional" },
+    { "name": "level_context_obstructive", "type": "boolean", "status": "optional" },
+    { "name": "level_context_degraded", "type": "boolean", "status": "optional" },
+    { "name": "canonical_near_flag", "type": "boolean", "status": "provisional" },
+    { "name": "rejection_risk_flag", "type": "boolean", "status": "provisional" },
+    { "name": "continuation_obstructed_flag", "type": "boolean", "status": "provisional" },
+    { "name": "conflicted_flag", "type": "boolean", "status": "derived_later" }
+  ],
+  "forbidden_fields": [
+    "canonical_level_owner",
+    "final_level_verdict",
+    "trade_block_command"
+  ]
+}

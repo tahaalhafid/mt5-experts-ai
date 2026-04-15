@@ -1,0 +1,61 @@
+INSTITUTIONAL SELF-LEARNING CONTRACT
+document_role=BOUNDED_RUNTIME_LEARNING_CONTRACT
+document_version=L3_INSTITUTIONAL_SELF_LEARNING_V1
+authority_scope=NON_AUTHORITATIVE_CONFIDENCE_AND_CONTEXT_SHAPING_ONLY
+trust_rule=Learning remains MT5-internal, bounded, auditable, and non-executive.
+
+IDENTITY PRESERVATION
+- MT5 remains the sole runtime authority for decision, execution, risk, and governance.
+- External ATAS shadow input remains non-authoritative.
+- Semantic adapter remains mandatory in external ingestion architecture.
+- Databento and Fusion are not activated by this contract.
+- AI readiness authority remains unchanged; this contract does not force-enable AI.
+
+LEARNING INPUT SURFACES
+- decision context evidence index: AI\\ai_institutional_learning_decision_context.jsonl
+- trade outcome evidence stream: AI\\ai_institutional_learning_events.jsonl
+- runtime feedback record: AI\\ai_trade_feedback.json
+- bounded advisory-level context and support/resistance confluence state
+
+LEARNING OUTPUT SURFACES
+- derived memory truth: AI\\ai_institutional_learning_memory.json
+- runtime status: AI\\ai_institutional_learning_status.json|txt
+- confidence-envelope shaping fields in unified decision confidence
+
+OUTPUT BOUNDARIES
+- Allowed influence:
+  - confidence shaping
+  - caution shaping
+  - context-fit shaping
+  - contradiction/hold/reevaluation signaling
+- Forbidden influence:
+  - direct trade send/cancel/size
+  - risk or governor override
+  - council authority override
+  - direct execution permission override
+
+ANTI-OVERFIT / ANTI-DRIFT CONTROLS
+- min evidence before any influence: 8
+- min evidence before positive strengthen: 14
+- min evidence before negative penalty: 10
+- max confidence delta magnitude: 0.08
+- max caution score: 0.10
+- ewma alpha: 0.15
+- drift guard scales influence down under high outcome sign-flip instability
+- insufficient evidence fallback: zero influence with explicit status reason
+
+SUPPORT/RESISTANCE LEARNING RULE
+- Support/resistance is treated as first-class contextual learning input only.
+- SR interaction quality is used for motif keying and loss/win attribution.
+- SR context does not become external execution authority.
+
+AUDITABILITY
+- Learning events remain line-level traceable.
+- Motif memory retains evidence counts, recent outcomes, and attribution tags.
+- Status surface retains last applied bounded influence and reason codes.
+
+NON-GOALS
+- no autonomous strategy mutation
+- no direct runtime plan overwrite
+- no hidden optimization loop with authority expansion
+- no external authority transfer

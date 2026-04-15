@@ -1,0 +1,119 @@
+dashboard_button_policy
+document_version=MT5_DASHBOARD_PHASE0_BUTTON_POLICY_V1
+document_role=FORMAL_DASHBOARD_BUTTON_STATE_AND_POLICY_MODEL
+authority_class=NON_RUNTIME_UI_GUARDRAIL_CONTRACT
+scope=BUTTON_MODEL_ONLY_NO_ACTIVE_BUTTON_RENDERING
+
+BUTTON STATE MODEL
+button_state=ENABLED
+meaning=User may perform the local/read-only action immediately.
+scope_limit=View-local only. No runtime mutation.
+
+button_state=DISABLED
+meaning=Button exists visually but cannot be used in current local context.
+scope_limit=Must expose a bounded non-authority reason.
+
+button_state=VIEW_ONLY
+meaning=Button opens or reveals information only.
+scope_limit=No write path, no intent creation.
+
+button_state=LOCKED_WITH_REASON
+meaning=Button is intentionally unavailable due to governance or posture.
+scope_limit=Reason text required.
+
+button_state=HIDDEN
+meaning=Button is not shown in the current page/layout.
+scope_limit=No implied missing capability claim.
+
+button_state=REQUEST_AVAILABLE
+meaning=Reserved future request architecture can express availability in design only.
+scope_limit=Not active in Phase 0 or Phase 1 unless separately approved.
+
+button_state=REQUEST_PENDING
+meaning=Reserved request workflow placeholder state only.
+scope_limit=Must not be emitted or persisted in Phase 0.
+
+button_state=REQUEST_REJECTED
+meaning=Reserved request workflow outcome placeholder only.
+scope_limit=Must not be emitted or persisted in Phase 0.
+
+button_state=REQUEST_ACCEPTED_NOT_APPLIED
+meaning=Reserved request workflow outcome placeholder only.
+scope_limit=Must not be emitted or persisted in Phase 0.
+
+button_state=NOT_IMPLEMENTED_RESERVED
+meaning=Contractually reserved, intentionally not implemented in current phase.
+scope_limit=Default Phase 0 state for all dashboard buttons because no rendering is built yet.
+
+V1 BUTTON CLASSES
+
+CLASS A: ALLOWED NOW FOR LATER READ-ONLY V1 UI
+Default Phase 0 state for every Class A button=NOT_IMPLEMENTED_RESERVED
+Default later Phase 1 expectation=ENABLED or VIEW_ONLY only
+
+- Refresh View
+- Reload Curated Status Surfaces
+- Next / Previous / Tabs Navigation
+- Open Page buttons
+- Collapse / Expand Panels
+- Compact View / Full View
+- Filter by Severity
+- Filter by Panel
+- Filter by State Class
+- Show / Hide Transitional Warnings
+- Show / Hide Advanced Details
+- Copy Visible Summary
+- Export Visible Snapshot
+- Reset Layout
+- Local Visual Alert Dismiss
+- Re-sync View Timestamps
+
+Class A restrictions:
+- local/read-only only
+- no source mutation
+- no runtime mutation
+- no request creation
+- no control semantics
+- Export Visible Snapshot must obey dashboard_snapshot_sanitization_policy.txt
+
+CLASS B: DEFERRED ARCHITECTURALLY ONLY
+Default Phase 0 state=NOT_IMPLEMENTED_RESERVED
+Required visual state if surfaced later without full approval=LOCKED_WITH_REASON or HIDDEN
+
+- Maintenance Hold Request
+- No-New-Trades Request
+- Diagnostics Level Request
+- Mode / Profile Request
+- Controlled Pilot Consideration Request
+- Review Escalation Request
+
+Class B restrictions:
+- no file writes
+- no queue creation
+- no runtime hook
+- no governance hook
+- no status mutation
+- no silent placeholder submission channel
+
+CLASS C: FORBIDDEN
+Required state=HIDDEN
+Forbidden forever unless a separate future package explicitly changes governance truth
+
+- runtime unfreeze
+- trade enablement
+- pilot activation
+- strategy activation/deactivation
+- plan overwrite
+- direct parameter mutation
+- free-form TP/SL editing
+- threshold mutation
+- governor mutation
+- AI authority escalation
+- source gateway commit
+- archive purge / rollback apply
+- release gate override
+- external delivery enable
+
+BUTTON INTERPRETATION LOCK
+The dashboard may contain local navigation and local visibility controls only.
+No button may imply that the dashboard can command the runtime, AI, pilot, export gate, or factory pipelines.

@@ -1,0 +1,230 @@
+{
+  "version": "ATAS_SOURCE_TO_STATE_BINDING_MATRIX_V1",
+  "phase": "PHASE_2_KICKOFF",
+  "non_operative": true,
+  "state_families": [
+    {
+      "state_family": "OrderFlowState",
+      "bindings": [
+        {
+          "source_family": "runtime_context_snapshot",
+          "direct_fields": [
+            "packet_id",
+            "trace_id",
+            "event_time",
+            "liquidity_sweep_state",
+            "absorption_state",
+            "delta_bias_state",
+            "imbalance_state",
+            "continuation_exhaustion_hint"
+          ],
+          "future_derived_fields": [
+            "orderflow_confidence_band",
+            "sweep_persistence_score"
+          ],
+          "freshness_gate_required": true
+        },
+        {
+          "source_family": "observation_event_stream",
+          "direct_fields": [
+            "microstructure_observation",
+            "signal_stability_window_sec"
+          ],
+          "future_derived_fields": [
+            "event_density_score"
+          ],
+          "freshness_gate_required": true
+        }
+      ],
+      "forbidden_fields": [
+        "final_regime_owner",
+        "final_market_meaning_owner",
+        "tradability_verdict",
+        "execution_command"
+      ]
+    },
+    {
+      "state_family": "LiquidityState",
+      "bindings": [
+        {
+          "source_family": "runtime_context_snapshot",
+          "direct_fields": [
+            "packet_id",
+            "execution_symbol",
+            "liquidity_stability_state",
+            "level_candidates"
+          ],
+          "future_derived_fields": [
+            "spread_pressure_state",
+            "liquidity_void_presence",
+            "depth_quality_score"
+          ],
+          "freshness_gate_required": true
+        },
+        {
+          "source_family": "advisory_status_cached",
+          "direct_fields": [
+            "nearest_support_price",
+            "nearest_resistance_price",
+            "nearest_support_distance_points",
+            "nearest_resistance_distance_points"
+          ],
+          "future_derived_fields": [
+            "liquidity_proximity_risk"
+          ],
+          "freshness_gate_required": true
+        }
+      ],
+      "forbidden_fields": [
+        "risk_override",
+        "governor_override",
+        "position_size_instruction"
+      ]
+    },
+    {
+      "state_family": "LevelInteractionState",
+      "bindings": [
+        {
+          "source_family": "advisory_status_cached",
+          "direct_fields": [
+            "nearest_support_price",
+            "nearest_resistance_price",
+            "nearest_support_distance_points",
+            "nearest_resistance_distance_points",
+            "level_interaction_type",
+            "support_resistance_confluence_state",
+            "level_context_supportive",
+            "level_context_obstructive",
+            "level_context_degraded"
+          ],
+          "future_derived_fields": [
+            "canonical_near_flag",
+            "rejection_risk_flag",
+            "continuation_obstructed_flag",
+            "conflicted_flag"
+          ],
+          "freshness_gate_required": true
+        },
+        {
+          "source_family": "runtime_context_snapshot",
+          "direct_fields": [
+            "level_candidates"
+          ],
+          "future_derived_fields": [
+            "level_significance_rank"
+          ],
+          "freshness_gate_required": true
+        }
+      ],
+      "forbidden_fields": [
+        "canonical_level_owner",
+        "final_level_verdict",
+        "trade_block_command"
+      ]
+    },
+    {
+      "state_family": "MicrostructureEnvironmentEvidence",
+      "bindings": [
+        {
+          "source_family": "runtime_context_snapshot",
+          "direct_fields": [
+            "packet_id",
+            "event_time",
+            "market_state_class",
+            "session_context",
+            "price_space_relation",
+            "basis_capture_state",
+            "cross_instrument_translation_applied",
+            "overlay_enabled"
+          ],
+          "future_derived_fields": [
+            "environment_cleanliness_state",
+            "context_stability_score",
+            "regime_hint_nonbinding"
+          ],
+          "freshness_gate_required": true
+        },
+        {
+          "source_family": "advisory_status_cached",
+          "direct_fields": [
+            "contradiction_flag",
+            "semantic_only_mode",
+            "translation_state_summary"
+          ],
+          "future_derived_fields": [
+            "context_contradiction_density"
+          ],
+          "freshness_gate_required": true
+        }
+      ],
+      "forbidden_fields": [
+        "final_regime_verdict",
+        "final_tradability_verdict",
+        "decision_package"
+      ]
+    },
+    {
+      "state_family": "QualityValidityState",
+      "bindings": [
+        {
+          "source_family": "runtime_context_status_cached",
+          "direct_fields": [
+            "packet_id",
+            "evaluated_at",
+            "freshness_state",
+            "quality_state",
+            "packet_age_ms",
+            "acceptance_state",
+            "rejection_reason",
+            "shadow_attached"
+          ],
+          "future_derived_fields": [
+            "source_completeness_score"
+          ],
+          "freshness_gate_required": true
+        },
+        {
+          "source_family": "adapter_snapshot_status",
+          "direct_fields": [
+            "last_packet_id",
+            "last_acceptance_state",
+            "last_rejection_reason"
+          ],
+          "future_derived_fields": [
+            "adapter_lag_ms"
+          ],
+          "freshness_gate_required": true
+        },
+        {
+          "source_family": "exporter_snapshot_status",
+          "direct_fields": [
+            "packet_id",
+            "last_run_timestamp",
+            "write_status",
+            "rejection_reason"
+          ],
+          "future_derived_fields": [
+            "exporter_lag_ms"
+          ],
+          "freshness_gate_required": true
+        },
+        {
+          "source_family": "capture_telemetry_cadence",
+          "direct_fields": [
+            "first_failing_gate",
+            "classification"
+          ],
+          "future_derived_fields": [
+            "cadence_health_score"
+          ],
+          "freshness_gate_required": false
+        }
+      ],
+      "forbidden_fields": [
+        "gate_bypass_override",
+        "force_attach",
+        "force_eligible"
+      ]
+    }
+  ]
+}

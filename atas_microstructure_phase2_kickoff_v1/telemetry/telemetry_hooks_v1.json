@@ -1,0 +1,81 @@
+{
+  "version": "ATAS_MICROSTRUCTURE_TELEMETRY_HOOKS_V1",
+  "phase": "PHASE_2_KICKOFF",
+  "non_operative": true,
+  "purpose": "Validation and diagnostics hooks for source freshness/cadence/completeness before engine semantics are implemented.",
+  "output_targets": {
+    "latest_report_json": "MQL5/Files/AI/atas_micro_phase2_validation/phase2_state_validation_latest.json",
+    "event_stream_jsonl": "MQL5/Files/AI/atas_micro_phase2_validation/phase2_state_validation_stream.jsonl"
+  },
+  "hooks": [
+    {
+      "hook_id": "source_freshness_age_seconds",
+      "metric_family": "freshness",
+      "description": "Age in seconds from source mtime or packet event_time to evaluator time.",
+      "required": true,
+      "classification_thresholds": {
+        "fresh": "<= 30",
+        "stale": "31..180",
+        "expired": "> 180"
+      }
+    },
+    {
+      "hook_id": "source_cadence_seconds",
+      "metric_family": "cadence",
+      "description": "Observed cadence between packet/timestamp progression points.",
+      "required": true,
+      "classification_thresholds": {
+        "healthy": "<= 10",
+        "degraded": "11..60",
+        "stalled": "> 60"
+      }
+    },
+    {
+      "hook_id": "lineage_progression",
+      "metric_family": "lineage",
+      "description": "Packet and trace continuity across observation/exporter/adapter/intake/advisory surfaces.",
+      "required": true
+    },
+    {
+      "hook_id": "state_family_completeness_ratio",
+      "metric_family": "completeness",
+      "description": "Per-family present-field ratio against interface scaffolding.",
+      "required": true
+    },
+    {
+      "hook_id": "missing_field_families",
+      "metric_family": "completeness",
+      "description": "List of missing mandatory fields grouped by state family.",
+      "required": true
+    },
+    {
+      "hook_id": "invalid_field_families",
+      "metric_family": "quality",
+      "description": "Type mismatch or malformed field values grouped by state family.",
+      "required": true
+    },
+    {
+      "hook_id": "forbidden_field_hits",
+      "metric_family": "governance",
+      "description": "Forbidden ownership or authority-like fields detected in candidate states.",
+      "required": true
+    },
+    {
+      "hook_id": "phase1_contract_compatibility",
+      "metric_family": "compatibility",
+      "description": "Optional checks against Phase 1 core/extended schema requirements.",
+      "required": false
+    }
+  ],
+  "classification_labels": [
+    "AVAILABLE",
+    "STALE",
+    "MISSING",
+    "NOT_YET_PRODUCED",
+    "BLOCKED",
+    "INELIGIBLE",
+    "EMPTY_BUT_VALID",
+    "INVALID"
+  ],
+  "governance_notice": "Telemetry is non-authoritative and diagnostics-only. No runtime execution/risk/governor semantics may be inferred from telemetry outputs."
+}

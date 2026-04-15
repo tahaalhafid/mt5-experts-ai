@@ -1,0 +1,53 @@
+artifact_role=EDGE_PROMOTION_SUPPRESSION_POLICY
+artifact_authority_class=AUTHORITATIVE_FACTORY_EDGE_GOVERNANCE_POLICY
+policy_version=E9_EDGE_PROMOTION_SUPPRESSION_POLICY_V1
+phase_id=E9
+
+purpose:
+- define how edge families may later be promoted, tightened, narrowed, downgraded, or suppressed using factory evidence
+- preserve a governance-only posture in this phase
+
+core_definition:
+- promotion means evidence-based governance advancement only; it does not mean runtime activation.
+- suppression means governance restriction pressure only; it does not mean live disabling in E9.
+- tightening means later demanding stronger evidence, cleaner timing, better geometry, or cleaner contextual conditions before broader acceptance.
+- narrowing means later reducing the family's acceptable scope to fewer zones, regimes, or contexts.
+- downgrade means later reducing family standing or confidence posture when evidence does not justify current breadth.
+- all E9 governance remains non-runtime, non-executing, non-licensing, and non-mutative.
+
+hard_boundaries:
+- E9 does not change current runtime licensing
+- E9 does not rewrite current council behavior
+- E9 does not suppress families live
+- E9 does not promote families live
+- E9 does not bypass later review or enrichment phases
+
+conceptual_governance_inputs:
+- zone canon
+- regime posture
+- timing structure
+- invalidation and risk geometry
+- exit architecture
+- scorecards and runtime accounting
+- health posture
+- deterioration posture
+- suppression pressure
+- overblocking risk
+- geometry quality
+- evidence depth
+
+promotion_readiness_guidance:
+- promotion readiness is later justified only when thesis coherence, regime fit, timing clarity, invalidation clarity, geometry quality, exit coherence, and evidence depth are strong enough together.
+- absence of strong suppression pressure matters as much as positive structure.
+- scorecards contribute evidence; they do not self-govern.
+
+suppression_and_downgrade_guidance:
+- suppression pressure should surface when fragility, persistent poor geometry, deterioration, evidence weakness, vague edge logic, or inflated scope persist.
+- downgrade pressure should surface before silent demotion; the pressure must remain visible and reviewable.
+- tightening and narrowing are preferred when the family still has strategic value but current scope is too broad or too weakly evidenced.
+
+anti-overreach_rules:
+- no family is promoted merely because it is a current canon seed
+- no family is suppressed merely because it is conditional
+- no single strong structural description rescues repeated poor geometry or weak evidence depth
+- governance pressure remains descriptive until later review/governance phases act on it

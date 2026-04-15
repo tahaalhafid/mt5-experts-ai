@@ -1,0 +1,26 @@
+STRATEGY TRANSFER PACKAGE 4 — SHELL COLLAPSE CONTRACT
+
+Purpose:
+Shell collapse determines whether an ingested legacy shell should remain intact, remain only as conditional/deeper shell posture, or collapse into primitive-led or research-only posture.
+
+Shell collapse in Package 4:
+- applies only to the 27 Package 3 actually ingested first-wave elements
+- is conservative
+- is lineage-preserving
+- is non-destructive
+- is not deletion
+- is not archive finalization
+- is not runtime deactivation (runtime freeze already exists from Package 1)
+- is not canon admission
+
+Allowed shell outcomes in this package:
+- SHELL_RETAINED_INTACT
+- SHELL_RETAINED_AS_CONDITIONAL_SHELL_ONLY
+- SHELL_RETAINED_AS_DEEPER_CANDIDATE_SHELL_ONLY
+- SHELL_COLLAPSED_TO_PRIMITIVE_LED_STRUCTURE
+- SHELL_COLLAPSED_TO_RESEARCH_ONLY_SHELL
+
+Boundaries:
+- shell collapse does not delete the source shell
+- shell collapse does not prove lack of value
+- shell collapse only changes factory-side posture for the ingested Package 3 first wave

@@ -1,0 +1,49 @@
+dashboard_state_precedence_matrix
+document_version=MT5_DASHBOARD_PHASE0_STATE_PRECEDENCE_MATRIX_V1
+document_role=FORMAL_DASHBOARD_STATE_PRECEDENCE_MATRIX
+authority_class=NON_RUNTIME_VIEW_STATE_DOMINANCE_CONTRACT
+scope=DISPLAY_DOMINANCE_ONLY
+
+PRECEDENCE ORDER
+1. CRITICAL_BLOCKING_OPERATIONAL
+2. GOVERNANCE_CONSTRAINT
+3. READINESS_LIMITATION
+4. TRANSITIONAL_VISIBILITY
+5. POSITIVE_BUT_BOUNDED
+
+LAYER 1: CRITICAL_BLOCKING_OPERATIONAL
+states=FROZEN,TRADING_BLOCKED,EXPORT_BLOCKED,STARTUP_BLOCKED
+dominance_rule=Highest visible blocking operational state becomes the dominant banner or card state.
+lower_priority_handling=All lower-layer states are downgraded to notes, secondary badges, or supporting reasons.
+same_layer_order=FROZEN > TRADING_BLOCKED > EXPORT_BLOCKED > STARTUP_BLOCKED
+
+LAYER 2: GOVERNANCE_CONSTRAINT
+states=GOVERNANCE_HELD,PILOT_DEFINED_NOT_LIVE,AI_OFF,AI_SHADOW_ONLY,AI_ADVISORY_ONLY,EVIDENCE_ONLY,REVIEW_PENDING
+dominance_rule=Use as primary state only when no Layer 1 state is active for the same composition.
+lower_priority_handling=Layers 3-5 demoted to secondary note/badge.
+same_layer_order=GOVERNANCE_HELD > AI_OFF > PILOT_DEFINED_NOT_LIVE > AI_ADVISORY_ONLY > AI_SHADOW_ONLY > EVIDENCE_ONLY > REVIEW_PENDING
+
+LAYER 3: READINESS_LIMITATION
+states=NOT_READY,STARTUP_PARTIAL,READINESS_PARTIAL,SOURCE_PARTIAL,FACTORY_PARTIAL,STALE_STATE
+dominance_rule=Use as primary state only if no Layer 1-2 state dominates the same composition.
+lower_priority_handling=Layer 4 becomes warning badges/notes; Layer 5 becomes muted support text.
+same_layer_order=NOT_READY > STALE_STATE > SOURCE_PARTIAL > FACTORY_PARTIAL > STARTUP_PARTIAL > READINESS_PARTIAL
+
+LAYER 4: TRANSITIONAL_VISIBILITY
+states=PLACEHOLDER_STATE,PENDING_RUNTIME_INIT,SUMMARY_ONLY_NOT_PRIMARY_TRUTH,TRANSITIONAL_ARTIFACT,ZERO_RECORD_STATE,STATUS_EMITTED_NOT_RUNTIME_CONFIRMED,MIXED_PLANE_SUMMARY_ONLY
+dominance_rule=Never override Layers 1-3. May become visible only as banner-note, subtitle, or badge.
+lower_priority_handling=Layer 5 remains background support only.
+same_layer_order=MIXED_PLANE_SUMMARY_ONLY > ZERO_RECORD_STATE > SUMMARY_ONLY_NOT_PRIMARY_TRUTH > PENDING_RUNTIME_INIT > STATUS_EMITTED_NOT_RUNTIME_CONFIRMED > TRANSITIONAL_ARTIFACT > PLACEHOLDER_STATE
+
+LAYER 5: POSITIVE_BUT_BOUNDED
+states=STARTUP_OK,FACTORY_READY,ARCHITECTURE_DEFINED_NOT_OPERATIONALLY_ACTIVE
+dominance_rule=May appear as positive bounded note, secondary chip, or success-style muted badge only when Layers 1-4 do not conflict.
+lower_priority_handling=No lower layer exists.
+same_layer_order=STARTUP_OK > FACTORY_READY > ARCHITECTURE_DEFINED_NOT_OPERATIONALLY_ACTIVE
+
+DOMINANCE APPLICATION RULES
+- The dashboard may show multiple true states, but only one dominant state per banner/widget.
+- When a higher-priority state is present, lower-priority states must be restyled as note/badge/warning only.
+- Positive bounded states must never visually suppress a critical or governance-hold truth.
+- Summary/transitional states may explain context but may not replace authoritative blocking truth.
+- If page-level states conflict, top-level banner follows the top-level posture priority rule from dashboard_design_lock_contract.txt.

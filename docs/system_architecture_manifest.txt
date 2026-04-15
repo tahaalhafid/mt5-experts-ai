@@ -1,0 +1,124 @@
+DRAFT / NON-AUTHORITATIVE TECHNICAL REFERENCE
+Truth role: Technical architecture reference only.
+It is NOT authoritative for:
+- current operational status
+- active baseline identity
+- current phase acceptance truth
+- active plan truth
+
+Use instead:
+- MQL5/Experts/AI/docs/current_system_status.txt
+- MQL5/Experts/AI/docs/baseline_identity.txt
+- MQL5/Experts/AI/docs/implementation_state_map.txt
+
+----------------------------------------------------------------
+
+SYSTEM ARCHITECTURE MANIFEST
+Project: MT5 Council Architecture (AI/Experts)
+Scope: Reference-only documentation. No runtime impact.
+
+============================================================
+A) Core Layers (what exists in code)
+============================================================
+1) Main runtime entry
+   - File: MQL5/Experts/AI/main_ea.mq5
+   - Role: Orchestrates snapshots, routes decision modes, applies policy gates, journals, and calls execution.
+
+2) Market regime / environment building
+   - Files (examples): market_regime.mqh, council_environment.mqh
+   - Role: Builds CouncilEnvironmentReport (zone_type + regime_summary + zone_name + signals).
+
+3) Zone semantics inference (text + enum harmonization)
+   - File: MQL5/Experts/AI/council_strategies.mqh
+   - Fn: CouncilInferZoneSemantic(CouncilEnvironmentReport &env)
+   - Role: Converts (zone_type / regime_summary / zone_name) into a stable semantic label used by alignment and diagnostics.
+
+4) Council strategy activation (Zone → Strategy Activation)
+   - File: MQL5/Experts/AI/council_strategies.mqh
+   - Fn: RunCouncilStrategySet(...) + BuildCouncilStrategy_*()
+   - Role: Produces CouncilStrategyReport[] for the active runtime (COUNCIL_MAX_STRATEGIES items).
+
+5) Strategy reports (per-strategy)
+   - Data: CouncilStrategyReport
+   - Contains: strategy_id, strategy_family, direction_bias, decision (BUY/SELL/WAIT), vote_weight, score_final, short_reason/explanation (when available).
+
+6) Aggregation (Council → Aggregation)
+   - Files: council_mode_runtime.mqh, council_mode_types.mqh
+   - Fn: BuildCouncilAggregateReport(...)
+   - Role: Aggregates strategy reports into final council recommendation and support signals.
+
+7) Attribution + system reporting (diagnostic only)
+   - Files: council_mode_runtime.mqh, council_txt_reporter.mqh
+   - Fns: CouncilBuildDecisionAttributionV1(...), SaveCouncilSystemReportEx2(...)
+   - Role: Converts reports into explainable summaries (best/support, reasons). Does NOT change decision.
+
+8) Governor / Policy (gating, not scoring)
+   - Files (examples): evolution_governor.mqh, policy modules used from main_ea.mq5
+   - Role: Applies high-level eligibility checks and risk state. Must not be confused with Council scoring.
+
+9) Level Awareness v2 — Environmental Brake (late-stage brake)
+   - File: MQL5/Experts/AI/level_awareness_brake.mqh
+   - Fn: BuildLevelAwarenessBrakeReport(...)
+   - Role: Runs only at the final gate BEFORE execution; returns ALLOW / HARD_REJECT with an explainable reason.
+   - Important: Does not modify Council scoring, votes, best/support, CouncilQ, or thresholds.
+
+10) Execution core
+   - Files (examples): core_trade_engine.mqh, execution_estimator_v1.mqh
+   - Role: Places orders / manages positions. Called only after all gates pass.
+
+11) Journaling / analytics
+   - File: MQL5/Experts/AI/performance_journal.mqh (+ journal_analytics.mqh)
+   - Role: Emits compact JSON decision logs. Used for post-analysis; does not change decision.
+
+12) Zone Coverage Awareness (diagnostic only)
+   - File: council_strategies.mqh (+ runtime integration)
+   - Fn: BuildZoneCoverageReport(...)
+   - Role: Computes coverage_label/diversity/concentration/conflict from reports[] and env semantic.
+
+============================================================
+B) End-to-end execution sequence (conceptual)
+============================================================
+1) main_ea.mq5 builds timeframe snapshots (M1/M5/M15...) and regime/environment.
+2) Decision routing selects mode (COUNCIL or others).
+3) If COUNCIL:
+   3.1) RunCouncilStrategySet(...) → CouncilStrategyReport reports[]
+   3.2) BuildCouncilAggregateReport(...) → council summary (best/support/consensus)
+   3.3) BuildZoneCoverageReport(...) → diagnostic coverage report (no behavior impact)
+   3.4) Attribution + text reporting → logs (no behavior impact)
+4) Governor/Policy gates check if trade is allowed at all (risk, cooldown, etc).
+5) If BUY/SELL candidate:
+   5.1) Level Awareness v2 brake runs (ALLOW/HARD_REJECT) with interaction-aware reasoning.
+6) If allowed → execution engine places trade.
+7) Journaling writes compact decision + diagnostics fields.
+
+============================================================
+C) Key responsibilities by file (short map)
+============================================================
+- main_ea.mq5:
+  routing, policy gates, journaling calls, final execution call points, brake integration point.
+- council_mode_runtime.mqh:
+  council runtime orchestration, report arrays, aggregation call, attribution/reporting calls.
+- council_strategies.mqh:
+  strategy set, zone semantic inference, alignment helpers, zone coverage computation.
+- council_mode_types.mqh:
+  enums/structs for council (zones, reports, runtime results, roles metadata).
+- council_txt_reporter.mqh:
+  human-readable council report output.
+- performance_journal.mqh:
+  compact JSON decision records (including zone coverage + level brake fields).
+
+============================================================
+D) Clarifying boundaries (critical)
+============================================================
+- Council decision:
+  computed from strategy reports and aggregation. This is the "what would we do" recommendation.
+- Governor/Policy:
+  eligibility gates and risk state. May block trade regardless of Council. Does NOT rescore strategies.
+- Level brake:
+  last-stage location-aware HARD_REJECT/ALLOW gate. Does NOT alter Council output.
+- Execution:
+  order placement and position handling only.
+- Diagnostics (attribution, zone coverage):
+  reporting/visibility layers only, never decision-making.
+
+End of manifest.

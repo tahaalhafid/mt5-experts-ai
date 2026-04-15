@@ -1,0 +1,76 @@
+SOURCE INTAKE GATEWAY CONTRACT
+version=V1
+
+artifact_path=MQL5/Files/AI/edge_factory/registry/source_intake_gateway.json
+artifact_role=SOURCE_INTAKE_GATEWAY
+artifact_authority_class=NON_AUTHORITATIVE_ANALYTICAL_INBOX
+gateway_mode=FULL_REPLACEMENT_SNAPSHOT
+
+operational_role:
+- The gateway is the one official analytical inbox for external source-intake AI output.
+- It exists to preserve raw-source richness before later governed commit into factory subregistries.
+- It is an inbox and contract surface, not a downstream truth surface.
+
+authoritative_writer_scope:
+- The analytical source-intake AI unit may update ONLY the gateway file.
+- No other file is writable by that external analytical intake unit in this phase.
+
+the_gateway_is_not:
+- source_registry truth
+- material_registry truth
+- decomposition truth
+- canon promotion authority
+- runtime truth
+- execution authority
+- runtime licensing authority
+
+processing_boundary:
+- detection-only awareness may observe gateway updates
+- no auto-import
+- no auto-commit
+- no auto-decomposition
+- no canon mutation
+- no runtime mutation
+- no authority escalation
+
+semantic_priority_rule:
+- Structured semantic fields remain the primary interpretation layer.
+- Codification layer is supplementary candidate intelligence only.
+- Code candidate presence must never override weak or ambiguous semantic structure.
+- Code candidate presence must never imply runtime maturity, runtime safety, or runtime approval.
+
+required_top_level_snapshot_elements:
+- gateway_version
+- gateway_contract_version
+- source_intake_gateway_rich_hybrid_schema_version
+- producer_role
+- snapshot_identity
+- update_id
+- snapshot_time
+- updated_at
+- gateway_record_count
+- gateway_material_total
+- records
+
+required_record_sections:
+- source_package
+- extraction_summary
+- materials
+- factory_decision_layer
+
+lineage_rule:
+- Every intake record must remain traceable back to source package identity and source reference.
+- Downstream commit layers must preserve lineage instead of flattening it away.
+
+detection_truth_rule:
+- Detection is lightweight and observational only.
+- update_id and content hash are the primary change signals.
+- gateway_last_seen_modified_time may be unavailable in this phase and must be reported truthfully when unavailable.
+- snapshot_updated_at is the logical producer timestamp when provided by the gateway.
+
+non_runtime_boundary:
+- gateway content is never runtime-authoritative in this phase
+- codification runtime authority remains false
+- direct_factory_commit_allowed=false
+- auto_import_allowed=false
+- runtime_trading_impact=false

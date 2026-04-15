@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "atas_direct_write_core_contract_v1.schema.json",
+  "title": "ATAS Direct Write Core Contract V1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "envelope",
+    "quality",
+    "signal_payload"
+  ],
+  "properties": {
+    "artifact_role": {
+      "type": "string",
+      "const": "ATAS_DIRECT_WRITE_CORE_PACKET"
+    },
+    "artifact_authority_class": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "ATAS_DIRECT_WRITE_CORE_V1"
+    },
+    "envelope": {
+      "type": "object",
+      "required": [
+        "packet_id",
+        "written_at",
+        "fresh_until",
+        "source_symbol",
+        "execution_symbol",
+        "source_mode",
+        "packet_validity"
+      ],
+      "properties": {
+        "packet_id": { "type": "string", "minLength": 1 },
+        "written_at": { "type": "string", "minLength": 1 },
+        "fresh_until": { "type": "string", "minLength": 1 },
+        "source_symbol": { "type": "string", "minLength": 1 },
+        "execution_symbol": { "type": "string", "minLength": 1 },
+        "source_mode": { "type": "string" },
+        "packet_validity": { "type": "string" }
+      }
+    },
+    "quality": {
+      "type": "object",
+      "required": [
+        "quality_state",
+        "confidence_ceiling",
+        "suppression_active",
+        "suppression_flags",
+        "suppression_reason_codes"
+      ],
+      "properties": {
+        "quality_state": { "type": "string", "minLength": 1 },
+        "confidence_ceiling": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "suppression_active": { "type": "boolean" },
+        "suppression_flags": { "type": "string" },
+        "suppression_reason_codes": { "type": "string" }
+      }
+    },
+    "signal_payload": {
+      "type": "object",
+      "required": [
+        "liquidity_sweep_state",
+        "absorption_state",
+        "delta_bias_state",
+        "imbalance_state",
+        "liquidity_stability_state",
+        "continuation_exhaustion_hint"
+      ],
+      "properties": {
+        "liquidity_sweep_state": { "type": "string" },
+        "absorption_state": { "type": "string" },
+        "delta_bias_state": { "type": "string" },
+        "imbalance_state": { "type": "string" },
+        "liquidity_stability_state": { "type": "string" },
+        "continuation_exhaustion_hint": { "type": "string" }
+      }
+    },
+    "non_authoritative_note": {
+      "type": "string"
+    }
+  }
+}

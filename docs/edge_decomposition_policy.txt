@@ -1,0 +1,157 @@
+EDGE DECOMPOSITION POLICY
+Authority: Institutional Edge Factory decomposition and normalization governance policy.
+Truth posture: Decomposition policy only. No runtime behavior change.
+
+============================================================
+PHASE IDENTITY
+============================================================
+Phase:
+- E1 — Source Decomposition & Normalization Engine
+
+Purpose:
+- Transform registered raw edge materials into structured internal edge language.
+- Separate story from mechanism.
+- Separate market thesis from trigger mechanics.
+- Separate invalidation/risk/exit structure from narrative packaging.
+- Preserve lineage back to registered material and source records.
+
+Non-goals:
+- No canon admission
+- No codifiability approval
+- No testing approval
+- No runtime export
+- No runtime activation
+- No code behavior change
+
+============================================================
+DECOMPOSITION BRANCH
+============================================================
+Authoritative decomposition branch:
+- MQL5/Files/AI/edge_factory/decomposition/
+
+Authoritative decomposition files:
+- decomposition/decomposition_registry.json
+- decomposition/normalized_materials.json
+- decomposition/decomposition_status.json
+
+Rule:
+- These files are authoritative for factory decomposition structure, normalization linkage, and decomposition status visibility only.
+- They are not runtime trading authority.
+- They are not canon-promotion authority.
+- They are not codifiability-audit authority.
+- They are not testing/export/runtime-ingestion authority.
+
+============================================================
+WHAT DECOMPOSITION MEANS
+============================================================
+Decomposition means:
+- transforming raw material into structured internal edge language
+- separating narrative claims from operational mechanism
+- separating thesis, trigger, invalidation, risk, and exit ideas into bounded fields
+- preserving provisional regime/zone hints without pretending final licensing
+- retaining lineage back to the registered source
+
+Decomposition does NOT mean:
+- approval
+- codifiability success
+- runtime value
+- canon candidacy
+- testing readiness
+- activation readiness
+
+============================================================
+RAW-TO-NORMALIZED HANDLING RULES
+============================================================
+1) Runtime-imported family
+   - normalize as family-level thesis + archetype + provisional zone/regime fit
+   - preserve member-level dependency as a limitation
+   - do not pretend family-level trigger detail is fully extracted yet
+
+2) Runtime strategy implementation
+   - normalize as a concrete strategy implementation placeholder
+   - keep member title and runtime lineage
+   - avoid inventing exact trigger/invalidation details not already captured
+
+3) Legacy strategy blueprint / playbook / PDF / URL / note
+   - normalize thesis, setup archetype, provisional trigger/invalidation/risk/exit fields where recoverable
+   - preserve ambiguity when source precision is weak
+   - allow PARTIAL / AMBIGUOUS / RESEARCH_ONLY outcomes
+
+4) Indicator primitive
+   - normalize primarily as confirmation/context/timing primitive
+   - not as full strategy identity by default
+
+5) Entry-pattern primitive
+   - normalize primarily as timing/entry-shape primitive
+   - not as full standalone edge identity by default
+
+6) Filter primitive
+   - normalize primarily as suppression/context/filter role
+   - not as standalone edge identity
+
+7) Risk-model primitive
+   - normalize primarily as management / stop / exit / scaling primitive
+   - not as thesis identity
+
+8) Internal runtime finding / human review submission
+   - normalize as attributable bounded material
+   - require lineage to registered source and origin reference
+   - do not allow narrative confidence alone to simulate structure
+
+============================================================
+PRELIMINARY ZONE / REGIME OUTPUTS ONLY
+============================================================
+Allowed at E1:
+- primary_zone_candidate
+- secondary_zone_candidates
+- primary_regime_fit
+- secondary_regime_fits
+
+Not allowed at E1:
+- final runtime licensing
+- final canon placement
+- final activation permissions
+- final regime/zone authority
+
+All zone/regime outputs at E1 remain provisional.
+
+============================================================
+PRE-CODIFIABILITY OUTPUTS ONLY
+============================================================
+Allowed preliminary hints:
+- CLEARLY_CODIFIABLE_CANDIDATE
+- PARTIALLY_CODIFIABLE_CANDIDATE
+- HEAVY_DISCRETION_DEPENDENCE
+- NEEDS_STRUCTURAL_REWRITE
+- RESEARCH_ONLY_NON_RUNTIME
+
+These are pre-audit hints only.
+They do NOT replace the later codifiability audit.
+
+============================================================
+ANTI-FABRICATION RULE
+============================================================
+At E1:
+- preserve what is known
+- mark unknowns clearly
+- preserve ambiguity honestly
+- do not fabricate trigger precision
+- do not fabricate invalidation precision
+- do not fabricate asset/timeframe specificity
+- do not upgrade narrative into false structure
+
+If a source cannot be decomposed cleanly, it must remain:
+- DECOMPOSITION_PARTIAL
+- DECOMPOSITION_AMBIGUOUS
+- DECOMPOSITION_RESEARCH_ONLY
+- DECOMPOSITION_BLOCKED_PENDING_BETTER_SOURCE
+
+============================================================
+LINEAGE PRESERVATION RULE
+============================================================
+Every normalized record must retain traceability back to:
+- material registry record
+- source registry record
+- original origin_reference
+
+No normalized record is allowed to become detached from lineage.

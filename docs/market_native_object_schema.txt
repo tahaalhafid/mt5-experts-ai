@@ -1,0 +1,111 @@
+MARKET-NATIVE OBJECT SCHEMA
+Authority: Normalized market-native raw-object schema for Institutional Edge Factory.
+Truth posture: Schema contract only. No runtime behavior change.
+
+============================================================
+SCHEMA PURPOSE
+============================================================
+Every market-native intelligence object must target one normalized representation so that:
+- liquidity events
+- structure-quality states
+- displacement/reclaim states
+- session/volatility behavior
+- toxicity/suppression contexts
+
+can become comparable factory-layer raw intelligence objects before any later canon, codifiability, or testing decisions.
+
+============================================================
+REQUIRED FIELDS
+============================================================
+- market_native_object_id
+  Unique market-native object identifier.
+
+- object_class
+  Primary taxonomy class-group identity:
+  LIQUIDITY_EVENT_CLASS / STRUCTURE_QUALITY_CLASS / DISPLACEMENT_RECLAIM_CLASS / SESSION_VOLATILITY_CLASS / TOXIC_CONTEXT_CLASS
+
+- object_subclass
+  Specific normalized taxonomy member such as SWEEP_AND_RECLAIM or CLEAN_TREND_STRUCTURE.
+
+- source_class
+  Must remain MARKET_NATIVE_SOURCE for native market objects.
+
+- trust_tier
+  Default trust posture inherited from the market-native source class.
+  This does not imply empirical validation by itself.
+
+- object_role
+  Primary market-native role:
+  RAW_MARKET_EVENT / STRUCTURAL_CONTEXT_OBJECT / LIQUIDITY_CONTEXT_OBJECT / DISPLACEMENT_CONTEXT_OBJECT / VOLATILITY_CONTEXT_OBJECT / SESSION_CONTEXT_OBJECT / TOXICITY_SUPPRESSION_OBJECT
+
+- market_behavior_thesis
+  Bounded statement of what the market behavior means.
+
+- provisional_zone_fit
+  Provisional zone affinity only.
+  Not final runtime licensing.
+
+- provisional_regime_fit
+  Provisional regime affinity only.
+  Not final runtime licensing.
+
+- structural_context_note
+  Structural reading note relevant to the object.
+
+- liquidity_context_note
+  Liquidity reading note relevant to the object.
+
+- displacement_context_note
+  Displacement reading note relevant to the object.
+
+- volatility_context_note
+  Volatility reading note relevant to the object.
+
+- session_context_note
+  Session timing or session-quality note relevant to the object.
+
+- toxic_context_note
+  Suppression-risk note where applicable.
+
+- directional_bias_hint
+  Provisional directional posture only.
+  Not execution authority.
+
+- confidence_posture
+  Conservative confidence posture such as:
+  PLACEHOLDER_DESIGN_ONLY
+  STRUCTURALLY_PLAUSIBLE_NOT_VALIDATED
+  HIGH_SIGNAL_REQUIRES_LATER_TESTING
+
+- ambiguity_flags
+  Honest list of unresolved ambiguity or boundary flags.
+
+- object_limitations
+  Conservative limitations note.
+
+- lineage_reference
+  Traceability back to:
+  - market_native_manifest.json
+  - taxonomy class/subclass
+  - origin/placeholder note if seeded at E2
+
+============================================================
+SCHEMA RULES
+============================================================
+1) market-native objects represent raw market behavior only
+2) object fields must remain descriptive, bounded, and non-activating
+3) provisional_zone_fit and provisional_regime_fit are allowed; final runtime licensing is forbidden
+4) object_role must describe the raw intelligence function, not a runtime strategy identity
+5) confidence_posture must not overstate validation
+6) ambiguity_flags must remain visible when uncertainty exists
+7) lineage_reference is mandatory
+8) indicator naming must not be used as object identity
+
+============================================================
+PLACEHOLDER SEED DISCIPLINE
+============================================================
+If E2 seeds placeholder objects:
+- placeholder status must remain explicit
+- empirical validation must remain absent unless later phases establish it
+- confidence posture must remain conservative
+- no placeholder object may be treated as runtime-active

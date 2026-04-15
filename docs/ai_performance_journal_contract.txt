@@ -1,0 +1,32 @@
+ai_performance_journal_contract
+document_version=O1_AI_PERFORMANCE_JOURNAL_CONTRACT_V1
+document_role=OPERATIONAL_JOURNAL_BOOTSTRAP_AND_USAGE_CONTRACT
+authority_class=INTERNAL_OPERATIONAL_SURFACE_CONTRACT
+scope=INTERNAL_RUNTIME_JOURNAL_ONLY
+
+PURPOSE
+Define the intended role and clean bootstrap behavior of AI\ai_performance_journal.jsonl.
+
+ROLE
+- append-only JSONL operational journal
+- internal runtime observation and journaling surface
+- used for bounded internal diagnostics, validation summaries, and operational visibility
+- not an investor-facing artifact
+- not an external-delivery artifact
+- not a copied-backup dependency
+
+BOOTSTRAP RULE
+- first startup may begin with an empty valid journal file
+- if the journal is missing at startup, runtime creates a clean empty file automatically
+- no fake historical records are seeded
+- no backup-copy workflow is required
+
+VALID EMPTY STATE
+- empty file is valid
+- later append operations remain responsible for writing one JSON object per line
+- empty bootstrap does not imply historical performance, readiness, or trading approval
+
+BOUNDARY
+- this journal does not grant runtime authority
+- this journal does not weaken freeze/governance posture
+- this journal supports observability only

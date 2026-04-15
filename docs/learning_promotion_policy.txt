@@ -1,0 +1,76 @@
+learning_promotion_policy
+document_version=L6_LEARNING_PROMOTION_POLICY_V1
+document_scope=GOVERNED_PROMOTION_READINESS_ONLY
+authority_class=NON_AUTHORITATIVE_GOVERNANCE_POLICY
+purpose=DEFINE_WHEN_STRONG_GOVERNED_LEARNING_OUTPUTS_MAY_BE_CONSIDERED_PROMOTION_READY_WITHOUT_RUNTIME_ACTIVATION_OR_HIDDEN_MUTATION
+non_goals=NO_RUNTIME_APPLY_ENGINE|NO_MUTATION_ENGINE|NO_PROMOTION_AUTOMATION|NO_ROLLBACK_EXECUTOR|NO_AUTO_APPLY|NO_AUTHORITY_EXPANSION
+
+1. FORMAL ROLE OF THIS LAYER
+This layer defines promotion readiness and non-promotion discipline for governed learning outputs.
+This layer does not activate runtime change.
+This layer does not write into the active plan.
+This layer does not convert promotion readiness into implementation.
+This layer does not alter strategy logic, thresholds, governors, failure detectors, execution-quality behavior, dirty-environment handling, trend-continuation logic, or any live trading behavior.
+
+2. WHAT PROMOTION MEANS IN THIS PHASE
+promotion_meaning=GOVERNED_READINESS_FOR_LATER_CONTROLLED_IMPLEMENTATION_PLANNING_ONLY
+promotion_meaning_2=STRONGER_GOVERNANCE_CONSIDERATION_BASED_ON_TRACEABLE_EVIDENCE_AND_REVIEW_HISTORY
+promotion_meaning_3=STATUS_ELEVATION_WITHIN_REVIEW_DISCIPLINE_ONLY
+promotion_does_not_mean=RUNTIME_ACTIVATION|DIRECT_APPLY|STRATEGY_MUTATION|THRESHOLD_MUTATION|GOVERNOR_MUTATION|FAILURE_DETECTOR_MUTATION|EXECUTION_MUTATION|ACTIVE_PLAN_OVERWRITE|AUTO_APPLY|IMMEDIATE_IMPLEMENTATION
+
+3. PROMOTION READINESS STATES
+promotion_readiness_state=NOT_PROMOTION_READY
+state_purpose=Default state when criteria are not yet satisfied or disqualifiers remain active.
+state_implication=NO_PROMOTION_CONSIDERATION_ADVANCEMENT
+
+promotion_readiness_state=PROMOTION_CANDIDATE
+state_purpose=The governed learning output is sufficiently bounded and traceable for later controlled implementation planning consideration.
+state_implication=READY_FOR_STRONGER_GOVERNANCE_CONSIDERATION_ONLY_NOT_RUNTIME_CHANGE
+
+promotion_readiness_state=PROMOTION_REQUIRES_MORE_EVIDENCE
+state_purpose=The learning output may have value but does not yet have enough evidence or corroboration for promotion readiness.
+state_implication=RETURN_TO_EVIDENCE_REVIEW_OR_LIMITED_REFINEMENT
+
+promotion_readiness_state=PROMOTION_REQUIRES_STRONGER_SIGNOFF
+state_purpose=The learning output may be promotion-viable but governance sensitivity, risk, or scope requires stronger sign-off before readiness can be recognized.
+state_implication=ESCALATION_OR_ADDITIONAL_SIGNOFF_ONLY_NOT_RUNTIME_CHANGE
+
+4. FORMAL PROMOTION CRITERIA
+A governed learning output may be considered promotion-ready only when all of the following are true:
+- sufficient and traceable evidence basis exists for the specific bounded claim.
+- review-governed acceptance history exists and remains consistent with L4 decision discipline.
+- experiment design or review support exists where applicable under L5.
+- scope is bounded, explicit, and does not conceal broad or cross-layer mutation intent.
+- risk framing is explicit, credible, and proportionate to the claim.
+- validation expectations are explicit and reviewable.
+- rollback readiness is explicit, feasible, and traceable.
+- no prohibited mutation path is present.
+- no unresolved critical ambiguity remains.
+- no authority elevation implication exists.
+- no hidden runtime activation intent exists.
+
+promotion_criterion_1=TRACEABLE_EVIDENCE_BASIS
+promotion_criterion_2=REVIEW_GOVERNED_ACCEPTANCE_HISTORY
+promotion_criterion_3=APPLICABLE_EXPERIMENT_OR_REVIEW_SUPPORT
+promotion_criterion_4=BOUNDED_SCOPE
+promotion_criterion_5=ACCEPTABLE_RISK_FRAMING
+promotion_criterion_6=EXPLICIT_VALIDATION_EXPECTATIONS
+promotion_criterion_7=EXPLICIT_ROLLBACK_READINESS
+promotion_criterion_8=NO_PROHIBITED_MUTATION_PATH
+promotion_criterion_9=NO_UNRESOLVED_CRITICAL_AMBIGUITY
+promotion_criterion_10=NO_AUTHORITY_ELEVATION_IMPLICATION
+
+5. PROMOTION SIGN-OFF EXPECTATIONS
+Lower-risk and tightly bounded items may be considered promotion-candidate only after REVIEW_BOARD sign-off.
+Governance-sensitive, cross-scope, or materially consequential items may require stronger escalation and may require COMMITTEE_REVIEWER visibility or sign-off when justified.
+Sign-off in this phase means governance readiness only.
+Sign-off in this phase does not authorize runtime activation, direct apply, or plan overwrite.
+
+required_signoff_default=REVIEW_BOARD
+required_signoff_elevated=COMMITTEE_REVIEWER_WHEN_GOVERNANCE_OR_MATERIALITY_JUSTIFIES
+signoff_rule=SIGNOFF_CONFIRMS_GOVERNED_PROMOTION_READINESS_ONLY
+
+6. NON-PROMOTION PRINCIPLE
+A learning output that fails any critical promotion criterion remains non-promotion-ready.
+A persuasive narrative, sophisticated presentation, or lengthy analysis does not substitute for evidence sufficiency, validation framing, rollback readiness, or governance sign-off.
+Promotion pressure from weak evidence is forbidden.

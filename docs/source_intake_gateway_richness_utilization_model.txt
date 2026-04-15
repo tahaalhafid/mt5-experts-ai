@@ -1,0 +1,28 @@
+SOURCE INTAKE GATEWAY RICHNESS UTILIZATION MODEL
+version=V1
+
+purpose:
+- define how rich hybrid intake remains useful after preservation
+
+downstream utility targets:
+- decomposition quality improvement
+- semantic projection support
+- codifiability assessment support
+- contradiction visibility support
+- ambiguity handling support
+- zone/regime/timing/risk/exit refinement support
+- scorecard context support
+- governance context support
+- enrichment context support
+- review-board context support
+
+utilization_rule:
+- preserved richness should not remain inert storage
+- downstream layers should expose awareness of rich source detail, ambiguity, contradiction, and codification references
+- code candidate text remains supplementary; semantic interpretation remains primary
+
+operational_boundary:
+- no auto semantic projection
+- no auto codification audit
+- no runtime use
+- no auto import or commit

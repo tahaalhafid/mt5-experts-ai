@@ -1,0 +1,23 @@
+INTERNAL FACTORY HIDDEN ASSUMPTIONS AND FALSE PRECISION POLICY
+version=PHASE4_INTERNAL_FACTORY_HIDDEN_ASSUMPTIONS_AND_FALSE_PRECISION_POLICY_V1
+
+the audit must detect:
+- hidden_assumption_flags
+- hidden_discretion_flags
+- false_precision_flags
+- threshold_fragility_flags
+- narrative_to_code_gap_flags
+- ambiguity_leak_flags
+- visual_dependence_flags
+
+explicit concerns:
+- code appears precise but rests on vague semantics
+- code hides subjective chart-reading assumptions
+- code introduces unsupported thresholds
+- ambiguity is compressed into fake certainty
+- visual/manual judgment is converted into silent code assumptions
+
+rule:
+- contradictions, hidden assumptions, discretion leaks, false precision, and unresolved ambiguity remain visible by default
+- analytical polish must not be mistaken for structural sufficiency
+

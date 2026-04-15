@@ -1,0 +1,181 @@
+AI SCHEDULING POLICY
+document_role=AUTHORITATIVE_AI_SCHEDULING_POLICY
+policy_version=A4_AI_SCHEDULING_POLICY_V1
+authority_scope=AI_SCHEDULING_INTENT_ONLY
+linked_cost_policy=docs/ai_cost_governance_policy.txt
+linked_task_registry=docs/ai_task_registry.txt
+linked_trigger_matrix=docs/ai_trigger_matrix.txt
+linked_escalation_policy=docs/ai_escalation_policy.txt
+policy_note=This policy defines scheduling categories, cadence intent, cooldown intent, suppression intent, and event-vs-cadence precedence only. It does not implement a scheduler.
+
+SCHEDULING CATEGORY TAXONOMY
+
+EVENT_IMMEDIATE
+category_purpose=Run promptly for strong incident or candidate events when policy allows.
+expected_usage=Critical incidents, execution-failure-linked forensic review, compact council advisory packets.
+suppression_behavior=Same-scope duplicates suppressed within cooldown unless stronger evidence appears.
+escalation_allowance=May escalate to TARGETED_RETRIEVAL or DEEP_INVESTIGATION only if the task family policy allows.
+budget_sensitivity=High. Hard caps still apply.
+
+EVENT_DEFERRED
+category_purpose=Event-linked work that should not interrupt immediately and may defer to the next budget-safe window.
+expected_usage=Non-critical drift checks, learning-governance evidence refresh, follow-up review tasks.
+suppression_behavior=Defer or merge if a recent equivalent task already ran.
+escalation_allowance=Escalate only when stronger repeated evidence appears.
+budget_sensitivity=High.
+
+HOURLY_WINDOW
+category_purpose=Short cadence review window for bounded operational watch use.
+expected_usage=Only for narrowly justified periodic review families.
+suppression_behavior=If equivalent output already exists for the hour window, suppress rerun or emit compact update note.
+escalation_allowance=No deep escalation by cadence alone.
+budget_sensitivity=Medium.
+
+DAILY_WINDOW
+category_purpose=Primary cadence for drift, learning, and operating intelligence review.
+expected_usage=Drift analysis, learning-governance support, bounded summary reviews.
+suppression_behavior=Minor-noise triggers should defer into the scheduled daily window rather than forcing immediate reruns.
+escalation_allowance=Targeted retrieval allowed if the daily review scope justifies it.
+budget_sensitivity=Medium.
+
+THREE_DAY_WINDOW
+category_purpose=Broader institutional review window for aggregated evidence.
+expected_usage=Three-day review inputs, broader learning support, bounded proposal preparation.
+suppression_behavior=Do not rerun full three-day work for routine minor changes inside the same window.
+escalation_allowance=Targeted retrieval allowed; deep escalation only for stronger evidence.
+budget_sensitivity=Medium to high.
+
+WEEKLY_WINDOW
+category_purpose=Low-frequency governance review cadence.
+expected_usage=Governance audit, broad control-surface review, institutional oversight summaries.
+suppression_behavior=Routine signals already covered by the weekly scope should not retrigger the full audit.
+escalation_allowance=Usually summary-first only; targeted retrieval only if a governance anomaly is material.
+budget_sensitivity=Low to medium.
+
+ON_DEMAND_ONLY
+category_purpose=Explicit request driven work.
+expected_usage=Operator copilot and tightly scoped support questions.
+suppression_behavior=No background automatic reruns.
+escalation_allowance=Targeted retrieval only when the request requires it and A1 allows it.
+budget_sensitivity=Request-bound, not background-budget-driven.
+
+REVIEW_TRIGGERED
+category_purpose=Work that should run only when a formal review or proposal context exists.
+expected_usage=Bounded proposal generation, review-board evidence packaging, institutional review bundles.
+suppression_behavior=Suppress when the same review scope already has a current package and no material new evidence exists.
+escalation_allowance=May use targeted retrieval when the review scope warrants it.
+budget_sensitivity=High.
+
+TASK SCHEDULING INTENT
+
+1)
+task_family=FORENSIC_ANALYSIS
+allowed_scheduling_categories=EVENT_IMMEDIATE|ON_DEMAND_ONLY
+primary_scheduling_category=EVENT_IMMEDIATE
+secondary_scheduling_category=ON_DEMAND_ONLY
+event_may_bypass_cadence=true
+must_respect_cooldown=true
+must_respect_hourly_cap=true
+must_respect_daily_deep_cap=true
+
+2)
+task_family=DRIFT_ANALYSIS
+allowed_scheduling_categories=DAILY_WINDOW|THREE_DAY_WINDOW|EVENT_DEFERRED
+primary_scheduling_category=DAILY_WINDOW
+secondary_scheduling_category=THREE_DAY_WINDOW
+event_may_bypass_cadence=false_for_minor_noise
+must_respect_cooldown=true
+must_respect_hourly_cap=true
+must_respect_daily_deep_cap=true
+
+3)
+task_family=ROOT_CAUSE_INVESTIGATION
+allowed_scheduling_categories=EVENT_IMMEDIATE|EVENT_DEFERRED|ON_DEMAND_ONLY
+primary_scheduling_category=EVENT_IMMEDIATE
+secondary_scheduling_category=EVENT_DEFERRED
+event_may_bypass_cadence=true_on_strong_incident
+must_respect_cooldown=true
+must_respect_hourly_cap=true
+must_respect_daily_deep_cap=true
+
+4)
+task_family=BOUNDED_PROPOSAL_GENERATION
+allowed_scheduling_categories=REVIEW_TRIGGERED|THREE_DAY_WINDOW|EVENT_DEFERRED
+primary_scheduling_category=REVIEW_TRIGGERED
+secondary_scheduling_category=THREE_DAY_WINDOW
+event_may_bypass_cadence=false_without_strong_review_trigger
+must_respect_cooldown=true
+must_respect_hourly_cap=true
+must_respect_daily_deep_cap=true
+
+5)
+task_family=COVERAGE_GAP_ANALYSIS
+allowed_scheduling_categories=EVENT_DEFERRED|THREE_DAY_WINDOW|ON_DEMAND_ONLY
+primary_scheduling_category=EVENT_DEFERRED
+secondary_scheduling_category=THREE_DAY_WINDOW
+event_may_bypass_cadence=false_by_default
+must_respect_cooldown=true
+must_respect_hourly_cap=true
+must_respect_daily_deep_cap=true
+
+6)
+task_family=GOVERNANCE_AUDIT
+allowed_scheduling_categories=WEEKLY_WINDOW|REVIEW_TRIGGERED
+primary_scheduling_category=WEEKLY_WINDOW
+secondary_scheduling_category=REVIEW_TRIGGERED
+event_may_bypass_cadence=false_except_material_governance_incident
+must_respect_cooldown=true
+must_respect_hourly_cap=true
+must_respect_daily_deep_cap=true
+
+7)
+task_family=OPERATOR_COPILOT
+allowed_scheduling_categories=ON_DEMAND_ONLY
+primary_scheduling_category=ON_DEMAND_ONLY
+secondary_scheduling_category=NONE
+event_may_bypass_cadence=not_applicable
+must_respect_cooldown=false_for_explicit_new_request
+must_respect_hourly_cap=background_cap_not_applicable_request_scope_still_bounded
+must_respect_daily_deep_cap=true
+
+8)
+task_family=LEARNING_GOVERNANCE_SUPPORT
+allowed_scheduling_categories=DAILY_WINDOW|THREE_DAY_WINDOW|REVIEW_TRIGGERED|EVENT_DEFERRED
+primary_scheduling_category=DAILY_WINDOW
+secondary_scheduling_category=THREE_DAY_WINDOW
+event_may_bypass_cadence=false_without_review_need
+must_respect_cooldown=true
+must_respect_hourly_cap=true
+must_respect_daily_deep_cap=true
+
+9)
+task_family=COUNCIL_CONTEXTUAL_ADVISORY
+allowed_scheduling_categories=EVENT_IMMEDIATE
+primary_scheduling_category=EVENT_IMMEDIATE
+secondary_scheduling_category=NONE
+event_may_bypass_cadence=true_but_compact_only
+must_respect_cooldown=true
+must_respect_hourly_cap=true
+must_respect_daily_deep_cap=not_applicable_summary_only
+special_constraint=per_candidate_event_compact_summary_only_no_deep_retrieval
+
+COOLDOWN AND DEDUPE RULES
+- same_trigger_cooldown=If the same trigger family fires again inside AITriggerCooldownMinutes for the same scope, suppress rerun unless stronger evidence exists.
+- same_family_cooldown=If the same task family already produced materially equivalent output for the same scope within its cooldown window, prefer suppression or compact update note.
+- duplicate_incident_suppression=If an incident report already exists for the same decision_id, position_id, incident window, or candidate scope, do not rerun full analysis without stronger evidence.
+- same_scope_suppression=If no material state change exists for the same scope, defer or suppress rerun.
+- escalation_on_stronger_evidence_only=Only escalate severity or investigation depth when the new trigger materially strengthens evidence, broadens impact, or changes risk posture.
+- rerun_deferral_no_material_change=If the state is materially unchanged, defer to the next cadence window rather than forcing another run.
+
+EVENT VS CADENCE PRECEDENCE
+- Event-immediate categories take precedence only for incident strength or candidate-linked contexts defined by policy.
+- Cadence-led categories should absorb routine noise rather than rerunning on every minor event.
+- Review-triggered work should not preempt higher-priority incident work under budget pressure.
+- Operator on-demand requests remain eligible, but should still remain bounded in retrieval depth and output length.
+- Council advisory is the only task intended for per-candidate immediacy, and even then only in compact summary form.
+
+NON-GOALS
+- no_runtime_scheduler
+- no_runtime_queue
+- no_counter_implementation
+- no_delivery_integration

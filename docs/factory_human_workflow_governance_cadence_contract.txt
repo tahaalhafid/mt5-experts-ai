@@ -1,0 +1,95 @@
+FACTORY HUMAN WORKFLOW AND GOVERNANCE CADENCE CONTRACT
+version=PHASE8_FACTORY_HUMAN_WORKFLOW_GOVERNANCE_CONTRACT_V1
+artifact_role=FACTORY_WORKFLOW_GOVERNANCE_CONTRACT
+artifact_plane_role=CONTROL_PLANE
+
+Purpose
+- Define bounded human-operational governance structure for the factory.
+- Clarify who is expected to review what, what checkpoint applies, and what cadence applies.
+- Keep workflow/governance meaning explicit without creating workflow automation or runtime behavior.
+
+What workflow/governance means here
+- Human workflow expresses expected bounded human-operational ownership, review checkpoint category, review rhythm, and current workflow posture interpretation.
+- Governance cadence expresses review rhythm expectation only.
+- Workflow/governance may describe review responsibility and hold/archive/escalation posture.
+- Workflow/governance does not create scheduling, automation, approval, validation, experiment success, canon eligibility, or runtime permission.
+
+What workflow/governance must not imply
+- runtime permission
+- auto-promotion
+- validation success
+- experiment success
+- canon eligibility
+- trading value proof
+- AI authority escalation
+- workflow automation
+- review completion unless explicitly emitted elsewhere
+
+How workflow differs from other truths
+- Workflow differs from lifecycle:
+  lifecycle states describe where the material currently sits architecturally; workflow describes expected human-operational handling.
+- Workflow differs from routing:
+  routing describes bounded downstream destination/handoff; workflow describes who is expected to act and under what checkpoint/cadence/posture.
+- Workflow differs from validation:
+  workflow may require review without implying validation happened.
+- Workflow differs from experiment success:
+  experiment packaging review posture is not experiment approval or success.
+- Workflow differs from canon eligibility:
+  no workflow posture implies canon eligibility.
+
+Bounded human role model
+- FACTORY_INTAKE_REVIEWER
+- FACTORY_DECOMPOSITION_REVIEWER
+- FACTORY_INTELLIGENCE_REVIEWER
+- FACTORY_GOVERNANCE_REVIEWER
+- FACTORY_ARCHIVE_REVIEWER
+- FACTORY_EXPERIMENT_PACKAGING_REVIEWER
+- FACTORY_OPERATOR_UNASSIGNED
+
+Governance checkpoint model
+- CHECKPOINT_NONE
+- CHECKPOINT_INTAKE_REVIEW
+- CHECKPOINT_DECOMPOSITION_REVIEW
+- CHECKPOINT_INTELLIGENCE_REVIEW
+- CHECKPOINT_ROUTING_REVIEW
+- CHECKPOINT_GOVERNANCE_HOLD_REVIEW
+- CHECKPOINT_EXPERIMENT_PACKAGING_REVIEW
+- CHECKPOINT_ARCHIVE_REVIEW
+
+Cadence model
+- CADENCE_UNSPECIFIED
+- CADENCE_AD_HOC
+- CADENCE_INTAKE_BATCH
+- CADENCE_PERIODIC_REVIEW
+- CADENCE_GOVERNANCE_REVIEW
+- CADENCE_ARCHIVE_SWEEP
+- CADENCE_EXPERIMENT_PACKAGING_WINDOW
+
+Workflow posture model
+- WORKFLOW_PENDING_REVIEW
+- WORKFLOW_UNDER_REVIEW
+- WORKFLOW_HELD
+- WORKFLOW_READY_FOR_REVIEW
+- WORKFLOW_READY_FOR_ARCHIVE_DECISION
+- WORKFLOW_READY_FOR_EXPERIMENT_PACKAGING_REVIEW
+- WORKFLOW_NO_HUMAN_ACTION_ASSIGNED
+
+Interpretation discipline
+- human_review_role means expected bounded reviewer category, not person assignment.
+- governance_checkpoint means expected review checkpoint category, not completion.
+- governance_cadence means expected review rhythm, not scheduler execution.
+- workflow_posture means current workflow interpretation only, not approval or validation.
+
+Current tracking model
+- CURRENT_WORKFLOW_STATE_DERIVED_NOT_EVENT_HISTORY
+- No append-only workflow history is created in this phase.
+- No ticketing/workflow engine is created in this phase.
+
+Boundary honesty
+- non-runtime
+- non-automatic
+- non-authoritative
+- human review required where workflow fields are emitted
+- no direct registry commit implied
+- no direct canon promotion implied
+- no direct runtime use implied

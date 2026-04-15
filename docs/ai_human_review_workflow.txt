@@ -1,0 +1,218 @@
+AI HUMAN REVIEW WORKFLOW
+document_role=AUTHORITATIVE_AI_HUMAN_REVIEW_WORKFLOW_POLICY
+document_version=A7_AI_HUMAN_REVIEW_WORKFLOW_V1
+authority_scope=AI_HUMAN_REVIEW_GOVERNANCE_ONLY
+linked_authority_gate=H6_AI_ACTIVATION_READINESS_GATE
+linked_input_policy=docs/ai_access_policy.txt
+linked_task_registry=docs/ai_task_registry.txt
+linked_output_contract=docs/ai_output_contract.txt
+linked_repository_design=docs/ai_intelligence_repository_design.txt
+linked_roles_policy=docs/ai_review_roles_and_responsibilities.txt
+linked_decision_matrix=docs/ai_review_decision_matrix.txt
+trust_rule=defines_human_review_roles_states_paths_and_traceability_only
+policy_note=This phase adds institutional review workflow above bounded AI outputs without creating runtime control, auto-apply, or live approval automation.
+non_goal=no_workflow_engine
+non_goal=no_ui_review_queue
+non_goal=no_email_or_telegram_loop
+non_goal=no_repository_writer_logic
+non_goal=no_proposal_application_logic
+non_goal=no_experiment_orchestration_logic
+non_goal=no_committee_dashboard
+non_goal=no_runtime_mutation_authority
+
+GLOBAL REVIEW PRINCIPLES
+- AI outputs remain derived, bounded, reviewable artifacts.
+- AI authority remains limited to AI_OFF, AI_SHADOW_ONLY, and AI_ADVISORY_ONLY.
+- No human review state or decision in this document creates direct runtime mutation authority.
+- No proposal approval in this workflow equals live activation.
+- No learning evidence acceptance in this workflow mutates runtime or plan truth.
+- Council advisory packets remain contextual, bounded, non-directional, and non-authoritative.
+- Repository storage and human review are connected conceptually, but A7 does not implement full runtime workflow tooling.
+
+ROLE MODEL
+- OPERATOR = reads operational outputs, acknowledges informational items, and flags review-worthy items.
+- ADMIN_REVIEWER = performs first-line formal review for incidents, daily intelligence, bounded proposals, and learning evidence.
+- REVIEW_BOARD = reviews bounded proposals, learning-governance evidence, repeated drift patterns, and structured improvement candidates.
+- COMMITTEE_REVIEWER = reviews high-level executive/governance items and major escalations.
+
+REVIEW STATES
+1)
+review_state=INFORMATIONAL_ONLY
+state_purpose=Artifact is visible/archived but does not require formal approval by default.
+who_may_place=SYSTEM_CLASSIFICATION|OPERATOR|ADMIN_REVIEWER
+allowed_next_states=PENDING_REVIEW,UNDER_REVIEW,CLOSED_NO_ACTION
+history_transition_required=true
+
+2)
+review_state=PENDING_REVIEW
+state_purpose=Item is review-worthy and awaits assigned human review.
+who_may_place=OPERATOR|ADMIN_REVIEWER|REVIEW_BOARD
+allowed_next_states=UNDER_REVIEW,DEFERRED,REJECTED,ESCALATED,CLOSED_NO_ACTION
+history_transition_required=true
+
+3)
+review_state=UNDER_REVIEW
+state_purpose=Assigned reviewer is actively evaluating evidence, relevance, and next step.
+who_may_place=ADMIN_REVIEWER|REVIEW_BOARD|COMMITTEE_REVIEWER
+allowed_next_states=ACCEPTED_FOR_ACTION,ACCEPTED_FOR_EXPERIMENT,DEFERRED,REJECTED,ESCALATED,CLOSED_NO_ACTION
+history_transition_required=true
+
+4)
+review_state=ACCEPTED_FOR_ACTION
+state_purpose=Human reviewer accepted that a governed follow-up action item should exist outside runtime auto-apply.
+who_may_place=ADMIN_REVIEWER|REVIEW_BOARD|COMMITTEE_REVIEWER
+allowed_next_states=CLOSED_NO_ACTION,ESCALATED
+history_transition_required=true
+
+5)
+review_state=ACCEPTED_FOR_EXPERIMENT
+state_purpose=Human reviewer accepted a bounded experiment or bounded implementation-planning next step only.
+who_may_place=REVIEW_BOARD|COMMITTEE_REVIEWER
+allowed_next_states=CLOSED_NO_ACTION,ESCALATED
+history_transition_required=true
+
+6)
+review_state=DEFERRED
+state_purpose=Item remains open conceptually but action is postponed pending timing, more data, or lower priority.
+who_may_place=ADMIN_REVIEWER|REVIEW_BOARD|COMMITTEE_REVIEWER
+allowed_next_states=UNDER_REVIEW,ESCALATED,CLOSED_NO_ACTION
+history_transition_required=true
+
+7)
+review_state=REJECTED
+state_purpose=Reviewer determined that no governed next step should proceed from the current item.
+who_may_place=ADMIN_REVIEWER|REVIEW_BOARD|COMMITTEE_REVIEWER
+allowed_next_states=CLOSED_NO_ACTION
+history_transition_required=true
+
+8)
+review_state=ESCALATED
+state_purpose=Item exceeded the current review scope and has been forwarded to a higher or different review role.
+who_may_place=OPERATOR|ADMIN_REVIEWER|REVIEW_BOARD
+allowed_next_states=UNDER_REVIEW,DEFERRED,REJECTED,ACCEPTED_FOR_ACTION,ACCEPTED_FOR_EXPERIMENT,CLOSED_NO_ACTION
+history_transition_required=true
+
+9)
+review_state=CLOSED_NO_ACTION
+state_purpose=Review item is closed, archived, and has no further open review requirement for the current cycle.
+who_may_place=ADMIN_REVIEWER|REVIEW_BOARD|COMMITTEE_REVIEWER
+allowed_next_states=NONE
+history_transition_required=true
+
+STATE RULES
+- INFORMATIONAL_ONLY items remain archival/visible by default and do not silently become approval objects.
+- PENDING_REVIEW must identify the review trigger or reason for review-worthiness.
+- UNDER_REVIEW must preserve reviewer role and decision context.
+- ACCEPTED_FOR_ACTION means governed next step only; it never means direct runtime mutation, direct plan mutation, or live activation.
+- ACCEPTED_FOR_EXPERIMENT means review-approved bounded experiment or implementation-planning handoff only; it never means auto-apply.
+- DEFERRED must retain a reason such as awaiting more evidence, lower urgency, or superseding review window.
+- REJECTED should preserve the rejection reason for institutional memory.
+- ESCALATED must record target role and escalation reason.
+- CLOSED_NO_ACTION closes the current review cycle and prevents endless open-loop review drift.
+
+OUTPUT-TO-REVIEW NORMALIZATION
+- Informational by default: HOURLY_WATCH_REPORT, DAILY_OPERATING_INTELLIGENCE_REPORT, OPERATOR_COPILOT_RESPONSE_TEMPLATE, EXECUTIVE_ADMIN_BRIEF, COUNCIL_ADVISORY_PACKET_TEMPLATE.
+- Reviewable by operator/admin depending on severity or relevance: EVENT_TRIGGERED_INCIDENT_REPORT, GOVERNANCE_AUDIT_OUTPUT, ROOT_CAUSE_OUTPUT, ANOMALY_OUTPUT, DRIFT_OUTPUT.
+- Review-board required: REVIEWABLE_PROPOSAL_TEMPLATE, LEARNING_GOVERNANCE_EVIDENCE_TEMPLATE.
+- Committee-visible only by default: EXECUTIVE_ADMIN_BRIEF and major governance escalations.
+- Escalation-eligible when repeated/high-severity/governance-relevant patterns exist: incidents, drift deterioration, governance contradictions, repeated advisory hold patterns with measurable effect.
+
+PROPOSAL REVIEW WORKFLOW
+rule_family=REVIEWABLE_PROPOSAL
+direct_apply_allowed=false
+auto_apply_allowed=false
+runtime_activation_from_approval_allowed=false
+proposal_approval_equals_runtime_activation=false
+workflow_path=AI_GENERATED_PROPOSAL->PENDING_REVIEW->ADMIN_REVIEWER_TRIAGE->REVIEW_BOARD_REVIEW_IF_ESCALATED_OR_REQUIRED->ACCEPT_FOR_EXPERIMENT_OR_ACTION_OR_REJECT_OR_DEFER->HANDOFF_OUTSIDE_RUNTIME_CONTROL
+policy_notes=
+- Proposals are review objects, not live control surfaces.
+- ADMIN_REVIEWER may reject, defer, request more evidence, or escalate to REVIEW_BOARD.
+- REVIEW_BOARD may reject, defer, accept for experiment, or accept for bounded implementation-planning/action preparation.
+- Any accepted outcome remains human-governed and separate from runtime application.
+- No accepted proposal silently mutates ai_current_plan.json, runtime execution, governor thresholds, or live trading behavior.
+
+LEARNING-GOVERNANCE EVIDENCE WORKFLOW
+rule_family=LEARNING_GOVERNANCE_EVIDENCE
+direct_learning_mutation_allowed=false
+auto_learning_mutation_allowed=false
+workflow_path=EVIDENCE_BUNDLE_GENERATED->PENDING_REVIEW_OR_UNDER_REVIEW->ADMIN_REVIEWER_AND_OR_REVIEW_BOARD->ACKNOWLEDGE_OR_DEFER_OR_REJECT_OR_ESCALATE_OR_ACCEPT_FOR_EXPERIMENT->OPTIONAL_LINK_TO_LATER_PROPOSAL
+policy_notes=
+- Learning evidence supports review-governed learning decisions only.
+- Evidence may contribute to a later proposal or experiment package.
+- Evidence may not directly mutate runtime logic, plan truth, or live execution behavior.
+- Review outcome records should preserve linked evidence bundle IDs where relevant.
+
+INCIDENT REVIEW WORKFLOW
+rule_family=INCIDENT_ROOT_CAUSE_ANOMALY_DRIFT
+workflow_path=INCIDENT_OR_ALERT_GENERATED->INFORMATIONAL_ONLY_OR_PENDING_REVIEW->OPERATOR_ACKNOWLEDGE_OR_FLAG->ADMIN_REVIEWER_TRIAGE->OPTIONAL_REVIEW_BOARD_ESCALATION->CLOSE_OR_LINK_TO_EVIDENCE_OR_PROPOSAL
+review_worthy_conditions=
+- repeated high-severity incident
+- repeated drift deterioration
+- cross-layer anomaly cluster
+- governance contradiction or audit concern
+- event with learning-governance or proposal relevance
+closure_note=Incident outputs may remain informational only when low materiality and no governed next step is justified.
+
+COUNCIL ADVISORY REVIEW WORKFLOW
+rule_family=COUNCIL_ADVISORY_POST_FACT_REVIEW
+live_formal_approval_required=false
+proposal_object=false
+workflow_path=ADVISORY_PACKET_GENERATED->VISIBLE_AND_ARCHIVED->OPTIONAL_POST_FACT_EFFECTIVENESS_REVIEW->OPTIONAL_REFERENCE_IN_INCIDENT_ROOT_CAUSE_OR_LEARNING_EVIDENCE
+policy_notes=
+- Council advisory packets are operator-visible and archived.
+- Council advisory packets do not require formal live-moment approval bureaucracy.
+- Council advisory packets may later be reviewed for effectiveness, consistency, or hold-pattern consequences.
+- Council advisory packets may be referenced as supporting evidence in incident, root-cause, proposal, drift, or learning workflows.
+- Council advisory packets do not by themselves authorize action, runtime control, or directional trading behavior.
+
+ESCALATION RULES
+- Repeated HIGH or CRITICAL incident patterns should escalate to ADMIN_REVIEWER.
+- Repeated drift deterioration, recurring anomaly clusters, or repeated review-relevant learning evidence should escalate to REVIEW_BOARD.
+- Bounded proposals affecting learning/governance review should escalate to REVIEW_BOARD.
+- Major governance contradiction, repeated cross-role disagreement, or high-level institutional risk note should escalate to COMMITTEE_REVIEWER.
+- Recurring council advisory hold/reevaluation patterns with measurable operational effect should escalate into post-fact effectiveness review.
+- Escalation never grants direct runtime authority; it only changes the human review venue.
+
+CLOSURE RULES
+- Informational note acknowledged and archived -> CLOSED_NO_ACTION.
+- Incident investigated with no governed next step -> CLOSED_NO_ACTION.
+- Proposal rejected -> CLOSED_NO_ACTION with rejection reason preserved.
+- Proposal accepted for experiment or governed action handoff -> closed within the review workflow after handoff record is created.
+- Evidence bundle superseded by newer evidence -> CLOSED_NO_ACTION with supersession note.
+- Drift/anomaly signal expired without further significance -> CLOSED_NO_ACTION.
+- Escalated item closes only after the target review role records a terminal outcome.
+
+TRACEABILITY REQUIREMENTS
+required_review_history_fields=
+review_item_id,
+source_report_id,
+source_output_type,
+review_state,
+reviewer_role,
+review_decision,
+review_reason,
+escalated_to,
+review_timestamp,
+linked_proposal_id,
+linked_evidence_bundle_id,
+closure_note
+
+traceability_rules=
+- Review history should conceptually record every material state transition.
+- Review history should preserve role separation between OPERATOR, ADMIN_REVIEWER, REVIEW_BOARD, and COMMITTEE_REVIEWER.
+- Review history should distinguish informational visibility from formal review requirement.
+- Review history should preserve linkages between incidents, evidence bundles, proposals, advisory packets, and closure outcomes where applicable.
+- A7 defines the fields and governance requirements only; it does not build the storage engine here.
+
+REPOSITORY RELATIONSHIP
+- The repository stores AI outputs and review-relevant artifacts.
+- The human review workflow determines how review-worthy outputs move through states and decisions.
+- Review history belongs conceptually to repository-linked governance history, but repository storage remains non-authoritative and derived.
+- A7 does not redesign repository persistence architecture or build runtime workflow tooling.
+
+AUTHORITY SAFETY REMINDER
+- No direct BUY/SELL generation.
+- No direct execution instruction.
+- No direct runtime mutation.
+- No auto-apply.
+- No AI authority expansion beyond SHADOW/ADVISORY boundaries already established.

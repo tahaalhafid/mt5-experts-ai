@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "atas.context_decision_basis_summary.v1",
+  "title": "ATAS Context Decision Basis Summary V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_family",
+    "summary_id",
+    "linked_packet_id",
+    "bounded_influence_state",
+    "provided_context_families",
+    "suppressed_context_families",
+    "non_authoritative_notice"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "ATAS_CONTEXT_DECISION_BASIS_SUMMARY_V1"
+    },
+    "packet_family": {
+      "const": "context_decision_basis_summary"
+    },
+    "summary_id": {
+      "type": "string"
+    },
+    "linked_packet_id": {
+      "type": "string"
+    },
+    "bounded_influence_state": {
+      "type": "string",
+      "enum": [
+        "NO_EFFECT",
+        "DISPLAY_ONLY",
+        "CONTEXT_SHAPING_ONLY",
+        "SUPPRESSED"
+      ]
+    },
+    "provided_context_families": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "suppressed_context_families": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "non_authoritative_notice": {
+      "const": "ATAS context is bounded non-authoritative evidence; MT5 retains final decision/risk/governor/execution authority."
+    }
+  }
+}

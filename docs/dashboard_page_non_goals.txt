@@ -1,0 +1,35 @@
+dashboard_page_non_goals
+document_version=MT5_DASHBOARD_PHASE0_PAGE_NON_GOALS_V1
+document_role=FORMAL_DASHBOARD_PAGE_LEVEL_NON_GOALS
+authority_class=NON_RUNTIME_INTERPRETATION_BOUNDARY_CONTRACT
+scope=PAGE_LEVEL_MEANING_LIMITS
+
+page_id=system_posture_overview
+what_this_page_does_not_mean=This page does not become the primary truth source; it is a bounded summary of other governed sources.
+
+page_id=runtime_governance
+what_this_page_does_not_mean=This page does not grant runtime authority, unfreeze privilege, or trade permission.
+
+page_id=ai_authority_readiness
+what_this_page_does_not_mean=This page does not imply AI execution authority, AI enablement, or mutation rights.
+
+page_id=ai_advisory_review_governance
+what_this_page_does_not_mean=This page does not imply AI may control direction, veto runtime, or write to governed truth surfaces.
+
+page_id=factory_state
+what_this_page_does_not_mean=Factory State does not imply runtime authority, canon promotion, experiment approval, or trading permission.
+
+page_id=transfer_pilot_cohort
+what_this_page_does_not_mean=Pilot page does not imply live pilot, execution privilege, or runtime reactivation.
+
+page_id=export_release_gate
+what_this_page_does_not_mean=Export page does not imply export approval, release clearance, or external delivery authorization.
+
+page_id=startup_diagnostics
+what_this_page_does_not_mean=Startup/Diagnostics does not imply readiness, health, or permission beyond the visible bounded source truth.
+
+page_id=alerts_reasons_holds
+what_this_page_does_not_mean=Alerts/Reasons/Holds does not become a governance action console or approval surface.
+
+page_id=market_operational_context
+what_this_page_does_not_mean=Market Operational Context does not imply live trading authority, execution intent, or strategy selection control.

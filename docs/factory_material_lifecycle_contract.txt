@@ -1,0 +1,212 @@
+FACTORY MATERIAL LIFECYCLE CONTRACT
+version=PHASE2_MATERIAL_LIFECYCLE_CONTRACT_V1_1
+artifact_role=FACTORY_MATERIAL_LIFECYCLE_CONTRACT
+authority_class=ARCHITECTURAL_GOVERNANCE_REFERENCE_ONLY
+
+PURPOSE
+This contract defines the explicit lifecycle truth model for factory materials.
+It makes current stage, valid direct transitions, and forbidden transitions visible without creating a workflow engine.
+
+WHAT A FACTORY MATERIAL IS
+A factory material is any source-derived, imported, decomposed, normalized, or dispositioned material record that the factory can trace by material_id.
+
+WHAT LIFECYCLE STATE MEANS
+A lifecycle state is the most truthful currently-emitted governed stage or disposition visible for a material in the present architecture.
+State presence alone does NOT imply:
+- reviewed
+- validated
+- experiment readiness
+- canon eligibility
+- runtime permission
+
+LIFECYCLE TRUTH REPRESENTATION
+Lifecycle truth is represented using:
+- lifecycle_state
+- prior_lifecycle_state
+- lifecycle_transition_reason
+- lifecycle_transition_actor
+- lifecycle_transition_time
+- lifecycle_transition_note
+- allowed_next_lifecycle_states
+- layer_emitted_lifecycle_state
+- lifecycle_state_derivation_basis
+- lifecycle_state_event_history_available
+
+IMPORTANT LIMIT
+Current lifecycle tracking is CURRENT_STATE_DERIVED_NOT_EVENT_HISTORY.
+A lifecycle field may be emitted now even when the underlying transition was reconstructed from already-emitted factory evidence.
+
+AUTHORITATIVE DIRECT TRANSITION TRUTH
+The contract below is the single authoritative direct-transition table.
+Per-record allowed_next_lifecycle_states must match this table exactly for the material's current lifecycle_state.
+No record may imply an additional next state unless this contract is explicitly expanded later.
+
+LIFECYCLE STATES
+- INTAKE_REGISTERED
+  Material has been formally registered or is present in the gateway inbox.
+  Does NOT imply decomposition, review, intelligence emission, or usefulness.
+
+- DECOMPOSITION_PENDING
+  Material is registered but still awaits decomposition work.
+  Does NOT imply decomposition output exists.
+
+- DECOMPOSED
+  A decomposition-layer record exists.
+  Does NOT imply normalization.
+
+- NORMALIZED
+  A normalized material record exists.
+  Does NOT imply intelligence emission, review, validation, or classification.
+
+- INTELLIGENCE_PENDING
+  Material has reached normalized visibility but has not yet produced internal intelligence output.
+  Does NOT imply that intelligence support is absent structurally.
+
+- INTELLIGENCE_EMITTED
+  Internal intelligence records were emitted for the material.
+  Does NOT imply review or validation.
+
+- REVIEW_ROUTED
+  Material has been routed toward later review.
+  Does NOT imply review started.
+
+- REVIEW_IN_PROGRESS
+  Review work has started.
+  Does NOT imply validation or canon eligibility.
+
+- RESEARCH_ONLY
+  Material remains preserved for research/reference only.
+  Does NOT imply deletion.
+
+- REJECTED_EARLY
+  Material was dispositioned away from deeper progression early.
+  Does NOT imply deletion.
+
+- PRIMITIVE_CLASSIFIED
+  Material is currently classified as primitive/support rather than a family candidate.
+  Does NOT imply experiment packaging.
+
+- FAMILY_CANDIDATE_CLASSIFIED
+  Material is currently classified as a family-level candidate or candidate-bearing family structure.
+  Does NOT imply experiment packaging or canon eligibility.
+
+- EXPERIMENT_PACKAGED
+  Material has been packaged for later bounded experimentation review.
+  Does NOT imply canon eligibility or runtime use.
+
+- GOVERNANCE_HELD
+  Material is currently held by governance disposition.
+  Does NOT imply rejection or archive.
+
+- ARCHIVED
+  Material is intentionally preserved as archive/history/reference.
+  Does NOT imply deletion.
+
+VALID DIRECT TRANSITION SEMANTICS
+- INTAKE_REGISTERED -> DECOMPOSITION_PENDING
+  Meaning: decomposition still awaits work.
+  Minimum truth: registered material exists.
+  Does NOT imply decomposition began.
+
+- INTAKE_REGISTERED -> DECOMPOSED
+  Meaning: decomposition record emitted.
+  Minimum truth: decomposition record exists.
+  Does NOT imply normalization.
+
+- DECOMPOSITION_PENDING -> DECOMPOSED
+  Meaning: decomposition output emitted.
+  Minimum truth: emitted decomposition record.
+
+- DECOMPOSED -> NORMALIZED
+  Meaning: normalized record emitted.
+  Minimum truth: normalized material record exists.
+
+- NORMALIZED -> INTELLIGENCE_PENDING
+  Meaning: material is normalized but intelligence output has not been emitted.
+  Minimum truth: normalized record exists and no emitted intelligence record exists.
+
+- NORMALIZED -> PRIMITIVE_CLASSIFIED
+  Meaning: current evidence supports primitive/support disposition.
+  Minimum truth: emitted classification evidence in current architecture.
+
+- NORMALIZED -> FAMILY_CANDIDATE_CLASSIFIED
+  Meaning: current evidence supports family-candidate disposition.
+  Minimum truth: emitted classification evidence in current architecture.
+
+- NORMALIZED -> RESEARCH_ONLY
+  Meaning: material is preserved but not advanced beyond research posture.
+  Minimum truth: explicit research-only disposition evidence.
+
+- NORMALIZED -> ARCHIVED
+  Meaning: material is intentionally retained as archive/reference.
+  Minimum truth: explicit archive disposition evidence.
+
+- INTELLIGENCE_PENDING -> INTELLIGENCE_EMITTED
+  Meaning: internal intelligence output emitted.
+  Minimum truth: emitted internal intelligence record tied to the material.
+
+- INTELLIGENCE_EMITTED -> REVIEW_ROUTED
+  Meaning: routed toward review.
+  Minimum truth: emitted review-routing evidence.
+
+- REVIEW_ROUTED -> REVIEW_IN_PROGRESS
+  Meaning: review activity started.
+  Minimum truth: emitted review-start evidence.
+
+- RESEARCH_ONLY -> ARCHIVED
+  Meaning: research-only material moved to archive/reference preservation.
+  Minimum truth: archive disposition emitted.
+
+- PRIMITIVE_CLASSIFIED -> ARCHIVED
+  Meaning: primitive retained only as archive/reference.
+  Minimum truth: archive disposition emitted.
+
+- FAMILY_CANDIDATE_CLASSIFIED -> EXPERIMENT_PACKAGED
+  Meaning: bounded experiment package emitted later.
+  Minimum truth: emitted experiment package.
+  Does NOT imply canon eligibility.
+
+- FAMILY_CANDIDATE_CLASSIFIED -> GOVERNANCE_HELD
+  Meaning: governance hold disposition emitted.
+  Minimum truth: emitted governance hold evidence.
+
+DIRECT NEXT STATE TABLE
+- INTAKE_REGISTERED => DECOMPOSITION_PENDING,DECOMPOSED
+- DECOMPOSITION_PENDING => DECOMPOSED
+- DECOMPOSED => NORMALIZED
+- NORMALIZED => INTELLIGENCE_PENDING,PRIMITIVE_CLASSIFIED,FAMILY_CANDIDATE_CLASSIFIED,RESEARCH_ONLY,ARCHIVED
+- INTELLIGENCE_PENDING => INTELLIGENCE_EMITTED
+- INTELLIGENCE_EMITTED => REVIEW_ROUTED
+- REVIEW_ROUTED => REVIEW_IN_PROGRESS
+- REVIEW_IN_PROGRESS => NONE
+- RESEARCH_ONLY => ARCHIVED
+- REJECTED_EARLY => NONE
+- PRIMITIVE_CLASSIFIED => ARCHIVED
+- FAMILY_CANDIDATE_CLASSIFIED => EXPERIMENT_PACKAGED,GOVERNANCE_HELD
+- EXPERIMENT_PACKAGED => NONE
+- GOVERNANCE_HELD => NONE
+- ARCHIVED => NONE
+
+FORBIDDEN OR INVALID TRANSITIONS
+- INTAKE_REGISTERED -> EXPERIMENT_PACKAGED
+- DECOMPOSITION_PENDING -> FAMILY_CANDIDATE_CLASSIFIED
+- DECOMPOSITION_PENDING -> PRIMITIVE_CLASSIFIED
+- NORMALIZED -> EXPERIMENT_PACKAGED without intermediate classification/review logic
+- INTELLIGENCE_PENDING -> VALIDATED concepts not yet defined in this phase
+- PRIMITIVE_CLASSIFIED -> REVIEW_ROUTED without explicit contract support
+- PRIMITIVE_CLASSIFIED -> GOVERNANCE_HELD without explicit contract support
+- FAMILY_CANDIDATE_CLASSIFIED -> REVIEW_ROUTED without explicit contract support
+- FAMILY_CANDIDATE_CLASSIFIED -> ARCHIVED without explicit contract support
+- NORMALIZED -> REVIEW_ROUTED without explicit contract support
+- PRIMITIVE_CLASSIFIED -> CANON eligibility by implication
+- FAMILY_CANDIDATE_CLASSIFIED -> canon eligibility by implication
+- ARCHIVED -> deleted by implication
+
+CURRENT PHASE NOTE
+Phase 2 installs lifecycle visibility and current-state discipline only.
+It does NOT install:
+- routing contracts
+- append-only event history
+- utility accounting
+- runtime integration
+- authority expansion

@@ -1,0 +1,46 @@
+FACTORY STRATEGY TRANSFER — PACKAGE 5 — PILOT OPERATING CYCLE CONTRACT
+
+Purpose
+- Define a bounded pilot operating cycle for first-wave reviewed survivors only.
+- Preserve conservative future controlled pilot consideration posture.
+- Keep runtime freeze intact.
+
+What pilot operating cycle means here
+- A bounded cohort definition and governance expectation only.
+- A future controlled pilot consideration posture only.
+- A statement of review cadence and evidence expectations only.
+- It is not runtime reactivation.
+- It is not execution privilege.
+- It is not live trading permission.
+- It is not broad pilot launch.
+- It is not automatic promotion.
+
+Pilot cohort categories
+- PILOT_COHORT_CONSIDERATION_READY
+- PILOT_COHORT_HELD_FOR_MORE_EVIDENCE
+- PILOT_COHORT_PRIMITIVE_LAYER_ONLY
+- PILOT_COHORT_RESEARCH_ONLY
+- PILOT_COHORT_NOT_ELIGIBLE
+
+Conservative interpretation
+- Deeper-candidate survivors may become PILOT_COHORT_CONSIDERATION_READY.
+- Conditional-only survivors may become PILOT_COHORT_HELD_FOR_MORE_EVIDENCE.
+- Primitive-only outcomes remain PILOT_COHORT_PRIMITIVE_LAYER_ONLY.
+- Research-only outcomes remain PILOT_COHORT_RESEARCH_ONLY.
+- Only Package 4 reviewed first-wave survivors are eligible for pilot-cycle categorization here.
+
+Pilot evidence expectations
+- Future pilot evidence is bounded to structural coherence, context fit, timing quality, risk geometry coherence, exit coherence, and governance review sufficiency.
+- Pilot evidence expectations do not prove trading value and do not restore runtime permission.
+
+Pilot cadence expectations
+- Cadence is governance expectation only, not scheduling logic.
+- Allowed cadence notes include:
+  - PILOT_CADENCE_GOVERNANCE_REVIEW
+  - PILOT_CADENCE_EVIDENCE_HOLD
+  - PILOT_CADENCE_REFERENCE_ONLY
+
+Runtime boundary
+- Runtime freeze remains active.
+- No live pilot execution starts here.
+- No execution privilege is restored here.

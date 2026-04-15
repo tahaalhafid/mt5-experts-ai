@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "atas.trace_summary.v1",
+  "title": "ATAS Trace Summary V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_family",
+    "trace_id",
+    "packet_id",
+    "timeline_utc",
+    "stage_outcome",
+    "first_failing_gate"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "ATAS_TRACE_SUMMARY_V1"
+    },
+    "packet_family": {
+      "const": "trace_summary"
+    },
+    "trace_id": {
+      "type": "string"
+    },
+    "packet_id": {
+      "type": "string"
+    },
+    "timeline_utc": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observation_time_utc",
+        "exporter_time_utc",
+        "adapter_time_utc",
+        "mt5_status_time_utc"
+      ],
+      "properties": {
+        "observation_time_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "exporter_time_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "adapter_time_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "mt5_status_time_utc": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "stage_outcome": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "first_failing_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stage",
+        "reason_code"
+      ],
+      "properties": {
+        "stage": {
+          "type": "string"
+        },
+        "reason_code": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

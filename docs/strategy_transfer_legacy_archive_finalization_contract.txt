@@ -1,0 +1,46 @@
+FACTORY STRATEGY TRANSFER — PACKAGE 5 — LEGACY ARCHIVE FINALIZATION CONTRACT
+
+Purpose
+- Finalize legacy archive/reference posture truth after Packages 1–4.
+- Preserve lineage and reference value without deletion.
+- Distinguish processed first-wave shells, extracted primitives, research-only residues, and remaining prepared-only backlog.
+- Keep runtime freeze intact.
+
+What archive finalization means here
+- It is a bounded reference/disposition truth for transferred legacy material.
+- It records how transferred legacy material should now be interpreted inside the transfer chain.
+- It is non-destructive.
+- It is non-runtime.
+- It is non-automatic.
+- It is not deletion.
+- It is not physical cleanup.
+- It is not proof of completion, validation, canon admission, profitability, or live readiness.
+
+Archive/reference posture categories
+- LEGACY_ARCHIVE_REFERENCE
+- LEGACY_ARCHIVE_PRIMITIVE_SOURCE
+- LEGACY_ARCHIVE_RESEARCH_REFERENCE
+- LEGACY_ARCHIVE_CANON_CANDIDATE_REFERENCE
+- LEGACY_ARCHIVE_PENDING_BACKLOG_REFERENCE
+- LEGACY_ARCHIVE_UNPROCESSED_PREPARED_REFERENCE
+
+Interpretation guidance
+- Processed first-wave shells retained after Package 4 may finalize as LEGACY_ARCHIVE_CANON_CANDIDATE_REFERENCE.
+- Extracted primitive records and shell residues collapsed to primitive-led structure finalize as LEGACY_ARCHIVE_PRIMITIVE_SOURCE.
+- Research-only shells finalize as LEGACY_ARCHIVE_RESEARCH_REFERENCE.
+- Remaining prepared-only backlog that never entered Packages 3–4 remains LEGACY_ARCHIVE_UNPROCESSED_PREPARED_REFERENCE.
+- LEGACY_ARCHIVE_PENDING_BACKLOG_REFERENCE is available for future bounded use but is not required to be emitted if the current backlog truth is better expressed as unprocessed prepared reference.
+
+What archive finalization must not imply
+- deletion occurred
+- runtime privilege was restored
+- live pilot execution started
+- primitive extraction happened for backlog elements
+- shell collapse happened for backlog elements
+- review happened for backlog elements
+- archive finalization equals canon admission
+
+Runtime boundary
+- Package 1 runtime freeze remains active.
+- No execution privilege is restored by archive finalization.
+- No live pilot execution is started by archive finalization.

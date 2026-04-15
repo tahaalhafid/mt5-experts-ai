@@ -1,0 +1,32 @@
+2026-04-09 02:50:00 +03:00 | compile_attempt | tool=MetaEditor64
+command: & 'C:\Program Files\MetaTrader 5\metaeditor64.exe' /portable /compile:"C:\Users\INFINTY GROUP\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Experts\AI\main_ea.mq5" /log:"C:\Users\INFINTY GROUP\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Experts\AI\compile_sr_advisory_reliability_repair.log"
+result: process_exit_code=0
+artifact_check: requested /log output was not emitted by MetaEditor in this environment.
+artifact_check: main_ea.ex5 timestamp did not update during this compile probe.
+compile_verification_state: NOT_CONFIRMED_BY_TOOL_OUTPUT
+
+2026-04-09 02:52:00 +03:00 | static_compile_impact_checks
+- verified signature alignment across writer chain:
+  - Correlation_RegisterTradeOpenV5(...)
+  - JournalAppendTradeOpenV5(...)
+  - PJ_BuildTradeOpenJsonV5(...)
+  - main_ea BUY/SELL call sites
+- verified new S/R fields propagated:
+  - nearest_support_price / nearest_resistance_price
+  - nearest_*_distance_points
+  - level_interaction_type + level_context_* flags
+- verified new advisory reliability diagnostics propagated:
+  - advisory_attachment_state
+  - advisory_ineligibility_reason_code
+  - advisory_gate_reason_code
+  - advisory_block_class
+  - advisory_usage_state
+  - advisory_zero_effect_reason
+  - advisory availability/eligibility/shadow-attached booleans
+- verified advisory artifacts now serialize gate-state booleans/reasons for forensic diagnosis.
+- verified no intentional edits to execution entry/exit authority branches, risk/governor control formulas, Databento/Fusion activation paths, semantic adapter posture, or AI authority posture.
+static_check_state: PASSED
+
+final_compile_state: SOURCE_PATCH_APPLIED_WITH_STATIC_SYMBOL_CONSISTENCY_ONLY
+note: run interactive compile in the target terminal MetaEditor instance for definitive compiler diagnostics.
+

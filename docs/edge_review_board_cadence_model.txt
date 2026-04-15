@@ -1,0 +1,36 @@
+EDGE REVIEW BOARD CADENCE MODEL — E11
+
+Cadence principles
+- Cadence is strategic and conservative.
+- Cadence is designed to review the factory’s trajectory, not to steer runtime behavior.
+- Reviews may be periodic or escalation-driven.
+
+Cadence classes
+1) PERIODIC_STRATEGIC_REVIEW
+- broad strategic scan of the active edge factory
+- reviews current canon balance, concentration, strategic focus, and major weak points
+- suitable cadence: periodic program review
+
+2) DETERIORATION_ESCALATION_REVIEW
+- used when fragility, weak evidence depth, poor geometry interaction, or unresolved governance pressure clusters around specific families
+- suitable cadence: triggered by repeated weak signals or meaningful concern clusters
+
+3) COVERAGE_GAP_REVIEW
+- used when zones remain persistently sparse or underseeded
+- suitable cadence: periodic and after meaningful intake/enrichment changes
+
+4) OVERLAP_CROWDING_REVIEW
+- used when overlapping labels or family duplication threatens canon clarity
+- suitable cadence: periodic or on overlap escalation
+
+5) ENRICHMENT_VALUE_REVIEW
+- used when enrichment loops appear productive or noisy
+- suitable cadence: after enrichment batches or repeated low-value reentry signals
+
+6) SUPPRESSION_ESCALATION_REVIEW
+- used when suppression pressure becomes materially visible and may justify later action preparation
+- suitable cadence: event-driven, not continuous runtime control
+
+Cadence boundary
+- Cadence produces strategic review outcomes only.
+- Cadence does not grant live approval, live suppression, live promotion, or code mutation.

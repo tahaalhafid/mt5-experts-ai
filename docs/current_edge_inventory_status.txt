@@ -1,0 +1,124 @@
+CURRENT EDGE INVENTORY STATUS
+Authority: Current edge/canon inventory status for Institutional Edge Factory pre-intake only.
+Truth posture: Inventory and state reporting only. No runtime behavior change.
+
+============================================================
+SUMMARY POSITION
+============================================================
+edge_factory_pre_intake_phase=E-1
+edge_factory_pre_intake_state=CANON_RECLASSIFICATION_COMPLETE
+current_canon_seed_ready=true
+current_runtime_decision_engine=COUNCIL
+
+Truthful runtime distinction:
+- Current runtime is driven primarily by council families and council strategy implementations in council_strategies.mqh.
+- Compiled runtime-plan primitives from ai_current_plan.json remain active as trigger/confirmation/filter/pattern/risk support.
+- Library strategy identities exist, but they are not the current primary runtime strategy-identity path.
+- ai_build_zone.json exists, but it is not part of the active runtime reference path.
+
+============================================================
+QUANTITY REPORTING BY CLASS
+============================================================
+runtime_council_families_total=9
+runtime_council_strategies_total=17
+library_strategy_definitions_total=6
+indicator_definitions_total=13
+entry_pattern_definitions_total=9
+risk_model_definitions_total=7
+filter_definitions_total=9
+supporting_analytical_primitives_total=13
+legacy_non_authoritative_composition_artifacts_total=1
+
+============================================================
+CANON GROUP COUNTS
+============================================================
+core_canon_families_total=4
+conditional_candidate_runtime_families_total=4
+primitive_downgraded_runtime_families_total=1
+
+conditional_candidate_library_strategy_blueprints_total=3
+legacy_archived_library_strategy_identities_total=3
+
+primitive_layer_indicators_total=13
+primitive_layer_entry_patterns_total=9
+primitive_layer_risk_models_total=7
+primitive_layer_filters_total=9
+primitive_layer_support_modules_total=13
+
+legacy_archive_non_authoritative_artifacts_total=1
+
+============================================================
+LIFECYCLE / STATE REPORTING
+============================================================
+ACTIVE_RUNTIME_CANON
+- LIQUIDITY_REVERSAL
+- MEAN_RECLAIM
+- TREND_CONTINUATION
+- COMPRESSION_BREAKOUT
+
+ACTIVE_RUNTIME_BOUNDED
+- TREND_PULLBACK_CONTINUATION
+- VOL_BREAKOUT
+- EXPANSION_CONTINUATION
+- MICRO_RANGE_BREAK
+
+PRIMITIVE_SUPPORT_ONLY
+- MOMENTUM_REVERSAL_ASSIST
+- all indicators
+- all entry patterns
+- all risk models
+- all filters
+- audited support modules
+
+CANDIDATE_UNDER_REVIEW
+- trend_pullback
+- breakout_continuation
+- dual_timeframe_reclaim
+
+LEGACY_REFERENCE_ONLY
+- bollinger_mean_reversion
+- bollinger_reclaim_reversal
+- sweep_reversal__library_identity
+
+NON_AUTHORITATIVE_REFERENCE
+- ai_build_zone.json
+
+============================================================
+CURRENT RUNTIME DRIVERS VS PASSIVE MATERIAL
+============================================================
+Current runtime drivers:
+- council family layer in council_strategies.mqh
+- council strategy implementations under those families
+- active compiled plan primitives from ai_current_plan.json via strategy_compiler.mqh
+
+Passive / reference / non-primary materials:
+- library strategy definitions in library_strategies.mqh
+- free-composition artifact ai_build_zone.json
+- architecture/reference docs
+
+Important current-plan primitive set:
+- main trigger: sweep_detector
+- strong confirmations: bollinger_reclaim_trigger, candle_rejection_validation
+- medium confirmations: mfi_momentum, ema_trend_alignment
+- required filter: atr_volatility_filter
+- entry patterns: pullback_entry, breakout_entry
+- fixed runtime risk-model primitives currently compiled: atr_stop_rr_exit, time_exit_with_move_sl
+
+============================================================
+CURRENT CORE CANON SEED
+============================================================
+recommended_core_canon_seed=LIQUIDITY_REVERSAL|MEAN_RECLAIM|TREND_CONTINUATION|COMPRESSION_BREAKOUT
+
+Seed readiness interpretation:
+- true means the current canon has been reclassified cleanly enough to start E0 intake governance.
+- true does NOT mean runtime canon switching or automated family suppression was performed.
+- true does NOT mean old materials were deleted.
+- true does NOT mean productization is complete.
+
+============================================================
+CONSERVATIVE NOTES
+============================================================
+- This report does not claim that every currently present material is future-worthy.
+- This report does not demote all historical material blindly.
+- This report does not invent quality evidence that is not present in code/docs/state.
+- This report only states what currently exists, what currently drives runtime, and how canon competition should now be structured going forward.

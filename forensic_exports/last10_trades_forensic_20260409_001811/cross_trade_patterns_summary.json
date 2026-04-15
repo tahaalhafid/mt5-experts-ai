@@ -1,0 +1,37 @@
+﻿{
+    "total_trades":  10,
+    "outcomes":  {
+                     "wins":  7,
+                     "losses":  3,
+                     "flats":  0
+                 },
+    "repeated_failure_causes":  "FACT:SR_CANONICAL_NEAR:3",
+    "repeated_success_causes":  [
+                                    "FACT:SR_UNKNOWN:2",
+                                    "FACT:SR_CANONICAL_NEAR:2",
+                                    "FACT:SR_REJECTION_RISK:2",
+                                    "FACT:SR_CONTINUATION_OBSTRUCTED:1"
+                                ],
+    "repeated_regime_labels":  [
+                                   "FACT:TREND_DOWN:5",
+                                   "FACT:RANGE_DIRTY:2",
+                                   "FACT:COMPRESSION:1",
+                                   "FACT:RANGE_BALANCED:1",
+                                   "FACT:EXPANSION:1"
+                               ],
+    "repeated_advisory_uselessness":  "FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached:10",
+    "learning_help_or_hurt":  "UNAVAILABLE (performance journal lock prevented per-trade learning delta extraction)",
+    "selectivity_hint":  "INFERRED:10 entries captured; rejected-decision count outside this table",
+    "missing_fields":  [
+                           "base_confidence_score",
+                           "final_confidence_score",
+                           "policy_risk_score",
+                           "requested_entry_price",
+                           "actual_fill_price",
+                           "slippage",
+                           "max_favorable_excursion",
+                           "max_adverse_excursion",
+                           "result_points",
+                           "r_multiple"
+                       ]
+}

@@ -1,0 +1,54 @@
+dashboard_text_vocabulary_lock
+document_version=MT5_DASHBOARD_PHASE0_TEXT_VOCABULARY_LOCK_V1
+document_role=FORMAL_DASHBOARD_TEXT_VOCABULARY_LOCK
+authority_class=NON_RUNTIME_COPY_DISCIPLINE_CONTRACT
+scope=ALL_DASHBOARD_COPY
+
+MANDATORY VOCABULARY RULES
+- do_not_use=Ready
+  use_instead=Ready only when qualified; prefer Not Ready, Readiness Partial, or Factory Ready Structurally
+- do_not_use=AI Enabled
+  use_instead=AI Off, AI Shadow Only, or AI Advisory Only
+- do_not_use=Pilot Active
+  use_instead=Pilot Defined, Not Live
+- do_not_use=Factory Ready
+  use_instead=Factory Ready Structurally
+- do_not_use=Export Ready
+  use_instead=Export Blocked or Export Status Under Gate
+- do_not_use=Healthy
+  use_instead=Structurally Present, Bounded, Partial, or Freshness Confirmed only when accurate
+- do_not_use=Live Ready
+  use_instead=Not allowed
+- do_not_use=Product Ready
+  use_instead=Not allowed
+- do_not_use=Performance Ready
+  use_instead=Not allowed
+- do_not_use=Approved
+  use_instead=Defined, Reviewed, Held, or Blocked depending on source truth
+- do_not_use=Operational
+  use_instead=Operational View only when referring to internal visibility, not execution privilege
+
+MANDATORY CURRENT-TRUTH PHRASES
+- Runtime Frozen
+- Trading Blocked
+- Governance Held
+- Export Blocked
+- Pilot Defined, Not Live
+- AI Off
+- AI Advisory Only
+- AI Shadow Only
+- Evidence Only
+- Factory Ready Structurally
+- Architecture Defined, Not Operationally Active
+- Summary Only, Not Primary Truth
+
+STYLE LOCK
+- short
+- bounded
+- non-dramatic
+- non-marketing
+- non-investor-facing
+- non-authority-inflating
+
+NEGATIVE CERTAINTY RULE
+Do not convert absence of evidence into pass, ready, safe, healthy, or clear.

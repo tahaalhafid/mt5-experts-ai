@@ -1,0 +1,95 @@
+{
+  "version": "ATAS_MICROSTRUCTURE_PHASE3_CANDIDATE_FAMILY_CONTRACT_V1",
+  "phase": "PHASE_3_IMPLEMENTATION",
+  "bundle_schema_version": "ATAS_MICROSTRUCTURE_PHASE3_CANDIDATE_BUNDLE_V1",
+  "non_authoritative": true,
+  "pre_governance": true,
+  "pre_export_composer": true,
+  "families": {
+    "OrderFlowState": {
+      "mandatory_fields": [
+        "aggression_state",
+        "passivity_state",
+        "absorption_state",
+        "exhaustion_state",
+        "imbalance_state",
+        "initiative_response_state",
+        "reaction_quality_state",
+        "field_group_quality"
+      ],
+      "optional_fields": [
+        "source_lineage_packet_id",
+        "source_lineage_trace_id"
+      ],
+      "provisional_fields": [],
+      "derived_later_fields": []
+    },
+    "LiquidityState": {
+      "mandatory_fields": [
+        "liquidity_pressure_state",
+        "pull_stack_behavior",
+        "density_void_state",
+        "book_asymmetry_state",
+        "local_microstructure_stability",
+        "field_group_quality"
+      ],
+      "optional_fields": [],
+      "provisional_fields": [],
+      "derived_later_fields": []
+    },
+    "LevelInteractionState": {
+      "mandatory_fields": [
+        "candidate_area_interaction_state",
+        "defended_failed_area_behavior",
+        "rejection_acceptance_character",
+        "absorption_near_area",
+        "pressure_around_band",
+        "local_interaction_state",
+        "field_group_quality"
+      ],
+      "optional_fields": [],
+      "provisional_fields": [],
+      "derived_later_fields": []
+    },
+    "MicrostructureEnvironmentEvidence": {
+      "mandatory_fields": [
+        "compression_expansion_evidence",
+        "order_disorder_evidence",
+        "contradiction_evidence",
+        "microstructure_cleanliness_evidence",
+        "local_instability_markers",
+        "field_group_quality"
+      ],
+      "optional_fields": [],
+      "provisional_fields": [],
+      "derived_later_fields": []
+    },
+    "QualityValidityState": {
+      "mandatory_fields": [
+        "degradation_state",
+        "suppression_flags",
+        "suppression_reason_codes",
+        "export_eligibility_candidate",
+        "confidence_ceiling_candidate",
+        "field_group_quality",
+        "invalid_or_missing_family_indicators"
+      ],
+      "optional_fields": [],
+      "provisional_fields": [
+        "export_eligibility_candidate"
+      ],
+      "derived_later_fields": []
+    }
+  },
+  "forbidden_boundary_fields": [
+    "final_regime_verdict",
+    "final_regime_owner",
+    "canonical_support_owner",
+    "canonical_resistance_owner",
+    "final_tradability_verdict",
+    "decision_package",
+    "execution_command",
+    "risk_override",
+    "governor_override"
+  ]
+}

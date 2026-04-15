@@ -1,0 +1,304 @@
+AI EFFECTIVENESS METRICS CATALOG
+document_role=AUTHORITATIVE_AI_EFFECTIVENESS_METRICS_CATALOG
+document_version=A8_AI_EFFECTIVENESS_METRICS_CATALOG_V1
+authority_scope=AI_EFFECTIVENESS_METRIC_DEFINITIONS_ONLY
+linked_framework=docs/ai_effectiveness_review_framework.txt
+linked_decision_policy=docs/ai_effectiveness_decision_policy.txt
+trust_rule=defines_metric_names_meanings_and_placeholder_measurement_status_without_building_runtime_calculation_logic
+policy_note=Metrics in this catalog may be quantitative or qualitative. When reliable runtime measurement is not yet available, the metric must remain explicitly placeholder-based.
+
+METRIC STATUS RULES
+- metric_status=ACTIVE_WHEN_RUNTIME_DATA_EXISTS means the metric is legitimate but depends on actual repository/runtime evidence.
+- metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT means the metric is defined for governance review but not yet reliably measurable from current package state.
+- metric_status=QUALITATIVE_REVIEW_REQUIRED means the metric must be assessed through review notes rather than forced numeric precision.
+- Do not fabricate numeric certainty when evidence is missing, shallow, or ambiguous.
+
+ASSESSMENT SIGNAL REFERENCE
+effectiveness_signal_modes=POSITIVE_SIGNAL,MIXED_SIGNAL,INSUFFICIENT_EVIDENCE,NEGATIVE_SIGNAL
+optional_rating_bands=LOW,MODERATE,HIGH
+
+ADVISORY METRICS
+
+metric_name=advisory_total
+metric_category=ADVISORY
+metric_purpose=Count total council advisory packets observed in review window.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=advisory_caution_total
+metric_category=ADVISORY
+metric_purpose=Count advisory packets classified as caution.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=advisory_strong_caution_total
+metric_category=ADVISORY
+metric_purpose=Count advisory packets classified as strong caution.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=advisory_hold_total
+metric_category=ADVISORY
+metric_purpose=Count packets that resulted in hold or reevaluation handling.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=advisory_block_eligible_total
+metric_category=ADVISORY
+metric_purpose=Count advisory packets marked block-eligible under reserved future bounded classification.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=advisory_block_applied_total
+metric_category=ADVISORY
+metric_purpose=Track whether block mode was actually applied.
+metric_type=QUANTITATIVE
+metric_status=ACTIVE_WHEN_RUNTIME_DATA_EXISTS
+policy_expectation=Should normally remain zero while default block mode is disabled.
+
+metric_name=hold_then_trade_total
+metric_category=ADVISORY
+metric_purpose=Count held candidates later traded after reevaluation.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=hold_then_drop_total
+metric_category=ADVISORY
+metric_purpose=Count held candidates later dropped rather than traded.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=blocked_loss_prevention_count
+metric_category=ADVISORY
+metric_purpose=Estimate cases where stronger advisory handling plausibly prevented deteriorating outcomes.
+metric_type=QUANTITATIVE_OR_QUALITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+interpretation_note=Use conservatively and avoid overstating counterfactual certainty.
+
+metric_name=blocked_win_penalty_count
+metric_category=ADVISORY
+metric_purpose=Estimate cases where caution or hold likely prevented a favorable opportunity.
+metric_type=QUANTITATIVE_OR_QUALITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+interpretation_note=Must be reviewed together with loss prevention evidence.
+
+metric_name=false_caution_risk
+metric_category=ADVISORY
+metric_purpose=Assess whether caution frequency appears excessive relative to demonstrated value.
+metric_type=QUALITATIVE
+metric_status=QUALITATIVE_REVIEW_REQUIRED
+
+metric_name=false_block_risk
+metric_category=ADVISORY
+metric_purpose=Assess whether block-eligible severity classification appears overstated or noisy.
+metric_type=QUALITATIVE
+metric_status=QUALITATIVE_REVIEW_REQUIRED
+
+metric_name=advisory_effectiveness_confidence
+metric_category=ADVISORY
+metric_purpose=Summarize confidence in advisory usefulness conclusion.
+metric_type=QUALITATIVE_BAND
+metric_status=QUALITATIVE_REVIEW_REQUIRED
+
+PROPOSAL METRICS
+
+metric_name=proposals_total
+metric_category=PROPOSAL
+metric_purpose=Count generated reviewable proposals in window.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=proposals_reviewed_total
+metric_category=PROPOSAL
+metric_purpose=Count proposals that actually received formal review handling.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=proposals_rejected_total
+metric_category=PROPOSAL
+metric_purpose=Count proposals rejected during review.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=proposals_deferred_total
+metric_category=PROPOSAL
+metric_purpose=Count proposals deferred because evidence, timing, or priority was insufficient.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=proposals_accepted_for_experiment_total
+metric_category=PROPOSAL
+metric_purpose=Count proposals accepted only for bounded experiment consideration.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=proposals_accepted_for_governed_action_total
+metric_category=PROPOSAL
+metric_purpose=Count proposals accepted for governed planning/review follow-through without auto-apply.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=proposal_noise_rate
+metric_category=PROPOSAL
+metric_purpose=Assess whether proposal volume contains excessive low-value or repetitive submissions.
+metric_type=QUALITATIVE_OR_QUANTITATIVE
+metric_status=QUALITATIVE_REVIEW_REQUIRED
+
+metric_name=proposal_relevance_rate
+metric_category=PROPOSAL
+metric_purpose=Assess how often proposals are materially relevant to actual review priorities.
+metric_type=QUALITATIVE_OR_QUANTITATIVE
+metric_status=QUALITATIVE_REVIEW_REQUIRED
+
+metric_name=proposal_review_burden_note
+metric_category=PROPOSAL
+metric_purpose=Record whether proposal handling cost is justified by proposal quality.
+metric_type=QUALITATIVE
+metric_status=QUALITATIVE_REVIEW_REQUIRED
+
+LEARNING-GOVERNANCE METRICS
+
+metric_name=learning_evidence_total
+metric_category=LEARNING_GOVERNANCE
+metric_purpose=Count generated learning-governance evidence bundles.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=learning_evidence_reviewed_total
+metric_category=LEARNING_GOVERNANCE
+metric_purpose=Count evidence bundles that received formal review.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=learning_evidence_escalated_total
+metric_category=LEARNING_GOVERNANCE
+metric_purpose=Count evidence bundles escalated to review-board or committee review.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=learning_evidence_contributed_to_proposal_total
+metric_category=LEARNING_GOVERNANCE
+metric_purpose=Count evidence bundles that meaningfully informed later proposal review.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=learning_signal_strength_note
+metric_category=LEARNING_GOVERNANCE
+metric_purpose=Qualitative note on whether evidence bundles reduce guesswork and improve governed learning review.
+metric_type=QUALITATIVE
+metric_status=QUALITATIVE_REVIEW_REQUIRED
+
+REVIEW WORKFLOW METRICS
+
+metric_name=review_items_total
+metric_category=REVIEW_WORKFLOW
+metric_purpose=Count total review-tracked AI items in window.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=informational_only_total
+metric_category=REVIEW_WORKFLOW
+metric_purpose=Count items that remained informational only.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=pending_review_total
+metric_category=REVIEW_WORKFLOW
+metric_purpose=Count items entering or remaining in pending review.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=escalated_total
+metric_category=REVIEW_WORKFLOW
+metric_purpose=Count review items escalated to higher governance level.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=closed_no_action_total
+metric_category=REVIEW_WORKFLOW
+metric_purpose=Count items closed without governed follow-through.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=review_cycle_time_note
+metric_category=REVIEW_WORKFLOW
+metric_purpose=Qualitative note on whether review latency is manageable.
+metric_type=QUALITATIVE
+metric_status=QUALITATIVE_REVIEW_REQUIRED
+
+metric_name=review_burden_level
+metric_category=REVIEW_WORKFLOW
+metric_purpose=Summarize practical review overhead level.
+metric_type=QUALITATIVE_BAND
+metric_status=QUALITATIVE_REVIEW_REQUIRED
+
+COST AND NOISE METRICS
+
+metric_name=ai_reports_total
+metric_category=COST_AND_NOISE
+metric_purpose=Count total AI reports or output artifacts considered in window.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=repeated_duplicate_outputs_total
+metric_category=COST_AND_NOISE
+metric_purpose=Count repeated low-value or near-duplicate outputs that escaped suppression.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=suppressed_duplicate_count
+metric_category=COST_AND_NOISE
+metric_purpose=Count outputs suppressed by dedupe logic where measurable.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=deep_investigation_consumption_note
+metric_category=COST_AND_NOISE
+metric_purpose=Record whether deeper investigations were used selectively and proportionately.
+metric_type=QUALITATIVE
+metric_status=QUALITATIVE_REVIEW_REQUIRED
+
+metric_name=budget_pressure_mode_observed
+metric_category=COST_AND_NOISE
+metric_purpose=Record whether review window showed material pressure against budget policy.
+metric_type=QUALITATIVE
+metric_status=QUALITATIVE_REVIEW_REQUIRED
+
+metric_name=noise_vs_value_note
+metric_category=COST_AND_NOISE
+metric_purpose=Summarize whether output volume is justified by resulting review or operational value.
+metric_type=QUALITATIVE
+metric_status=QUALITATIVE_REVIEW_REQUIRED
+
+GOVERNANCE METRICS
+
+metric_name=authority_violations_detected_total
+metric_category=GOVERNANCE
+metric_purpose=Count detected violations of allowed AI authority bounds.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=non_authoritative_status_breach_total
+metric_category=GOVERNANCE
+metric_purpose=Count outputs that behaved as if silently authoritative.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=forbidden_output_content_detected_total
+metric_category=GOVERNANCE
+metric_purpose=Count outputs containing forbidden direct-control or directional content.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+metric_name=advisory_boundary_breach_total
+metric_category=GOVERNANCE
+metric_purpose=Count advisory artifacts that exceeded bounded contextual non-directional scope.
+metric_type=QUANTITATIVE
+metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+METRIC INTERPRETATION DISCIPLINE
+- No single metric should dominate effectiveness conclusions when evidence is thin.
+- Advisory benefit metrics must be balanced against blocked-win penalty and false-caution risk.
+- Proposal acceptance counts alone do not prove proposal quality or runtime value.
+- Review burden and cost can outweigh apparent analytical richness.
+- Governance breach metrics have high seriousness even when counts are low.

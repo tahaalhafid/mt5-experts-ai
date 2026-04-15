@@ -1,0 +1,35 @@
+ATAS Level Evidence Contract v1 (Phase 0.5)
+
+Purpose
+- Export bounded level behavior evidence from ATAS into MT5 shadow context.
+- Improve observability only.
+- Do not create canonical level authority.
+
+What ATAS May Export
+- Candidate level observations (bounded max 3)
+- For each candidate:
+  - price and side candidate
+  - level class and origin
+  - session context
+  - absorption/sweep/reclaim evidence
+  - imbalance and divergence descriptors
+  - local touch/reaction/stability properties
+  - freshness/invalidation bounds
+  - candidate role and market behavior tag
+
+What ATAS May NOT Export
+- Canonical final support
+- Canonical final resistance
+- Trade-ready level authority
+- Entry/exit directives
+- Risk sizing directives
+- Governor directives
+
+Authority Boundary
+- Level behavior evidence: allowed as non-authoritative shadow context.
+- Canonical support/resistance authority: MT5-only in Phase 0.5.
+- Any ATAS level evidence is descriptive and bounded; never a decision command.
+
+Consumption Boundary
+- Consumption mode remains SHADOW_ONLY.
+- No downstream live consumer may treat ATAS level candidates as execution-level truth.

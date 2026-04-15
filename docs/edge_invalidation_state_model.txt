@@ -1,0 +1,56 @@
+EDGE INVALIDATION STATE MODEL
+Authority: Institutional Edge Factory invalidation-state model only.
+Truth posture: Invalidation-state interpretation only. No runtime behavior change.
+
+============================================================
+INVALIDATION STATES
+============================================================
+- INVALIDATION_NOT_APPLICABLE
+  Under suppressive or non-licensable posture, invalidation is intentionally not interpreted for factory progression.
+
+- INVALIDATION_NOT_REACHED
+  The thesis has not yet structurally failed.
+
+- INVALIDATION_EARLY_WARNING
+  Warning signs are emerging, but the thesis is not yet conclusively broken.
+
+- INVALIDATION_PENDING
+  Breakdown risk is meaningful and the thesis is near a real failure threshold.
+
+- INVALIDATION_CONFIRMED
+  Structural thesis failure is clear enough that the factory should treat the prior edge logic as broken.
+
+- INVALIDATION_STRUCTURAL
+  The broader structure supporting the thesis materially failed.
+
+- INVALIDATION_RECLAIM_FAILURE
+  Reclaim-based logic materially failed or was lost.
+
+- INVALIDATION_ACCEPTANCE_FAILURE
+  Acceptance beyond break/reclaim/release did not hold sufficiently to preserve the thesis.
+
+- INVALIDATION_CONTINUATION_FAILURE
+  Continuation failed to resume or structurally hold.
+
+- INVALIDATION_EXHAUSTION_COLLAPSE
+  The thesis reached a spent/exhausted state and then collapsed against the expected continuation or reversal logic.
+
+============================================================
+STATE DISCIPLINE
+============================================================
+- INVALIDATION_EARLY_WARNING is not INVALIDATION_CONFIRMED.
+- INVALIDATION_PENDING is not yet full thesis failure.
+- INVALIDATION_CONFIRMED is not a runtime stop instruction.
+- INVALIDATION_NOT_APPLICABLE should dominate when regime posture is suppressive.
+- The factory must preserve ambiguity when it cannot honestly separate noise from thesis failure.
+
+============================================================
+AMBIGUITY DISCIPLINE
+============================================================
+Use ambiguity conservatively when:
+- the trigger itself was still incomplete
+- the thesis boundary was broad or under-specified
+- the difference between reclaim failure and ordinary probe was still weak
+- continuation deterioration was visible but not yet structurally decisive
+- micro-release failure is too noisy to classify cleanly
+

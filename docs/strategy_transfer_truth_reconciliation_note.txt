@@ -1,0 +1,33 @@
+artifact_role=STRATEGY_TRANSFER_TRUTH_RECONCILIATION_NOTE
+artifact_authority_class=CONTROL_PLANE_RECONCILIATION_NOTE
+truth_reconciliation_version=POST_AUDIT_PACKAGE_C_TRUTH_RECONCILIATION_V1
+purpose=RECONCILE_REGISTERED_MATERIAL_TOTAL_DISCREPANCY_BETWEEN_EDGE_FACTORY_MANIFEST_AND_MATERIAL_REGISTRY
+scope=COUNTING_RULE_ONLY_NOT_RUNTIME_NOT_RECLASSIFICATION_NOT_PILOT_EXECUTION
+
+observed_prior_values:
+- edge_factory_manifest.registered_material_total = 84
+- material_registry.registered_material_total = 102
+
+authoritative_counting_rule:
+CURRENT_EMITTED_FACTORY_MATERIAL_RECORD_COUNT SHALL BE material_registry.registered_material_total AND SHALL EQUAL length(material_registry.registered_materials)
+
+why_84_existed:
+The value 84 represented the preserved base factory corpus count before strategy-transfer-emitted additions were reflected at top-level manifest truth.
+
+why_102_exists:
+The value 102 is the current emitted material count after:
+- 1 runtime plan shell record emitted during Package 3
+- 17 extracted primitive records emitted during Package 4
+Total transfer-emitted additions = 18
+
+reconciliation_result:
+- edge_factory_manifest.registered_material_total is now aligned to 102
+- material_registry.registered_material_total remains 102
+- base corpus count is preserved only as historical reference:
+  historical_base_factory_material_total_pre_transfer_additions=84
+
+interpretation_boundaries:
+- this reconciliation does not imply runtime readiness
+- this reconciliation does not imply pilot live execution
+- this reconciliation does not imply validation or investor readiness
+- this reconciliation only resolves counting truth

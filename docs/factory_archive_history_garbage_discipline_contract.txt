@@ -1,0 +1,75 @@
+Factory Architecture Improvement — Phase 9
+Phase name: Archive, History, and Garbage Discipline
+
+contract_version=PHASE9_FACTORY_ARCHIVE_HISTORY_GARBAGE_DISCIPLINE_CONTRACT_V1
+
+1) What this contract defines
+This contract defines how the factory represents:
+- archive posture
+- historical-reference posture
+- retention posture
+- stale / duplicate / garbage discipline
+
+This layer is bounded, non-runtime, non-destructive, and non-automatic.
+
+2) What archive means
+Archive means the record is preserved as bounded reference truth, not deleted and not granted new operational authority.
+ARCHIVED_REFERENCE does not imply deletion, completion, approval, validation, success, or runtime permission.
+
+3) What historical reference means
+Historical reference means the record is retained for bounded interpretive or audit value while no longer serving as the active surface for current progression.
+HISTORICAL_REFERENCE_ONLY does not imply obsolescence, weakness, or deletion.
+
+4) What retention posture means
+Retention posture describes why the record is still kept:
+- active use
+- traceability
+- historical audit
+- pending review
+- pending archive sweep
+- minimal retained reference
+
+Retention posture is not a workflow engine and does not schedule action.
+
+5) What stale / duplicate / garbage discipline means
+stale means bounded loss of recent relevance, not deletion.
+duplicate means duplicate truth or reference burden, not duplicate material identity by default.
+garbage / non-active clutter means non-active support residue that should be interpreted as non-primary and non-current, not physically removed automatically.
+
+6) Allowed archive / disposition categories
+ACTIVE_REFERENCE, ARCHIVED_REFERENCE, HISTORICAL_REFERENCE_ONLY, STALE_REFERENCE, DUPLICATE_REFERENCE, NON_ACTIVE_CLUTTER, RETENTION_UNSPECIFIED
+
+7) Allowed retention postures
+RETAIN_ACTIVE, RETAIN_FOR_TRACEABILITY, RETAIN_FOR_HISTORICAL_AUDIT, RETAIN_UNTIL_REVIEW, RETAIN_UNTIL_ARCHIVE_SWEEP, RETAIN_MINIMAL_REFERENCE_ONLY, RETENTION_NOT_YET_DEFINED
+
+8) Allowed stale / duplicate / garbage categories
+NOT_STALE, STALE_NO_RECENT_RELEVANCE, STALE_PENDING_DISPOSITION, DUPLICATE_TRUTH_SURFACE, DUPLICATE_REFERENCE_ONLY, GARBAGE_NON_ACTIVE_SUPPORT_SURFACE, CLEAN_ACTIVE_SURFACE
+
+9) Allowed history interpretation categories
+HISTORY_NOT_TRACKED, HISTORY_CURRENT_STATE_ONLY, HISTORY_REFERENCE_PRESERVED, HISTORY_ARCHIVAL_ONLY, HISTORY_TRACEABILITY_PRESERVED
+
+10) Control-plane vs data-plane
+This contract is control-plane truth.
+Per-record archive / history / garbage fields are data-plane truth.
+Summary manifests may remain mixed-plane transitional when preserving backward continuity, but must explicitly note what they summarize.
+
+11) Distinctions from other layers
+- archive/history is not lifecycle truth
+- archive/history is not routing truth
+- archive/history is not utility truth
+- archive/history is not evidence-binding truth
+- archive/history is not workflow/governance completion truth
+
+Examples:
+- a record may be ARCHIVED_REFERENCE without implying archive review completion
+- a historical reference may retain audit value without being active
+- a stale reference may still be retained
+- duplicate truth surface does not imply duplicate material identity
+- non-active clutter does not imply deletion
+
+12) Boundaries
+Archive/history/garbage discipline expresses bounded retention, reference, and clutter posture only. It does not imply deletion, review completion, validation success, experiment success, canon eligibility, runtime permission, profitability, live trading proof, or event-history replay capability.
+
+13) History interpretation note
+History in this phase means bounded interpretive history posture only.
+It does not mean append-only replay, event timeline reconstruction, or workflow history replay.

@@ -1,0 +1,102 @@
+REGIME-EDGE MAPPING POLICY
+Authority: Institutional Edge Factory regime-to-edge mapping policy only.
+Truth posture: Factory structural compatibility mapping only. No runtime behavior change.
+
+============================================================
+PHASE IDENTITY
+============================================================
+Phase:
+- E4 — Regime-to-Edge Mapping Engine
+
+Purpose:
+- Define the formal regime-to-edge mapping layer inside the factory.
+- Specify which zones and families are structurally compatible with which market regimes.
+- Distinguish regime compatibility from zone membership and from runtime permissions.
+
+Non-goals:
+- No runtime activation
+- No trigger approval
+- No execution permission
+- No runtime export
+- No code behavior change
+
+============================================================
+WHAT REGIME-TO-EDGE MAPPING MEANS
+============================================================
+Regime-to-edge mapping means:
+- the factory assigns structural compatibility posture between regimes and edge zones/families
+- regime mapping decides whether a zone or family is structurally appropriate, secondary, conditional, weak-fit, or suppressed under a regime
+- regime mapping is stricter than zone membership alone
+
+Regime-to-edge mapping does NOT mean:
+- runtime licensing
+- execution permission
+- trigger approval
+- guaranteed profitability
+- automatic canon promotion
+- automatic suppression in current runtime code
+
+============================================================
+CANONICAL REGIMES
+============================================================
+The formal canonical regimes in E4 are:
+- TREND_UP
+- TREND_DOWN
+- RANGE_BALANCED
+- RANGE_DIRTY
+- COMPRESSION
+- EXPANSION
+- TRANSITION
+- NO_TRADE
+- UNKNOWN
+
+These regime names remain compact on purpose.
+E4 does not inflate regime count beyond what the current factory can support meaningfully.
+
+============================================================
+MAPPING PRINCIPLES
+============================================================
+1) Zone membership does not guarantee regime approval.
+2) A family may be strong in one regime and suppressed in another.
+3) Regime mapping is applied to zones first, then inherited conservatively by families.
+4) Secondary zone membership should not receive the same posture strength as a zone's primary family seed.
+5) Market-native support objects remain support/context only.
+6) Primitive support materials do not gain family permission automatically.
+7) NO_TRADE and UNKNOWN remain suppressive regimes by design.
+8) Range-dirty and transition contexts must remain conflict-aware and conservatively permissioned.
+
+============================================================
+CURRENT CONSERVATIVE REGIME READ
+============================================================
+Trend regimes:
+- TREND_CONTINUATION is the clearest primary fit.
+- TREND_PULLBACK and breakout/continuation expansion labels remain subordinate or conditional.
+- Range mean-reclaim and reversal labels stay constrained.
+
+Range regimes:
+- RANGE_MEAN_RECLAIM is the clearest primary fit for RANGE_BALANCED.
+- RANGE_DIRTY remains structurally fragile and should not receive broad permission merely because several families can be narrated into it.
+
+Compression / expansion regimes:
+- COMPRESSION is the clearest home for compression-first edges.
+- EXPANSION is the clearest home for breakout and continuation-expansion behavior.
+- Compression and expansion overlap must stay explicit rather than collapsed into one permissive bucket.
+
+Transition regimes:
+- REVERSAL_EXHAUSTION is the clearest primary fit.
+- Other families may remain conditional or weak-fit, but transition should not become a catch-all permission regime.
+
+============================================================
+ANTI-OVERPERMISSION RULES
+============================================================
+- not every zone should remain active in every regime
+- too many conditional mappings in one regime is a conflict warning, not a sign of opportunity abundance
+- primary posture should stay sparse
+- secondary posture should remain narrower than narrative plausibility might suggest
+- support objects, primitives, and contextual market-native records do not imply family licensing
+
+============================================================
+BOUNDARY NOTE
+============================================================
+E4 defines factory-level structural compatibility only.
+It does not change runtime strategy logic, entry logic, exit logic, governor formulas, execution behavior, AI authority, or live trading behavior.

@@ -1,0 +1,148 @@
+AI LEARNING REVIEW DECISION WORKFLOW
+document_role=AUTHORITATIVE_LEARNING_REVIEW_DECISION_WORKFLOW
+document_version=L4_LEARNING_REVIEW_DECISION_WORKFLOW_V1
+authority_scope=LEARNING_PROPOSAL_REVIEW_DECISION_GOVERNANCE_ONLY
+linked_learning_contract=docs/learning_governance_contract.txt
+linked_learning_scope_boundaries=docs/learning_scope_boundaries.txt
+linked_learning_prohibited_mutation_paths=docs/learning_prohibited_mutation_paths.txt
+linked_evidence_pipeline=docs/learning_evidence_pipeline.txt
+linked_evidence_catalog=docs/learning_evidence_catalog.txt
+linked_evidence_quality_policy=docs/learning_evidence_quality_policy.txt
+linked_learning_proposal_engine=docs/learning_proposal_engine.txt
+linked_learning_proposal_types=docs/learning_proposal_types.txt
+linked_learning_proposal_risk_policy=docs/learning_proposal_risk_policy.txt
+linked_human_review_workflow=docs/ai_human_review_workflow.txt
+linked_review_roles=docs/ai_review_roles_and_responsibilities.txt
+linked_learning_review_matrix=docs/learning_review_matrix.txt
+linked_learning_decision_outcomes=docs/learning_decision_outcomes.txt
+trust_rule=defines_how_bounded_learning_proposals_move_through_human_review_without_creating_runtime_mutation_or_hidden_learning_authority
+policy_note=This phase formalizes reviewer assignment decision paths escalation defer reject closure and non-mutative handoff rules for learning proposals. It does not implement queues automation experimentation launch or runtime changes.
+non_goal=no_runtime_review_engine
+non_goal=no_proposal_queue_system
+non_goal=no_decision_automation
+non_goal=no_experiment_launcher
+non_goal=no_mutation_engine
+non_goal=no_dashboard
+non_goal=no_scheduler_orchestrator
+non_goal=no_runtime_activation_authority
+
+GLOBAL GOVERNANCE PRINCIPLES
+- Learning proposals remain bounded, reviewable, non-authoritative artifacts.
+- OPERATOR may view and flag learning proposals but may not approve them.
+- ADMIN_REVIEWER may triage, reject, defer, request more evidence, and escalate within governed review.
+- REVIEW_BOARD handles structured learning proposals that require formal governed consideration.
+- COMMITTEE_REVIEWER is reserved for justified governance-sensitive escalations only.
+- No learning review decision in this phase creates runtime mutation authority.
+- No learning proposal acceptance equals live activation, plan overwrite, threshold mutation, or auto-apply.
+- Review-governed acceptance produces handoff eligibility only for later planning or later controlled experimentation consideration.
+- Proposal review must remain traceable, bounded, and closed explicitly to avoid silent limbo.
+
+CONCEPTUAL LEARNING REVIEW FLOW
+1)
+stage_name=PROPOSAL_PACKAGED
+stage_purpose=A learning proposal exists in bounded packaged form according to L3 requirements.
+entry_requirement=Packaged proposal includes family scope evidence references sufficiency quality risk class limitations validation intent rollback note and direct_apply_allowed=false auto_apply_allowed=false.
+allowed_next_stage=PRE_REVIEW_TRIAGE
+
+2)
+stage_name=PRE_REVIEW_TRIAGE
+stage_purpose=ADMIN_REVIEWER determines whether the proposal is review-ready, weak, ambiguous, or governance-sensitive.
+typical_checks=traceability completeness evidence sufficiency boundedness mutation-path discipline review level fit and risk framing
+allowed_next_stage=UNDER_FORMAL_REVIEW,REJECTED_PRE_REVIEW,DEFERRED_FOR_CONTEXT,REQUIRE_MORE_EVIDENCE,ESCALATED_FOR_FORMAL_REVIEW
+
+3)
+stage_name=UNDER_FORMAL_REVIEW
+stage_purpose=Assigned reviewer role evaluates the proposal according to family risk and evidence strength.
+assigned_by=proposal_family_name,proposal_risk_class,required_review_level
+allowed_next_stage=DECISION_RECORDED,ESCALATED_FOR_FORMAL_REVIEW,DEFERRED_FOR_CONTEXT,REQUIRE_MORE_EVIDENCE
+
+4)
+stage_name=DECISION_RECORDED
+stage_purpose=A formal human decision outcome is recorded conceptually for the proposal.
+allowed_outcomes=REJECT,DEFER,REQUIRE_MORE_EVIDENCE,ACCEPT_FOR_EXPERIMENT,ACCEPT_FOR_GOVERNED_ACTION_PREPARATION,ESCALATE,CLOSE_NO_ACTION
+allowed_next_stage=HANDOFF_RECORDED_OR_CLOSED
+
+5)
+stage_name=HANDOFF_RECORDED_OR_CLOSED
+stage_purpose=Accepted proposals are handed off conceptually to later governed planning or later controlled experimentation consideration only; rejected, deferred, or closed proposals are archived conceptually.
+closure_rule=Every proposal must end the current review pass with an explicit closure or explicit re-entry condition.
+
+REVIEWER ASSIGNMENT PRINCIPLES
+- proposal_family_name, proposal_risk_class, and required_review_level determine the primary reviewer role.
+- LOW_RISK_REVIEW proposals usually begin with ADMIN_REVIEWER.
+- HIGH_RISK_REVIEW and GOVERNANCE_SENSITIVE_REVIEW proposals normally require REVIEW_BOARD handling even if triaged first by ADMIN_REVIEWER.
+- COMMITTEE_REVIEWER is used only when governance-boundary consequences, institutional contradictions, or policy-scope consequences justify higher review.
+- Weak evidence alone does not justify escalation; weak proposals may be rejected or returned for more evidence instead.
+
+PRE-REVIEW TRIAGE RULES
+- Reject before deeper review if hidden mutation intent is present.
+- Reject before deeper review if evidence is thin for the claim scope.
+- Require more evidence if the idea is plausible but support is currently insufficient.
+- Defer if the proposal is bounded and potentially useful but timing, priority, or contextual readiness is not adequate.
+- Escalate if review scope exceeds ADMIN_REVIEWER comfort, if governance sensitivity is material, or if risk framing requires REVIEW_BOARD handling.
+- Close with no action if the proposal adds no governed next-step value under the current window or scope.
+
+DECISION DISCIPLINE
+- REJECT means no governed next step proceeds from the current proposal package.
+- DEFER means the proposal is not rejected, but it cannot progress now without changed timing, context, or priority.
+- REQUIRE_MORE_EVIDENCE means the proposal may re-enter review only after stronger or better-linked evidence is added.
+- ACCEPT_FOR_EXPERIMENT means later controlled experimentation consideration may proceed in a future phase; it does not launch anything here.
+- ACCEPT_FOR_GOVERNED_ACTION_PREPARATION means later planning or structured preparation may proceed in a future phase; it does not authorize mutation or activation here.
+- ESCALATE means ownership moves to a higher or more appropriate reviewer role with explicit reason.
+- CLOSE_NO_ACTION means the proposal is archived without current next-step continuation.
+
+ESCALATION RULES
+- insufficient_admin_confidence=ESCALATE_TO_REVIEW_BOARD
+- high_risk_or_governance_sensitive_proposal=REVIEW_BOARD_BY_DEFAULT
+- repeated_unresolved_proposal=ESCALATE_OR_CLOSE_DO_NOT_LOOP_ENDLESSLY
+- proposals_implying_scope_or_governance_boundary_consequences=COMMITTEE_REVIEWER_ONLY_WHEN_JUSTIFIED
+- weak_evidence_only=REJECT_OR_REQUIRE_MORE_EVIDENCE_NOT_AUTOMATIC_ESCALATION
+- cross_scope_contradiction_or_policy_conflict=ESCALATE_WITH_EXPLICIT_REASON
+- observation_only_items_without_change_value=CLOSE_NO_ACTION_OR_REJECT
+- committee_escalation_threshold=high_and_exception_based_not_default
+
+DEFER AND REJECT DISCIPLINE
+- defer_when=boundedness_is_sound_but_timing_priority_or_context_is_not_yet_right
+- reject_when=hidden_mutation_path_exists,evidence_is_too_weak_for_claim,traceability_is_missing,boundedness_is_missing,risk_framing_is_unsound
+- require_more_evidence_when=idea_is_plausible_but_bundle_strength_linkage_or_corroboration_is_not_yet_sufficient
+- repeated_defer_limit=do_not_allow_endless_defer_chains_without_new_evidence_or_new_context
+- repeated_weak_proposal_rule=close_under_current_window_or_scope_if_new_support_does_not_arrive
+
+CLOSURE RULES
+- rejected_proposal=archived_and_closed
+- accepted_for_experiment=review_workflow_closes_after_non_mutative_handoff_is_recorded_conceptually
+- accepted_for_governed_action_preparation=review_workflow_closes_after_non_mutative_handoff_is_recorded_conceptually
+- deferred_proposal=must_define_reentry_condition_or_eventual_close_no_action
+- superseded_proposal=close_when_replaced_by_newer_bounded_package
+- repeated_weak_proposal=may_close_permanently_under_current_window_scope_or_regime
+- unresolved_escalation=must_end_with_terminal_decision_or_explicit_return_condition
+
+TRACEABILITY EXPECTATIONS
+- learning_decision_record_id
+- learning_proposal_id
+- proposal_family_name
+- proposal_risk_class
+- reviewer_role
+- review_state
+- decision_outcome
+- decision_reason
+- escalated_to
+- linked_evidence_bundle_ids
+- linked_repository_records
+- handoff_target_if_any
+- closure_note
+- decision_timestamp
+
+RELATIONSHIP TO L5 AND LATER PHASES
+- L4 outputs feed later L5 controlled experimentation governance.
+- L4 may produce experiment-ready or governed-action-preparation-ready handoff states only.
+- L4 does not launch experiments.
+- L4 does not promote learning into runtime.
+- L4 does not bypass review boundaries, repository discipline, or human decision accountability.
+
+AI ROLE BOUNDARY
+- AI may support proposal clarity, summarize evidence for reviewers, and organize bounded rationale.
+- AI may not decide review outcomes.
+- AI may not self-escalate into approval.
+- AI may not convert review decisions into runtime changes.
+- AI may not bypass human reviewer roles or create silent acceptance.

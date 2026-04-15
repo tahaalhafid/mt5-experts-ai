@@ -1,0 +1,22 @@
+EDGE ENRICHMENT BOUNDARY MODEL
+phase_id=E10
+model_role=FORBIDDEN_LOOP_PATH_AND_BOUNDARY_DISCIPLINE
+
+1) FORBIDDEN LOOP PATHS
+- RUNTIME_EVIDENCE_TO_DIRECT_RUNTIME_MUTATION
+- SCORECARD_TO_DIRECT_SUPPRESSION
+- AI_OUTPUT_TO_DIRECT_PROMOTION
+- ENRICHMENT_TO_RUNTIME_BYPASS
+- GOVERNANCE_SIGNAL_TO_LIVE_PARAMETER_MUTATION
+- LOOP_OUTPUT_TO_AUTHORITY_ELEVATION
+
+2) WHY THESE PATHS ARE FORBIDDEN
+They would collapse the factory into uncontrolled self-modification, bypass review, or expand authority beyond the bounded design already established.
+
+3) BOUNDARY NOTE
+E10 enrichment may register, route, rescope, re-intake, decompose, review, research, or archive.
+It may NOT mutate runtime, override governance, or create direct trading control.
+
+4) HONESTY RULE
+If an enrichment signal is weak, repetitive, vague, or blocked by governance boundary, it must remain visibly weak, repetitive, vague, or blocked.
+It must not be relabeled as progress by narrative alone.

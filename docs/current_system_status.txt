@@ -1,0 +1,145 @@
+CURRENT SYSTEM STATUS
+Authority: This is the single authoritative current project/system status document.
+Purpose: Reflect the real current baseline and current system state without release-truth ambiguity.
+
+============================================================
+CURRENT ACTIVE BASELINE
+============================================================
+Active baseline archive/build name:
+- Full_Integrated_Project_MT5_AI_strategy_memory_v1_warnclean_phaseB_R1_documentation_baseline_reconciliation_cleanup.zip
+
+Parent baseline archive/build name:
+- Full_Integrated_Project_MT5_AI_strategy_memory_v1_warnclean_phaseB_S3_security_secret_hygiene.zip
+
+Current active plan id:
+- plan_v076
+
+Current active decision engine mode:
+- COUNCIL
+
+Completed phase stack:
+- S1 — Truth Integrity Repair Pack
+- S2 — Compile / Release Discipline Pack
+- S2b — Documentation & Status Reconciliation Pack
+- S3 — Security & Secret Hygiene
+- S4 — Journaling & Feedback Normalization Pack
+- H1 — Runtime Governance Hardening Pack
+- H2 — Observability & Diagnostic Reliability Pack
+- H3 — Execution Quality Validation Pack
+- H4 — Replay / Validation Layer Pack
+- H5 — Risk & Safety Hardening Pack
+- H6 — AI Activation Readiness Gate
+- A1 — AI Input Catalog & Access Policy
+- A2 — AI Task Registry & Trigger Matrix
+- A3 — AI Output Contract & Report Templates
+- A4 — AI Cost Governance & Scheduling
+- A5 — AI Intelligence Repository
+- A6 — AI Council Advisory Integration Layer
+- A7 — Human Review & Approval Workflow
+- A8 — AI Effectiveness Review
+- L1 — Learning Governance Contract
+- L2 — Learning Evidence Pipeline
+- L3 — Learning Proposal Engine
+- L4 — Review-Governed Learning Decisions
+- L5 — Controlled Experimentation Layer
+- L6 — Learning Promotion & Rollback Discipline
+- L7 — Learning Impact Audit
+- R1 — Documentation / Baseline Reconciliation Cleanup
+
+Current next phase position:
+- Productization has not started.
+- If work continues without another reconciliation/audit detour, the next logical phase is P1 — Product Definition.
+
+============================================================
+DOCUMENTATION HIERARCHY
+============================================================
+Authoritative project-status documents:
+- MQL5/Experts/AI/docs/current_system_status.txt
+- MQL5/Experts/AI/docs/baseline_identity.txt
+- MQL5/Experts/AI/docs/implementation_state_map.txt
+
+Authoritative release/control documents:
+- MQL5/Experts/AI/docs/release_protocol.txt
+- MQL5/Experts/AI/docs/phase_acceptance_checklist.txt
+- MQL5/Experts/AI/docs/versioning_policy.txt
+
+Derived visibility / status manifests (non-authoritative for project-status truth):
+- MQL5/Files/AI/ai_activation_readiness_status.txt
+- MQL5/Files/AI/ai_activation_readiness_status.json
+- MQL5/Files/AI/ai_repository_manifest.txt
+- MQL5/Files/AI/ai_repository_manifest.json
+
+Technical references only (non-authoritative for baseline/status truth):
+- MQL5/Experts/AI/docs/system_architecture_manifest.txt
+- MQL5/Experts/AI/docs/zone_family_strategy_map.txt
+
+Interpretation rule:
+- If a manifest or reference document appears richer or newer but conflicts with this file on baseline/current-status truth, this file remains authoritative unless replaced by a later accepted authoritative status release.
+
+============================================================
+CURRENT OPERATIONAL REALITY
+============================================================
+Runtime-affecting layers completed and active/bounded:
+- S1, S2, S4, H1, H2, H3, H4, H5, and H6 are completed and remain part of the current stabilized/hardened operating stack.
+- Core trading runtime remains council-mode based under the authoritative plan.
+- A6 bounded council advisory integration exists as a selective bounded runtime integration layer, still non-authoritative and non-mutative.
+- No later phase after A6 changes strategy logic, execution logic, governor formulas, failure detector formulas, or live trading behavior.
+
+Governance / docs / policy-complete layers:
+- A1, A2, A3, A4 define AI inputs/tasks/outputs/cost governance.
+- A5 defines the AI intelligence repository architecture and visibility model, but its manifest remains a non-authoritative derived design/status artifact, not runtime truth.
+- A7 and A8 define review/effectiveness governance.
+- L1 through L7 define the governed learning stack policy-wise.
+- S3 defines security/secret hygiene inventory, boundaries, and external-delivery blockers.
+- R1 reconciles documentation truth to the actual completed stack.
+
+Important conservative distinction:
+- Governance/docs/policy-complete does NOT mean a full runtime engine exists for each layer.
+- Where only policy/visibility artifacts exist, this file does not reinterpret them as live operational engines.
+
+============================================================
+AUTHORITATIVE VS NON-AUTHORITATIVE STATUS
+============================================================
+Authoritative runtime truth:
+- MQL5/Files/AI/ai_current_plan.json for active plan truth
+- runtime code and actual runtime control surfaces for behavior truth
+
+Derived but non-authoritative:
+- ai_activation_readiness_status.* = visibility/status artifact only
+- ai_repository_manifest.* = design/visibility artifact only
+- ai_evolution_state.json = derived mirror only
+- ai_previous_plan_backup.json = backup-only artifact
+- package placeholders and manifest placeholders remain non-authoritative even when metadata-rich
+
+Historical / reference only:
+- older baseline references inside stale docs are historical only and are not current truth after this R1 reconciliation
+- technical reference docs remain non-authoritative
+
+============================================================
+SECURITY / DELIVERY POSTURE
+============================================================
+Security posture:
+- S3 security-secret hygiene is defined, inventoried, and explicitly blocking external delivery until the blockers are cleared through later implementation/verification work.
+- No Telegram delivery, customer-facing externalization, or broader productization readiness is claimed here.
+
+Delivery truth:
+- external_delivery_allowed=false remains the honest posture
+- productization work has not started
+
+============================================================
+CURRENT NOT-YET-STARTED AREAS
+============================================================
+Not started:
+- P-series productization stack
+- any claimed customer-safe external delivery pathway
+- any claim that the repository/review/governance stack is fully implemented as end-to-end production runtime tooling
+
+============================================================
+COMPILE / VERIFICATION TRUTH
+============================================================
+This reconciliation phase:
+- changed documentation/status files only
+- did not change code behavior
+- does not claim fresh compile verification
+
+End of current system status.

@@ -1,0 +1,92 @@
+FACTORY EVIDENCE BINDING CONTRACT
+version=PHASE7_FACTORY_EVIDENCE_BINDING_CONTRACT_V1
+
+purpose
+This contract defines how factory-side structural claims may be conservatively bound to downstream outcome truth without implying runtime value, validation, experiment success, canon eligibility, or trading proof.
+
+what evidence binding means
+Evidence binding is bounded traceability between an emitted factory-side record or claim and a downstream outcome reference already observable in factory-emitted truth surfaces.
+
+what an evidence link is
+An evidence link is a declared relationship between:
+- a factory-side claim surface
+- and a downstream outcome reference
+with explicit linkage type, basis, limitations, and unobserved-state handling.
+
+allowed expression
+Evidence binding may express:
+- which downstream outcome reference category is being used
+- whether the link is direct, partial, indirect, supporting-only, or not yet linked
+- what basis supports the link
+- what downstream outcome remains unobserved
+- what limitations apply
+- what the binding must not imply
+
+must not imply
+Evidence binding must not imply:
+- review approval
+- validation success
+- experiment success
+- canon eligibility
+- runtime permission
+- profitability
+- live trading value
+- proof of real-world edge
+
+difference from utility
+Utility answers what bounded downstream usefulness is being claimed.
+Evidence binding answers whether that claim or related architectural truth is traceably linked to a downstream outcome reference.
+
+difference from review outcome
+Evidence binding may reference a review-related downstream outcome category, but it does not mean review approval happened unless emitted review outcome truth exists.
+
+difference from validation
+Evidence binding is not validation.
+A bound outcome reference is traceability, not validation.
+
+difference from experiment success
+Experiment packaging or review-related references are not experiment success proof.
+
+difference from canon eligibility
+A bound classification or archive outcome is not canon eligibility.
+
+difference from live trading proof
+No evidence binding field in this factory proves live trading value.
+
+downstream outcome reference categories
+- REVIEW_OUTCOME_REFERENCE
+- GOVERNANCE_OUTCOME_REFERENCE
+- EXPERIMENT_PACKAGING_OUTCOME_REFERENCE
+- ARCHIVE_DISPOSITION_REFERENCE
+- RESEARCH_ONLY_DISPOSITION_REFERENCE
+- CLASSIFICATION_OUTCOME_REFERENCE
+- NO_DOWNSTREAM_OUTCOME_REFERENCE
+
+evidence linkage types
+- DIRECT_LINK
+- INDIRECT_LINK
+- PARTIAL_LINK
+- SUPPORTING_LINK_ONLY
+- NOT_YET_LINKED
+- NO_BINDABLE_OUTCOME
+- ZERO_STATE_NO_BINDING
+
+evidence binding basis model
+- LIFECYCLE_TO_OUTCOME_BINDING
+- ROUTING_TO_OUTCOME_BINDING
+- UTILITY_TO_OUTCOME_BINDING
+- INTERNAL_INTELLIGENCE_TO_REVIEW_BINDING
+- CLASSIFICATION_TO_DISPOSITION_BINDING
+- MIXED_FACTORY_TO_DOWNSTREAM_BINDING
+- ZERO_STATE_TRUTH_ONLY
+
+unbound or not-yet-observed states
+- OUTCOME_NOT_YET_OBSERVED
+- NO_BINDABLE_DOWNSTREAM_EVENT
+- SUPPORT_ONLY_NO_OUTCOME_BINDING
+- INSUFFICIENT_LINKAGE_EVIDENCE
+- ZERO_STATE_NO_OUTCOME_BINDING
+
+truth rule
+Binding means traceability only.
+Binding is not approval, validation, profitability, or runtime authority.

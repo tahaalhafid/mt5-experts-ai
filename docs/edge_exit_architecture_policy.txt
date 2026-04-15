@@ -1,0 +1,59 @@
+artifact_role=EDGE_EXIT_ARCHITECTURE_POLICY
+artifact_authority_class=AUTHORITATIVE_FACTORY_EXIT_ARCHITECTURE_POLICY
+policy_version=E7_EDGE_EXIT_ARCHITECTURE_POLICY_V1
+phase_id=E7
+
+purpose:
+- define family-specific exit architecture at the factory layer
+- separate gain realization and exposure reduction logic from invalidation logic
+- preserve thesis-aware exit structure without implying runtime behavior
+
+core_definition:
+- exit architecture describes how an edge family conceptually harvests gains, reduces size, tightens protection, or abandons path-dependent hold assumptions after entry.
+- invalidation describes thesis failure.
+- exit architecture describes management while the thesis is still working, partially working, stalling, or losing momentum.
+- exit architecture is therefore not the same as invalidation, even when protective actions may occur before full failure.
+
+hard_boundaries:
+- exit architecture in E7 is non-runtime
+- exit architecture in E7 is non-executing
+- exit architecture in E7 is non-licensing
+- exit architecture in E7 does not rewrite current runtime exit logic
+- exit architecture in E7 does not grant execution permission
+- exit architecture in E7 does not replace later scorecard/governance/export phases
+
+required_exit_concepts:
+- target_logic
+- partial_reduction_logic
+- time_stop_logic
+- failure_to_expand_logic
+- protective_tightening_logic
+- structural_trailing_logic
+- momentum_decay_management
+- exhaustion_protective_logic
+
+principles:
+- good thesis does not imply one generic exit for every family
+- fast-expansion families and rotational families should not share identical harvesting assumptions
+- continuation families should allow structural hold concepts that differ from mean-reversion or reversal families
+- failure-to-expand may justify defensive management before invalidation is fully confirmed
+- protective tightening may become appropriate even when thesis remains partially intact
+- poor geometry remains visible at exit stage; attractive timing does not rescue poor downstream path quality
+- exit architecture must remain thesis-driven rather than purely fixed-r multiple thinking
+
+anti_false_precision_discipline:
+- target logic should not pretend path clarity when the thesis naturally has variable travel distance
+- time-stop logic should not be faked as precise when the family still lacks mature path expectations
+- protective tightening should not masquerade as invalidation
+- partial logic should not default to generic profit taking when structure-specific harvesting is known
+- one attractive entry does not justify optimistic hold duration if follow-through deteriorates quickly
+
+family_style_intent:
+- rotational/reversion families emphasize return-to-range, edge-to-mid, edge-to-opposing-liquidity harvesting, plus exhaustion protection
+- continuation families emphasize structural trailing, staged continuation objectives, and momentum-decay awareness
+- breakout families emphasize staged objectives, fast failure-to-expand handling, and earlier protection after the first impulse
+- post-displacement continuation families emphasize hold-if-still-efficient logic with tightening when momentum decays
+- micro expansion families emphasize faster targets, stricter time-stop discipline, and earlier protection
+
+boundary_note:
+- E7 exit architecture remains factory-level only until later scorecard, governance, and export phases decide whether any licensed runtime representation should exist.

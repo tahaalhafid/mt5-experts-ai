@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="panel">
+  <h2>Recent Trades ({{ payload.limit }})</h2>
+  <p class="subtle">Hydration legend: {% for s in payload.state_legend %}<span class="badge {{ s|lower }}">{{ s }}</span>{% endfor %}</p>
+  <div class="toolbar">
+    <a href="/trades?limit=10">10</a>
+    <a href="/trades?limit=20">20</a>
+    <a href="/trades?limit=50">50</a>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>decision_id</th>
+          <th>position/deal</th>
+          <th>symbol</th>
+          <th>dir</th>
+          <th>entry / exit</th>
+          <th>strategy</th>
+          <th>regime</th>
+          <th>S/R context</th>
+          <th>advisory / posture</th>
+          <th>confidence envelope</th>
+          <th>attribution</th>
+          <th>result</th>
+          <th>source/freshness</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in payload.rows %}
+        <tr>
+          <td class="mono">
+            <div>{{ r.decision_id }}</div>
+            <div><span class="badge {{ r.decision_link_state|lower }}">{{ r.decision_link_state }}</span></div>
+          </td>
+          <td class="mono">
+            <div>pos={{ r.position_id }}</div>
+            <div>close={{ r.close_deal_id }}</div>
+          </td>
+          <td>{{ r.symbol }}</td>
+          <td>{{ r.direction }}</td>
+          <td>
+            <div>{{ r.entry_time }}</div>
+            <div class="subtle">{{ r.exit_time }}</div>
+          </td>
+          <td>
+            <div>{{ r.strategy_id }}</div>
+            <div class="subtle">{{ r.strategy_family }}</div>
+            <div>
+              <span class="badge {{ r.strategy_id_state|lower }}">{{ r.strategy_id_state }}</span>
+              <span class="badge {{ r.strategy_family_state|lower }}">{{ r.strategy_family_state }}</span>
+            </div>
+          </td>
+          <td>
+            <div>{{ r.regime_label }}</div>
+            <div class="subtle">vol={{ r.volatility_regime }}</div>
+            <div class="subtle">struct={{ r.structure_bucket }}</div>
+          </td>
+          <td>
+            <div>bucket={{ r.sr_interaction_bucket }}</div>
+            <div class="subtle">canon={{ r.canonical_level_state }}</div>
+            <div class="subtle">type={{ r.level_interaction_type }}</div>
+            <div class="subtle">S={{ r.nearest_support_price }} | R={{ r.nearest_resistance_price }}</div>
+            <div class="subtle">obs={{ r.support_resistance_observation_source }}</div>
+            <div>
+              <span class="badge {{ r.sr_interaction_bucket_state|lower }}">{{ r.sr_interaction_bucket_state }}</span>
+              <span class="badge {{ r.canonical_level_state_state|lower }}">{{ r.canonical_level_state_state }}</span>
+              <span class="badge {{ r.level_interaction_type_state|lower }}">{{ r.level_interaction_type_state }}</span>
+            </div>
+          </td>
+          <td>
+            <div>eligible={{ r.advisory_eligible }} <span class="badge {{ r.advisory_eligible_state|lower }}">{{ r.advisory_eligible_state }}</span></div>
+            <div>usage={{ r.advisory_usage_state }} <span class="badge {{ r.advisory_usage_state_data_state|lower }}">{{ r.advisory_usage_state_data_state }}</span></div>
+            <div class="subtle">zero_effect={{ r.advisory_zero_effect_reason }}</div>
+            <div>posture={{ r.decision_acceptance_posture }} <span class="badge {{ r.decision_acceptance_posture_state|lower }}">{{ r.decision_acceptance_posture_state }}</span></div>
+          </td>
+          <td>
+            <div>base={{ r.base_confidence }} <span class="badge {{ r.base_confidence_state|lower }}">{{ r.base_confidence_state }}</span></div>
+            <div>final={{ r.final_confidence }} <span class="badge {{ r.final_confidence_state|lower }}">{{ r.final_confidence_state }}</span></div>
+            <div class="subtle">risk={{ r.policy_risk_score }} <span class="badge {{ r.policy_risk_score_state|lower }}">{{ r.policy_risk_score_state }}</span></div>
+            <div class="subtle">fit={{ r.regime_fit_score }} <span class="badge {{ r.regime_fit_score_state|lower }}">{{ r.regime_fit_score_state }}</span></div>
+            <div class="subtle">learn_delta={{ r.learning_confidence_delta }} <span class="badge {{ r.learning_confidence_delta_state|lower }}">{{ r.learning_confidence_delta_state }}</span></div>
+            <div class="subtle">learn_caution={{ r.learning_caution_score }} <span class="badge {{ r.learning_caution_score_state|lower }}">{{ r.learning_caution_score_state }}</span></div>
+          </td>
+          <td>
+            <div>{{ r.runtime_primary_attribution }}</div>
+            <div class="subtle">{{ r.runtime_secondary_attribution }}</div>
+            <div class="subtle">{{ r.decision_reasoning_flags }}</div>
+          </td>
+          <td>
+            <div>{{ r.trade_result }}</div>
+            <div class="subtle">{{ r.profit }}</div>
+          </td>
+          <td>
+            <div>{{ r.source_timestamp }}</div>
+            <div><span class="badge {{ r.source_timestamp_state|lower }}">{{ r.source_timestamp_state }}</span> <span class="badge {{ r.freshness_state|lower }}">{{ r.freshness_state }}</span></div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

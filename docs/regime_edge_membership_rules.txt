@@ -1,0 +1,97 @@
+REGIME-EDGE MEMBERSHIP RULES
+Authority: Institutional Edge Factory regime membership rules only.
+Truth posture: Structural compatibility mapping only. No runtime behavior change.
+
+============================================================
+REGIME POSTURE CLASSES
+============================================================
+- REGIME_ALLOWED_PRIMARY
+  The zone/family is a clear structural fit for the regime and may later deserve primary licensing consideration.
+
+- REGIME_ALLOWED_SECONDARY
+  The zone/family remains structurally compatible, but is not treated as the regime's strongest first-choice fit.
+
+- REGIME_CONDITIONAL
+  The zone/family may be viable only when additional structural qualifiers are present.
+
+- REGIME_WEAK_FIT
+  The zone/family has limited structural compatibility and should not be treated as a strong regime home.
+
+- REGIME_SUPPRESSED
+  The zone/family should be treated as structurally inappropriate under the regime.
+
+- REGIME_RESEARCH_ONLY
+  The zone/family remains reference-only under the regime and should not be treated as a current licensing candidate.
+
+============================================================
+MAPPING DISCIPLINE
+============================================================
+1) Zones are mapped to regimes first.
+2) Families inherit zone posture conservatively.
+3) Zone-primary family seeds may inherit a zone posture directly.
+4) Zone-secondary families normally receive one-step posture downgrade relative to the zone template.
+5) Primitive materials do not receive family regime posture automatically.
+6) Market-native support objects do not receive family regime posture automatically.
+7) Legacy or research-only references must not be upgraded into allowed posture simply because they share a zone label.
+
+============================================================
+CURRENT ZONE-TO-REGIME INTENT
+============================================================
+TREND_CONTINUATION
+- primary in TREND_UP and TREND_DOWN
+- secondary in EXPANSION
+- conditional in TRANSITION
+- weak or suppressed elsewhere
+
+TREND_PULLBACK
+- secondary in TREND_UP and TREND_DOWN
+- conditional in COMPRESSION and TRANSITION
+- weak in RANGE_BALANCED and EXPANSION
+- suppressed in dirty/no-trade/unknown contexts
+
+RANGE_MEAN_RECLAIM
+- primary in RANGE_BALANCED
+- secondary in RANGE_DIRTY
+- conditional in COMPRESSION and TRANSITION
+- weak in trend regimes
+- suppressed in EXPANSION, NO_TRADE, UNKNOWN
+
+REVERSAL_EXHAUSTION
+- primary in TRANSITION
+- secondary in RANGE_DIRTY
+- conditional in TREND_UP, TREND_DOWN, RANGE_BALANCED
+- weak in COMPRESSION
+- suppressed in EXPANSION, NO_TRADE, UNKNOWN
+
+COMPRESSION
+- primary in COMPRESSION
+- secondary in TRANSITION
+- conditional in RANGE_BALANCED and EXPANSION
+- weak in trend or dirty-range regimes
+- suppressed in NO_TRADE and UNKNOWN
+
+EXPANSION_BREAKOUT
+- primary in EXPANSION
+- secondary in TREND_UP and TREND_DOWN
+- conditional in COMPRESSION and TRANSITION
+- weak in RANGE_BALANCED
+- suppressed in RANGE_DIRTY, NO_TRADE, UNKNOWN
+
+EXPANSION_CONTINUATION
+- primary in EXPANSION
+- secondary in TREND_UP and TREND_DOWN
+- conditional in TRANSITION
+- weak in COMPRESSION
+- suppressed in range/no-trade/unknown regimes
+
+MICRO_RANGE_EXPANSION
+- secondary in COMPRESSION
+- conditional in RANGE_BALANCED and EXPANSION
+- weak in TREND_UP, TREND_DOWN, RANGE_DIRTY, TRANSITION
+- suppressed in NO_TRADE and UNKNOWN
+
+============================================================
+ANTI-DRIFT RULE
+============================================================
+Regime posture inside the factory must not be misread as live runtime permission.
+Later phases may consume these mappings, but E4 itself remains non-executable.

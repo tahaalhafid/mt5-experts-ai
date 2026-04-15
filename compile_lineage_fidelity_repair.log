@@ -1,0 +1,27 @@
+2026-04-09 01:34:20 +03:00 | compile_attempt | tool=MetaEditor64
+command: "C:\Program Files\MetaTrader 5\metaeditor64.exe" /compile:"C:\Users\INFINTY GROUP\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Experts\AI\main_ea.mq5" /log:"C:\Users\INFINTY GROUP\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\MQL5\Experts\AI\compile_lineage_fidelity_repair.log"
+result: process_exit_code=0
+artifact_check: requested /log file was not emitted by MetaEditor in this environment.
+ex5_check: main_ea.ex5 timestamp unchanged from pre-run compile baseline.
+compile_verification_state: NOT_CONFIRMED_BY_TOOL_OUTPUT
+
+2026-04-09 01:34:21 +03:00 | compile_attempt_variant | method=Start-Process argument array
+result: process_exit_code=0
+artifact_check: no compiler output log generated.
+compile_verification_state: NOT_CONFIRMED_BY_TOOL_OUTPUT
+
+2026-04-09 01:34:22 +03:00 | static_compile_impact_checks
+- verified new identifiers exist in defining surfaces and call-sites:
+  - linked_runtime_strategy_id
+  - linked_runtime_strategy_family
+  - linked_support_resistance_bucket
+  - linked_canonical_level_state
+  - ILV1_LINEAGE_PATH
+  - ILV1_LINEAGE_STATUS_PATH
+  - ILV1_BuildTradeLineageKey(...)
+  - SCM_RecordClosedTradeOutcome(... extended lineage args ...)
+- verified no direct edits to execution/risk/governor authority gate branches.
+static_check_state: PASSED
+
+final_compile_state: SOURCE_PATCH_APPLIED_WITH_STATIC_SYMBOL_CONSISTENCY_ONLY
+note: re-run compile in interactive MetaEditor environment to produce definitive compiler diagnostics if required.

@@ -1,0 +1,103 @@
+LEARNING DECISION OUTCOMES
+document_role=AUTHORITATIVE_LEARNING_DECISION_OUTCOME_POLICY
+document_version=L4_LEARNING_DECISION_OUTCOMES_V1
+authority_scope=LEARNING_PROPOSAL_DECISION_MEANINGS_NEXT_STEPS_AND_NON_MUTATIVE_ACCEPTANCE_ONLY
+linked_workflow=docs/learning_review_decision_workflow.txt
+linked_review_matrix=docs/learning_review_matrix.txt
+linked_human_review_workflow=docs/ai_human_review_workflow.txt
+linked_learning_proposal_engine=docs/learning_proposal_engine.txt
+trust_rule=defines_learning_review_outcomes_without_authorizing_runtime_mutation_auto_apply_or_authority_expansion
+policy_note=Decision outcomes here are human governance outcomes only. They do not execute experiments, implement changes, overwrite plans, or alter live trading behavior.
+
+FORMAL DECISION OUTCOMES
+
+- REJECT
+  outcome_purpose=Stop the current proposal from progressing because its evidence, boundedness, traceability, risk framing, or mutation discipline is not acceptable.
+  who_may_issue_it=ADMIN_REVIEWER,REVIEW_BOARD,COMMITTEE_REVIEWER
+  what_it_means=No governed next step proceeds from the current proposal package.
+  what_it_does_not_mean=It does not erase history and it does not imply that future stronger proposals are forbidden.
+  allowed_next_steps=ARCHIVE_AND_CLOSE,OPTIONAL_FUTURE_NEW_PROPOSAL_UNDER_NEW_EVIDENCE
+
+- DEFER
+  outcome_purpose=Pause a bounded proposal that may still be relevant later when timing, readiness, or priority changes.
+  who_may_issue_it=ADMIN_REVIEWER,REVIEW_BOARD,COMMITTEE_REVIEWER
+  what_it_means=The proposal is not progressing now, but is not necessarily invalid in principle.
+  what_it_does_not_mean=It does not mean silent approval and it does not keep the proposal open forever without re-entry conditions.
+  allowed_next_steps=WAIT_FOR_REENTRY_CONDITION,REQUIRE_MORE_EVIDENCE,LATER_REVIEW,CLOSE_NO_ACTION
+
+- REQUIRE_MORE_EVIDENCE
+  outcome_purpose=Force stronger, clearer, or better-linked support before the proposal may be reconsidered.
+  who_may_issue_it=ADMIN_REVIEWER,REVIEW_BOARD,COMMITTEE_REVIEWER
+  what_it_means=Current evidence is not sufficient for the proposal's claimed scope or risk.
+  what_it_does_not_mean=It does not imply likely future acceptance and it does not let narrative confidence substitute for missing evidence.
+  allowed_next_steps=EVIDENCE_STRENGTHENING,REPACKAGING,LATER_REVIEW,REJECT
+
+- ACCEPT_FOR_EXPERIMENT
+  outcome_purpose=Mark a proposal as eligible for later controlled experimentation consideration in a future phase.
+  who_may_issue_it=REVIEW_BOARD,COMMITTEE_REVIEWER
+  what_it_means=The proposal is sufficiently bounded and supported to enter a later governed experimentation consideration path.
+  what_it_does_not_mean=It is not runtime activation, not experiment launch, not plan overwrite, not threshold mutation, and not auto-apply.
+  allowed_next_steps=NON_MUTATIVE_HANDOFF_TO_L5_OR_LATER_EXPERIMENT_GOVERNANCE,ARCHIVE_DECISION_RECORD
+
+- ACCEPT_FOR_GOVERNED_ACTION_PREPARATION
+  outcome_purpose=Mark a proposal as eligible for later planning, preparation, or structured governance continuation.
+  who_may_issue_it=ADMIN_REVIEWER,REVIEW_BOARD,COMMITTEE_REVIEWER
+  what_it_means=The proposal may move into later governed planning or preparation work only.
+  what_it_does_not_mean=It is not live activation, not implementation, not runtime control, not parameter mutation, and not permission to bypass later review.
+  allowed_next_steps=NON_MUTATIVE_HANDOFF_TO_LATER_PLANNING_OR_GOVERNED_PREPARATION,ARCHIVE_DECISION_RECORD
+
+- ESCALATE
+  outcome_purpose=Transfer the proposal to a higher or more appropriate reviewer role with explicit reason.
+  who_may_issue_it=ADMIN_REVIEWER,REVIEW_BOARD
+  what_it_means=The current reviewer will not finalize the proposal and a more appropriate reviewer must handle it.
+  what_it_does_not_mean=It does not imply probable acceptance and it does not automatically strengthen weak evidence.
+  allowed_next_steps=UNDER_HIGHER_REVIEW,REJECT,DEFER,REQUIRE_MORE_EVIDENCE,ACCEPT_OUTCOME
+
+- CLOSE_NO_ACTION
+  outcome_purpose=End the current review pass with no governed next step under the current scope or window.
+  who_may_issue_it=ADMIN_REVIEWER,REVIEW_BOARD,COMMITTEE_REVIEWER
+  what_it_means=The proposal is archived without current continuation.
+  what_it_does_not_mean=It does not imply that history is discarded or that future better-bounded proposals are impossible.
+  allowed_next_steps=ARCHIVE_AND_CLOSE,OPTIONAL_FUTURE_NEW_PROPOSAL_UNDER_NEW_SCOPE_OR_EVIDENCE
+
+EXPLICIT ACCEPTANCE MEANING
+- ACCEPT_FOR_EXPERIMENT = eligibility for later governed experimentation consideration only.
+- ACCEPT_FOR_GOVERNED_ACTION_PREPARATION = eligibility for later planning/preparation/review continuation only.
+- acceptance_is_not_runtime_activation=true
+- acceptance_is_not_plan_overwrite=true
+- acceptance_is_not_threshold_mutation=true
+- acceptance_is_not_strategy_change=true
+- acceptance_is_not_governor_change=true
+- acceptance_is_not_execution_change=true
+- acceptance_is_not_auto_apply=true
+
+DEFER REJECT ESCALATION AND CLOSURE DISCIPLINE
+- defer_if=timing_priority_or_context_is_not_yet_right_but_boundedness_is_sound
+- reject_if=mutation_path_is_hidden,evidence_is_too_weak,traceability_is_missing,boundedness_is_missing,risk_framing_is_unacceptable
+- require_more_evidence_if=proposal_is_plausible_but_support_is_not_sufficient_for_scope_or_risk
+- escalate_if=risk_or_governance_scope_exceeds_current_reviewer_or_cross_scope_conflict_exists
+- close_if=proposal_is_rejected,archived_after_handoff,explicitly_no_actioned,or_superseded
+- endless_defer_loops_forbidden=true
+
+TRACEABILITY EXPECTATIONS
+- learning_decision_record_id
+- learning_proposal_id
+- proposal_family_name
+- proposal_risk_class
+- reviewer_role
+- review_state
+- decision_outcome
+- decision_reason
+- escalated_to
+- linked_evidence_bundle_ids
+- linked_repository_records
+- handoff_target_if_any
+- closure_note
+- decision_timestamp
+
+AI ROLE BOUNDARY
+- AI may help clarify proposal rationale for reviewers.
+- AI may summarize evidence and limitations.
+- AI may not issue decision outcomes.
+- AI may not self-approve or self-escalate into approval.
+- AI may not convert an accepted outcome into runtime change.

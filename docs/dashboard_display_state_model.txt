@@ -1,0 +1,198 @@
+dashboard_display_state_model
+document_version=MT5_DASHBOARD_PHASE0_DISPLAY_STATE_MODEL_V1
+document_role=FORMAL_DASHBOARD_DISPLAY_STATE_MODEL
+authority_class=NON_RUNTIME_VIEW_STATE_CONTRACT
+scope=DISPLAY_ONLY
+
+STATE CLASS: AUTHORITATIVE
+state_id=FROZEN
+default_severity=CRITICAL
+default_badge=AUTHORITY_BADGE:AUTHORITATIVE
+meaning=Runtime execution privilege remains frozen by governance.
+rendering_rule=Eligible for dominant posture banner.
+non_implication=Does not imply data loss or runtime deletion.
+
+state_id=TRADING_BLOCKED
+default_severity=CRITICAL
+default_badge=AUTHORITY_BADGE:AUTHORITATIVE
+meaning=Trading is not allowed in the current runtime posture.
+rendering_rule=Eligible for dominant posture banner.
+non_implication=Does not imply market context absence.
+
+state_id=GOVERNANCE_HELD
+default_severity=WARNING
+default_badge=AUTHORITY_BADGE:AUTHORITATIVE
+meaning=Governance hold or policy lock is active.
+rendering_rule=Primary card or banner state.
+non_implication=Does not imply execution resume path.
+
+state_id=PILOT_DEFINED_NOT_LIVE
+default_severity=NOTICE
+default_badge=AUTHORITY_BADGE:AUTHORITATIVE
+meaning=Pilot structure or evidence design exists, but no live pilot is active.
+rendering_rule=Primary pilot-page state.
+non_implication=Does not imply pilot execution privilege.
+
+state_id=EXPORT_BLOCKED
+default_severity=CRITICAL
+default_badge=AUTHORITY_BADGE:AUTHORITATIVE
+meaning=Export or external delivery remains blocked.
+rendering_rule=Dominant export-page state and top-level posture candidate.
+non_implication=Does not imply internal visibility failure.
+
+state_id=STARTUP_OK
+default_severity=INFO
+default_badge=AUTHORITY_BADGE:AUTHORITATIVE
+meaning=Required startup posture completed for the bounded surface.
+rendering_rule=Positive bounded status only.
+non_implication=Does not imply trading permission.
+
+state_id=STARTUP_BLOCKED
+default_severity=CRITICAL
+default_badge=AUTHORITY_BADGE:AUTHORITATIVE
+meaning=Startup completion is blocked or incomplete at authoritative source level.
+rendering_rule=Primary startup-page state.
+non_implication=Does not imply file corruption.
+
+state_id=FACTORY_READY
+default_severity=NOTICE
+default_badge=AUTHORITY_BADGE:AUTHORITATIVE
+meaning=Factory structure is ready at its bounded architectural layer.
+rendering_rule=Positive bounded status only.
+required_copy=Factory Ready Structurally
+non_implication=Does not imply runtime authority, canon promotion, or experiment approval.
+
+state_id=FACTORY_PARTIAL
+default_severity=CAUTION
+default_badge=AUTHORITY_BADGE:AUTHORITATIVE
+meaning=Factory structure exists but remains partial or incomplete for the displayed aspect.
+rendering_rule=Primary factory-page state if no stronger blocking state dominates.
+non_implication=Does not imply failure of all factory branches.
+
+state_id=AI_OFF
+default_severity=WARNING
+default_badge=AUTHORITY_BADGE:AUTHORITATIVE
+meaning=AI authority is currently off at current authoritative readiness status.
+rendering_rule=Primary AI authority state when present.
+non_implication=Does not imply AI contract definitions do not exist.
+
+state_id=AI_SHADOW_ONLY
+default_severity=NOTICE
+default_badge=AUTHORITY_BADGE:AUTHORITATIVE
+meaning=AI may only observe or shadow, without runtime mutation or control rights.
+rendering_rule=Bounded AI posture only.
+non_implication=Does not imply enabled execution.
+
+state_id=AI_ADVISORY_ONLY
+default_severity=NOTICE
+default_badge=AUTHORITY_BADGE:AUTHORITATIVE
+meaning=AI may provide bounded advisory output only, without mutation or execution authority.
+rendering_rule=Bounded AI posture only.
+non_implication=Does not imply readiness, control, or auto-apply.
+
+STATE CLASS: DERIVED
+state_id=NOT_READY
+default_severity=WARNING
+default_badge=STATE_CLASS_BADGE:DERIVED
+meaning=Required conditions for the displayed surface are not sufficiently satisfied.
+rendering_rule=Derived readiness summary only.
+non_implication=Does not replace authoritative blocking reason.
+
+state_id=STARTUP_PARTIAL
+default_severity=CAUTION
+default_badge=STATE_CLASS_BADGE:DERIVED
+meaning=Startup signals are partially populated but incomplete.
+rendering_rule=Secondary startup note unless no authoritative startup state is available.
+non_implication=Does not imply startup success.
+
+state_id=READINESS_PARTIAL
+default_severity=CAUTION
+default_badge=STATE_CLASS_BADGE:DERIVED
+meaning=Some readiness subconditions exist while others remain incomplete.
+rendering_rule=AI/factory secondary note.
+non_implication=Does not imply permission.
+
+state_id=SOURCE_PARTIAL
+default_severity=CAUTION
+default_badge=SOURCE_BADGE:PARTIAL
+meaning=One or more required dashboard sources are missing, partial, or fallback-only.
+rendering_rule=Page or widget warning overlay.
+non_implication=Does not imply source absence everywhere.
+
+state_id=REVIEW_PENDING
+default_severity=NOTICE
+default_badge=STATE_CLASS_BADGE:DERIVED
+meaning=Review or validation completion is still pending.
+rendering_rule=Secondary note/badge.
+non_implication=Does not imply rejection.
+
+state_id=EVIDENCE_ONLY
+default_severity=NOTICE
+default_badge=STATE_CLASS_BADGE:DERIVED
+meaning=The visible surface is bounded to evidence/review use only.
+rendering_rule=Secondary pilot/advisory badge.
+non_implication=Does not imply execution path.
+
+state_id=STALE_STATE
+default_severity=WARNING
+default_badge=FRESHNESS_BADGE:STALE
+meaning=Displayed source age exceeds allowed freshness expectation or cannot be verified safely.
+rendering_rule=Page or widget warning; never green.
+non_implication=Does not imply source invalidity, only freshness concern.
+
+state_id=MIXED_PLANE_SUMMARY_ONLY
+default_severity=NOTICE
+default_badge=SUMMARY_PLACEHOLDER_BADGE:SUMMARY_ONLY
+meaning=The visible surface summarizes mixed authoritative/derived/transitional truth and is not primary truth.
+rendering_rule=Summary-only banner/note.
+non_implication=Does not imply dashboard authority.
+
+state_id=ARCHITECTURE_DEFINED_NOT_OPERATIONALLY_ACTIVE
+default_severity=INFO
+default_badge=STATE_CLASS_BADGE:DERIVED
+meaning=Architecture and contracts are defined, but the operational/rendering layer is not active.
+rendering_rule=Phase 0 and reserved-feature marker.
+non_implication=Does not imply runtime availability.
+
+STATE CLASS: PLACEHOLDER_OR_TRANSITIONAL
+state_id=PLACEHOLDER_STATE
+default_severity=NOTICE
+default_badge=SUMMARY_PLACEHOLDER_BADGE:PLACEHOLDER
+meaning=The visible item exists only as a placeholder or reserved structure.
+rendering_rule=Muted placeholder panel/text only.
+non_implication=Does not imply live data.
+
+state_id=PENDING_RUNTIME_INIT
+default_severity=NOTICE
+default_badge=SUMMARY_PLACEHOLDER_BADGE:TRANSITIONAL
+meaning=Runtime-origin visibility awaits a future runtime initialization.
+rendering_rule=Startup/transitional note.
+non_implication=Does not imply failure or approval.
+
+state_id=SUMMARY_ONLY_NOT_PRIMARY_TRUTH
+default_severity=NOTICE
+default_badge=SUMMARY_PLACEHOLDER_BADGE:SUMMARY_ONLY
+meaning=Visible summary is not the primary authoritative truth surface.
+rendering_rule=Note/badge only.
+non_implication=Does not imply inaccuracy; only bounded authority.
+
+state_id=TRANSITIONAL_ARTIFACT
+default_severity=NOTICE
+default_badge=SUMMARY_PLACEHOLDER_BADGE:TRANSITIONAL
+meaning=Artifact exists for continuity during architecture transition.
+rendering_rule=Secondary note/badge.
+non_implication=Does not imply final steady-state design.
+
+state_id=ZERO_RECORD_STATE
+default_severity=CAUTION
+default_badge=SUMMARY_PLACEHOLDER_BADGE:ZERO_RECORD
+meaning=Artifact exists and parses, but record count is zero and semantically inconclusive.
+rendering_rule=Zero-record warning; never healthy by default.
+non_implication=Does not imply success or failure of future intake.
+
+state_id=STATUS_EMITTED_NOT_RUNTIME_CONFIRMED
+default_severity=NOTICE
+default_badge=SUMMARY_PLACEHOLDER_BADGE:EMITTED_ONLY
+meaning=A status artifact is emitted but runtime confirmation is not established.
+rendering_rule=Transitional note/badge.
+non_implication=Does not imply runtime execution truth.

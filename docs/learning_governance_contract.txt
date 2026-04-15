@@ -1,0 +1,106 @@
+AI LEARNING GOVERNANCE CONTRACT
+document_role=AUTHORITATIVE_LEARNING_GOVERNANCE_CONTRACT
+document_version=L1_LEARNING_GOVERNANCE_CONTRACT_V1
+authority_scope=LEARNING_GOVERNANCE_DEFINITION_ONLY
+linked_authority_gate=H6_AI_ACTIVATION_READINESS_GATE
+linked_task_registry=docs/ai_task_registry.txt
+linked_output_contract=docs/ai_output_contract.txt
+linked_repository_design=docs/ai_intelligence_repository_design.txt
+linked_human_review_workflow=docs/ai_human_review_workflow.txt
+linked_effectiveness_review_framework=docs/ai_effectiveness_review_framework.txt
+linked_scope_boundaries=docs/learning_scope_boundaries.txt
+linked_prohibited_mutation_paths=docs/learning_prohibited_mutation_paths.txt
+trust_rule=defines_learning_as_a_review_governed_evidence_loop_not_an_autonomous_runtime_mutation_system
+policy_note=This phase formalizes what learning means in this project and what it is forbidden to do. It does not implement auto-learning, runtime mutation, experiments, or control authority.
+non_goal=no_runtime_learning_engine
+non_goal=no_automatic_experiment_execution
+non_goal=no_live_parameter_mutation
+non_goal=no_runtime_plan_overwrite
+non_goal=no_authority_expansion
+non_goal=no_control_surface_creation
+
+FORMAL DEFINITION OF LEARNING
+- Learning in this project is evidence-informed, review-governed, bounded, non-autonomous, and non-live-mutative by default.
+- Learning means improving institutional understanding, review quality, experiment selection, and governed change planning through evidence and analysis.
+- Learning is valid only when it remains traceable, reviewable, and bounded by the existing H6, A1-A8 authority, input, output, repository, review, and effectiveness constraints.
+- Learning exists as a governance loop, not as a self-authorized optimization loop.
+
+WHAT LEARNING IS NOT
+- Learning is not direct runtime strategy mutation.
+- Learning is not direct threshold mutation.
+- Learning is not direct governor mutation.
+- Learning is not direct failure detector mutation.
+- Learning is not direct execution mutation.
+- Learning is not direct live weight mutation.
+- Learning is not autonomous AI optimization.
+- Learning is not self-authorized plan mutation.
+- Learning is not automatic block-mode enablement.
+- Learning is not any path that converts AI analysis directly into live trading behavior.
+
+LEARNING GOVERNANCE LOOP
+stage_1=EVIDENCE_COLLECTION
+stage_1_purpose=Collect review-governed evidence, diagnostics, replay findings, validation findings, repository history, and bounded output history relevant to learning questions.
+
+stage_2=ANALYSIS
+stage_2_purpose=Analyze patterns, failure clusters, root-cause hypotheses, drift structure, advisory usefulness, proposal quality, and review burden without mutating runtime.
+
+stage_3=PROPOSAL_FORMATION
+stage_3_purpose=Convert bounded evidence and analysis into learning evidence bundles, experiment candidates, or reviewable proposals with explicit scope and non-authoritative status.
+
+stage_4=REVIEW
+stage_4_purpose=Send learning-relevant artifacts through the established A7 human review workflow and the bounded proposal/evidence review paths.
+
+stage_5=CONTROLLED_CHANGE_PLANNING
+stage_5_purpose=Prepare governed next steps for possible experiment design, bounded implementation planning, or further evidence requests. This stage does not activate runtime change by itself.
+
+stage_6=VALIDATION
+stage_6_purpose=Use replay, validation, review findings, and impact checks to determine whether a proposed learning-derived idea has sufficient support for future controlled handling.
+
+stage_7=IMPACT_AUDIT
+stage_7_purpose=Review whether learning outputs improved understanding, reduced guesswork, supported better proposals, or created noise or burden, using the A8 effectiveness review discipline.
+
+ALLOWED LEARNING INPUTS
+- review_governed_evidence
+- diagnostics
+- replay_outputs
+- validation_outputs
+- drift_outputs
+- anomaly_outputs
+- root_cause_outputs
+- reviewable_proposals
+- advisory_effectiveness_review_outputs
+- repository_history
+- review_history
+- impact_audit_findings
+
+ALLOWED LEARNING OUTPUTS
+- evidence_bundles
+- bounded_proposals
+- experiment_candidates
+- review_governed_recommendations
+- impact_findings
+
+OUTPUT LIMITATION RULE
+- Learning outputs remain derived, bounded, reviewable, and non-authoritative.
+- Learning outputs may inform later governed review and controlled planning only.
+- Learning outputs may not directly mutate runtime, overwrite truth sources, or elevate AI authority.
+
+AI ROLE IN LEARNING
+ai_allowed_roles=evidence_generator|pattern_analyst|root_cause_analyst|bounded_proposal_generator|learning_support_analyst
+ai_prohibited_roles=direct_learning_mutator|direct_runtime_optimizer|self_authorizing_learning_controller|live_change_executor|plan_truth_overwriter
+ai_role_note=AI may support learning by surfacing patterns, evidence, and bounded proposals, but AI never becomes the mutative authority for learning outcomes.
+
+LEARNING AUTHORITY CONTRACT
+- Learning authority remains human-governed.
+- The authoritative active plan remains ai_current_plan.json and is not overwritten by learning artifacts.
+- Learning evidence may influence review, prioritization, and future experiment consideration, but not direct live mutation.
+- No learning artifact grants direct control over strategy, execution, governor, failure detector, risk formulas, or live advisory authority.
+
+RELATIONSHIP TO LATER PHASES
+- L1 provides the contract that later learning phases must obey.
+- Later learning phases may refine evidence structure, experiment governance, and audit discipline only within this contract.
+- L1 does not authorize runtime mutation, direct control, or automatic enablement of any reserved advisory mode.
+
+ACCEPTANCE DISCIPLINE
+- A learning outcome is considered acceptable only when it remains bounded, reviewable, traceable, and non-autonomous.
+- Any future learning feature that conflicts with this contract must be considered out of bounds unless explicitly re-governed in a later approved phase.

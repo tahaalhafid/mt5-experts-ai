@@ -1,0 +1,68 @@
+EDGE DECOMPOSITION STATUS MODEL
+Authority: Decomposition state model for Institutional Edge Factory normalization.
+Truth posture: Status model only. No runtime behavior change.
+
+============================================================
+APPROVED DECOMPOSITION STATES
+============================================================
+
+DECOMPOSITION_NOT_STARTED
+- Material is registered but not yet processed into normalized edge language.
+
+DECOMPOSITION_IN_PROGRESS
+- Decomposition work has begun but normalized output is not yet ready.
+
+DECOMPOSITION_PARTIAL
+- Material has been decomposed into a useful bounded placeholder structure.
+- Important details remain incomplete.
+- Suitable for later review but not for strong claims.
+
+DECOMPOSITION_NORMALIZED
+- Material has a conservative normalized structure with enough role clarity for later codifiability audit intake.
+- This still does NOT imply approval, canon candidacy, or runtime value.
+
+DECOMPOSITION_AMBIGUOUS
+- Material contains meaningful content but cannot be normalized cleanly without dishonest precision.
+- Ambiguity must remain visible.
+
+DECOMPOSITION_RESEARCH_ONLY
+- Material is retained for lineage/research/reference only.
+- Not suitable for direct codifiability path under current evidence.
+
+DECOMPOSITION_BLOCKED_PENDING_BETTER_SOURCE
+- Material cannot be decomposed responsibly without a better or clearer source.
+
+DECOMPOSITION_READY_FOR_CODIFIABILITY_AUDIT
+- Reserved readiness state for later use after normalization quality has been reviewed more explicitly.
+- E1 may prepare for this state conceptually but does not grant codifiability approval.
+
+============================================================
+AMBIGUITY HANDLING DISCIPLINE
+============================================================
+A material should remain PARTIAL / AMBIGUOUS / RESEARCH_ONLY / BLOCKED when any of the following apply:
+- excessive discretion
+- unclear trigger
+- unclear invalidation
+- contradictory logic
+- vague "works well" claims
+- overlapping archetypes without clear boundaries
+- lineage weakness
+- source precision too weak for honest structure
+
+Rules:
+1) ambiguity must be surfaced, not hidden
+2) better-source dependency must be stated explicitly
+3) narrative sophistication must not upgrade ambiguity into false clarity
+4) a decomposed record may remain useful even when partial
+5) research-only status is acceptable when honest normalization is not possible
+
+============================================================
+CURRENT E1 CONSERVATIVE SEEDING RULE
+============================================================
+At E1 the currently imported materials may appear in normalized_materials.json as conservative placeholder-normalized records.
+
+This means:
+- preserve what is known from intake
+- derive only bounded provisional zone/regime hints where justified
+- mark unknowns clearly
+- do not fabricate exact logic absent from the source record

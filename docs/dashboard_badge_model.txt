@@ -1,0 +1,37 @@
+dashboard_badge_model
+document_version=MT5_DASHBOARD_PHASE0_BADGE_MODEL_V1
+document_role=FORMAL_DASHBOARD_BADGE_MODEL
+authority_class=NON_RUNTIME_UI_METADATA_CONTRACT
+scope=BADGE_SEMANTICS_ONLY
+
+MANDATORY BADGE: Authority Badge
+allowed_values=AUTHORITATIVE,DERIVED,PLACEHOLDER,TRANSITIONAL,LOCAL_ONLY
+rule=Every primary widget must show one Authority Badge.
+
+MANDATORY BADGE: Source Badge
+allowed_values=TIER_A_CURATED,TIER_B_STRUCTURAL,TIER_C_CONTEXTUAL,FALLBACK_TEXT_ONLY,PARTIAL,RAW_BLOCKED
+rule=Every primary widget must show one Source Badge describing source class or fallback posture.
+
+MANDATORY BADGE: Freshness Badge
+allowed_values=FRESH,STALE,NO_TIMESTAMP,BOOT_ONLY,ON_DEMAND,PAGE_ENTRY_ONLY
+rule=Every primary widget must show one Freshness Badge or an explicit freshness exception label.
+
+OPTIONAL BADGE: State Class Badge
+allowed_values=AUTHORITATIVE_STATE,DERIVED_STATE,PLACEHOLDER_STATE
+rule=Use when a widget needs to clarify whether the displayed dominant state is authoritative, derived, or transitional.
+
+OPTIONAL BADGE: Summary / Placeholder Badge
+allowed_values=SUMMARY_ONLY,ZERO_RECORD,TRANSITIONAL,EMITTED_ONLY
+rule=Use when the widget summarizes mixed-plane, zero-record, placeholder, or emitted-not-confirmed truth.
+
+BADGE PRIORITY RULE
+If space is limited, keep badges in this order:
+1. Authority Badge
+2. Source Badge
+3. Freshness Badge
+4. State Class Badge
+5. Summary / Placeholder Badge
+
+BADGE COLOR/STYLE RULE
+Visual style may support comprehension later, but badge text must carry the semantic burden even without color.
+Badges must not imply approval, permission, or execution readiness.

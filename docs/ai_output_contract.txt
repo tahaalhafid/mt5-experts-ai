@@ -1,0 +1,171 @@
+AI OUTPUT CONTRACT
+document_role=AUTHORITATIVE_AI_OUTPUT_CONTRACT
+document_version=A3_AI_OUTPUT_CONTRACT_V1
+authority_scope=AI_OUTPUT_GOVERNANCE_ONLY
+trust_rule=defines_allowed_ai_output_classes_and_schema_contracts_only
+baseline_dependency=H6+A1+A2
+non_goal=no_runtime_generation_engine
+non_goal=no_direct_control
+non_goal=no_auto_apply
+non_goal=no_runtime_truth_authority
+non_goal=no_plan_truth_authority
+
+GLOBAL OUTPUT RULES
+- All AI outputs in this project are derived, bounded, reviewable artifacts.
+- No AI output may claim runtime-truth authority.
+- No AI output may claim plan-truth authority.
+- No AI output may contain direct BUY/SELL commands.
+- No AI output may contain direct execution instructions.
+- No AI output may contain direct plan-mutation commands.
+- No AI output may contain direct threshold/governor mutation commands for auto-apply.
+- No AI output may contain hidden veto language outside the allowed council advisory packet schema.
+- Proposal-like outputs are reviewable only and never directly applicable from output contract alone.
+
+NORMALIZED REUSABLE SCHEMA PRIMITIVES
+required_common_fields=
+report_id,
+report_type,
+task_family,
+authority_state,
+generated_at,
+target_scope,
+severity,
+confidence,
+evidence_strength,
+key_findings,
+rationale,
+limitations,
+review_required,
+non_authoritative_notice
+
+optional_common_fields=
+target_symbol,
+target_time_window,
+evidence_scope,
+structured_anomalies,
+hypotheses,
+recommendations,
+suggested_next_action,
+operator_visibility,
+admin_visibility,
+learning_governance_relevance,
+advisory_state,
+advisory_reason_codes,
+advisory_constraints,
+proposal_reference_id
+
+NORMALIZED SCALES
+confidence_scale=LOW|MEDIUM|HIGH
+severity_scale=LIGHT|STANDARD|HIGH|CRITICAL
+evidence_strength_scale=WEAK|MODERATE|STRONG
+evidence_sufficiency_rule=must_be_stated_when_confidence_is_LOW_or_evidence_strength_is_WEAK
+limitations_rule=must_be_present_when_scope_is_partial_or_retrieval_is_bounded
+
+OUTPUT CLASS DEFINITIONS
+
+output_class_name=DIAGNOSTIC_FINDINGS
+output_purpose=bounded diagnostic explanation and evidence-backed findings
+allowed_authority_states=AI_SHADOW_ONLY|AI_ADVISORY_ONLY
+default_visibility_tier=INTERNAL_SHADOW_ONLY
+required_schema_fields=report_id,report_type,task_family,authority_state,generated_at,target_scope,severity,confidence,evidence_strength,key_findings,rationale,limitations,review_required,non_authoritative_notice
+optional_schema_fields=target_symbol,target_time_window,evidence_scope,structured_anomalies,suggested_next_action,operator_visibility
+forbidden_content=direct_trading_commands,direct_execution_orders,direct_plan_mutation,direct_threshold_mutation,claims_of_truth_authority
+expected_consumer=internal_review|operator_if_explicitly_elevated
+
+output_class_name=STRUCTURED_ANOMALIES
+output_purpose=compact anomaly listing with typed evidence and bounded scope
+allowed_authority_states=AI_SHADOW_ONLY|AI_ADVISORY_ONLY
+default_visibility_tier=INTERNAL_SHADOW_ONLY
+required_schema_fields=report_id,report_type,task_family,generated_at,target_scope,severity,confidence,evidence_strength,structured_anomalies,limitations,review_required,non_authoritative_notice
+optional_schema_fields=evidence_scope,key_findings,recommendations,operator_visibility
+forbidden_content=directional_commands,direct_control_language,truth_authority_claims
+expected_consumer=internal_review|operator_incident_review
+
+output_class_name=HYPOTHESES
+output_purpose=hypothesis-oriented explanation where causality is not yet proven
+allowed_authority_states=AI_SHADOW_ONLY|AI_ADVISORY_ONLY
+default_visibility_tier=INTERNAL_SHADOW_ONLY
+required_schema_fields=report_id,report_type,task_family,generated_at,target_scope,severity,confidence,evidence_strength,hypotheses,rationale,limitations,review_required,non_authoritative_notice
+optional_schema_fields=evidence_scope,key_findings,suggested_next_action
+forbidden_content=certainty_claims_without_evidence,direct_control_instructions,truth_authority_claims
+expected_consumer=internal_review|review_board
+
+output_class_name=RECOMMENDATIONS
+output_purpose=bounded recommendations for review without direct application
+allowed_authority_states=AI_ADVISORY_ONLY
+default_visibility_tier=OPERATOR_VISIBLE
+required_schema_fields=report_id,report_type,task_family,authority_state,generated_at,target_scope,severity,confidence,evidence_strength,recommendations,rationale,limitations,review_required,suggested_next_action,non_authoritative_notice
+optional_schema_fields=evidence_scope,key_findings,structured_anomalies
+forbidden_content=auto_apply_language,direct_runtime_mutation,direct_execution_commands
+expected_consumer=operator|admin|review_board
+
+output_class_name=REVIEWABLE_PROPOSALS
+output_purpose=bounded proposal artifacts requiring explicit human review
+allowed_authority_states=AI_ADVISORY_ONLY
+default_visibility_tier=REVIEW_BOARD_VISIBLE
+required_schema_fields=proposal_id,report_type,task_family,authority_state,generated_at,proposal_scope,proposal_type,evidence_basis,rationale,expected_benefit,expected_risk,required_review_level,direct_apply_allowed,auto_apply_allowed,bounded_change_note,validation_plan,rollback_note,review_required,non_authoritative_notice
+optional_schema_fields=target_scope,target_symbol,target_time_window,proposal_reference_id,limitations
+forbidden_content=apply_now_commands,direct_plan_mutation_instructions,direct_threshold_mutation_commands,truth_authority_claims
+expected_consumer=review_board|admin
+contract_rule=direct_apply_allowed=false
+contract_rule=auto_apply_allowed=false
+
+output_class_name=PERIODIC_REPORTS
+output_purpose=scheduled intelligence summaries for recurring review windows
+allowed_authority_states=AI_SHADOW_ONLY|AI_ADVISORY_ONLY
+default_visibility_tier=OPERATOR_VISIBLE
+required_schema_fields=report_id,report_type,task_family,authority_state,generated_at,target_scope,severity,confidence,evidence_strength,key_findings,rationale,limitations,review_required,non_authoritative_notice
+optional_schema_fields=structured_anomalies,hypotheses,recommendations,suggested_next_action,learning_governance_relevance
+forbidden_content=direct_control_instructions,direct_execution_commands,truth_authority_claims
+expected_consumer=operator|admin|committee
+
+output_class_name=OPERATOR_ANSWERS
+output_purpose=concise operator-facing answers bounded to the request context
+allowed_authority_states=AI_SHADOW_ONLY|AI_ADVISORY_ONLY
+default_visibility_tier=OPERATOR_VISIBLE
+required_schema_fields=report_id,report_type,task_family,authority_state,generated_at,target_scope,confidence,evidence_strength,key_findings,rationale,limitations,review_required,non_authoritative_notice
+optional_schema_fields=structured_anomalies,recommendations,suggested_next_action
+forbidden_content=direct_execution_orders,hidden_control_language,truth_authority_claims
+expected_consumer=operator
+
+output_class_name=LEARNING_GOVERNANCE_EVIDENCE
+output_purpose=evidence bundles that inform learning governance without live mutation
+allowed_authority_states=AI_SHADOW_ONLY|AI_ADVISORY_ONLY
+default_visibility_tier=REVIEW_BOARD_VISIBLE
+required_schema_fields=evidence_bundle_id,report_type,task_family,authority_state,generated_at,evidence_scope,observed_pattern,drift_summary,root_cause_summary,confidence,evidence_strength,affected_zone_or_family,bounded_change_candidate,review_required,direct_learning_mutation_allowed,limitations,non_authoritative_notice
+optional_schema_fields=proposal_reference_if_any,key_findings,recommendations,learning_governance_relevance
+forbidden_content=live_weight_mutation,auto_optimization_commands,direct_learning_mutation
+expected_consumer=review_board|committee
+contract_rule=direct_learning_mutation_allowed=false
+
+output_class_name=COUNCIL_CONTEXTUAL_ADVISORY
+output_purpose=post-candidate contextual advisory packet only
+allowed_authority_states=AI_SHADOW_ONLY|AI_ADVISORY_ONLY
+default_visibility_tier=OPERATOR_VISIBLE
+required_schema_fields=advisory_packet_id,report_type,task_family,authority_state,generated_at,candidate_scope,candidate_decision_id,advisory_state,advisory_confidence,evidence_strength,advisory_reason_codes,rationale_short,evidence_limitations,direct_control_allowed,directional_generation_allowed,reserved_future_state_note,non_authoritative_notice
+optional_schema_fields=relevant_zone,relevant_strategy_family,anomaly_context,drift_context,advisory_constraints
+forbidden_content=BUY_SELL_generation,direction_replacement,direct_block_allow_control,parameter_mutation,truth_authority_claims
+expected_consumer=operator|admin
+contract_rule=direct_control_allowed=false
+contract_rule=directional_generation_allowed=false
+allowed_advisory_states=NO_ADVISORY|ADVISORY_OK|ADVISORY_CAUTION|ADVISORY_STRONG_CAUTION|ADVISORY_INSUFFICIENT_EVIDENCE|BLOCK_CANDIDATE_ELIGIBLE
+reserved_future_state_note=BLOCK_CANDIDATE_ELIGIBLE_is_reserved_only_and_not_actionable_in_A3
+
+PROHIBITED OUTPUT CONTENT
+- direct BUY/SELL commands
+- direct execution orders
+- direct plan mutation commands
+- direct threshold mutation instructions for auto-apply
+- governor override commands
+- hidden veto language outside allowed council advisory packet schema
+- claims of runtime truth authority
+- claims of plan truth authority
+- implied auto-apply language
+- hidden direct-control wording
+
+OUTPUT BOUNDARY RULES
+- SHADOW outputs may be generated only as derived/internal/review artifacts.
+- ADVISORY outputs may be visible to operator/admin/review flows but remain non-authoritative.
+- Proposal outputs are reviewable only.
+- Council advisory outputs are non-directional only.
+- Learning governance outputs are evidence/proposal only.

@@ -1,0 +1,157 @@
+LEARNING_IMPACT_METRICS_CATALOG
+document_version=L7_LEARNING_IMPACT_METRICS_CATALOG_V1
+document_role=FORMAL_GOVERNED_LEARNING_IMPACT_METRICS_CATALOG
+authority_class=NON_AUTHORITATIVE_GOVERNANCE_POLICY
+scope=LEARNING_IMPACT_AUDIT_METRICS_ONLY
+runtime_metric_engine_built=false
+
+METRIC_STATUS_RULE
+If reliable runtime measurement is not yet available, metric_status must be:
+- PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+or
+- QUALITATIVE_REVIEW_REQUIRED
+
+CATEGORY_A_PROPOSAL_USEFULNESS_METRICS
+- learning_proposals_total
+  metric_category=PROPOSAL_USEFULNESS
+  metric_purpose=track governed learning proposal volume
+  metric_type=QUANTITATIVE_COUNT
+  metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+- promotion_candidates_total
+  metric_category=PROPOSAL_USEFULNESS
+  metric_purpose=track proposals reaching promotion-candidate readiness review
+  metric_type=QUANTITATIVE_COUNT
+  metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+- promotion_rejected_total
+  metric_category=PROPOSAL_USEFULNESS
+  metric_purpose=track proposals failing promotion readiness
+  metric_type=QUANTITATIVE_COUNT
+  metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+- promotion_requires_more_evidence_total
+  metric_category=PROPOSAL_USEFULNESS
+  metric_purpose=track proposals needing more support before readiness
+  metric_type=QUANTITATIVE_COUNT
+  metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+- promotion_requires_stronger_signoff_total
+  metric_category=PROPOSAL_USEFULNESS
+  metric_purpose=track governance-sensitive proposals needing stronger signoff
+  metric_type=QUANTITATIVE_COUNT
+  metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+- proposal_usefulness_note
+  metric_category=PROPOSAL_USEFULNESS
+  metric_purpose=qualitatively judge whether proposals were valuable or noisy
+  metric_type=QUALITATIVE_NOTE
+  metric_status=QUALITATIVE_REVIEW_REQUIRED
+- proposal_noise_note
+  metric_category=PROPOSAL_USEFULNESS
+  metric_purpose=record proposal inflation or low-value repetition concerns
+  metric_type=QUALITATIVE_NOTE
+  metric_status=QUALITATIVE_REVIEW_REQUIRED
+
+CATEGORY_B_EXPERIMENT_DESIGN_USEFULNESS_METRICS
+- experiment_designs_total
+  metric_category=EXPERIMENT_USEFULNESS
+  metric_purpose=track governed experiment-design volume
+  metric_type=QUANTITATIVE_COUNT
+  metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+- experiment_designs_rejected_total
+  metric_category=EXPERIMENT_USEFULNESS
+  metric_purpose=track experiment designs rejected on boundedness, validation, or governance grounds
+  metric_type=QUANTITATIVE_COUNT
+  metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+- experiment_designs_accepted_for_later_consideration_total
+  metric_category=EXPERIMENT_USEFULNESS
+  metric_purpose=track designs considered viable for later governance stages
+  metric_type=QUANTITATIVE_COUNT
+  metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+- experiment_boundedness_quality_note
+  metric_category=EXPERIMENT_USEFULNESS
+  metric_purpose=qualitatively assess experiment boundedness discipline
+  metric_type=QUALITATIVE_NOTE
+  metric_status=QUALITATIVE_REVIEW_REQUIRED
+- experiment_validation_readiness_note
+  metric_category=EXPERIMENT_USEFULNESS
+  metric_purpose=assess validation clarity and sufficiency at design level
+  metric_type=QUALITATIVE_NOTE
+  metric_status=QUALITATIVE_REVIEW_REQUIRED
+- experiment_rollback_readiness_note
+  metric_category=EXPERIMENT_USEFULNESS
+  metric_purpose=assess rollback readiness strength and credibility
+  metric_type=QUALITATIVE_NOTE
+  metric_status=QUALITATIVE_REVIEW_REQUIRED
+
+CATEGORY_C_REVIEW_BURDEN_AND_GOVERNANCE_METRICS
+- learning_review_items_total
+  metric_category=REVIEW_BURDEN
+  metric_purpose=track learning-related review workload
+  metric_type=QUANTITATIVE_COUNT
+  metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+- learning_escalations_total
+  metric_category=REVIEW_BURDEN
+  metric_purpose=track escalation pressure from learning artifacts
+  metric_type=QUANTITATIVE_COUNT
+  metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+- learning_closed_no_action_total
+  metric_category=REVIEW_BURDEN
+  metric_purpose=track closed-no-action outcomes that may indicate weak value or disciplined filtering
+  metric_type=QUANTITATIVE_COUNT
+  metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+- governance_burden_note
+  metric_category=REVIEW_BURDEN
+  metric_purpose=qualitatively assess governance overhead caused by learning
+  metric_type=QUALITATIVE_NOTE
+  metric_status=QUALITATIVE_REVIEW_REQUIRED
+- review_fatigue_risk_note
+  metric_category=REVIEW_BURDEN
+  metric_purpose=assess reviewer fatigue risk or governance drag
+  metric_type=QUALITATIVE_NOTE
+  metric_status=QUALITATIVE_REVIEW_REQUIRED
+
+CATEGORY_D_SIDE_EFFECT_AND_ROLLBACK_METRICS
+- rollback_pressure_note
+  metric_category=SIDE_EFFECT_AND_ROLLBACK
+  metric_purpose=record whether learning outputs are increasing future rollback concern
+  metric_type=QUALITATIVE_NOTE
+  metric_status=QUALITATIVE_REVIEW_REQUIRED
+- side_effect_risk_note
+  metric_category=SIDE_EFFECT_AND_ROLLBACK
+  metric_purpose=record unintended-side-effect risk or emergence
+  metric_type=QUALITATIVE_NOTE
+  metric_status=QUALITATIVE_REVIEW_REQUIRED
+- promotion_disqualification_rate_note
+  metric_category=SIDE_EFFECT_AND_ROLLBACK
+  metric_purpose=qualitatively assess disqualification frequency and its meaning
+  metric_type=QUALITATIVE_NOTE
+  metric_status=QUALITATIVE_REVIEW_REQUIRED
+- bounded_scope_violation_detected_total
+  metric_category=SIDE_EFFECT_AND_ROLLBACK
+  metric_purpose=track detected scope-bounding failures
+  metric_type=QUANTITATIVE_COUNT
+  metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+- governance_boundary_breach_detected_total
+  metric_category=SIDE_EFFECT_AND_ROLLBACK
+  metric_purpose=track detected governance-boundary breaches or pressure events
+  metric_type=QUANTITATIVE_COUNT
+  metric_status=PLACEHOLDER_PENDING_RUNTIME_MEASUREMENT
+
+CATEGORY_E_TRUST_AND_TIGHTENING_METRICS
+- learning_trust_signal
+  metric_category=TRUST_AND_TIGHTENING
+  metric_purpose=record conservative trust interpretation for governed learning outputs
+  metric_type=QUALITATIVE_SIGNAL
+  metric_status=QUALITATIVE_REVIEW_REQUIRED
+- learning_scope_tightening_signal
+  metric_category=TRUST_AND_TIGHTENING
+  metric_purpose=record whether stricter evidence or narrower handling is justified
+  metric_type=QUALITATIVE_SIGNAL
+  metric_status=QUALITATIVE_REVIEW_REQUIRED
+- learning_scope_narrowing_signal
+  metric_category=TRUST_AND_TIGHTENING
+  metric_purpose=record whether governed learning scope should narrow further
+  metric_type=QUALITATIVE_SIGNAL
+  metric_status=QUALITATIVE_REVIEW_REQUIRED
+- learning_requires_more_evidence_signal
+  metric_category=TRUST_AND_TIGHTENING
+  metric_purpose=record whether stronger evidence is required before stronger governance confidence
+  metric_type=QUALITATIVE_SIGNAL
+  metric_status=QUALITATIVE_REVIEW_REQUIRED

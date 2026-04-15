@@ -1,0 +1,121 @@
+IMPLEMENTATION STATE MAP
+Authority: Authoritative implementation-state classification for the current accepted baseline.
+Purpose: Compact operational clarity only. Not a release protocol and not a trading-logic spec.
+
+Classification meanings:
+- IMPLEMENTED_RUNTIME_ACTIVE        = present and part of the accepted active runtime behavior/path
+- IMPLEMENTED_RUNTIME_BOUNDED       = present in runtime but bounded, selective, non-authoritative, or default-restricted
+- IMPLEMENTED_GOVERNANCE_DEFINED    = phase/layer is formally defined and accepted as governance/policy, without being claimed here as a full runtime engine
+- IMPLEMENTED_DOCS_AND_VISIBILITY_ONLY = documentation and/or visibility metadata layer is completed, but it is not runtime behavior truth
+- DESIGN_PLACEHOLDER_ONLY           = design intent / placeholder exists, but not a completed runtime/governance implementation here
+- HISTORICAL_ONLY                   = retained only as historical context, not current operational truth
+- NON_AUTHORITATIVE_DERIVED         = derived or placeholder artifact that may be useful operationally but is not authoritative status/control truth
+
+============================================================
+RUNTIME / CONTROL STACK
+============================================================
+core council trading runtime
+- status: IMPLEMENTED_RUNTIME_ACTIVE
+- evidence: main_ea.mq5, decision_mode_router.mqh, council_mode_runtime.mqh, council_aggregator.mqh, council_strategies.mqh
+
+pre-AI filtering / gating path
+- status: IMPLEMENTED_RUNTIME_ACTIVE
+- evidence: council_pre_ai_filter.mqh, council_pre_ai_gate.mqh, council runtime integration
+
+governor / safety / failure-detection path
+- status: IMPLEMENTED_RUNTIME_ACTIVE
+- evidence: council_governor.mqh, council_ai_governor.mqh, council_failure_detector.mqh, risk and hardening integrations
+
+observability / journaling / validation / replay
+- status: IMPLEMENTED_RUNTIME_ACTIVE
+- evidence: S4, H2, H3, H4 related runtime code paths and files
+
+AI activation readiness gate
+- status: IMPLEMENTED_RUNTIME_BOUNDED
+- evidence: H6 runtime authority gate + AI remains bounded/off unless readiness requirements are satisfied
+- note: bounded by AI_OFF / AI_SHADOW_ONLY / AI_ADVISORY_ONLY; no direct control or auto-apply
+
+council advisory runtime integration
+- status: IMPLEMENTED_RUNTIME_BOUNDED
+- evidence: A6 bounded advisory integration
+- note: contextual/non-directional/non-mutative; not a direct trading authority layer
+
+default-off optional runtime tightening/control paths
+- status: IMPLEMENTED_RUNTIME_BOUNDED
+- evidence: council setup lifecycle, execution quality gate, activation pressure gate, dirty environment tightening, live exit architecture
+- note: present but default-off / bounded by current runtime settings
+
+============================================================
+AI / REVIEW / LEARNING GOVERNANCE STACK
+============================================================
+AI input/task/output/cost governance (A1-A4)
+- status: IMPLEMENTED_GOVERNANCE_DEFINED
+- evidence: accepted A1-A4 documents and aligned visibility metadata
+- note: policy-defined; not claimed here as full end-to-end runtime orchestration
+
+AI intelligence repository architecture (A5)
+- status: IMPLEMENTED_DOCS_AND_VISIBILITY_ONLY
+- evidence: repository design docs + ai_repository_manifest.*
+- note: repository manifest remains non-authoritative derived design/status, not runtime truth
+
+AI human review / effectiveness governance (A7-A8)
+- status: IMPLEMENTED_GOVERNANCE_DEFINED
+- evidence: A7/A8 policy documents + aligned visibility metadata
+
+learning governance stack (L1-L7)
+- status: IMPLEMENTED_GOVERNANCE_DEFINED
+- evidence: L1-L7 documents + aligned visibility metadata
+- note: learning governance is policy-complete here, not a claim of autonomous learning runtime
+
+security / secret hygiene layer (S3)
+- status: IMPLEMENTED_DOCS_AND_VISIBILITY_ONLY
+- evidence: S3 policy/inventory/blocker documents + aligned visibility metadata
+- note: defined and blocking external delivery, but not claimed as fully implemented security enforcement tooling
+
+documentation baseline reconciliation (R1)
+- status: IMPLEMENTED_DOCS_AND_VISIBILITY_ONLY
+- evidence: reconciled status/release/baseline documents
+- note: documentation truth alignment only; no runtime effect
+
+============================================================
+AUTHORITATIVE / NON-AUTHORITATIVE ARTIFACT CLASSES
+============================================================
+authoritative active plan truth
+- status: IMPLEMENTED_RUNTIME_ACTIVE
+- evidence: MQL5/Files/AI/ai_current_plan.json
+
+derived evolution mirror
+- status: NON_AUTHORITATIVE_DERIVED
+- evidence: MQL5/Files/AI/ai_evolution_state.json
+
+backup-only prior plan snapshot
+- status: NON_AUTHORITATIVE_DERIVED
+- evidence: MQL5/Files/AI/ai_previous_plan_backup.json
+
+AI activation readiness manifest
+- status: NON_AUTHORITATIVE_DERIVED
+- evidence: MQL5/Files/AI/ai_activation_readiness_status.txt/.json
+- note: visibility/status artifact only, not project-status truth and not active-plan truth
+
+AI repository manifest
+- status: NON_AUTHORITATIVE_DERIVED
+- evidence: MQL5/Files/AI/ai_repository_manifest.txt/.json
+- note: design/visibility artifact only, not runtime truth and not baseline truth
+
+technical reference manifests
+- status: HISTORICAL_ONLY
+- evidence: system_architecture_manifest.txt, zone_family_strategy_map.txt
+- note: reference useful, but non-authoritative for active baseline/status truth
+
+============================================================
+NOT YET STARTED / PLACEHOLDER AREAS
+============================================================
+P-series productization stack
+- status: DESIGN_PLACEHOLDER_ONLY
+- evidence: not yet started in the completed phase stack
+
+customer-facing external delivery path
+- status: DESIGN_PLACEHOLDER_ONLY
+- evidence: blocked by S3 external delivery blockers; not established as current capability
+
+End of implementation state map.

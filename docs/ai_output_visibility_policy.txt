@@ -1,0 +1,146 @@
+AI OUTPUT VISIBILITY POLICY
+document_role=AUTHORITATIVE_AI_OUTPUT_VISIBILITY_POLICY
+document_version=A3_AI_OUTPUT_VISIBILITY_POLICY_V1
+authority_scope=AI_OUTPUT_VISIBILITY_GOVERNANCE_ONLY
+trust_rule=defines_who_may_see_which_output_families_and_under_what_constraints
+baseline_dependency=H6+A1+A2+A3
+
+VISIBILITY TIERS
+- INTERNAL_SHADOW_ONLY
+- OPERATOR_VISIBLE
+- ADMIN_VISIBLE
+- REVIEW_BOARD_VISIBLE
+- COMMITTEE_VISIBLE
+
+TIER DEFINITIONS
+INTERNAL_SHADOW_ONLY=derived_internal_shadow_output_not_for_operational_truth_or_runtime_control
+OPERATOR_VISIBLE=visible_to_runtime_operator_or_operator_review_context
+ADMIN_VISIBLE=visible_to_admin_or_operational_owner_context
+REVIEW_BOARD_VISIBLE=visible_to_formal_review_governance_context
+COMMITTEE_VISIBLE=visible_to_broader_institutional_committee_context
+
+OUTPUT CLASS VISIBILITY
+DIAGNOSTIC_FINDINGS=INTERNAL_SHADOW_ONLY|OPERATOR_VISIBLE_when_explicitly_elevated
+STRUCTURED_ANOMALIES=INTERNAL_SHADOW_ONLY|OPERATOR_VISIBLE_when_incident_relevant
+HYPOTHESES=INTERNAL_SHADOW_ONLY|REVIEW_BOARD_VISIBLE
+RECOMMENDATIONS=OPERATOR_VISIBLE|ADMIN_VISIBLE|REVIEW_BOARD_VISIBLE
+REVIEWABLE_PROPOSALS=REVIEW_BOARD_VISIBLE|ADMIN_VISIBLE
+PERIODIC_REPORTS=OPERATOR_VISIBLE|ADMIN_VISIBLE|COMMITTEE_VISIBLE_as_template_allows
+OPERATOR_ANSWERS=OPERATOR_VISIBLE
+LEARNING_GOVERNANCE_EVIDENCE=REVIEW_BOARD_VISIBLE|COMMITTEE_VISIBLE
+COUNCIL_CONTEXTUAL_ADVISORY=OPERATOR_VISIBLE|ADMIN_VISIBLE
+
+TEMPLATE FAMILY VISIBILITY
+HOURLY_WATCH_REPORT=OPERATOR_VISIBLE
+EVENT_TRIGGERED_INCIDENT_REPORT=OPERATOR_VISIBLE|ADMIN_VISIBLE
+DAILY_OPERATING_INTELLIGENCE_REPORT=OPERATOR_VISIBLE|ADMIN_VISIBLE
+THREE_DAY_INSTITUTIONAL_REVIEW=REVIEW_BOARD_VISIBLE|COMMITTEE_VISIBLE
+EXECUTIVE_ADMIN_BRIEF=ADMIN_VISIBLE|COMMITTEE_VISIBLE
+REVIEWABLE_PROPOSAL_TEMPLATE=REVIEW_BOARD_VISIBLE|ADMIN_VISIBLE
+OPERATOR_COPILOT_RESPONSE_TEMPLATE=OPERATOR_VISIBLE
+COUNCIL_ADVISORY_PACKET_TEMPLATE=OPERATOR_VISIBLE|ADMIN_VISIBLE
+LEARNING_GOVERNANCE_EVIDENCE_TEMPLATE=REVIEW_BOARD_VISIBLE|COMMITTEE_VISIBLE
+
+VISIBILITY CONSTRAINTS
+- SHADOW_ONLY authority does not convert outputs into runtime-authoritative truth.
+- OPERATOR_VISIBLE does not imply direct control authority.
+- ADMIN_VISIBLE does not imply auto-apply or direct mutation authority.
+- REVIEW_BOARD_VISIBLE is review-oriented only.
+- COMMITTEE_VISIBLE is briefing/review-oriented only.
+
+CONFIDENCE / SEVERITY / EVIDENCE DISCIPLINE
+confidence_scale=LOW|MEDIUM|HIGH
+severity_scale=LIGHT|STANDARD|HIGH|CRITICAL
+evidence_strength_scale=WEAK|MODERATE|STRONG
+mandatory_limitations_for=HYPOTHESES|REVIEWABLE_PROPOSALS|COUNCIL_CONTEXTUAL_ADVISORY|LEARNING_GOVERNANCE_EVIDENCE
+mandatory_review_required_true_for=REVIEWABLE_PROPOSALS|LEARNING_GOVERNANCE_EVIDENCE
+mandatory_insufficient_evidence_note_for=LOW_confidence_or_WEAK_evidence_or_partial_scope
+
+PROHIBITED OUTPUT CONTENT
+- direct BUY/SELL commands
+- direct execution orders
+- direct plan mutation commands
+- direct threshold mutation instructions for auto-apply
+- governor override commands
+- hidden veto language outside allowed council advisory schema
+- claims of runtime truth authority
+- claims of plan truth authority
+- hidden direct control language
+- hidden auto-apply language
+
+SPECIAL CONTRACTS
+
+REVIEWABLE PROPOSAL SCHEMA
+mandatory_fields=
+proposal_id,
+proposal_scope,
+proposal_type,
+evidence_basis,
+rationale,
+expected_benefit,
+expected_risk,
+required_review_level,
+direct_apply_allowed=false,
+auto_apply_allowed=false,
+bounded_change_note,
+validation_plan,
+rollback_note,
+review_required=true,
+non_authoritative_notice
+contract_rule=proposal_output_mode_is_reviewable_only
+
+COUNCIL ADVISORY PACKET SCHEMA
+mandatory_fields=
+advisory_packet_id,
+advisory_state,
+advisory_confidence,
+evidence_strength,
+advisory_reason_codes,
+rationale_short,
+candidate_scope,
+candidate_decision_id,
+evidence_limitations,
+direct_control_allowed=false,
+directional_generation_allowed=false,
+reserved_future_state_note,
+non_authoritative_notice
+optional_fields=
+relevant_zone,
+relevant_strategy_family,
+anomaly_context,
+drift_context,
+advisory_constraints
+allowed_advisory_states=
+NO_ADVISORY,
+ADVISORY_OK,
+ADVISORY_CAUTION,
+ADVISORY_STRONG_CAUTION,
+ADVISORY_INSUFFICIENT_EVIDENCE,
+BLOCK_CANDIDATE_ELIGIBLE
+contract_rule=BLOCK_CANDIDATE_ELIGIBLE_is_reserved_future_state_only
+contract_rule=no_direct_block_allow_control_exists_in_A3
+
+LEARNING GOVERNANCE EVIDENCE SCHEMA
+mandatory_fields=
+evidence_bundle_id,
+evidence_scope,
+source_task_families,
+observed_pattern,
+drift_summary,
+root_cause_summary,
+confidence,
+evidence_strength,
+affected_zone_or_family,
+bounded_change_candidate,
+review_required=true,
+direct_learning_mutation_allowed=false,
+limitations,
+non_authoritative_notice
+optional_fields=
+proposal_reference_if_any,
+recommendations,
+learning_governance_relevance
+contract_rule=learning_governance_output_mode_is_evidence_and_reviewable_proposal_only
+
+NON-AUTHORITATIVE NOTICE STANDARD
+required_notice_text=This output is derived, bounded, review-oriented, and non-authoritative for runtime truth, plan truth, and direct control.

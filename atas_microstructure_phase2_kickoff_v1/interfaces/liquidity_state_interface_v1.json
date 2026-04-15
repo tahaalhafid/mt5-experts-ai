@@ -1,0 +1,24 @@
+{
+  "version": "LIQUIDITY_STATE_INTERFACE_V1",
+  "family": "LiquidityState",
+  "non_operative": true,
+  "fields": [
+    { "name": "packet_id", "type": "string", "status": "mandatory" },
+    { "name": "event_time_utc", "type": "string", "status": "mandatory" },
+    { "name": "execution_symbol", "type": "string", "status": "mandatory" },
+    { "name": "liquidity_stability_state", "type": "string", "status": "mandatory" },
+    { "name": "level_candidate_count", "type": "integer", "status": "optional" },
+    { "name": "nearest_support_price", "type": "number", "status": "optional" },
+    { "name": "nearest_resistance_price", "type": "number", "status": "optional" },
+    { "name": "nearest_support_distance_points", "type": "integer", "status": "optional" },
+    { "name": "nearest_resistance_distance_points", "type": "integer", "status": "optional" },
+    { "name": "depth_quality_state", "type": "string", "status": "provisional" },
+    { "name": "spread_pressure_state", "type": "string", "status": "derived_later" },
+    { "name": "liquidity_void_presence", "type": "string", "status": "derived_later" }
+  ],
+  "forbidden_fields": [
+    "position_size_instruction",
+    "risk_override",
+    "governor_override"
+  ]
+}

@@ -1,0 +1,175 @@
+ATAS Governed Advisory Level 3 Implementation Report
+Version: 1
+Date: 2026-04-08
+Language: English only
+
+13.1 Scope executed
+- Implemented Level 3 bounded ATAS governed advisory integration for COUNCIL candidate flow.
+- Added deterministic advisory gate, structured advisory packet, support/resistance-aware confluence logic, bounded outcome mapping, and advisory artifacts.
+- Integrated ATAS governed advisory handler before the existing AI council advisory handler in post-candidate, pre-execution stage.
+- Preserved MT5 runtime authority boundaries and existing AI advisory architecture.
+- Deferred dashboard-specific visualization additions (not required for bounded runtime safety and artifact traceability).
+
+13.2 Backup evidence
+- Pre-change backup created:
+  - C:\Users\INFINTY GROUP\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075\backup_archives\pre_change_20260408_130339_atas_governed_advisory_level3.zip
+- Governed backup scope included:
+  - MQL5/Experts/AI
+  - MQL5/Files/AI
+- Live-locked file exclusion applied:
+  - MQL5/Files/AI/ai_performance_journal.jsonl
+
+13.3 Files added
+- MQL5/Experts/AI/atas_governed_advisory_contract.mqh
+- MQL5/Experts/AI/atas_governed_advisory_layer.mqh
+- MQL5/Experts/AI/atas_governed_advisory_artifacts.mqh
+- MQL5/Experts/AI/docs/atas_governed_advisory_boundary_contract.txt
+- MQL5/Experts/AI/docs/atas_governed_advisory_schema_contract.txt
+- MQL5/Experts/AI/docs/atas_governed_advisory_rollout_protocol.txt
+- MQL5/Experts/AI/docs/atas_governed_advisory_effectiveness_contract.txt
+- MQL5/Experts/AI/docs/atas_governed_advisory_level3_implementation_report.txt
+
+13.4 Files modified
+- MQL5/Experts/AI/main_ea.mq5
+  - Added Level 3 ATAS governed advisory inputs.
+  - Added integration include hooks.
+  - Added bounded handler invocation before existing AI advisory integration for BUY/SELL candidates.
+  - Added advisory artifact refresh calls in OnInit/OnTick.
+- MQL5/Experts/AI/council_mode_types.mqh
+  - Added minimal descriptive advisory fields into CouncilEnvironmentReport.
+  - Added safe defaults in InitCouncilEnvironmentReport.
+
+13.5 Architecture summary
+- ATAS shadow packet remains attached via existing intake path and remains non-authoritative.
+- New Level 3 advisory layer consumes existing shadow-attached environment context and canonical level-awareness context.
+- New advisory gate and packet are deterministic and bounded.
+- Advisory outputs are emitted to dedicated non-authoritative status/effectiveness artifacts.
+- Integration point is post-candidate, pre-execution:
+  - ATAS governed advisory (deterministic external-context advisory)
+  - then existing AI council advisory integration
+  - then MT5 canonical execution path if still allowed.
+
+13.6 Authority proof
+- MT5 authority remains unchanged:
+  - No new direct external decision authority introduced.
+  - No direct risk/governor/plan mutation route introduced.
+- ATAS advisory remains non-authoritative:
+  - advisory trust rules and artifact authority classes explicitly mark non-authoritative derived context.
+- Support/resistance authority remains internal:
+  - canonical level-awareness remains from level_awareness_brake.mqh.
+  - ATAS level evidence used as bounded confluence/context only.
+- Databento remains inactive:
+  - no Databento activation logic added.
+- Fusion remains inactive:
+  - no fusion activation or precedence changes added.
+- Existing AI advisory remains preserved:
+  - HandleCouncilAIAdvisoryIntegration remains intact and still runs after the new ATAS governed advisory step.
+
+13.7 Runtime behavior summary
+- Advisory build:
+  - built only in COUNCIL candidate path.
+- Gate pass/fail:
+  - checks payload presence, shadow attach, quality, freshness (policy), session relevance, symbol mapping presence, level-context relevance, translation/semantic-only policy.
+- Hold behavior:
+  - implemented as bounded option under rollout mode HOLD_REEVALUATE only.
+  - bounded by hold bars and max holds per signature.
+- Default delivery posture:
+  - observe-only rollout mode default (ATASAdvisoryRolloutMode=0).
+  - no hold behavior triggered by default.
+- Fallback:
+  - if unavailable/ineligible, MT5 canonical candidate flow continues.
+- Artifacts emitted:
+  - atas_governed_advisory_status.txt/json
+  - atas_governed_advisory_effectiveness.txt/json
+  - atas_governed_advisory_last_packet.json
+
+13.8 Support/resistance integration summary
+- Canonical level context taken from LevelAwarenessBrakeReport (internal MT5-owned):
+  - nearest support/resistance prices/distances
+  - breakout room score
+  - rejection risk score
+  - continuation obstacle risk
+  - reversal trap risk
+- External ATAS evidence used for bounded confluence:
+  - level candidate side, proximity, and directional alignment/conflict
+  - microstructure contradiction/confirmation hints (delta/imbalance states)
+- Result:
+  - confluence state and contradiction/confirmation are advisory signals only.
+  - no canonical level ownership transferred to ATAS.
+
+13.9 Compile / verification results
+- Compile probe attempted with MetaEditor64 command-line:
+  - C:\Program Files\MetaTrader 5\MetaEditor64.exe /compile:...main_ea.mq5 /s
+- Limitation observed:
+  - no deterministic compiler log file was emitted by this environment path.
+  - main_ea.ex5 timestamp did not update during this task window.
+- Therefore:
+  - full compile success cannot be claimed from this environment.
+  - static compile-impact analysis performed on touched code paths.
+  - no intentional syntax-fragment edits or partial declarations introduced.
+
+13.10 Acceptance checklist
+- Governance acceptance:
+  - PASS (no authority transfer, no Databento activation, no fusion activation).
+- Runtime acceptance:
+  - PASS by static path analysis; compile proof remains environment-limited.
+- Advisory acceptance:
+  - PASS (deterministic gate, bounded outcomes, no direct BUY/SELL generation, reserved block remains non-active).
+- Support/resistance acceptance:
+  - PASS (canonical internal authority preserved, external bounded confluence only).
+- Coexistence acceptance:
+  - PASS (existing AI advisory remains intact and separate).
+
+AI Readiness Investigation and Outcome
+- Inspected readiness logic in main_ea.mq5:
+  - EvaluateAIAuthorityReadinessState(...)
+  - ApplyAIAuthorityReadinessState(...)
+  - ai_activation_readiness_status.json runtime surface
+- Current observed AI state:
+  - authority_state=AI_OFF
+  - readiness_state=NOT_READY
+  - readiness_reason_code=authority_off_review_present_bounded
+  - next_upgrade_blocker=configure_ai_bridge_transport
+  - ai_bridge_ready=false
+  - security_clearance_for_advisory=false
+- Root cause class:
+  - readiness gates not satisfied (bridge transport + advisory clearance policy + authority gate posture).
+- Changes made for AI readiness:
+  - none (intentionally).
+- Why unchanged:
+  - forcing readiness/activation would violate bounded governance and package instruction.
+- Outcome:
+  - AI remains OFF / NOT_READY with explicit reasons preserved.
+
+Sensitive behavior confirmation
+- Support/resistance integration is contextual/advisory only.
+- Advisory remains bounded and non-executive.
+- Authority creep prevention:
+  - no direct execution/risk/governor control paths introduced.
+  - hold path is bounded, optional rollout mode, and non-default.
+- Shadow/advisory separation maintained:
+  - atas_runtime_context.* remains packet/status truth.
+  - atas_governed_advisory_* remains advisory interpretation/evidence only.
+
+Files intentionally not modified (sensitive/out-of-scope)
+- MQL5/Experts/AI/atas_intake_layer.mqh
+- MQL5/Experts/AI/atas_runtime_contract.mqh
+- MQL5/Experts/AI/council_environment.mqh
+- MQL5/Experts/AI/level_awareness_brake.mqh
+- MQL5/Experts/AI/dashboard_source_registry.mqh
+- MQL5/Experts/AI/dashboard_state_classifier.mqh
+- MQL5/Experts/AI/dashboard_state_collector.mqh
+- MQL5/Experts/AI/dashboard_view_model.mqh
+- MT5 strategy/risk/governor execution cores outside the bounded advisory insertion path
+
+Residual concerns
+- Environment-specific MetaEditor CLI behavior prevented deterministic compile-log capture.
+- Runtime verification of hold mode path is pending explicit rollout-mode activation and live replay checks.
+
+Recommended next bounded step
+- Run controlled compile in the active MetaEditor terminal context and capture build diagnostics.
+- Run bounded runtime validation in observe-only mode first:
+  - confirm advisory artifacts are emitted per tick/candidate.
+  - confirm no execution path drift.
+- Optionally test SOFT_INFLUENCE and HOLD_REEVALUATE in a controlled replay environment only after governance sign-off.
+

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="grid two">
+  <section class="panel">
+    <h2>Runtime Decision Context</h2>
+    <table>
+      <tbody>
+        {% for k,v in payload.runtime.items() %}
+        <tr><th>{{ k }}</th><td>{{ v }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel">
+    <h2>Decision Envelope (Latest)</h2>
+    <table>
+      <tbody>
+        {% for k,v in payload.decision_envelope.items() %}
+        <tr><th>{{ k }}</th><td>{{ v }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<div class="grid two">
+  <section class="panel">
+    <h2>Final Runtime Levels (MT5 Decision-Ready)</h2>
+    <table>
+      <tbody>
+        {% for k,v in payload.final_runtime_levels.items() %}
+        <tr><th>{{ k }}</th><td>{{ v }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel">
+    <h2>ATAS Reference Truth</h2>
+    <table>
+      <tbody>
+        {% for k,v in payload.atas_reference_truth.items() %}
+        <tr><th>{{ k }}</th><td>{{ v }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<div class="grid two">
+  <section class="panel">
+    <h2>Shadow Context</h2>
+    <table>
+      <tbody>
+        {% for k,v in payload.shadow_context.items() %}
+        <tr><th>{{ k }}</th><td>{{ v }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel">
+    <h2>Shadow Status + Advisory</h2>
+    <table>
+      <tbody>
+        {% for k,v in payload.shadow_status.items() %}
+        <tr><th>{{ k }}</th><td>{{ v }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <hr />
+    <table>
+      <tbody>
+        {% for k,v in payload.advisory.items() %}
+        <tr><th>{{ k }}</th><td>{{ v }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</div>
+{% endblock %}

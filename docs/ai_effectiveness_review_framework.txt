@@ -1,0 +1,202 @@
+AI EFFECTIVENESS REVIEW FRAMEWORK
+document_role=AUTHORITATIVE_AI_EFFECTIVENESS_REVIEW_FRAMEWORK
+document_version=A8_AI_EFFECTIVENESS_REVIEW_FRAMEWORK_V1
+authority_scope=AI_EFFECTIVENESS_EVALUATION_GOVERNANCE_ONLY
+linked_authority_gate=H6_AI_ACTIVATION_READINESS_GATE
+linked_task_registry=docs/ai_task_registry.txt
+linked_output_contract=docs/ai_output_contract.txt
+linked_cost_governance=docs/ai_cost_governance_and_scheduling.txt
+linked_repository_design=docs/ai_intelligence_repository_design.txt
+linked_council_advisory=docs/ai_council_advisory_integration_layer.txt
+linked_human_review_workflow=docs/ai_human_review_workflow.txt
+linked_metrics_catalog=docs/ai_effectiveness_metrics_catalog.txt
+linked_decision_policy=docs/ai_effectiveness_decision_policy.txt
+trust_rule=defines_how_ai_usefulness_is_evaluated_without_creating_runtime_scoring_or_control_authority
+policy_note=This phase establishes measured review of AI usefulness, cost, and governance value without building a runtime analytics engine or changing trading behavior.
+non_goal=no_runtime_scoring_engine
+non_goal=no_automatic_metric_calculator
+non_goal=no_dashboard
+non_goal=no_notification_orchestrator
+non_goal=no_repository_population_logic
+non_goal=no_automatic_rollback_or_auto_tightening
+non_goal=no_runtime_mutation_authority
+
+GLOBAL EFFECTIVENESS PRINCIPLES
+- AI effectiveness means practical value under bounded SHADOW and ADVISORY constraints.
+- AI is not considered effective merely because outputs are verbose, sophisticated-looking, or frequent.
+- AI usefulness must be assessed against operational value, governance compliance, review burden, and cost discipline together.
+- Thin evidence windows may produce observation notes, but not strong effectiveness claims.
+- Review conclusions in A8 are governance outcomes only and do not mutate trading logic, execution behavior, or AI authority automatically.
+- Council advisory effectiveness remains post-fact measured review and does not become live bureaucratic approval control.
+- Proposal and learning-governance usefulness must be judged by review value and boundedness, not by pressure to approve changes.
+- Negative effectiveness findings may justify narrowing, budget tightening, downgrade, or rollback preparation without implying direct runtime mutation.
+
+
+OVERALL AI LAYER SYNTHESIS
+- AI as a whole is effective only when combined evidence across task families shows practical operational value, acceptable review burden, acceptable cost discipline, and stable governance compliance.
+- A single successful output family does not automatically justify the whole AI surface.
+- A single weak task family does not automatically invalidate the whole AI layer if the weakness is containable through narrowing or disablement.
+
+TASK FAMILY REVIEW RULE
+- Each task family must be reviewed separately before whole-layer conclusions are made.
+- Typical task families include WATCH, INCIDENT, DAILY_INTELLIGENCE, COUNCIL_ADVISORY, PROPOSAL, LEARNING_EVIDENCE, OPERATOR_COPILOT, ROOT_CAUSE, ANOMALY, DRIFT, and GOVERNANCE_AUDIT outputs.
+- Whole-layer conclusions should synthesize task-family findings rather than replace them.
+
+EVALUATION DIMENSIONS
+
+1)
+evaluation_dimension_name=FUNCTIONAL_USEFULNESS
+evaluation_purpose=Determine whether AI materially improves understanding, triage, diagnosis, review preparation, or operator awareness.
+evidence_sources=HOURLY_WATCH_REPORT,EVENT_TRIGGERED_INCIDENT_REPORT,DAILY_OPERATING_INTELLIGENCE_REPORT,ROOT_CAUSE_OUTPUT,ANOMALY_OUTPUT,DRIFT_OUTPUT,OPERATOR_FEEDBACK,REVIEW_HISTORY
+primary_review_audience=ADMIN_REVIEWER,REVIEW_BOARD
+decision_relevance=Used to decide whether task families remain justified, narrow in scope, or require more evidence.
+
+2)
+evaluation_dimension_name=COUNCIL_ADVISORY_VALUE
+evaluation_purpose=Determine whether council advisory improves handling of candidate entries or reevaluation while avoiding excessive hold/noise or unjustified caution.
+evidence_sources=COUNCIL_ADVISORY_PACKET_TEMPLATE,ADVISORY_HISTORY,INCIDENT_HISTORY,REVIEW_HISTORY,POST_FACT_EFFECTIVENESS_REVIEW_NOTES
+primary_review_audience=ADMIN_REVIEWER,REVIEW_BOARD,COMMITTEE_REVIEWER when materially relevant
+decision_relevance=Used to decide whether advisory remains useful as-is, should be narrowed, or whether block-mode study is justified later.
+
+3)
+evaluation_dimension_name=PROPOSAL_QUALITY
+evaluation_purpose=Determine whether reviewable proposals are bounded, relevant, evidence-backed, and worth human review effort.
+evidence_sources=REVIEWABLE_PROPOSAL_TEMPLATE,REVIEW_HISTORY,PROPOSAL_HISTORY,REJECTION_NOTES,DEFER_NOTES
+primary_review_audience=ADMIN_REVIEWER,REVIEW_BOARD
+decision_relevance=Used to decide whether proposal generation should continue, be narrowed, or be disabled for specific task families.
+
+4)
+evaluation_dimension_name=LEARNING_GOVERNANCE_VALUE
+evaluation_purpose=Determine whether learning-governance evidence bundles meaningfully support governed learning decisions without becoming mutative.
+evidence_sources=LEARNING_GOVERNANCE_EVIDENCE_TEMPLATE,REVIEW_HISTORY,LEARNING_HISTORY,LINKED_PROPOSAL_RECORDS
+primary_review_audience=ADMIN_REVIEWER,REVIEW_BOARD
+decision_relevance=Used to decide whether evidence generation improves governed learning quality or mainly creates archival noise.
+
+5)
+evaluation_dimension_name=REVIEW_BURDEN
+evaluation_purpose=Determine whether AI outputs create manageable review workload or excessive triage and committee overhead.
+evidence_sources=REVIEW_HISTORY,REVIEW_CYCLE_TIME_NOTES,REVIEW_BURDEN_NOTES,OUTPUT_VOLUME_SUMMARIES
+primary_review_audience=ADMIN_REVIEWER,REVIEW_BOARD,COMMITTEE_REVIEWER for governance pressure
+decision_relevance=Used to tighten scope, reduce cadence, or disable low-value output families.
+
+6)
+evaluation_dimension_name=COST_EFFICIENCY
+evaluation_purpose=Determine whether AI benefit is justified relative to budget policy, scheduling pressure, and selective retrieval rules.
+evidence_sources=COST_GOVERNANCE_NOTES,RUN_SCHEDULE_SUMMARIES,DEEP_INVESTIGATION_USAGE_NOTES,BUDGET_PRESSURE_OBSERVATIONS,REVIEW_VALUE_SUMMARIES
+primary_review_audience=ADMIN_REVIEWER,REVIEW_BOARD
+decision_relevance=Used to continue as-is, tighten budgets, narrow triggers, or disable expensive low-value task families.
+
+7)
+evaluation_dimension_name=NOISE_DISCIPLINE
+evaluation_purpose=Determine whether AI remains selective and useful rather than repetitive, duplicative, or procedurally noisy.
+evidence_sources=OUTPUT_HISTORY,DUPLICATE_SUPPRESSION_NOTES,REVIEW_FEEDBACK,NOISE_VS_VALUE_SUMMARIES
+primary_review_audience=ADMIN_REVIEWER,REVIEW_BOARD
+decision_relevance=Used to narrow scope, raise evidence thresholds, or suppress low-value output families.
+
+8)
+evaluation_dimension_name=GOVERNANCE_COMPLIANCE
+evaluation_purpose=Determine whether AI remained inside SHADOW/ADVISORY boundaries and non-authoritative behavior.
+evidence_sources=OUTPUT_CONTRACT_AUDIT,REVIEW_HISTORY,GOVERNANCE_AUDIT_OUTPUT,BOUNDARY_BREACH_NOTES
+primary_review_audience=ADMIN_REVIEWER,REVIEW_BOARD,COMMITTEE_REVIEWER for serious contradiction
+decision_relevance=Used to require tightening, downgrade, disable a task family, or preserve bounded continuation.
+
+USEFULNESS SIGNAL MODES
+effectiveness_signal_modes=POSITIVE_SIGNAL,MIXED_SIGNAL,INSUFFICIENT_EVIDENCE,NEGATIVE_SIGNAL
+optional_rating_bands=LOW,MODERATE,HIGH
+
+SIGNAL INTERPRETATION PRINCIPLES
+- POSITIVE_SIGNAL means evidence indicates practical benefit under governance constraints.
+- MIXED_SIGNAL means there is useful value, but material noise, cost, false caution, or review burden offsets part of that value.
+- INSUFFICIENT_EVIDENCE means evidence volume, window depth, or review completion is too thin for a confident conclusion.
+- NEGATIVE_SIGNAL means value is weak, noise/cost/burden is high, or governance concerns materially reduce justification.
+- LOW, MODERATE, and HIGH are optional confidence/intensity bands and should not be forced when evidence is thin.
+- Absence of measured harm is not automatically proof of usefulness.
+- Apparent analytical sophistication does not substitute for operational usefulness.
+
+EVALUATION WINDOWS
+
+1)
+review_window=HOURLY_OBSERVATION
+what_should_be_reviewed=Light operational observation, duplicates, unusual advisory concentration, obvious incident clustering.
+what_can_be_concluded=Only weak early observations and triage cues.
+what_cannot_be_concluded=No strong usefulness or policy direction claims.
+thin_evidence_rule=Evidence is normally too thin for decisive effectiveness conclusions.
+
+2)
+review_window=DAILY_REVIEW
+what_should_be_reviewed=Output mix, advisory patterns, incidents, proposal arrivals, review burden signals, budget pressure observations.
+what_can_be_concluded=Preliminary usefulness/noise/cost observations for active task families.
+what_cannot_be_concluded=No strong structural continuation or rollback claim unless repeated severe governance breach exists.
+thin_evidence_rule=Single-day anomalies should not dominate policy conclusions unless severity is exceptional.
+
+3)
+review_window=THREE_DAY_REVIEW
+what_should_be_reviewed=Short-cycle trends, repeated advisory patterns, proposal quality patterns, learning evidence usefulness, review throughput, repeated noise.
+what_can_be_concluded=Moderately reliable early direction on usefulness vs burden.
+what_cannot_be_concluded=No phase-level confidence if reviewed artifacts are still too few or highly clustered.
+thin_evidence_rule=At least multiple reviewed artifacts across more than one family are preferred before strong claims.
+
+4)
+review_window=WEEKLY_REVIEW
+what_should_be_reviewed=Cross-family value, cost discipline, repeated false caution patterns, burden sustainability, governance compliance.
+what_can_be_concluded=Structured continuation, narrowing, tightening, or task-family disable recommendations.
+what_cannot_be_concluded=Permanent structural claims if conditions were unusually distorted or review coverage was incomplete.
+thin_evidence_rule=Review notes must state when special conditions make the week non-representative.
+
+5)
+review_window=PHASE_REVIEW
+what_should_be_reviewed=Accumulated evidence across review windows, repository history, repeated review outcomes, governance stability, cost-benefit direction.
+what_can_be_concluded=Best available governance conclusion on continuation, narrowing, downgrade, rollback preparation, or controlled experiment readiness.
+what_cannot_be_concluded=No direct runtime mutation or authority expansion.
+thin_evidence_rule=If reviewed artifact history is shallow, the required conclusion is REQUIRE_MORE_EVIDENCE.
+
+COUNCIL ADVISORY EFFECTIVENESS REVIEW
+- Evaluate whether holds and strong cautions materially improved handling quality, prevented deteriorating entries, or reduced avoidable confusion.
+- Evaluate whether advisory packets created excessive delay, repetitive caution, or measurable blocked-win penalty without enough risk-prevention value.
+- Evaluate block-eligible packets as evidence of advisory severity classification quality, not as proof that block mode should be enabled.
+- Compare useful cautions against false caution risk and false block risk conceptually and, where possible later, quantitatively.
+- Default policy remains conservative: block mode stays disabled unless later evidence supports controlled study.
+- Advisory usefulness should be judged by measured post-fact value, not intuition, rhetoric, or severity language alone.
+
+PROPOSAL EFFECTIVENESS REVIEW
+- Evaluate whether proposals are bounded, clear, evidence-linked, and meaningfully review-worthy.
+- Track whether proposals frequently end in rejection, defer, or closure because they are vague, repetitive, or weakly supported.
+- High proposal volume without review value is negative signal even if proposals appear sophisticated.
+- Accepted-for-experiment counts matter only as governance usefulness evidence, not as proof of runtime benefit.
+- Proposal review should favor selective high-value candidates over procedural proposal inflation.
+
+LEARNING-GOVERNANCE EFFECTIVENESS REVIEW
+- Evaluate whether evidence bundles improve understanding, support proposal quality, and reduce reviewer guesswork.
+- Evaluate whether evidence remains bounded, contextual, and non-mutative.
+- Evidence bundles are useful when they clarify why a learning-related candidate deserves review, not when they merely restate known observations.
+- Low-volume evidence may justify INSUFFICIENT_EVIDENCE rather than positive or negative claims.
+- Learning-governance value is strongest when evidence supports clearer experiment selection or cleaner proposal triage.
+
+AUTHORITY-SENSITIVE EVALUATION RULES
+- SHADOW outputs should be judged mainly on observational and analytical usefulness, not on direct action conversion.
+- ADVISORY outputs must be judged both on usefulness and on boundary compliance.
+- Informational outputs may still be valuable even when they never become action items.
+- No output is effective merely because reviewers accepted its style or tone.
+- Effectiveness means bounded, reviewable, institutionally useful contribution under non-authoritative constraints.
+
+TRACEABILITY REQUIREMENTS
+- effectiveness_review_id
+- review_window
+- evaluated_task_family
+- evaluated_output_class
+- effectiveness_signal
+- optional_rating_band
+- evidence_basis
+- metric_bundle_reference
+- review_conclusion
+- recommended_governance_outcome
+- linked_repository_records
+- reviewer_role
+- review_timestamp
+- thin_evidence_note
+- governance_compliance_note
+
+RELATIONSHIP TO LATER PHASES
+- A8 outputs support future A6 tuning, later learning-governance phases L1-L7, review-board prioritization, and future controlled experimentation decisions.
+- A8 may support later decisions on whether a specific AI task family should be tightened, narrowed, or disabled.
+- A8 does not authorize runtime mutation, direct control, automatic block-mode enablement, or automatic feature expansion.

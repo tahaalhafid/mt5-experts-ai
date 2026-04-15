@@ -1,0 +1,68 @@
+VERSIONING / NAMING POLICY
+Purpose: Eliminate ambiguous release names and duplicated baseline identity.
+
+============================================================
+1) FORBIDDEN AMBIGUOUS WORDS
+============================================================
+Do not use these as release identities:
+- latest
+- final
+- new
+- fixed
+- updated
+- copy
+- v2_final
+- any duplicate name that does not encode phase intent
+
+============================================================
+2) REQUIRED OUTPUT CLASSES
+============================================================
+Phase baseline archive:
+- <project_stem>_S<phase_number>_<scope>.zip
+- <project_stem>_H<phase_number>_<scope>.zip
+- <project_stem>_A<phase_number>_<scope>.zip
+- <project_stem>_L<phase_number>_<scope>.zip
+- <project_stem>_R<phase_number>_<scope>.zip
+- <project_stem>_P<phase_number>_<scope>.zip
+
+Phase sub-step / reconciliation baseline archive:
+- <project_stem>_<phase_number><letter_suffix>_<scope>.zip
+
+Fix-only archive:
+- <active_baseline_stem>_fixNN_<defect_scope>.zip
+
+Hotfix archive:
+- <active_baseline_stem>_hotfixNN_<defect_scope>.zip
+
+Changed-files-only companion:
+- <release_stem>_changed_files_only.zip
+
+============================================================
+3) ACTIVE BASELINE RULE
+============================================================
+The active baseline is not "the newest looking file".
+The active baseline is only the archive named in:
+- MQL5/Experts/AI/docs/baseline_identity.txt
+
+============================================================
+4) CURRENT ACTIVE BASELINE EXAMPLE
+============================================================
+Current active baseline archive:
+- Full_Integrated_Project_MT5_AI_strategy_memory_v1_warnclean_phaseB_R1_documentation_baseline_reconciliation_cleanup.zip
+
+Current changed-files-only companion:
+- R1_documentation_baseline_reconciliation_cleanup_changed_files_only.zip
+
+============================================================
+5) NAMING DISCIPLINE RULES
+============================================================
+- one release = one explicit release stem
+- changed-files-only archive must reuse the exact release stem
+- fix-only and hotfix releases must preserve parent baseline lineage
+- baseline_identity.txt must be updated when a new active baseline is promoted
+- current_system_status.txt and implementation_state_map.txt must be reconciled when the accepted baseline meaning changes materially
+- historical archives may remain, but must not be described as active/current unless baseline_identity.txt says so
+- status or reconciliation phases must still produce one authoritative baseline name, not a descriptive alias plus a competing archive name
+- docs-only or governance-only releases must not be misdescribed as runtime feature releases
+
+End of versioning policy.

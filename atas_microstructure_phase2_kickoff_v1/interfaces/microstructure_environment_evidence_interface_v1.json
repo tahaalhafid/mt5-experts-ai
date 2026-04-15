@@ -1,0 +1,24 @@
+{
+  "version": "MICROSTRUCTURE_ENVIRONMENT_EVIDENCE_INTERFACE_V1",
+  "family": "MicrostructureEnvironmentEvidence",
+  "non_operative": true,
+  "fields": [
+    { "name": "packet_id", "type": "string", "status": "mandatory" },
+    { "name": "event_time_utc", "type": "string", "status": "mandatory" },
+    { "name": "execution_symbol", "type": "string", "status": "mandatory" },
+    { "name": "market_state_class", "type": "string", "status": "optional" },
+    { "name": "session_context", "type": "string", "status": "optional" },
+    { "name": "price_space_relation", "type": "string", "status": "optional" },
+    { "name": "basis_capture_state", "type": "string", "status": "optional" },
+    { "name": "cross_instrument_translation_applied", "type": "boolean", "status": "optional" },
+    { "name": "contradiction_flag", "type": "boolean", "status": "optional" },
+    { "name": "semantic_only_mode", "type": "boolean", "status": "optional" },
+    { "name": "environment_cleanliness_state", "type": "string", "status": "provisional" },
+    { "name": "regime_hint_nonbinding", "type": "string", "status": "derived_later" }
+  ],
+  "forbidden_fields": [
+    "final_regime_verdict",
+    "final_tradability_verdict",
+    "decision_package_owner"
+  ]
+}

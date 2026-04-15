@@ -1,0 +1,60 @@
+INTERNAL FACTORY INTELLIGENCE ARCHITECTURE CONTRACT
+version=PHASE4_INTERNAL_FACTORY_INTELLIGENCE_ARCHITECTURE_CONTRACT_V1
+artifact_role=INTERNAL_FACTORY_INTELLIGENCE_ARCHITECTURE_CONTRACT
+authority_class=ARCHITECTURAL_GOVERNANCE_REFERENCE_ONLY
+
+PURPOSE
+This contract upgrades internal intelligence from a structurally correct snapshot surface into a more disciplined internal analytical artifact model.
+
+INTERNAL INTELLIGENCE IS
+- a non-authoritative internal analytical delta layer
+- a bounded interpretation layer built on top of rich intake, decomposition, and normalized material structure
+- a place where semantic clarification, codification interpretation, consistency exposure, hidden-assumption exposure, false-precision exposure, refinement hypothesis, and candidate packaging posture may be expressed
+
+INTERNAL INTELLIGENCE IS NOT
+- runtime control
+- canon authority
+- registry commit authority
+- validation
+- review outcome truth
+- event history
+- append-only replay
+- experiment permission
+- trading readiness
+
+INTERNAL INTELLIGENCE RECORD
+An internal intelligence record is a bounded analytical record that must answer:
+- why this record exists
+- what it adds beyond decomposition
+- what ambiguity remains unresolved
+- what review posture it carries
+- what must not be inferred from it
+
+DECOMPOSITION VS INTELLIGENCE
+Decomposition expresses normalized structural interpretation of the material.
+Internal intelligence expresses analytical delta beyond decomposition, such as:
+- semantic clarification
+- codification interpretation
+- semantic-code consistency exposure
+- hidden assumption exposure
+- false precision exposure
+- refinement hypothesis
+- candidate packaging posture
+
+If no meaningful analytical delta exists, that truth must remain explicit.
+
+NON-AUTHORITATIVE BOUNDARIES
+- semantic interpretation remains primary
+- codification interpretation remains supplementary
+- polished code must not override weak semantics
+- no internal intelligence record implies runtime readiness
+- no internal intelligence record implies canon eligibility
+- no internal intelligence record implies registry commit
+- human review remains required
+
+CURRENT TRACKING MODE
+- snapshot-oriented / current-state-oriented only
+- not event history
+- not review outcome history
+- not workflow state history
+

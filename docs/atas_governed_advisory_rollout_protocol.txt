@@ -1,0 +1,35 @@
+ATAS Governed Advisory Rollout Protocol (Level 3)
+Version: 1
+Language: English only
+
+Rollout modes
+1) ATAS_ADVISORY_ROLLOUT_OBSERVE_ONLY
+- Advisory is evaluated and emitted.
+- Runtime behavior remains non-blocking.
+- Outcome is display/flag visibility only.
+
+2) ATAS_ADVISORY_ROLLOUT_SOFT_INFLUENCE
+- Advisory may produce bounded operator/council caution flags.
+- No direct execution authority transfer.
+- No direct risk/governor mutation.
+
+3) ATAS_ADVISORY_ROLLOUT_HOLD_REEVALUATE
+- Bounded hold-for-reevaluation can apply only when:
+  - advisory is eligible
+  - contradiction is strong
+  - relevance/confluence thresholds are met
+  - per-signature hold budget allows it
+- Hold remains bounded by:
+  - explicit hold bars
+  - explicit max holds per signature
+- No default block authority activation.
+
+Delivery default
+- Architecture is implemented for all three modes.
+- Runtime default is observe-only.
+
+Operational safeguards
+- Semantic-only fallback remains explicit when price anchors are suppressed.
+- If advisory is unavailable/ineligible, MT5 canonical flow continues.
+- All outcomes are emitted to dedicated advisory artifacts.
+

@@ -1,0 +1,36 @@
+PHASE ACCEPTANCE CHECKLIST
+Use this before accepting any future phase or fix-only release.
+
+============================================================
+REQUIRED CHECKS
+============================================================
+[ ] scope stayed inside the approved phase
+[ ] exact files changed are listed
+[ ] behavior-change statement is explicit
+[ ] release type is explicit: phase release / fix-only / hotfix
+[ ] baseline archive/build name is explicit
+[ ] baseline_identity.txt is updated if active baseline changed
+[ ] current_system_status.txt is reconciled if baseline/state truth changed
+[ ] implementation_state_map.txt is reconciled if implementation-state meaning changed
+[ ] authoritative vs derived vs backup artifact semantics are clear
+[ ] runtime-complete vs governance/docs-complete distinction is explicit where relevant
+[ ] no strategy / governor / AI authority / learning authority / execution / entry / exit drift occurred unless the phase explicitly allowed it
+[ ] no ambiguous competing output archives are presented as current
+[ ] compile-status limitation, if any, is stated honestly
+
+============================================================
+COMPILE CHECK
+============================================================
+[ ] compile clean confirmed in the intended build environment
+or
+[ ] no code files changed and the release states honestly that no fresh compile verification was performed
+
+============================================================
+RECOMMENDED CHECKS
+============================================================
+[ ] changed-files-only archive provided
+[ ] stale confusing non-authoritative artifacts deleted or marked obsolete when safe
+[ ] security/productization blockers are not understated in status docs
+[ ] future next-step permission is stated without ambiguity
+
+End of phase acceptance checklist.

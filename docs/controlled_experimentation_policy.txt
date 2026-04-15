@@ -1,0 +1,143 @@
+controlled_experimentation_policy
+document_version=L5_CONTROLLED_EXPERIMENTATION_POLICY_V1
+document_scope=GOVERNED_LEARNING_EXPERIMENTATION_DESIGN_ONLY
+authority_class=NON_AUTHORITATIVE_GOVERNANCE_POLICY
+purpose=DEFINE_SAFE_BOUNDED_REVIEW_GOVERNED_EXPERIMENTATION_PATHWAYS_FOR_L4_ACCEPTED_LEARNING_PROPOSALS
+non_goals=NO_RUNTIME_EXPERIMENT_ENGINE|NO_EXPERIMENT_LAUNCHER|NO_AUTO_APPLY|NO_LIVE_MUTATION|NO_AUTHORITY_EXPANSION
+
+1. FORMAL ROLE OF THIS LAYER
+This layer defines how accepted learning proposals may become controlled experiment designs only.
+This layer does not launch experiments.
+This layer does not mutate runtime behavior.
+This layer does not promote any learning output into live strategy, governor, failure detector, execution-quality, dirty-environment, trend-continuation, or any other live trading logic.
+
+2. FORMAL EXPERIMENT CLASSES
+experiment_class_name=SHADOW_EXPERIMENT
+experiment_purpose=OBSERVE_OR_COMPARE_BEHAVIOR_OR_DECISION_FRAMEWORK_OFFLINE_OR_NON_LIVE_WITHOUT_RUNTIME_ACTIVATION
+allowed_proposal_families=INVESTIGATION_PROPOSAL|EXPERIMENT_CANDIDATE_PROPOSAL|BOUNDED_THRESHOLD_REVIEW_PROPOSAL|BOUNDED_GATING_REVIEW_PROPOSAL
+allowed_risk_classes=LOW_RISK_REVIEW|MEDIUM_RISK_REVIEW|HIGH_RISK_REVIEW|GOVERNANCE_SENSITIVE_REVIEW
+live_runtime_activation_allowed=false
+review_preconditions=L4_ACCEPT_FOR_EXPERIMENT|TRACEABLE_EVIDENCE|DECLARED_SCOPE|DECLARED_RISK|VALIDATION_INTENT|ROLLBACK_READINESS_NOTE|NO_PROHIBITED_MUTATION_PATH
+validation_requirements=SUCCESS_FAILURE_UNCERTAINTY_DEFINED|OBSERVATION_WINDOW_DEFINED|EVIDENCE_COLLECTION_PLAN_DECLARED
+rollback_readiness_requirement=REQUIRED
+prohibited_usage=LIVE_ROLLOUT|DIRECT_PARAMETER_CHANGE|DIRECT_PLAN_OVERWRITE|IMPLICIT_AUTHORITY_ELEVATION
+
+experiment_class_name=SANDBOX_EXPERIMENT
+experiment_purpose=BOUNDED_NON_LIVE_OR_ISOLATED_DESIGN_VALIDATION_WITH_CLEAR_SCOPE_AND_BOUNDARY_DISCLOSURE
+allowed_proposal_families=INSTRUMENTATION_PROPOSAL|INVESTIGATION_PROPOSAL|EXPERIMENT_CANDIDATE_PROPOSAL|BOUNDED_POLICY_REVIEW_PROPOSAL|BOUNDED_THRESHOLD_REVIEW_PROPOSAL|BOUNDED_GATING_REVIEW_PROPOSAL
+allowed_risk_classes=LOW_RISK_REVIEW|MEDIUM_RISK_REVIEW|HIGH_RISK_REVIEW|GOVERNANCE_SENSITIVE_REVIEW
+live_runtime_activation_allowed=false
+review_preconditions=L4_ACCEPT_FOR_EXPERIMENT|TRACEABLE_EVIDENCE|DECLARED_SCOPE|DECLARED_RISK|VALIDATION_INTENT|ROLLBACK_READINESS_NOTE|NO_PROHIBITED_MUTATION_PATH
+validation_requirements=SUCCESS_FAILURE_UNCERTAINTY_DEFINED|DATA_COLLECTION_DEFINED|REVIEW_WINDOW_DEFINED|THIN_EVIDENCE_RISK_DISCLOSED
+rollback_readiness_requirement=REQUIRED
+prohibited_usage=UNBOUNDED_TESTING|GLOBAL_OPTIMIZATION_TRIAL|HIDDEN_LIVE_DEPLOYMENT
+
+experiment_class_name=BOUNDED_REVIEW_EXPERIMENT
+experiment_purpose=FORMAL_REVIEW_FACING_EXPERIMENT_DESIGN_FOR_SENSITIVE_OR_HIGHER_RISK_CASES_WITH_STRONGER_BOUNDARY_DISCIPLINE
+allowed_proposal_families=EXPERIMENT_CANDIDATE_PROPOSAL|BOUNDED_POLICY_REVIEW_PROPOSAL|BOUNDED_THRESHOLD_REVIEW_PROPOSAL|BOUNDED_GATING_REVIEW_PROPOSAL|LEARNING_SCOPE_TIGHTENING_PROPOSAL|LEARNING_SCOPE_NARROWING_PROPOSAL
+allowed_risk_classes=MEDIUM_RISK_REVIEW|HIGH_RISK_REVIEW|GOVERNANCE_SENSITIVE_REVIEW
+live_runtime_activation_allowed=false
+review_preconditions=L4_ACCEPT_FOR_EXPERIMENT|REVIEW_BOARD_ALIGNMENT|TRACEABLE_EVIDENCE|DECLARED_SCOPE|DECLARED_RISK|VALIDATION_INTENT|ROLLBACK_READINESS_NOTE|NO_PROHIBITED_MUTATION_PATH
+validation_requirements=SUCCESS_FAILURE_UNCERTAINTY_DEFINED|REVIEW_WINDOW_DEFINED|CROSS_REFERENCE_TO_EVIDENCE_AND_PRIOR_REVIEW_DEFINED
+rollback_readiness_requirement=REQUIRED
+prohibited_usage=HIDDEN_IMPLEMENTATION_PATH|OPEN_ENDED_TRIAL|UNSPECIFIED_MULTI_LAYER_CHANGE
+
+experiment_class_name=CONTROLLED_RUNTIME_TRIAL_DESIGN_ONLY
+experiment_purpose=DESIGN_ELIGIBILITY_ONLY_FOR_FUTURE_HIGHER_GOVERNANCE_REVIEW_WITHOUT_ANY_LIVE_ACTIVATION_IN_THIS_PHASE
+allowed_proposal_families=EXPERIMENT_CANDIDATE_PROPOSAL|BOUNDED_POLICY_REVIEW_PROPOSAL|BOUNDED_THRESHOLD_REVIEW_PROPOSAL|BOUNDED_GATING_REVIEW_PROPOSAL|LEARNING_SCOPE_TIGHTENING_PROPOSAL|LEARNING_SCOPE_NARROWING_PROPOSAL
+allowed_risk_classes=HIGH_RISK_REVIEW|GOVERNANCE_SENSITIVE_REVIEW
+live_runtime_activation_allowed=false
+review_preconditions=L4_ACCEPT_FOR_EXPERIMENT|REVIEW_BOARD_ALIGNMENT|OPTIONAL_COMMITTEE_ESCALATION_WHEN_JUSTIFIED|TRACEABLE_EVIDENCE|DECLARED_SCOPE|DECLARED_RISK|VALIDATION_INTENT|ROLLBACK_READINESS_NOTE|NO_PROHIBITED_MUTATION_PATH
+validation_requirements=DESIGN_ONLY_SUCCESS_FAILURE_MODEL|STRONG_LIMITATION_DISCLOSURE|NO_LIVE_ENABLEMENT|FUTURE_GOVERNANCE_REVIEW_REQUIRED
+rollback_readiness_requirement=REQUIRED
+prohibited_usage=LIVE_RUNTIME_TRIAL_START|DIRECT_CONFIG_CHANGE|DIRECT_EXPERIMENT_ENABLEMENT
+
+3. EXPERIMENT ELIGIBILITY RULES
+An experiment-eligible candidate requires all of the following:
+- learning proposal received ACCEPT_FOR_EXPERIMENT in L4
+- proposal remains bounded, traceable, and within declared family/risk framing
+- linked evidence bundle is SUFFICIENT_EVIDENCE or STRONG_CORROBORATED_EVIDENCE for the claim being explored
+- evidence quality is adequate for the proposed experiment scope
+- validation intent exists
+- rollback note exists
+- no prohibited mutation path is present
+- no authority elevation implication exists
+- no hidden live rollout intent exists
+- limitations and unresolved uncertainty are disclosed honestly
+
+4. NON-ELIGIBILITY RULES
+A proposal is not experiment-eligible when any of the following apply:
+- proposal was REJECTED
+- proposal is DEFERRED without explicit re-entry
+- proposal lacks ACCEPT_FOR_EXPERIMENT outcome
+- missing rollback readiness note
+- missing validation design
+- unsupported broad-scope or global optimization claim
+- hidden live mutation intent
+- unresolved ambiguity too high for the experiment class requested
+- evidence is THIN_EVIDENCE or traceability is incomplete
+- proposal attempts implicit authority expansion
+
+5. BOUNDEDNESS RULES FOR EXPERIMENT DESIGNS
+Every experiment design must declare:
+- exact experiment scope
+- target subsystem or policy domain
+- intended observation window
+- what is being evaluated
+- what is not being changed
+- expected upside
+- expected downside
+- exit criteria
+- rollback readiness note
+- review scope
+- mutation prohibition note
+
+Boundedness explicitly forbids:
+- global "test optimization" requests
+- multi-layer undefined experimentation
+- hidden live rollout
+- open-ended runtime trials
+- unspecific change envelopes
+
+6. VALIDATION EXPECTATIONS
+Each experiment design must state:
+- what success looks like
+- what failure looks like
+- what uncertainty remains
+- what evidence will be collected
+- which metrics or qualitative checks matter
+- which review window evaluates the result
+- which thin-evidence risk remains
+Validation remains a governance design requirement only, not a runtime scoring engine.
+
+7. ROLLBACK READINESS REQUIREMENTS
+Each experiment design must state:
+- rollback_trigger_conditions
+- rollback_scope
+- rollback_owner_role
+- rollback_feasibility_note
+- rollback_traceability_requirement
+Rollback readiness is mandatory even though this phase does not execute rollback.
+
+8. RELATIONSHIP TO OTHER PHASES
+Inputs arrive from L4 ACCEPT_FOR_EXPERIMENT outcomes only.
+This layer may prepare bounded experiment designs only.
+This layer does not launch experiments.
+This layer does not promote changes into runtime.
+This layer feeds later promotion or rollback governance in L6 and impact audit in L7.
+
+9. AI ROLE WITHIN CONTROLLED EXPERIMENTATION
+AI may help summarize rationale, organize bounded experiment fields, and restate validation and rollback expectations.
+AI may not authorize experiment launch, convert design into runtime trial, bypass review outcomes, weaken rollback requirements, or escalate design into live mutation.
+
+10. GLOBAL PROHIBITIONS
+direct_apply_allowed=false
+auto_apply_allowed=false
+live_runtime_activation_allowed=false
+authority_expansion_allowed=false
+strategy_mutation_allowed=false
+governor_mutation_allowed=false
+failure_detector_mutation_allowed=false
+execution_mutation_allowed=false
+threshold_mutation_allowed=false
+plan_overwrite_allowed=false

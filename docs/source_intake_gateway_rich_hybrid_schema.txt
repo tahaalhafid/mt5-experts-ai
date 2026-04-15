@@ -1,0 +1,155 @@
+SOURCE INTAKE GATEWAY RICH HYBRID SCHEMA
+version=V1
+
+contract_goal:
+- MAXIMUM INFORMATIONAL RICHNESS TRANSFER INTO THE FACTORY
+- WITH MAXIMUM PRACTICAL PRESERVATION AND FUTURE USABILITY
+- WITHOUT KNOWLEDGE COLLAPSE
+
+top_level_required_fields:
+- artifact_role
+- artifact_authority_class
+- gateway_version
+- gateway_contract_version
+- source_intake_gateway_rich_hybrid_schema_version
+- gateway_mode
+- gateway_processing_mode
+- producer_role
+- snapshot_identity
+- update_id
+- snapshot_time
+- updated_at
+- direct_factory_commit_allowed
+- auto_import_allowed
+- runtime_trading_impact
+- gateway_record_count
+- gateway_material_total
+- records
+
+record_required_sections:
+- intake_record_id
+- source_package
+- extraction_summary
+- materials
+- factory_decision_layer
+
+source_package_required_fields:
+- source_title
+- source_type
+- source_class
+- source_reference
+- source_context
+- intended_use
+- extraction_depth
+- output_mode
+- trust_tier
+- source_language
+- source_origin_kind
+- source_author_if_known
+- source_date_if_known
+- source_timeframe_scope_raw
+- source_asset_scope_raw
+- source_quality_note
+- major_limitations
+- ambiguity_summary
+- discretion_dependency_summary
+- marketing_or_hype_risk
+- backtest_evidence_present
+- live_evidence_present
+- lineage_reference
+
+extraction_summary_required_fields:
+- extraction_quality_note
+- extraction_limitations
+- ambiguity_summary
+- discretion_dependency_summary
+- codification_presence_detected
+- structural_semantic_depth
+- material_count
+- output_mode
+- lineage_reference
+
+material_required_fields:
+- material_id
+- material_title
+- material_role_candidate
+- material_type
+- material_priority
+- market_thesis_raw
+- setup_archetype_raw
+- trigger_logic_raw
+- timing_dependency_raw
+- invalidation_logic_raw
+- risk_logic_raw
+- exit_logic_raw
+- confirmation_logic_raw
+- suppression_logic_raw
+- session_logic_raw
+- volatility_logic_raw
+- context_logic_raw
+- asset_scope_raw
+- timeframe_scope_raw
+- provisional_zone_fit
+- provisional_regime_fit
+- trigger_archetype
+- invalidation_family
+- exit_family
+- codifiability_hint
+- discretion_load
+- confidence_posture
+- structural_clarity
+- falsifiability_quality
+- boundedness_quality
+- implementation_risk
+- overfitting_risk
+- false_precision_risk
+- factory_role_explanation
+- recommended_factory_route
+- recommended_next_stage
+- limitations
+- missing_components
+- ambiguity_flags
+- contradiction_flags
+- useful_as_family_candidate
+- useful_as_primitive
+- useful_as_enrichment
+- useful_as_context_module
+- research_only_recommended
+- early_rejection_recommended
+- lineage_reference
+- codification_layer
+
+codification_layer_required_fields:
+- code_presence
+- code_role
+- code_language
+- code_scope
+- code_authority
+- code_readiness
+- code_logic_summary
+- code_candidate_text
+- code_assumptions
+- code_ambiguity_carryforward
+- code_limitations
+- code_parseability_hint
+- code_semantic_density
+- code_requires_human_review
+- code_safe_for_runtime_use
+
+factory_decision_layer_required_fields:
+- recommended_factory_route
+- recommended_next_stage
+- useful_as_family_candidate
+- useful_as_primitive
+- useful_as_enrichment
+- useful_as_context_module
+- research_only_recommended
+- early_rejection_recommended
+- review_required_by_default
+- non_runtime_boundary_note
+
+semantic_over_code_hierarchy:
+- semantic layer is primary interpretation truth
+- codification layer is supplementary candidate expression
+- code never overrides weak or incomplete semantic structure
+- code candidate presence never implies maturity or runtime readiness

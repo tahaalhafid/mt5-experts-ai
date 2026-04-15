@@ -1,0 +1,136 @@
+ACTIVE BASELINE IDENTITY
+Authority: This is the single authoritative project document for release/baseline identity.
+Purpose: Remove ambiguity about which baseline future work must build on.
+
+============================================================
+ACTIVE BASELINE
+============================================================
+Active baseline archive/build name:
+- Full_Integrated_Project_MT5_AI_strategy_memory_v1_warnclean_phaseB_R1_documentation_baseline_reconciliation_cleanup.zip
+
+Parent baseline archive/build name:
+- Full_Integrated_Project_MT5_AI_strategy_memory_v1_warnclean_phaseB_S3_security_secret_hygiene.zip
+
+Changed-files-only companion expected for this release:
+- R1_documentation_baseline_reconciliation_cleanup_changed_files_only.zip
+
+Baseline status:
+- ACTIVE
+- BUILD ONLY ON THIS BASELINE UNTIL A NEW ACCEPTED PHASE REPLACES IT
+
+============================================================
+COMPLETED PHASE STACK
+============================================================
+- S1 — Truth Integrity Repair Pack
+- S2 — Compile / Release Discipline Pack
+- S2b — Documentation & Status Reconciliation Pack
+- S3 — Security & Secret Hygiene
+- S4 — Journaling & Feedback Normalization Pack
+- H1 — Runtime Governance Hardening Pack
+- H2 — Observability & Diagnostic Reliability Pack
+- H3 — Execution Quality Validation Pack
+- H4 — Replay / Validation Layer Pack
+- H5 — Risk & Safety Hardening Pack
+- H6 — AI Activation Readiness Gate
+- A1 — AI Input Catalog & Access Policy
+- A2 — AI Task Registry & Trigger Matrix
+- A3 — AI Output Contract & Report Templates
+- A4 — AI Cost Governance & Scheduling
+- A5 — AI Intelligence Repository
+- A6 — AI Council Advisory Integration Layer
+- A7 — Human Review & Approval Workflow
+- A8 — AI Effectiveness Review
+- L1 — Learning Governance Contract
+- L2 — Learning Evidence Pipeline
+- L3 — Learning Proposal Engine
+- L4 — Review-Governed Learning Decisions
+- L5 — Controlled Experimentation Layer
+- L6 — Learning Promotion & Rollback Discipline
+- L7 — Learning Impact Audit
+- R1 — Documentation / Baseline Reconciliation Cleanup
+
+============================================================
+CURRENT PROJECT POSTURE
+============================================================
+Runtime-affecting hardening/trading posture:
+- Core runtime trading stack remains the previously completed stabilized/hardened runtime.
+- No R1 runtime behavior changes were introduced.
+- H-series hardening remains the active runtime hardening layer.
+- A6 bounded council advisory integration remains the only later AI-era layer with selective runtime integration, still bounded by earlier authority restrictions.
+
+Governance / docs / policy posture:
+- A1-A5, A7-A8, and L1-L7 are completed as governance/policy/reference layers with visibility metadata where present.
+- These completed layers do NOT imply full runtime engines or auto-apply authority.
+- S3 security hygiene is now defined and inventoried, but remains a blocker for external delivery until implemented and verified beyond documentation/visibility status.
+
+Productization posture:
+- Productization P-series has NOT started.
+- No customer-delivery, Telegram-delivery, or external-integration readiness is claimed here.
+
+============================================================
+ACTIVE RUNTIME TRUTH ANCHORS
+============================================================
+Current active plan truth:
+- MQL5/Files/AI/ai_current_plan.json
+  role: authoritative active plan truth
+
+Current derived mirror state:
+- MQL5/Files/AI/ai_evolution_state.json
+  role: non-authoritative derived state
+
+Current backup-only prior plan snapshot:
+- MQL5/Files/AI/ai_previous_plan_backup.json
+  role: backup-only non-authoritative artifact
+
+Current active decision engine mode reference:
+- plan_v076 / COUNCIL
+- This document does not reinterpret runtime plan truth beyond the authoritative plan file.
+
+============================================================
+AUTHORITATIVE VS NON-AUTHORITATIVE ARTIFACTS
+============================================================
+Authoritative release/baseline identity:
+- MQL5/Experts/AI/docs/baseline_identity.txt
+
+Authoritative current project/system status:
+- MQL5/Experts/AI/docs/current_system_status.txt
+
+Authoritative implementation-state reference:
+- MQL5/Experts/AI/docs/implementation_state_map.txt
+
+Authoritative release discipline references:
+- MQL5/Experts/AI/docs/release_protocol.txt
+- MQL5/Experts/AI/docs/phase_acceptance_checklist.txt
+- MQL5/Experts/AI/docs/versioning_policy.txt
+
+Non-authoritative derived visibility/status artifacts:
+- MQL5/Files/AI/ai_activation_readiness_status.txt
+- MQL5/Files/AI/ai_activation_readiness_status.json
+- MQL5/Files/AI/ai_repository_manifest.txt
+- MQL5/Files/AI/ai_repository_manifest.json
+
+Draft / technical reference only:
+- MQL5/Experts/AI/docs/system_architecture_manifest.txt
+- MQL5/Experts/AI/docs/zone_family_strategy_map.txt
+
+Interpretation rule:
+- Rich metadata in derived manifests does NOT override the authoritative project-status documents above.
+
+============================================================
+CURRENT NEXT STEP POSITION
+============================================================
+If work continues, the next logical phase is:
+- P1 — Product Definition
+
+Exception:
+- Another audit / reconciliation / packaging-control phase may be inserted first if the team chooses, but productization has not started yet.
+
+============================================================
+COMPILE / VERIFICATION TRUTH
+============================================================
+R1 is a documentation/status reconciliation cleanup phase only.
+- No .mq5 or .mqh files were changed by this phase.
+- This document does NOT claim a fresh compile verification for R1.
+- Prior compile truth must not be rewritten or inflated by this release.
+
+End of active baseline identity.

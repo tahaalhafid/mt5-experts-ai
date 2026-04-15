@@ -1,0 +1,192 @@
+AI INPUT CATALOG
+document_role=AI_INPUT_CATALOG
+document_authority_class=AUTHORITATIVE_AI_INPUT_POLICY_REFERENCE
+catalog_version=A1_AI_INPUT_CATALOG_V1
+scope=AI input visibility classification only
+linked_authority_gate=H6_AI_ACTIVATION_READINESS_GATE
+linked_access_policy=docs/ai_access_policy.txt
+linked_task_matrix=docs/ai_task_input_matrix.txt
+policy_constraint=No AI authority expansion. H6 authority limits remain unchanged.
+
+INPUT SOURCE FORMAT
+- input_source_name
+- source_path_or_surface
+- input_group
+- authority_class
+- default_access_class
+- allowed_usage_note
+
+OPERATIONAL SUMMARIES
+
+1)
+input_source_name=baseline_identity
+source_path_or_surface=MQL5/Experts/AI/docs/baseline_identity.txt
+input_group=OPERATIONAL_SUMMARIES
+authority_class=AUTHORITATIVE_RELEASE_CONTROL_DOCUMENT
+default_access_class=ALWAYS_VISIBLE_SUMMARIES
+allowed_usage_note=Baseline identity, active baseline archive, active plan id, active mode, completed phase reference.
+
+2)
+input_source_name=current_operational_status
+source_path_or_surface=MQL5/Experts/AI/docs/current_system_status.txt
+input_group=OPERATIONAL_SUMMARIES
+authority_class=AUTHORITATIVE_CURRENT_OPERATIONAL_STATUS_DOCUMENT
+default_access_class=ALWAYS_VISIBLE_SUMMARIES
+allowed_usage_note=Current operational state narrative, implemented/partial/disabled/historical framing, next allowed phase.
+
+3)
+input_source_name=implementation_state_map
+source_path_or_surface=MQL5/Experts/AI/docs/implementation_state_map.txt
+input_group=OPERATIONAL_SUMMARIES
+authority_class=AUTHORITATIVE_IMPLEMENTATION_STATUS_REFERENCE
+default_access_class=ALWAYS_VISIBLE_SUMMARIES
+allowed_usage_note=Subsystem implementation classification for operational understanding.
+
+4)
+input_source_name=runtime_governance_status
+source_path_or_surface=MQL5/Files/AI/runtime_governance_status.txt|json
+input_group=OPERATIONAL_SUMMARIES
+authority_class=NON_AUTHORITATIVE_DERIVED_RUNTIME_GOVERNANCE
+default_access_class=ALWAYS_VISIBLE_SUMMARIES
+allowed_usage_note=Runtime governance state, trading allowed/blocked reason, truth/diagnostics readiness visibility.
+
+5)
+input_source_name=risk_safety_status
+source_path_or_surface=MQL5/Files/AI/risk_safety_status.txt|json
+input_group=OPERATIONAL_SUMMARIES
+authority_class=NON_AUTHORITATIVE_DERIVED_RUNTIME_SAFETY
+default_access_class=ALWAYS_VISIBLE_SUMMARIES
+allowed_usage_note=Safety state, lockout/safe-block state, open-position-management policy visibility.
+
+6)
+input_source_name=diagnostic_runtime_summary
+source_path_or_surface=MQL5/Files/AI/diagnostic_runtime_summary.txt|json
+input_group=OPERATIONAL_SUMMARIES
+authority_class=NON_AUTHORITATIVE_DERIVED_DIAGNOSTIC
+default_access_class=ALWAYS_VISIBLE_SUMMARIES
+allowed_usage_note=Latest materially relevant runtime cycle diagnostic summary.
+
+7)
+input_source_name=execution_quality_validation
+source_path_or_surface=MQL5/Files/AI/execution_quality_validation.txt|json
+input_group=OPERATIONAL_SUMMARIES
+authority_class=NON_AUTHORITATIVE_DERIVED_VALIDATION
+default_access_class=ALWAYS_VISIBLE_SUMMARIES
+allowed_usage_note=Decision-to-trade conversion, block-layer distribution, rejection-family distribution, open-failure counts.
+
+8)
+input_source_name=replay_validation_summary
+source_path_or_surface=MQL5/Files/AI/replay_validation_summary.txt|json
+input_group=OPERATIONAL_SUMMARIES
+authority_class=NON_AUTHORITATIVE_DERIVED_REPLAY
+default_access_class=ALWAYS_VISIBLE_SUMMARIES
+allowed_usage_note=Latest recent-case replay/reconstruction artifact with confidence and limitations.
+
+9)
+input_source_name=council_memory_summary
+source_path_or_surface=MQL5/Files/AI/council_memory.txt
+input_group=OPERATIONAL_SUMMARIES
+authority_class=NON_AUTHORITATIVE_REBUILDABLE_MEMORY_SUMMARY
+default_access_class=ALWAYS_VISIBLE_SUMMARIES
+allowed_usage_note=Derived memory summary only when present and not stale-reset pending.
+
+10)
+input_source_name=council_report_summary
+source_path_or_surface=MQL5/Files/AI/council_report.txt
+input_group=OPERATIONAL_SUMMARIES
+authority_class=NON_AUTHORITATIVE_REBUILDABLE_COUNCIL_REPORT
+default_access_class=ALWAYS_VISIBLE_SUMMARIES
+allowed_usage_note=Derived council report summary only when present and not stale-reset pending.
+
+RAW NORMALIZED INVESTIGATION SOURCES
+
+11)
+input_source_name=performance_journal_raw_normalized
+source_path_or_surface=MQL5/Files/AI/ai_performance_journal.jsonl
+input_group=RAW_NORMALIZED_INVESTIGATION
+authority_class=NON_AUTHORITATIVE_RAW_RUNTIME_RECORD
+default_access_class=ON_DEMAND_RETRIEVAL
+allowed_usage_note=Use only with bounded retrieval. Default mode is sliced investigation by time range, decision_id, position_id, deal_id, incident window, strategy family, or zone/regime.
+
+12)
+input_source_name=council_feedback_raw_normalized
+source_path_or_surface=MQL5/Files/AI/council_feedback.json
+input_group=RAW_NORMALIZED_INVESTIGATION
+authority_class=NON_AUTHORITATIVE_NORMALIZED_FEEDBACK_RECORD
+default_access_class=ON_DEMAND_RETRIEVAL
+allowed_usage_note=Use only with bounded retrieval. Intended for decision snapshot / trade close outcome investigation, not broad always-on raw reading.
+
+PLAN / STATE METADATA SNAPSHOTS
+
+13)
+input_source_name=current_plan_metadata_snapshot
+source_path_or_surface=MQL5/Files/AI/ai_current_plan.json
+input_group=PLAN_STATE_METADATA_SNAPSHOTS
+authority_class=AUTHORITATIVE_ACTIVE_RUNTIME_PLAN_TRUTH
+default_access_class=SNAPSHOT_ONLY
+allowed_usage_note=Metadata snapshot only. AI may read active plan id, active mode, truth policy markers, and limited metadata. Full mutable plan content is not an always-visible raw surface.
+
+14)
+input_source_name=evolution_state_metadata_snapshot
+source_path_or_surface=MQL5/Files/AI/ai_evolution_state.json
+input_group=PLAN_STATE_METADATA_SNAPSHOTS
+authority_class=DERIVED_NON_AUTHORITATIVE_MIRROR
+default_access_class=SNAPSHOT_ONLY
+allowed_usage_note=Metadata snapshot only. Use to understand evolution mirror state, not as authoritative active truth.
+
+15)
+input_source_name=previous_plan_backup_metadata_snapshot
+source_path_or_surface=MQL5/Files/AI/ai_previous_plan_backup.json
+input_group=PLAN_STATE_METADATA_SNAPSHOTS
+authority_class=BACKUP_ONLY_NON_AUTHORITATIVE_SNAPSHOT
+default_access_class=SNAPSHOT_ONLY
+allowed_usage_note=Backup snapshot metadata only. Do not treat as current plan truth.
+
+16)
+input_source_name=ai_activation_readiness_status
+source_path_or_surface=MQL5/Files/AI/ai_activation_readiness_status.txt|json
+input_group=PLAN_STATE_METADATA_SNAPSHOTS
+authority_class=NON_AUTHORITATIVE_DERIVED_AI_GOVERNANCE
+default_access_class=SNAPSHOT_ONLY
+allowed_usage_note=AI authority/readiness metadata only. Useful for AI self-governance visibility, not for runtime truth replacement.
+
+SENSITIVE / FORBIDDEN SOURCES
+
+17)
+input_source_name=runtime_secrets
+source_path_or_surface=MQL5/Files/AI/ai_runtime_secrets.json
+input_group=SENSITIVE_FORBIDDEN
+authority_class=SECRET_MATERIAL
+default_access_class=FORBIDDEN
+allowed_usage_note=Never visible to AI in A1. Not retrievable, not summarized, not exposed.
+
+18)
+input_source_name=credentials_and_execution_contracts
+source_path_or_surface=MQL5/Files/AI/ai_execution_contract.json
+input_group=SENSITIVE_FORBIDDEN
+authority_class=EXECUTION_PERMISSION_SURFACE
+default_access_class=FORBIDDEN
+allowed_usage_note=Direct execution permission surfaces are forbidden AI inputs in A1.
+
+19)
+input_source_name=mutable_control_surfaces
+source_path_or_surface=MQL5/Files/AI/ai_constraints.json|ai_mutation_rules.json|ai_governor_state.json|ai_next_plan_proposal.json
+input_group=SENSITIVE_FORBIDDEN
+authority_class=MUTABLE_CONTROL_SURFACE
+default_access_class=FORBIDDEN
+allowed_usage_note=AI may not use mutable control surfaces as operational inputs for live control or mutation.
+
+20)
+input_source_name=write_capable_truth_sources
+source_path_or_surface=Any write-capable truth or control surface
+input_group=SENSITIVE_FORBIDDEN
+authority_class=WRITE_CAPABLE_TRUTH_SOURCE
+default_access_class=FORBIDDEN
+allowed_usage_note=AI may not use write-capable system surfaces as inputs for operational mutation or auto-apply behavior.
+
+CATALOG NOTES
+- ALWAYS_VISIBLE_SUMMARIES are the default first read for AI work.
+- ON_DEMAND_RETRIEVAL sources require bounded retrieval rules from docs/ai_access_policy.txt.
+- SNAPSHOT_ONLY sources expose metadata only, not broad raw plan/state payload reading.
+- FORBIDDEN sources remain forbidden regardless of AI authority state in A1.
+- A1 defines input discipline only. It does not grant new AI authority or new execution behavior.

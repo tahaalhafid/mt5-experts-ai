@@ -1,0 +1,72 @@
+RELEASE PROTOCOL
+Scope: Practical release discipline only. No runtime behavior changes by this document.
+
+============================================================
+1) WHAT QUALIFIES AS A PHASE RELEASE
+============================================================
+A phase release is accepted only when all of the following are true:
+- scope is explicitly stated
+- changed files are listed exactly
+- behavior-change statement is explicit
+- baseline identity file is updated
+- phase acceptance checklist is satisfied
+- release archive name is unique and policy-compliant
+- no competing "current/latest/final/new" archive names remain ambiguous
+
+============================================================
+2) WHAT QUALIFIES AS A FIX-ONLY RELEASE
+============================================================
+A fix-only release:
+- stays within the already active phase scope
+- does not add new features or expand architecture
+- states the exact defect repaired
+- keeps the same active baseline lineage
+- uses fix-only naming from versioning_policy.txt
+
+============================================================
+3) COMPILE DISCIPLINE
+============================================================
+Before any release is accepted:
+- compile clean is required when code behavior changed
+- zero warnings is preferred
+- if warnings remain, each warning needs a written rationale
+- if compile was not executed in the patching environment, that limitation must be stated honestly
+- documentation/status-only reconciliation releases that change no .mq5/.mqh files must not claim fresh compile verification
+- documentation/status-only reconciliation releases may update the active baseline only if they state clearly that runtime behavior was unchanged and compile truth was not newly established by that release
+
+============================================================
+4) BASELINE PROMOTION RULE
+============================================================
+A new stable baseline is promoted only when:
+- the new phase/fix release passes the checklist
+- the release archive name is explicit
+- MQL5/Experts/AI/docs/baseline_identity.txt is updated
+- MQL5/Experts/AI/docs/current_system_status.txt remains truthful
+- prior baseline archives become historical, not active
+
+There must be exactly one active baseline at a time.
+
+============================================================
+5) STALE / NON-AUTHORITATIVE ARTIFACT HANDLING
+============================================================
+Delete or deprecate artifacts only when they create real release-truth confusion and are not needed by runtime.
+Preferred order:
+1) mark obsolete/historical-only if retention is useful
+2) delete only if clearly stale and non-runtime
+3) never delete files required by live runtime behavior
+
+============================================================
+6) AUTHORITATIVE VS DERIVED STATUS RULE
+============================================================
+The following remain authoritative for project-status truth:
+- baseline_identity.txt
+- current_system_status.txt
+- implementation_state_map.txt
+
+The following may be metadata-rich but remain non-authoritative for project-status truth unless a future phase changes that explicitly:
+- ai_activation_readiness_status.*
+- ai_repository_manifest.*
+- package placeholders
+- draft technical reference docs
+
+End of release protocol.

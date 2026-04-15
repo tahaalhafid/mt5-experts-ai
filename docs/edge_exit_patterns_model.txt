@@ -1,0 +1,68 @@
+artifact_role=EDGE_EXIT_PATTERNS_MODEL
+artifact_authority_class=AUTHORITATIVE_FACTORY_EXIT_PATTERN_MODEL
+model_version=E7_EDGE_EXIT_PATTERNS_MODEL_V1
+phase_id=E7
+
+exit_families_defined:
+- ROTATION_REVERSION_EXIT
+- STRUCTURAL_CONTINUATION_EXIT
+- BREAKOUT_STAGING_EXIT
+- POST_DISPLACEMENT_HOLD_EXIT
+- MICRO_EXPANSION_FAST_EXIT
+- EXHAUSTION_PROTECTIVE_EXIT
+
+family_definitions:
+
+ROTATION_REVERSION_EXIT:
+- suited_to: mean-reclaim and liquidity-reversal style families
+- target_logic: edge-to-mid or return-to-range first; opposing-side stretch only if rotation quality remains clean
+- partial_logic: early partial reduction is often justified once structural payback begins
+- time_stop_logic: yes, especially when reclaim holds but rotation stalls
+- failure_to_expand_logic: visible when reversal/reclaim stops rotating despite holding locally
+- protective_tightening: increases as move approaches range interior or opposing liquidity
+
+STRUCTURAL_CONTINUATION_EXIT:
+- suited_to: continuation and pullback-continuation families
+- target_logic: staged continuation objectives with structure-aware hold bias
+- partial_logic: secondary, not purely mechanical
+- time_stop_logic: used when continuation fails to advance in reasonable time
+- failure_to_expand_logic: present when continuation stops separating after confirmation
+- protective_tightening: follows structural trail and momentum decay
+
+BREAKOUT_STAGING_EXIT:
+- suited_to: breakout and release families
+- target_logic: first impulse objective first, second-stage target only if acceptance persists
+- partial_logic: prominent after initial release
+- time_stop_logic: important when breakout remains alive but cannot travel
+- failure_to_expand_logic: central
+- protective_tightening: should become aggressive after first clean impulse
+
+POST_DISPLACEMENT_HOLD_EXIT:
+- suited_to: post-displacement continuation families
+- target_logic: hold while post-displacement efficiency remains intact
+- partial_logic: optional after strong displacement travel
+- time_stop_logic: appears when reentry is present but continuation never restarts cleanly
+- failure_to_expand_logic: important
+- protective_tightening: responds to momentum decay and fatigue
+
+MICRO_EXPANSION_FAST_EXIT:
+- suited_to: micro-range expansion families
+- target_logic: local/fast objectives, not broad travel assumptions
+- partial_logic: may effectively coincide with first objective
+- time_stop_logic: strict
+- failure_to_expand_logic: dominant
+- protective_tightening: early and aggressive
+
+EXHAUSTION_PROTECTIVE_EXIT:
+- suited_to: exhaustion-sensitive reversal environments
+- target_logic: protect after fast relief move or exhaustion snapback
+- partial_logic: favored when reversal already paid back local imbalance
+- time_stop_logic: short leash
+- failure_to_expand_logic: visible when snapback immediately stalls
+- protective_tightening: prominent
+
+architecture_rules:
+- one exit family may still produce different state eligibility under different regimes
+- exit families do not imply execution permission
+- exit families do not imply score superiority
+- exit family assignment is conceptual and may later be refined by scorecard or test evidence

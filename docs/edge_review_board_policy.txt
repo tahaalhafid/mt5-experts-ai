@@ -1,0 +1,54 @@
+EDGE REVIEW BOARD POLICY — E11
+
+Purpose
+- The Institutional Edge Review Board is the strategic oversight layer of the edge factory.
+- It reviews edge quality, concentration, fragility, overlap, suppression pressure, enrichment value, and strategic fit.
+- It does not act as runtime council logic, AI authority escalation, live trading control, or auto-promotion/auto-suppression.
+
+Boundary
+- E11 is governance-only.
+- It is non-runtime, non-executing, non-licensing, and non-mutative.
+- Review-board outputs do not change trading behavior, runtime permissions, or code paths by themselves.
+
+What the board reviews
+- current canon status
+- zone coverage
+- regime mapping
+- timing and trigger architecture
+- invalidation and risk geometry
+- exit architecture
+- scorecards and runtime accounting
+- governance postures
+- enrichment signals
+- market-native concentration or gap signals
+- inventory crowding, duplication, and strategic gap signals
+
+Review-board roles
+- BOARD_CHAIR
+  - owns agenda discipline and boundary protection
+  - may frame strategic review scope
+  - may not create runtime permissions
+- STRATEGIC_EDGE_REVIEWER
+  - reviews strategic edge quality, concentration, fragility, and fit
+  - may recommend strategic outcomes only
+- EVIDENCE_CURATOR
+  - assembles inputs from canon, regime, timing, risk, exit, scorecards, governance, and enrichment layers
+  - may not act as promotion/suppression authority
+- GOVERNANCE_SECRETARIAT
+  - records review findings, outcomes, and lineage
+  - may not create live control
+
+Strategic concerns the board is expected to surface
+- concentrated dependence on too few strong families
+- persistent sparse zones
+- repeated family fragility without resolution
+- overlap/crowding that inflates canon clutter
+- suppression pressure that may justify later action-preparation review
+- enrichment loops producing low strategic value
+- future productization focus versus deprioritization candidates
+
+Required truth discipline
+- good narrative quality is not equal to strong strategic value
+- repeated governance motion is not equal to strategic progress
+- overlap should remain explicit and bounded
+- weak families should not gain status merely because they are adjacent to stronger ones

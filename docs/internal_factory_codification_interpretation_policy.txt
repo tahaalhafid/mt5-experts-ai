@@ -1,0 +1,35 @@
+INTERNAL FACTORY CODIFICATION INTERPRETATION POLICY
+version=PHASE4_INTERNAL_FACTORY_CODIFICATION_INTERPRETATION_POLICY_V1
+
+codification_intelligence purpose:
+- interpret embedded code-like payloads as analytical signals only
+- expose what code candidate text seems to express structurally
+- expose what the code assumes, compresses, or overstates
+
+rules:
+- semantic layer stays primary
+- code may clarify structure, but may not override weak semantics
+- polished code must not be confused with trading readiness
+- codification maturity must not be confused with runtime permission
+- code maturity must not be confused with analytical validity
+
+codification maturity postures:
+- CODIFICATION_UNPROVEN
+- CODIFICATION_PARTIAL
+- CODIFICATION_STRUCTURALLY_VALID
+- CODIFICATION_REVIEW_READY
+- CODIFICATION_EXPERIMENT_READY
+
+codification interpretation may express:
+- inferred logic components
+- sequence structure
+- dependency complexity
+- threshold structure note
+- state transition note
+
+codification interpretation must keep:
+- ambiguity visible
+- hidden assumptions visible
+- unsupported thresholds visible
+- semantic-code mismatch visible
+

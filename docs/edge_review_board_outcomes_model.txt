@@ -1,0 +1,41 @@
+EDGE REVIEW BOARD OUTCOMES MODEL — E11
+
+Allowed review-board outcomes
+- STRATEGIC_MAINTAIN
+  - maintain current strategic posture without broadening scope
+- STRATEGIC_FOCUS_RECOMMENDED
+  - focus future attention on the clearest and structurally strongest families/areas
+- STRATEGIC_TIGHTEN_SCOPE
+  - reduce ambiguity by demanding cleaner family/zone boundaries or stronger conditions
+- STRATEGIC_NARROW_SCOPE
+  - reduce accepted scope of a family or context rather than treating it broadly
+- STRATEGIC_DEPRIORITIZE
+  - reduce strategic emphasis where fragility, weak evidence, or low-value loops dominate
+- STRATEGIC_RESEARCH_MORE
+  - acknowledge a real gap or unresolved area and return it to research/enrichment/intake pathways
+- STRATEGIC_ESCALATE_FOR_LATER_ACTION_PREPARATION
+  - signal that later governed preparation may be needed; not live action
+- STRATEGIC_ARCHIVE_CONSIDERATION
+  - signal that later archive consideration may be appropriate if no useful improvement appears
+
+Outcome discipline
+- Outcomes remain review-oriented only.
+- Outcomes do not act as runtime council instructions.
+- Outcomes do not grant direct promotion, suppression, or execution.
+- Outcomes do not change licensing or runtime permissions in E11.
+
+Review-record structure
+Each review-board record should retain at minimum:
+- review_record_id
+- review_type
+- reviewed_scope
+- primary_inputs
+- key_findings
+- strategic_concern_note
+- concentration_or_gap_note
+- overlap_note
+- fragility_note
+- enrichment_value_note
+- recommended_outcome
+- confidence_posture
+- lineage_reference

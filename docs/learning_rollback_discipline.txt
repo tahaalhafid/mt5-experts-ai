@@ -1,0 +1,66 @@
+learning_rollback_discipline
+document_version=L6_LEARNING_ROLLBACK_DISCIPLINE_V1
+document_scope=ROLLBACK_READINESS_AND_DISCIPLINE_AT_PROMOTION_STAGE_ONLY
+authority_class=NON_AUTHORITATIVE_GOVERNANCE_POLICY
+purpose=DEFINE_ROLLBACK_DISCIPLINE_AND_ROLLBACK_READINESS_EXPECTATIONS_FOR_PROMOTION_CONSIDERATION_WITHOUT_EXECUTING_ROLLBACK
+non_goals=NO_ROLLBACK_EXECUTOR|NO_RUNTIME_MUTATION|NO_AUTO_REVERSAL|NO_LIVE_CHANGE_AUTHORITY
+
+1. FORMAL ROLE OF ROLLBACK DISCIPLINE
+Rollback discipline in this phase ensures that no learning output is treated as promotion-ready unless a credible rollback posture exists.
+This phase does not execute rollback.
+This phase does not authorize rollback by itself.
+This phase only defines expectations that must already be satisfied before promotion readiness may be recognized.
+
+2. ROLLBACK TRIGGER TYPES
+rollback_trigger_type=UNEXPECTED_DOWNSIDE_EXCEEDS_BOUNDED_EXPECTATION
+rollback_trigger_examples=NEGATIVE_BEHAVIOR_OUTSIDE_DECLARED_TOLERANCE|WORSE_THAN_EXPECTED_REVIEWED_RESULT|MATERIAL_UNDERPERFORMANCE
+
+rollback_trigger_type=EVIDENCE_INVALIDATION
+rollback_trigger_examples=SOURCE_LINKAGE_FAILURE|POST_REVIEW_CONTRADICTION|LATER_EVIDENCE_REVERSAL|DISCOVERED_DATA_DEFECT
+
+rollback_trigger_type=REVIEW_GOVERNANCE_CONTRADICTION
+rollback_trigger_examples=SIGNOFF_MISMATCH|SCOPE_MISMATCH|DECISION_HISTORY_CONFLICT|MISSING_APPROVAL_PATH
+
+rollback_trigger_type=PROPOSAL_OR_EXPERIMENT_OUTCOME_MATERIAL_UNDERPERFORMANCE
+rollback_trigger_examples=SUCCESS_CRITERIA_NOT_MET|FAILURE_CONDITION_REACHED|UNCERTAINTY_GREATER_THAN_ALLOWED
+
+rollback_trigger_type=HARMFUL_SIDE_EFFECT_EMERGENCE
+rollback_trigger_examples=UNEXPECTED_SYSTEM_BEHAVIOR|UNACCEPTABLE_SECONDARY_RISK|GOVERNANCE_OR_SAFETY_COST_TOO_HIGH
+
+rollback_trigger_type=GOVERNANCE_BOUNDARY_BREACH
+rollback_trigger_examples=AUTHORITY_SCOPE_DRIFT|IMPLICIT_MUTATION_PATH|REVIEW_BYPASS|FORBIDDEN_OUTPUT_SURFACE_USE
+
+rollback_trigger_type=OBSERVABILITY_OR_DIAGNOSTIC_CONTRADICTION
+rollback_trigger_examples=MONITORING_MISMATCH|ROOT_CAUSE_REVERSAL|VALIDATION_CONTRADICTION_DISCOVERED_LATER
+
+3. ROLLBACK READINESS REQUIREMENTS
+A promotion candidate must declare all of the following:
+- rollback_owner_role
+- rollback_scope
+- rollback_trigger_conditions
+- rollback_feasibility_note
+- rollback_traceability_reference
+- rollback_boundary_note
+
+rollback_owner_role_expectation=HUMAN_GOVERNANCE_ROLE_DEFINED_BEFORE_PROMOTION_READINESS
+rollback_scope_expectation=EXACT_BOUNDARY_OF_POTENTIAL_REVERSION_OR_WITHDRAWAL_MUST_BE_DECLARED
+rollback_trigger_expectation=TRIGGER_CONDITIONS_MUST_BE_SPECIFIC_AND_REVIEWABLE
+rollback_feasibility_expectation=FEASIBILITY_NOTE_MUST_ACKNOWLEDGE_LIMITATIONS_AND_DEPENDENCIES
+rollback_traceability_expectation=ROLLBACK_REFERENCES_MUST_LINK_TO_RELEVANT_EVIDENCE_REVIEW_AND_PROMOTION_RECORDS
+rollback_boundary_expectation=ROLLBACK_MUST_NOT_CREATE_NEW_MUTATION_PATH_OR_AUTHORITY_EXPANSION
+
+4. ROLLBACK DECISION EXPECTATIONS
+Rollback consideration should be prompt when trigger conditions are met or credibly threatened.
+Rollback consideration should be traceable, bounded, and sign-off-aware.
+Rollback consideration should prefer governance safety over narrative optimism.
+Rollback consideration in this phase remains conceptual and preparatory only.
+
+5. ROLLBACK SIGN-OFF EXPECTATIONS
+REVIEW_BOARD is the default sign-off level for rollback readiness sufficiency at promotion stage.
+COMMITTEE_REVIEWER visibility or sign-off may be required when governance sensitivity or materiality justifies it.
+No rollback readiness declaration permits autonomous rollback execution.
+
+6. NON-NEGOTIABLE RULE
+A promotion candidate without credible rollback readiness is not promotion-ready.
+A vague promise to roll back later does not satisfy this phase.
+A missing rollback owner, trigger set, or traceability reference is a promotion blocker.

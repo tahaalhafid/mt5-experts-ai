@@ -1,0 +1,118 @@
+ENTRY TIMING POLICY
+Authority: Institutional Edge Factory edge timing and trigger policy only.
+Truth posture: Factory timing architecture only. No runtime behavior change.
+
+============================================================
+PHASE IDENTITY
+============================================================
+Phase:
+- E5 — Entry Timing & Trigger Engine
+
+Purpose:
+- Define the formal entry timing and trigger architecture inside the factory.
+- Separate structural fit from "why now" timing logic.
+- Define trigger readiness, lateness, exhaustion, failure, and confirmation quality without granting runtime execution permission.
+
+Non-goals:
+- No runtime trigger execution
+- No entry logic rewrite
+- No execution permission
+- No invalidation/risk/exit engine yet
+- No code behavior change
+
+============================================================
+WHAT ENTRY TIMING MEANS
+============================================================
+Entry timing means:
+- the factory's "why now" layer for an edge family
+- the layer that explains whether an otherwise structurally compatible edge is early, ready, validated, incomplete, late, exhausted, failed, or not applicable
+- the layer that separates family identity from immediate trigger timing
+
+Timing is therefore distinct from:
+- zone membership
+- regime structural fit
+- execution permission
+- live runtime entry logic
+
+Structural fit is necessary but not sufficient.
+A family may be structurally compatible with a zone and regime while still being:
+- too early
+- not yet confirmed
+- already too late
+- already exhausted
+- timing-invalid under current confirmation quality
+
+============================================================
+BOUNDARY RULES
+============================================================
+E5 timing/trigger mapping remains:
+- non-runtime
+- non-executing
+- non-licensing
+- non-authoritative for live trade permission
+
+E5 does NOT:
+- grant runtime trigger approval
+- grant execution approval
+- bypass later invalidation, risk, exit, testing, scorecard, or governance phases
+- convert factory timing posture into live council behavior
+
+============================================================
+TIMING INTERPRETATION PRIMITIVES
+============================================================
+The factory now recognizes the following timing/trigger interpretation primitives:
+
+- confirmation_quality
+  Whether the confirming behavior is structurally persuasive or merely suggestive.
+
+- close_quality
+  Whether body-close behavior supports the thesis rather than leaving it wick-dominant or indecisive.
+
+- wick_rejection_quality
+  Whether rejection behavior is real structural rejection or only cosmetic intrabar noise.
+
+- expansion_quality
+  Whether expansion is decisive, directional, and contextually aligned rather than thin or unstable.
+
+- acceptance_quality
+  Whether price accepts beyond a break/reclaim rather than only printing a brief excursion.
+
+- follow_through_quality
+  Whether the move continues after confirmation or stalls immediately.
+
+- incomplete_confirmation
+  Structural plausibility is present, but the trigger remains underconfirmed.
+
+- no_follow_through_deterioration
+  Initial trigger appearance degrades because continuation/acceptance does not persist.
+
+============================================================
+ANTI-PREMATURE / ANTI-LATE DISCIPLINE
+============================================================
+The factory must explicitly distinguish:
+
+- early but structurally plausible
+  The edge thesis is coherent, but trigger evidence is still immature.
+
+- ready and confirmed
+  Timing state has matured from pre-trigger into validated trigger behavior.
+
+- already too late
+  Structural alignment may remain present, but asymmetry is degraded because the move has already traveled.
+
+- already exhausted
+  Structural and timing energy have deteriorated; fresh edge quality is materially reduced.
+
+- structurally attractive but timing-invalid
+  The market thesis may still look interesting, but trigger quality, follow-through, or timing freshness are insufficient.
+
+No timing map may collapse these into one vague "valid" bucket.
+
+============================================================
+ANTI-BLOAT DISCIPLINE
+============================================================
+- Trigger archetypes are factory timing archetypes, not runtime strategy names.
+- Not every family requires many archetypes at this phase.
+- Generic confirmation language must be treated as a weakness, not as precision.
+- Late-sensitive families must remain marked as late-sensitive rather than over-permissively "ready."
+- Suppressed regime posture must map to timing non-applicability rather than trigger optimism.

@@ -1,0 +1,63 @@
+AI REVIEW ROLES AND RESPONSIBILITIES
+document_role=AUTHORITATIVE_AI_REVIEW_ROLES_POLICY
+document_version=A7_AI_REVIEW_ROLES_V1
+authority_scope=AI_HUMAN_REVIEW_ROLE_SEPARATION_ONLY
+linked_workflow=docs/ai_human_review_workflow.txt
+linked_decision_matrix=docs/ai_review_decision_matrix.txt
+trust_rule=defines_human_role_purposes_scopes_escalations_and_prohibitions_only
+policy_note=These roles govern review handling of AI outputs and do not create runtime execution authority.
+
+ROLE DEFINITIONS
+
+1)
+role_name=OPERATOR
+role_purpose=Consume day-to-day AI visibility artifacts, acknowledge informational outputs, and flag review-worthy items for formal review.
+read_scope=HOURLY_WATCH_REPORT,EVENT_TRIGGERED_INCIDENT_REPORT,DAILY_OPERATING_INTELLIGENCE_REPORT,EXECUTIVE_ADMIN_BRIEF,OPERATOR_COPILOT_RESPONSE_TEMPLATE,COUNCIL_ADVISORY_PACKET_TEMPLATE,ROOT_CAUSE_OUTPUT,ANOMALY_OUTPUT,DRIFT_OUTPUT,GOVERNANCE_AUDIT_OUTPUT
+review_scope=INFORMATIONAL_ONLY triage, basic acknowledgment, review-worthy flagging, incident/context forwarding
+approval_scope=NONE
+escalation_scope=May move informational items to PENDING_REVIEW and may escalate to ADMIN_REVIEWER when materiality, repetition, or contradiction is observed.
+prohibition_scope=May not approve proposals, may not approve experiments, may not approve learning mutation, may not alter runtime logic, may not treat advisory packets as executable instructions, may not create live trading overrides.
+
+2)
+role_name=ADMIN_REVIEWER
+role_purpose=Perform first-line formal review over review-worthy AI outputs and determine whether items should be rejected, deferred, actioned as governed next steps, or escalated.
+read_scope=All operator-visible artifacts plus REVIEWABLE_PROPOSAL_TEMPLATE and LEARNING_GOVERNANCE_EVIDENCE_TEMPLATE
+review_scope=EVENT_TRIGGERED_INCIDENT_REPORT,DAILY_OPERATING_INTELLIGENCE_REPORT,REVIEWABLE_PROPOSAL_TEMPLATE,LEARNING_GOVERNANCE_EVIDENCE_TEMPLATE,ROOT_CAUSE_OUTPUT,ANOMALY_OUTPUT,DRIFT_OUTPUT,GOVERNANCE_AUDIT_OUTPUT,COUNCIL_ADVISORY_PACKET_TEMPLATE post-fact review context
+approval_scope=May acknowledge, request more evidence, defer, reject, accept for governed action preparation where review-board is not mandatory, and escalate to REVIEW_BOARD or COMMITTEE_REVIEWER when policy requires.
+escalation_scope=REVIEW_BOARD for bounded proposals, learning-governance evidence, repeated drift deterioration, structured improvement candidates; COMMITTEE_REVIEWER for major governance contradiction or institutional-risk summaries.
+prohibition_scope=May not auto-apply, may not activate live runtime changes, may not bypass review-board requirements for proposal/evidence classes that require review-board review, may not grant AI direct execution control.
+
+3)
+role_name=REVIEW_BOARD
+role_purpose=Provide structured multi-person or institutional review for bounded proposals, learning-governance evidence, repeated drift patterns, and material review-linked change candidates.
+read_scope=All AI output families and linked review history relevant to proposal/evidence/governance review
+review_scope=REVIEWABLE_PROPOSAL_TEMPLATE,LEARNING_GOVERNANCE_EVIDENCE_TEMPLATE,material ROOT_CAUSE_OUTPUT,material ANOMALY_OUTPUT,material DRIFT_OUTPUT,material GOVERNANCE_AUDIT_OUTPUT,post-fact COUNCIL_ADVISORY effectiveness patterns
+approval_scope=May reject, defer, accept for experiment, accept for governed action preparation, or escalate to COMMITTEE_REVIEWER for major governance significance.
+escalation_scope=COMMITTEE_REVIEWER when cross-role governance contradiction, institutional-risk concern, or high-level policy conflict exists.
+prohibition_scope=May not live-activate approved proposals, may not mutate runtime or plan truth directly, may not grant direct BUY/SELL authority, may not convert advisory packets into direct approval commands.
+
+4)
+role_name=COMMITTEE_REVIEWER
+role_purpose=Review executive/governance summaries, major escalations, and institution-level contradictions or policy-sensitive change candidates.
+read_scope=EXECUTIVE_ADMIN_BRIEF,major GOVERNANCE_AUDIT_OUTPUT,major REVIEWABLE_PROPOSAL summaries,major LEARNING_GOVERNANCE_EVIDENCE summaries,escalated incident/root-cause/advisory effectiveness summaries
+review_scope=Major governance escalations, institutional-risk items, major cross-role contradictions, policy-sensitive bounded change candidates
+approval_scope=May reject, defer, accept for governed action preparation, accept for experiment, or return items to lower review roles with constraints. These remain non-runtime decisions.
+escalation_scope=Top governance venue in A7; may request re-review, narrower evidence, or policy clarification.
+prohibition_scope=May not bypass established authority limits, may not convert committee visibility into live trading control, may not authorize direct runtime mutation or auto-apply.
+
+ROLE SEPARATION RULES
+- OPERATOR is visibility-first and cannot be the final approver for proposals or learning-governance evidence.
+- ADMIN_REVIEWER is the first formal review layer for material items and may escalate but not silently implement.
+- REVIEW_BOARD is required for proposal/evidence classes that carry structured governance significance.
+- COMMITTEE_REVIEWER is reserved for major governance review and does not function as a live execution authority.
+
+RESPONSIBILITY NORMALIZATION
+- OPERATOR = read, acknowledge, flag, forward.
+- ADMIN_REVIEWER = triage, review, reject/defer/escalate, bounded governed acceptance.
+- REVIEW_BOARD = structured proposal/evidence review, accept for experiment or governed action planning, institutional review memory.
+- COMMITTEE_REVIEWER = high-level governance visibility and major escalation handling.
+
+CROSS-ROLE PROHIBITIONS
+- No role in A7 may directly alter strategy logic, entry logic, exit logic, governor formulas, failure detector formulas, execution-quality formulas, dirty-environment logic, trend-continuation reinforcement logic, or direct live trading behavior from this workflow alone.
+- No role may treat AI output as silently authoritative.
+- No role may convert review acceptance into auto-apply.

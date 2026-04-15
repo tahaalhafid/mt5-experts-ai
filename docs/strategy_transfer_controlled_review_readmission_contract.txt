@@ -1,0 +1,36 @@
+STRATEGY TRANSFER PACKAGE 4 — CONTROLLED REVIEW & RE-ADMISSION CONTRACT
+
+Purpose:
+Controlled review in Package 4 evaluates only the 27 actually ingested first-wave legacy elements and assigns bounded review outcomes and reviewed re-admission status.
+
+Re-admission in Package 4 means:
+- reviewed factory-side admissibility posture
+- bounded eligibility for future controlled pilot consideration
+- primitive-layer retention posture
+- research-layer retention posture
+- conditional/deeper shell retention posture
+
+Re-admission in Package 4 does NOT mean:
+- runtime reactivation
+- execution privilege restoration
+- automatic promotion
+- live trading permission
+- canon admission completion
+
+Controlled review outcomes in this package may include:
+- REVIEW_HELD
+- REVIEW_ACCEPTED_FOR_FACTORY_CANON_LAYER
+- REVIEW_ACCEPTED_AS_PRIMITIVE_ONLY
+- REVIEW_ACCEPTED_AS_RESEARCH_ONLY
+- REVIEW_ACCEPTED_AS_CONDITIONAL_ONLY
+- REVIEW_REQUIRES_FURTHER_EVIDENCE
+
+Reviewed re-admission statuses in this package may include:
+- ELIGIBLE_FOR_FUTURE_DEEPER_CANDIDATE_CONSIDERATION
+- ELIGIBLE_FOR_FUTURE_CONDITIONAL_SHELL_CONSIDERATION
+- ELIGIBLE_FOR_FUTURE_PRIMITIVE_LAYER_ONLY
+- RETAINED_FOR_FUTURE_RESEARCH_LAYER_ONLY
+- NOT_ELIGIBLE_FOR_FUTURE_PILOT_CONSIDERATION_YET
+
+Boundary:
+Package 1 runtime freeze remains active after all Package 4 review outcomes.

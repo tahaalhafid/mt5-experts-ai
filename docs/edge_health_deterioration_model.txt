@@ -1,0 +1,40 @@
+artifact_role=EDGE_HEALTH_DETERIORATION_MODEL
+artifact_authority_class=AUTHORITATIVE_FACTORY_HEALTH_DETERIORATION_MODEL
+model_version=E8_EDGE_HEALTH_DETERIORATION_MODEL_V1
+phase_id=E8
+
+health_postures:
+- HEALTH_STRONG
+- HEALTH_STABLE
+- HEALTH_MIXED
+- HEALTH_FRAGILE
+- HEALTH_UNPROVEN
+
+health_posture_meaning:
+- HEALTH_STRONG is reserved for later evidence-rich families and is not widely claimed in E8
+- HEALTH_STABLE means the family/context is structurally mature enough to justify future accounting without making performance claims
+- HEALTH_MIXED means the family/context is structurally relevant but carries meaningful overlap, secondary-role, or context-fragility concerns
+- HEALTH_FRAGILE means ambiguity, crowding, noisy confirmation, or geometry sensitivity are already visible
+- HEALTH_UNPROVEN means the family/context remains too lightly supported for confident health claims
+
+deterioration_postures:
+- DETERIORATION_NONE_VISIBLE
+- DETERIORATION_EARLY_SIGNAL
+- DETERIORATION_REPEAT_SIGNAL
+- DETERIORATION_MATERIAL
+- DETERIORATION_UNKNOWN
+
+deterioration_meaning:
+- deterioration requires evidence over time; it should not be fabricated from one structural impression
+- DETERIORATION_UNKNOWN is the conservative default when runtime accounting feed is not yet active
+- later deterioration signals should consider expectancy drift, worsening mae/mfe posture, rising hold/reject pressure, session/regime concentration, and repeated geometry failure
+
+conservative_truth_rule:
+- no strong health claim from architecture alone
+- no deterioration claim from narrative alone
+- deterioration visibility should stay separate from simple dislike or stylistic preference
+- a family may remain structurally elegant while its future accounting health turns fragile
+- a family may remain structurally narrow without being invalid; accounting must later decide whether rarity, suppression, or deterioration is the real cause
+
+later_governance_note:
+- health and deterioration postures defined here prepare later promotion/suppression governance only.

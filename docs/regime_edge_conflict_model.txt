@@ -1,0 +1,73 @@
+REGIME-EDGE CONFLICT MODEL
+Authority: Institutional Edge Factory regime conflict visibility only.
+Truth posture: Conflict visibility and caution only. No runtime behavior change.
+
+============================================================
+CONFLICT TYPES
+============================================================
+- ZONE_REGIME_MISMATCH
+  A family belongs to a zone whose regime fit under current conditions is weak or suppressed.
+
+- CONDITIONAL_CLUSTERING
+  Too many families remain conditional inside one regime, creating overpermission pressure.
+
+- SUPPORT_HEAVY_DEPENDENCY
+  A regime depends mostly on support logic or contextual overlays rather than clear family seeds.
+
+- OVERLAP_PRESSURE
+  Too many adjacent zones compete inside the same regime without clear separation.
+
+- SPARSE_COVERAGE
+  A regime has weak or missing primary/secondary family representation.
+
+- OVERPERMISSION_RISK
+  A regime accumulates too many non-suppressed families and risks becoming a permissive catch-all bucket.
+
+============================================================
+CURRENT E4 CONFLICT READ
+============================================================
+Conflict-heavy regimes:
+- TREND_UP
+- TREND_DOWN
+- RANGE_DIRTY
+- TRANSITION
+
+Why:
+- TREND_UP and TREND_DOWN attract many conditional overlays beyond the single strong continuation seed.
+- RANGE_DIRTY has no strong primary family seed and leans on weaker reclaim/reversal compatibility.
+- TRANSITION legitimately hosts several behaviors, but that also raises overlap pressure.
+
+Support-heavy regimes:
+- RANGE_DIRTY
+- COMPRESSION
+- TRANSITION
+
+Sparse regimes:
+- RANGE_DIRTY
+- COMPRESSION
+- NO_TRADE
+- UNKNOWN
+
+Overpermission-risk regimes:
+- TREND_UP
+- TREND_DOWN
+- EXPANSION
+
+============================================================
+HOW TO READ CONFLICT STATUS
+============================================================
+Conflict visibility does NOT mean:
+- the regime is unusable
+- the family is invalid
+- runtime suppression has already happened
+
+Conflict visibility means:
+- later licensing/testing phases must tighten permission discipline
+- narrative plausibility alone is not enough
+- structural compatibility must remain narrower than label overlap
+
+============================================================
+ANTI-OVERCLAIM RULE
+============================================================
+A regime with many attached families is not automatically a strong regime.
+Sometimes it is simply a sign that the factory still needs sharper separation and stricter permissioning.

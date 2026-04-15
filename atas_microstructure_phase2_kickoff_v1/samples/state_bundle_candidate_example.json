@@ -1,0 +1,68 @@
+{
+  "schema_version": "ATAS_MICROSTRUCTURE_STATE_BUNDLE_PHASE2_KICKOFF_V1",
+  "candidate_id": "phase2_candidate_example_001",
+  "generated_at_utc": "2026-04-10T17:45:00Z",
+  "source_lineage": {
+    "packet_id": "atas_ind_example_packet",
+    "trace_id": "ATAS_TRACE_EXAMPLE_001",
+    "source_symbol": "GC",
+    "execution_symbol": "XAUUSD"
+  },
+  "states": {
+    "OrderFlowState": {
+      "packet_id": "atas_ind_example_packet",
+      "trace_id": "ATAS_TRACE_EXAMPLE_001",
+      "event_time_utc": "2026-04-10T17:44:55Z",
+      "execution_symbol": "XAUUSD",
+      "liquidity_sweep_state": "UNKNOWN",
+      "absorption_state": "UNKNOWN",
+      "delta_bias_state": "NEUTRAL",
+      "imbalance_state": "UNKNOWN",
+      "continuation_exhaustion_hint": "UNAVAILABLE",
+      "signal_stability_window_sec": 0
+    },
+    "LiquidityState": {
+      "packet_id": "atas_ind_example_packet",
+      "event_time_utc": "2026-04-10T17:44:55Z",
+      "execution_symbol": "XAUUSD",
+      "liquidity_stability_state": "UNKNOWN",
+      "level_candidate_count": 0
+    },
+    "LevelInteractionState": {
+      "packet_id": "atas_ind_example_packet",
+      "event_time_utc": "2026-04-10T17:44:55Z",
+      "execution_symbol": "XAUUSD",
+      "level_interaction_type": "UNAVAILABLE",
+      "support_resistance_confluence_state": "UNAVAILABLE"
+    },
+    "MicrostructureEnvironmentEvidence": {
+      "packet_id": "atas_ind_example_packet",
+      "event_time_utc": "2026-04-10T17:44:55Z",
+      "execution_symbol": "XAUUSD",
+      "market_state_class": "UNAVAILABLE",
+      "session_context": "UNAVAILABLE",
+      "price_space_relation": "UNAVAILABLE",
+      "basis_capture_state": "UNAVAILABLE",
+      "cross_instrument_translation_applied": false,
+      "contradiction_flag": false,
+      "semantic_only_mode": true
+    },
+    "QualityValidityState": {
+      "packet_id": "atas_ind_example_packet",
+      "event_time_utc": "2026-04-10T17:44:55Z",
+      "fresh_until_utc": "2026-04-10T17:47:55Z",
+      "evaluated_at_utc": "2026-04-10T17:45:00Z",
+      "freshness_state": "FRESH",
+      "quality_state": "UNKNOWN",
+      "packet_age_ms": 5000,
+      "attachment_state": "SHADOW_NOT_ATTACHED",
+      "advisory_eligibility_state": "INELIGIBLE",
+      "suppression_reason_codes": [
+        "PHASE2_KICKOFF_NON_OPERATIVE_EXAMPLE"
+      ],
+      "provenance_complete": false,
+      "classification": "NON_OPERATIVE_SCAFFOLD",
+      "first_failing_gate": "NONE"
+    }
+  }
+}

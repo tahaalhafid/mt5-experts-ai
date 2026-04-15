@@ -1,0 +1,45 @@
+EDGE ENRICHMENT REENTRY RULES
+phase_id=E10
+model_role=ALLOWED_REENTRY_PATH_DISCIPLINE
+
+1) ALLOWED REENTRY PATHS
+- RAW_SOURCE_TO_INTAKE_REENTRY
+- MARKET_NATIVE_FINDING_TO_DECOMPOSITION_REENTRY
+- SCORECARD_SIGNAL_TO_GOVERNANCE_REVIEW
+- DETERIORATION_SIGNAL_TO_NARROWING_REVIEW
+- SUPPRESSION_SIGNAL_TO_RESEARCH_OR_ARCHIVE_REENTRY
+- GOVERNANCE_OUTCOME_TO_RESCOPING_REENTRY
+- INTERNAL_RUNTIME_FINDING_TO_ENRICHMENT_REENTRY
+
+2) STATUS MODEL
+- ENRICHMENT_SIGNAL_REGISTERED
+- ENRICHMENT_REENTRY_ELIGIBLE
+- ENRICHMENT_RESEARCH_ONLY
+- ENRICHMENT_REVIEW_REQUIRED
+- ENRICHMENT_BLOCKED_BY_BOUNDARY
+- ENRICHMENT_READY_FOR_RESCOPING
+- ENRICHMENT_READY_FOR_REINTAKE
+
+3) REENTRY DISCIPLINE
+- scorecard signals may justify governance review, not direct promotion/suppression
+- deterioration signals may justify narrowing review, not direct live disabling
+- suppression signals may justify research/archive re-entry, not direct runtime removal
+- governance outcomes may justify rescoping re-entry, not direct implementation
+- new raw sources must re-enter through intake
+- new market-native findings must re-enter through decomposition
+
+4) RECORD FIELDS
+Each enrichment record should preserve:
+- enrichment_record_id
+- input_origin
+- input_type
+- source_reference
+- target_reentry_path
+- enrichment_reason
+- related_material_ids
+- related_zone_or_regime
+- related_scorecard_or_governance_refs
+- allowed_next_stage
+- forbidden_next_stage_note
+- confidence_posture
+- lineage_reference

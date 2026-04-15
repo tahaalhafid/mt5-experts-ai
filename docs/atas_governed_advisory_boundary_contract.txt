@@ -1,0 +1,43 @@
+ATAS Governed Advisory Boundary Contract (Level 3)
+Version: 1
+Language: English only
+
+1) Runtime authority boundary
+- MT5 runtime remains the sole authority for decision, execution, risk, and governance.
+- ATAS governed advisory is non-authoritative contextual intelligence only.
+- No ATAS advisory output may directly approve, deny, send, cancel, size, or risk-govern trades.
+
+2) External boundary
+- ATAS remains external shadow-derived input.
+- Semantic adapter remains mandatory.
+- No raw external feed enters MT5 directly.
+
+3) Support/resistance boundary
+- Canonical support/resistance authority remains MT5-internal.
+- ATAS level evidence is bounded confluence/context only.
+- ATAS cannot replace canonical level ownership.
+
+4) Influence boundary
+- Allowed bounded influence channels:
+  - caution bias
+  - reevaluation bias
+  - hold-for-reevaluation bias (bounded rollout mode only)
+  - confidence shaping
+  - contradiction signaling
+  - confirmation support
+- Forbidden channels:
+  - direct BUY/SELL generation
+  - direction replacement
+  - direct block/allow control authority
+  - runtime parameter mutation authority
+
+5) Scope lock for this implementation
+- Databento remains inactive.
+- Fusion remains inactive.
+- Hybrid live reactivation is out of scope.
+- AI advisory layer remains separate and preserved.
+
+6) Safety fallback
+- If advisory is unavailable or ineligible, runtime falls back to MT5 canonical flow.
+- No hidden penalty is applied solely because advisory is absent.
+

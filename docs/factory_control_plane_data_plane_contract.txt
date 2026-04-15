@@ -1,0 +1,76 @@
+FACTORY CONTROL PLANE VS DATA PLANE CONTRACT
+version=PHASE3_CONTROL_DATA_PLANE_CONTRACT_V1
+artifact_role=FACTORY_CONTROL_DATA_PLANE_CONTRACT
+authority_class=ARCHITECTURAL_GOVERNANCE_REFERENCE_ONLY
+
+PURPOSE
+This contract clarifies which artifacts define rules, contracts, policies, and support boundaries
+versus
+which artifacts represent current records, counts, emitted states, and operational visibility.
+
+CONTROL PLANE
+Control plane artifacts express:
+- contracts
+- policies
+- schema/version definitions
+- vocabulary definitions
+- lifecycle definitions
+- authority boundaries
+- support declarations
+- allowed/forbidden interpretation notes
+
+Control plane artifacts must NOT be treated as the primary source of current emitted record truth.
+
+DATA PLANE
+Data plane artifacts express:
+- material records
+- decomposition records
+- normalized records
+- intelligence records
+- emitted snapshots
+- counts
+- current status summaries
+- current lifecycle state
+- record links
+- zero/non-zero current truth
+
+Data plane artifacts must NOT redefine contracts or authority rules.
+
+PLANE ROLE VALUES
+- CONTROL_PLANE
+- DATA_PLANE
+- MIXED_PLANE_TRANSITIONAL
+
+MIXED_PLANE_TRANSITIONAL
+A mixed transitional artifact exists only when backward continuity or architectural convenience still requires limited coexistence of:
+- contract/support truth
+and
+- current summary/state truth
+
+When an artifact is mixed:
+- it must say so explicitly
+- it must identify contract_truth_location
+- it must identify current_status_truth_location or record_truth_location
+- it must not silently imply that all truth lives there
+
+INTERPRETATION RULES
+- artifact_plane_role states the primary plane role of the artifact
+- current_artifact_plane_truth must say what kind of truth is actually present in the artifact now
+- contract_truth_location points to the contract-defining surface
+- current_status_truth_location points to the current status/count surface
+- record_truth_location points to the current emitted record surface when applicable
+- mixed_plane_artifact_note is mandatory for transitional mixed artifacts
+
+TOP-LEVEL VISIBILITY RULE
+Top-level artifacts may summarize branch truth for visibility, but must not be interpreted as the primary location of both:
+- contract truth
+and
+- current emitted record truth
+unless they are explicitly marked MIXED_PLANE_TRANSITIONAL and interpretive notes are present.
+
+BOUNDARY RULES
+- control plane does not imply emitted records
+- data plane does not imply policy authority
+- mixed plane does not imply ambiguity is acceptable; mixed artifacts must explain the split
+- internal intelligence remains non-authoritative even when emitted
+- no plane role implies runtime permission, canon promotion, registry commit, or authority elevation

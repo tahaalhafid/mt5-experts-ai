@@ -1,0 +1,143 @@
+LEARNING EVIDENCE QUALITY POLICY
+document_role=AUTHORITATIVE_LEARNING_EVIDENCE_QUALITY_POLICY
+document_version=L2_LEARNING_EVIDENCE_QUALITY_POLICY_V1
+authority_scope=EVIDENCE_SUFFICIENCY_QUALITY_AND_BUNDLE_COMPOSITION_ONLY
+linked_pipeline=docs/learning_evidence_pipeline.txt
+linked_catalog=docs/learning_evidence_catalog.txt
+linked_learning_contract=docs/learning_governance_contract.txt
+trust_rule=defines_conservative_sufficiency_quality_and_bundle_rules_without_creating_automatic_learning_decisions
+policy_note=This policy formalizes how learning evidence is graded and bundled. It does not implement automatic evidence scoring or create mutative authority.
+
+SUFFICIENCY STATES
+- THIN_EVIDENCE
+  description=Evidence is too weak, narrow, ambiguous, stale, or poorly linked for meaningful learning conclusions.
+  usage_limit=May be archived or used to justify further collection, but not strong proposal support.
+  escalation_note=Thin evidence should be labeled honestly and not upgraded by narrative.
+
+- MINIMAL_EVIDENCE
+  description=Evidence supports preliminary discussion but remains narrow, weakly corroborated, or limited in scope.
+  usage_limit=May support bounded review framing or request-for-more-evidence.
+  escalation_note=Strong claims remain inappropriate.
+
+- SUFFICIENT_EVIDENCE
+  description=Evidence is materially usable for a bounded claim and is adequately corroborated for governed proposal or review support.
+  usage_limit=May support proposal and learning review discussions.
+  escalation_note=Still requires governed review and does not authorize mutation.
+
+- STRONG_CORROBORATED_EVIDENCE
+  description=Evidence is well-linked, adequately broad for its claim, corroborated across strong or complementary families, and limitations are disclosed.
+  usage_limit=May support stronger proposal or experiment-candidate review.
+  escalation_note=Even strong evidence remains non-mutative and review-governed.
+
+QUALITY GRADES
+- LOW_QUALITY
+  meaning=Evidence is weakly linked, narrow, stale, ambiguous, noisy, or poorly corroborated.
+  expected_handling=Archive, monitor, or request more evidence.
+
+- MODERATE_QUALITY
+  meaning=Evidence is usable with disclosed limitations and bounded claims, but still has notable gaps or modest corroboration.
+  expected_handling=Use cautiously for bounded review and proposal support.
+
+- HIGH_QUALITY
+  meaning=Evidence is well-linked, sufficiently recent for its claim, scope-clear, corroborated, and supported by review context where relevant.
+  expected_handling=Eligible for stronger review attention and experiment-candidate support.
+
+QUALITY DRIVERS
+Positive drivers:
+- sample_size_adequacy_for_claim
+- recency_fit_for_claim
+- linkage_quality
+- source_reliability
+- corroboration_breadth
+- scope_clarity
+- review_support_status
+- duplicate_noise_control
+
+Negative drivers:
+- stale_data
+- weak_linkage
+- unresolved_ambiguity
+- narrow_scope_with_strong_claim
+- duplicated_or_repetitive_noise
+- low_review_confidence
+- partial_or_missing_context
+- regime_or_scope_mismatch
+
+QUALITY DISCIPLINE RULES
+- Strong narrative style must not raise quality grade by itself.
+- Ambiguity must reduce quality or keep evidence at a lower sufficiency state.
+- Sparse evidence may still be high-quality for a narrow claim, but not for a broad claim.
+- Repeated noisy evidence does not become high-quality merely by repetition.
+- Review support increases confidence only when the rationale is explicit and linked.
+
+EVIDENCE BUNDLE TYPES
+
+- LEARNING_EVIDENCE_BUNDLE
+  required_evidence_families=At least 1 primary family plus 1 corroborating or contextual family unless explicit thin/minimal status is disclosed
+  optional_evidence_families=Any bounded supporting family including advisory effectiveness, review outcomes, proposal history, or operator feedback
+  minimum_sufficiency_threshold=MINIMAL_EVIDENCE for preliminary governed review; SUFFICIENT_EVIDENCE preferred
+  preferred_corroboration_pattern=diagnostic/replay/validation plus review or history linkage
+  required_limitation_disclosure=Yes
+  review_relevance=General learning review and governed understanding
+
+- PROPOSAL_SUPPORT_BUNDLE
+  required_evidence_families=At least 1 strong primary family plus corroboration from review-governed, validation, diagnostic, replay, or history evidence
+  optional_evidence_families=advisory effectiveness, root cause, anomaly, operator feedback as supporting context
+  minimum_sufficiency_threshold=SUFFICIENT_EVIDENCE
+  preferred_corroboration_pattern=runtime-linked or validation-linked evidence plus review outcome or history support
+  required_limitation_disclosure=Yes
+  review_relevance=Proposal review and bounded implementation planning only
+
+- EXPERIMENT_CANDIDATE_SUPPORT_BUNDLE
+  required_evidence_families=At least 2 corroborating families with at least 1 strong primary family and explicit limitation disclosure
+  optional_evidence_families=effectiveness review outputs, proposal history, learning history, governance audit context
+  minimum_sufficiency_threshold=STRONG_CORROBORATED_EVIDENCE preferred; SUFFICIENT_EVIDENCE only for tightly bounded experiment candidates with explicit caution
+  preferred_corroboration_pattern=validation/replay/diagnostic evidence plus review-governed outcomes and impact-oriented context
+  required_limitation_disclosure=Yes
+  review_relevance=Review-board experiment consideration only
+
+BUNDLE COMPOSITION RESTRICTIONS
+- Bundles may not hide unresolved contradictions.
+- Bundles may not omit thin-evidence labeling where applicable.
+- Bundles may not turn contextual/operator feedback into primary authority.
+- Bundles may not become a direct control path, mutation path, or plan-overwrite path.
+- Bundles must preserve source hierarchy and sufficiency disclosure.
+
+AMBIGUITY AND MIXED-SIGNAL DISCIPLINE
+- Thin evidence must be labeled as THIN_EVIDENCE.
+- Ambiguity must be surfaced explicitly.
+- Unresolved linkage issues reduce quality.
+- Insufficient evidence remains insufficient even if the narrative is sophisticated.
+- Mixed signals must be recorded honestly rather than collapsed into false certainty.
+
+TRACEABILITY EXPECTATIONS
+Each governed evidence bundle should conceptually track:
+- evidence_bundle_id
+- evidence_family_members
+- source_artifact_refs
+- source_time_window
+- scope_label
+- affected_zone_or_family
+- sufficiency_state
+- quality_grade
+- corroboration_note
+- limitations_note
+- downstream_review_relevance
+
+AI ROLE IN THE EVIDENCE PIPELINE
+AI may:
+- assemble evidence
+- analyze evidence
+- classify evidence
+- summarize evidence
+- package bounded evidence bundles
+
+AI may not:
+- bypass sufficiency rules
+- promote weak evidence to strong evidence by narrative alone
+- convert evidence bundles into direct runtime mutation
+- override source hierarchy by verbosity, confidence styling, or formatting
+
+FINAL RULE
+Evidence quality and bundle strength support governance decisions only.
+They do not authorize direct live changes, direct learning mutation, or authority elevation.

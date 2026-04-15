@@ -1,0 +1,24 @@
+{
+  "version": "ORDER_FLOW_STATE_INTERFACE_V1",
+  "family": "OrderFlowState",
+  "non_operative": true,
+  "fields": [
+    { "name": "packet_id", "type": "string", "status": "mandatory" },
+    { "name": "trace_id", "type": "string", "status": "mandatory" },
+    { "name": "event_time_utc", "type": "string", "status": "mandatory" },
+    { "name": "execution_symbol", "type": "string", "status": "mandatory" },
+    { "name": "liquidity_sweep_state", "type": "string", "status": "mandatory" },
+    { "name": "absorption_state", "type": "string", "status": "mandatory" },
+    { "name": "delta_bias_state", "type": "string", "status": "mandatory" },
+    { "name": "imbalance_state", "type": "string", "status": "mandatory" },
+    { "name": "continuation_exhaustion_hint", "type": "string", "status": "optional" },
+    { "name": "signal_stability_window_sec", "type": "integer", "status": "optional" },
+    { "name": "orderflow_confidence_band", "type": "string", "status": "provisional" },
+    { "name": "sweep_persistence_score", "type": "number", "status": "derived_later" }
+  ],
+  "forbidden_fields": [
+    "final_regime_verdict",
+    "tradability_verdict",
+    "execution_command"
+  ]
+}

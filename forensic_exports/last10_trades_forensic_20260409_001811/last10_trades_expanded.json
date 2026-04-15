@@ -1,0 +1,862 @@
+﻿[
+    {
+        "identity":  {
+                         "index":  1,
+                         "decision_id":  "XAUUSD-1775687836-100535-352",
+                         "ticket_or_position_id":  "FACT:8117647957",
+                         "close_deal_id":  "FACT:7663218973",
+                         "symbol":  "FACT:XAUUSD",
+                         "direction":  "FACT:SELL"
+                     },
+        "timing":  {
+                       "entry_time_utc":  "FACT:2026-04-08 22:40:07",
+                       "exit_time_utc":  "FACT:2026-04-08 22:45:55",
+                       "holding_duration":  "INFERRED:348s",
+                       "session":  "INFERRED:OFF_HOURS",
+                       "trading_day":  "INFERRED:2026-04-08"
+                   },
+        "entry_decision_context":  {
+                                       "strategy":  "FACT:sweep_reversal",
+                                       "strategy_family":  "FACT:LIQUIDITY_REVERSAL",
+                                       "plan_mode":  "FACT:HYBRID",
+                                       "decision_engine_mode":  "FACT:COUNCIL",
+                                       "regime_label":  "FACT:RANGE_DIRTY",
+                                       "regime_confidence":  "FACT:0.58",
+                                       "volatility_regime":  "FACT:HIGH_VOL",
+                                       "structure_context":  "FACT:CLEAN",
+                                       "council_decision_summary":  "FACT:[AI-EA] [INFO] Runtime decision (COUNCIL): [Regime=RANGE_DIRTY conf=0.58 trad=0.58] SELL | Mode=COUNCIL | Final=SELL | Zone=RANGE_MEAN_RECLAIM | ZoneConf=0.82 | PrefStyle=MEAN_RECLAIM | EnvScore=0.80 | CouncilQ=0.86 | Consensus=1.00 | ConsensusLabel=HIGH_CONVICTION | Conflict=0.00 | Dominant=SELL | Best=sweep_reversal | Regime=RANGE|HIGH_VOL|TIGHT_SPREAD|CLEAN | Council pipeline passed | zone=RANGE_MEAN_RECLAIM | pref_style=MEAN_RECLAIM | best_strategy=sweep_reversal | support=sweep_reversal,bollinger_reclaim | consensus=HIGH_CONVICTION | diversity=0.70 | gov_state=EXHAUSTION_SENSITIVE | fail_pressure=NONE | governor=AI Governor: exhaustion-sensitive mode | zone=RANGE_MEAN_RECLAIM | best_strategy=sweep_reversal | quality=0.86 | exhaustion=true",
+                                       "final_decision_reason":  "FACT:runtime_decision_log_present",
+                                       "trade_profile":  "FACT:MEAN_RECLAIM"
+                                   },
+        "confidence_policy_learning":  {
+                                           "base_confidence_score":  "UNAVAILABLE",
+                                           "final_confidence_score":  "UNAVAILABLE",
+                                           "policy_risk_score":  "UNAVAILABLE",
+                                           "regime_fit_score":  "FACT:0.58",
+                                           "learning_adjustment_applied":  "UNAVAILABLE",
+                                           "learning_confidence_delta":  "UNAVAILABLE",
+                                           "learning_caution_delta":  "UNAVAILABLE",
+                                           "learning_reason_codes":  "UNAVAILABLE",
+                                           "evidence_threshold_met":  "UNAVAILABLE"
+                                       },
+        "advisory_external":  {
+                                  "atas_advisory_eligible":  "FACT:false",
+                                  "atas_advisory_direction_or_type":  "FACT:SELL",
+                                  "atas_advisory_strength":  "FACT:0.438",
+                                  "contradiction_flag":  "FACT:False",
+                                  "hold_bias_flag":  "FACT:False",
+                                  "external_advisory_influenced_envelope":  "FACT:false",
+                                  "external_advisory_not_used_reason":  "FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+                              },
+        "support_resistance":  {
+                                   "sr_interaction_bucket":  "FACT:SR_REJECTION_RISK",
+                                   "confluence_state":  "FACT:context_captured",
+                                   "level_conflict_or_rejection_risk_flags":  "FACT:rejection_risk",
+                                   "sr_helped_or_hurt":  "INFERRED:potentially_hurt"
+                               },
+        "lifecycle":  {
+                          "requested_entry_price":  "UNAVAILABLE",
+                          "actual_fill_price":  "UNAVAILABLE",
+                          "slippage":  "UNAVAILABLE",
+                          "initial_stop_loss":  "UNAVAILABLE",
+                          "initial_take_profit":  "UNAVAILABLE",
+                          "later_management_changes":  "FACT:see_MQL5_log_for_ticket_8117647957",
+                          "exit_reason":  "UNAVAILABLE",
+                          "exit_classification":  "UNAVAILABLE"
+                      },
+        "outcome_attribution":  {
+                                    "result_points":  "UNAVAILABLE",
+                                    "result_money":  "FACT:1.1",
+                                    "r_multiple":  "UNAVAILABLE",
+                                    "outcome_class":  "FACT:WIN",
+                                    "primary_attribution":  "UNAVAILABLE",
+                                    "secondary_attribution":  "UNAVAILABLE",
+                                    "failure_or_success_motif_tags":  "FACT:strategy=sweep_reversal|direction=SELL|regime=RANGE_DIRTY|vol=HIGH_VOL|struct=CLEAN|setup=SETUP_NEUTRAL|sr=SR_REJECTION_RISK|contradiction=0",
+                                    "environment_fit":  "INFERRED:bucket=RANGE_DIRTY",
+                                    "setup_quality":  "FACT:SETUP_NEUTRAL"
+                                },
+        "ai_governance":  {
+                              "ai_authority_state":  "UNAVAILABLE",
+                              "ai_readiness_state":  "UNAVAILABLE",
+                              "ai_bridge_ready":  "FACT:False",
+                              "ai_advisory_active_or_blocked":  "FACT:ATAS_ADVISORY_INELIGIBLE",
+                              "ai_authority_gate_blocked":  "UNAVAILABLE",
+                              "ai_mattered_for_trade":  "INFERRED:non_authoritative_advisory_only"
+                          },
+        "narrative":  "FACT:Outcome=WIN profit=1.1 | FACT:Context regime=RANGE_DIRTY vol=HIGH_VOL sr=SR_REJECTION_RISK | FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+    },
+    {
+        "identity":  {
+                         "index":  2,
+                         "decision_id":  "XAUUSD-1775687230-100525-350",
+                         "ticket_or_position_id":  "FACT:8117550550",
+                         "close_deal_id":  "FACT:7663065838",
+                         "symbol":  "FACT:XAUUSD",
+                         "direction":  "FACT:SELL"
+                     },
+        "timing":  {
+                       "entry_time_utc":  "FACT:2026-04-08 22:34:12",
+                       "exit_time_utc":  "FACT:2026-04-08 22:36:29",
+                       "holding_duration":  "INFERRED:137s",
+                       "session":  "INFERRED:OFF_HOURS",
+                       "trading_day":  "INFERRED:2026-04-08"
+                   },
+        "entry_decision_context":  {
+                                       "strategy":  "FACT:sweep_reversal",
+                                       "strategy_family":  "FACT:LIQUIDITY_REVERSAL",
+                                       "plan_mode":  "FACT:HYBRID",
+                                       "decision_engine_mode":  "FACT:COUNCIL",
+                                       "regime_label":  "FACT:TREND_DOWN",
+                                       "regime_confidence":  "FACT:0.85",
+                                       "volatility_regime":  "FACT:HIGH_VOL",
+                                       "structure_context":  "FACT:CLEAN",
+                                       "council_decision_summary":  "FACT:[AI-EA] [INFO] Runtime decision (COUNCIL): [Regime=TREND_DOWN conf=0.85 trad=0.57] SELL | Mode=COUNCIL | Final=SELL | Zone=RANGE_MEAN_RECLAIM | ZoneConf=0.82 | PrefStyle=MEAN_RECLAIM | EnvScore=0.82 | CouncilQ=0.86 | Consensus=1.00 | ConsensusLabel=HIGH_CONVICTION | Conflict=0.00 | Dominant=SELL | Best=sweep_reversal | Regime=RANGE|HIGH_VOL|TIGHT_SPREAD|CLEAN | Council pipeline passed | zone=RANGE_MEAN_RECLAIM | pref_style=MEAN_RECLAIM | best_strategy=sweep_reversal | support=sweep_reversal,bollinger_reclaim | consensus=HIGH_CONVICTION | diversity=0.70 | gov_state=EXHAUSTION_SENSITIVE | fail_pressure=NONE | governor=AI Governor: exhaustion-sensitive mode | zone=RANGE_MEAN_RECLAIM | best_strategy=sweep_reversal | quality=0.86 | exhaustion=true",
+                                       "final_decision_reason":  "FACT:runtime_decision_log_present",
+                                       "trade_profile":  "FACT:MEAN_RECLAIM"
+                                   },
+        "confidence_policy_learning":  {
+                                           "base_confidence_score":  "UNAVAILABLE",
+                                           "final_confidence_score":  "UNAVAILABLE",
+                                           "policy_risk_score":  "UNAVAILABLE",
+                                           "regime_fit_score":  "FACT:0.57",
+                                           "learning_adjustment_applied":  "UNAVAILABLE",
+                                           "learning_confidence_delta":  "UNAVAILABLE",
+                                           "learning_caution_delta":  "UNAVAILABLE",
+                                           "learning_reason_codes":  "UNAVAILABLE",
+                                           "evidence_threshold_met":  "UNAVAILABLE"
+                                       },
+        "advisory_external":  {
+                                  "atas_advisory_eligible":  "FACT:false",
+                                  "atas_advisory_direction_or_type":  "FACT:SELL",
+                                  "atas_advisory_strength":  "FACT:0.355",
+                                  "contradiction_flag":  "FACT:False",
+                                  "hold_bias_flag":  "FACT:False",
+                                  "external_advisory_influenced_envelope":  "FACT:false",
+                                  "external_advisory_not_used_reason":  "FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+                              },
+        "support_resistance":  {
+                                   "sr_interaction_bucket":  "FACT:SR_CANONICAL_NEAR",
+                                   "confluence_state":  "FACT:context_captured",
+                                   "level_conflict_or_rejection_risk_flags":  "UNAVAILABLE",
+                                   "sr_helped_or_hurt":  "INFERRED:potentially_helpful"
+                               },
+        "lifecycle":  {
+                          "requested_entry_price":  "UNAVAILABLE",
+                          "actual_fill_price":  "UNAVAILABLE",
+                          "slippage":  "UNAVAILABLE",
+                          "initial_stop_loss":  "UNAVAILABLE",
+                          "initial_take_profit":  "UNAVAILABLE",
+                          "later_management_changes":  "FACT:see_MQL5_log_for_ticket_8117550550",
+                          "exit_reason":  "UNAVAILABLE",
+                          "exit_classification":  "UNAVAILABLE"
+                      },
+        "outcome_attribution":  {
+                                    "result_points":  "UNAVAILABLE",
+                                    "result_money":  "FACT:-33.5",
+                                    "r_multiple":  "UNAVAILABLE",
+                                    "outcome_class":  "FACT:LOSS",
+                                    "primary_attribution":  "UNAVAILABLE",
+                                    "secondary_attribution":  "UNAVAILABLE",
+                                    "failure_or_success_motif_tags":  "FACT:strategy=sweep_reversal|direction=SELL|regime=TREND_DOWN|vol=HIGH_VOL|struct=CLEAN|setup=SETUP_NEUTRAL|sr=SR_CANONICAL_NEAR|contradiction=0",
+                                    "environment_fit":  "INFERRED:bucket=TREND_DOWN",
+                                    "setup_quality":  "FACT:SETUP_NEUTRAL"
+                                },
+        "ai_governance":  {
+                              "ai_authority_state":  "UNAVAILABLE",
+                              "ai_readiness_state":  "UNAVAILABLE",
+                              "ai_bridge_ready":  "FACT:False",
+                              "ai_advisory_active_or_blocked":  "FACT:ATAS_ADVISORY_INELIGIBLE",
+                              "ai_authority_gate_blocked":  "UNAVAILABLE",
+                              "ai_mattered_for_trade":  "INFERRED:non_authoritative_advisory_only"
+                          },
+        "narrative":  "FACT:Outcome=LOSS profit=-33.5 | FACT:Context regime=TREND_DOWN vol=HIGH_VOL sr=SR_CANONICAL_NEAR | FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+    },
+    {
+        "identity":  {
+                         "index":  3,
+                         "decision_id":  "XAUUSD-1775687230-100525-350",
+                         "ticket_or_position_id":  "FACT:8117489594",
+                         "close_deal_id":  "FACT:7662984954",
+                         "symbol":  "FACT:XAUUSD",
+                         "direction":  "FACT:SELL"
+                     },
+        "timing":  {
+                       "entry_time_utc":  "FACT:2026-04-08 22:30:30",
+                       "exit_time_utc":  "FACT:2026-04-08 22:31:47",
+                       "holding_duration":  "INFERRED:77s",
+                       "session":  "INFERRED:OFF_HOURS",
+                       "trading_day":  "INFERRED:2026-04-08"
+                   },
+        "entry_decision_context":  {
+                                       "strategy":  "FACT:trend_momentum",
+                                       "strategy_family":  "FACT:TREND_CONTINUATION",
+                                       "plan_mode":  "FACT:HYBRID",
+                                       "decision_engine_mode":  "FACT:COUNCIL",
+                                       "regime_label":  "FACT:TREND_DOWN",
+                                       "regime_confidence":  "FACT:0.85",
+                                       "volatility_regime":  "FACT:HIGH_VOL",
+                                       "structure_context":  "FACT:CLEAN",
+                                       "council_decision_summary":  "FACT:[AI-EA] [INFO] Runtime decision (COUNCIL): [Regime=TREND_DOWN conf=0.85 trad=0.49] SELL | Mode=COUNCIL | Final=SELL | Zone=TREND_CONTINUATION | ZoneConf=0.87 | PrefStyle=CONTINUATION | EnvScore=0.86 | CouncilQ=0.76 | Consensus=1.00 | ConsensusLabel=NARROW | Conflict=0.00 | Dominant=SELL | Best=trend_momentum | Regime=TREND_BEAR|HIGH_VOL|TIGHT_SPREAD|CLEAN | Council pipeline passed | zone=TREND_CONTINUATION | pref_style=CONTINUATION | best_strategy=trend_momentum | support=trend_momentum,momentum_breakout_cont_v1,breakdown_momentum_v1 | consensus=NARROW | diversity=0.35 | gov_state=DEFENSIVE | fail_pressure=NONE | governor=AI Governor: narrow or conflicted consensus, tightened gate and nudged leader | state=DEFENSIVE | best_strategy=trend_momentum | consensus=NARROW | diversity=0.35 | conflict=0.00",
+                                       "final_decision_reason":  "FACT:runtime_decision_log_present",
+                                       "trade_profile":  "FACT:CONTINUATION"
+                                   },
+        "confidence_policy_learning":  {
+                                           "base_confidence_score":  "UNAVAILABLE",
+                                           "final_confidence_score":  "UNAVAILABLE",
+                                           "policy_risk_score":  "UNAVAILABLE",
+                                           "regime_fit_score":  "FACT:0.49",
+                                           "learning_adjustment_applied":  "UNAVAILABLE",
+                                           "learning_confidence_delta":  "UNAVAILABLE",
+                                           "learning_caution_delta":  "UNAVAILABLE",
+                                           "learning_reason_codes":  "UNAVAILABLE",
+                                           "evidence_threshold_met":  "UNAVAILABLE"
+                                       },
+        "advisory_external":  {
+                                  "atas_advisory_eligible":  "FACT:false",
+                                  "atas_advisory_direction_or_type":  "FACT:SELL",
+                                  "atas_advisory_strength":  "FACT:0.37",
+                                  "contradiction_flag":  "FACT:False",
+                                  "hold_bias_flag":  "FACT:False",
+                                  "external_advisory_influenced_envelope":  "FACT:false",
+                                  "external_advisory_not_used_reason":  "FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+                              },
+        "support_resistance":  {
+                                   "sr_interaction_bucket":  "FACT:SR_CANONICAL_NEAR",
+                                   "confluence_state":  "FACT:context_captured",
+                                   "level_conflict_or_rejection_risk_flags":  "UNAVAILABLE",
+                                   "sr_helped_or_hurt":  "INFERRED:potentially_helpful"
+                               },
+        "lifecycle":  {
+                          "requested_entry_price":  "UNAVAILABLE",
+                          "actual_fill_price":  "UNAVAILABLE",
+                          "slippage":  "UNAVAILABLE",
+                          "initial_stop_loss":  "UNAVAILABLE",
+                          "initial_take_profit":  "UNAVAILABLE",
+                          "later_management_changes":  "FACT:see_MQL5_log_for_ticket_8117489594",
+                          "exit_reason":  "UNAVAILABLE",
+                          "exit_classification":  "UNAVAILABLE"
+                      },
+        "outcome_attribution":  {
+                                    "result_points":  "UNAVAILABLE",
+                                    "result_money":  "FACT:-31.8",
+                                    "r_multiple":  "UNAVAILABLE",
+                                    "outcome_class":  "FACT:LOSS",
+                                    "primary_attribution":  "UNAVAILABLE",
+                                    "secondary_attribution":  "UNAVAILABLE",
+                                    "failure_or_success_motif_tags":  "FACT:strategy=trend_momentum|direction=SELL|regime=TREND_DOWN|vol=HIGH_VOL|struct=CLEAN|setup=SETUP_NEUTRAL|sr=SR_CANONICAL_NEAR|contradiction=0",
+                                    "environment_fit":  "INFERRED:bucket=TREND_DOWN",
+                                    "setup_quality":  "FACT:SETUP_NEUTRAL"
+                                },
+        "ai_governance":  {
+                              "ai_authority_state":  "UNAVAILABLE",
+                              "ai_readiness_state":  "UNAVAILABLE",
+                              "ai_bridge_ready":  "FACT:False",
+                              "ai_advisory_active_or_blocked":  "FACT:ATAS_ADVISORY_INELIGIBLE",
+                              "ai_authority_gate_blocked":  "UNAVAILABLE",
+                              "ai_mattered_for_trade":  "INFERRED:non_authoritative_advisory_only"
+                          },
+        "narrative":  "FACT:Outcome=LOSS profit=-31.8 | FACT:Context regime=TREND_DOWN vol=HIGH_VOL sr=SR_CANONICAL_NEAR | FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+    },
+    {
+        "identity":  {
+                         "index":  4,
+                         "decision_id":  "XAUUSD-1775686536-100513-342",
+                         "ticket_or_position_id":  "FACT:8117294770",
+                         "close_deal_id":  "FACT:7662783422",
+                         "symbol":  "FACT:XAUUSD",
+                         "direction":  "FACT:SELL"
+                     },
+        "timing":  {
+                       "entry_time_utc":  "FACT:2026-04-08 22:16:51",
+                       "exit_time_utc":  "FACT:2026-04-08 22:19:02",
+                       "holding_duration":  "INFERRED:131s",
+                       "session":  "INFERRED:OFF_HOURS",
+                       "trading_day":  "INFERRED:2026-04-08"
+                   },
+        "entry_decision_context":  {
+                                       "strategy":  "FACT:sweep_reversal",
+                                       "strategy_family":  "FACT:LIQUIDITY_REVERSAL",
+                                       "plan_mode":  "FACT:HYBRID",
+                                       "decision_engine_mode":  "FACT:COUNCIL",
+                                       "regime_label":  "FACT:TREND_DOWN",
+                                       "regime_confidence":  "FACT:0.85",
+                                       "volatility_regime":  "FACT:HIGH_VOL",
+                                       "structure_context":  "FACT:CLEAN",
+                                       "council_decision_summary":  "FACT:[AI-EA] [INFO] Runtime decision (COUNCIL): [Regime=TREND_DOWN conf=0.85 trad=0.61] SELL | Mode=COUNCIL | Final=SELL | Zone=RANGE_MEAN_RECLAIM | ZoneConf=0.82 | PrefStyle=MEAN_RECLAIM | EnvScore=0.83 | CouncilQ=0.87 | Consensus=1.00 | ConsensusLabel=HIGH_CONVICTION | Conflict=0.00 | Dominant=SELL | Best=sweep_reversal | Regime=RANGE|HIGH_VOL|TIGHT_SPREAD|CLEAN | Council pipeline passed | zone=RANGE_MEAN_RECLAIM | pref_style=MEAN_RECLAIM | best_strategy=sweep_reversal | support=sweep_reversal,bollinger_reclaim | consensus=HIGH_CONVICTION | diversity=0.70 | gov_state=EXHAUSTION_SENSITIVE | fail_pressure=NONE | governor=AI Governor: exhaustion-sensitive mode | zone=RANGE_MEAN_RECLAIM | best_strategy=sweep_reversal | quality=0.87 | exhaustion=true",
+                                       "final_decision_reason":  "FACT:runtime_decision_log_present",
+                                       "trade_profile":  "FACT:MEAN_RECLAIM"
+                                   },
+        "confidence_policy_learning":  {
+                                           "base_confidence_score":  "UNAVAILABLE",
+                                           "final_confidence_score":  "UNAVAILABLE",
+                                           "policy_risk_score":  "UNAVAILABLE",
+                                           "regime_fit_score":  "FACT:0.61",
+                                           "learning_adjustment_applied":  "UNAVAILABLE",
+                                           "learning_confidence_delta":  "UNAVAILABLE",
+                                           "learning_caution_delta":  "UNAVAILABLE",
+                                           "learning_reason_codes":  "UNAVAILABLE",
+                                           "evidence_threshold_met":  "UNAVAILABLE"
+                                       },
+        "advisory_external":  {
+                                  "atas_advisory_eligible":  "FACT:false",
+                                  "atas_advisory_direction_or_type":  "FACT:SELL",
+                                  "atas_advisory_strength":  "FACT:0.361",
+                                  "contradiction_flag":  "FACT:False",
+                                  "hold_bias_flag":  "FACT:False",
+                                  "external_advisory_influenced_envelope":  "FACT:false",
+                                  "external_advisory_not_used_reason":  "FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+                              },
+        "support_resistance":  {
+                                   "sr_interaction_bucket":  "FACT:SR_CANONICAL_NEAR",
+                                   "confluence_state":  "FACT:context_captured",
+                                   "level_conflict_or_rejection_risk_flags":  "UNAVAILABLE",
+                                   "sr_helped_or_hurt":  "INFERRED:potentially_helpful"
+                               },
+        "lifecycle":  {
+                          "requested_entry_price":  "UNAVAILABLE",
+                          "actual_fill_price":  "UNAVAILABLE",
+                          "slippage":  "UNAVAILABLE",
+                          "initial_stop_loss":  "UNAVAILABLE",
+                          "initial_take_profit":  "UNAVAILABLE",
+                          "later_management_changes":  "FACT:see_MQL5_log_for_ticket_8117294770",
+                          "exit_reason":  "UNAVAILABLE",
+                          "exit_classification":  "UNAVAILABLE"
+                      },
+        "outcome_attribution":  {
+                                    "result_points":  "UNAVAILABLE",
+                                    "result_money":  "FACT:60.5",
+                                    "r_multiple":  "UNAVAILABLE",
+                                    "outcome_class":  "FACT:WIN",
+                                    "primary_attribution":  "UNAVAILABLE",
+                                    "secondary_attribution":  "UNAVAILABLE",
+                                    "failure_or_success_motif_tags":  "FACT:strategy=sweep_reversal|direction=SELL|regime=TREND_DOWN|vol=HIGH_VOL|struct=CLEAN|setup=SETUP_NEUTRAL|sr=SR_CANONICAL_NEAR|contradiction=0",
+                                    "environment_fit":  "INFERRED:bucket=TREND_DOWN",
+                                    "setup_quality":  "FACT:SETUP_NEUTRAL"
+                                },
+        "ai_governance":  {
+                              "ai_authority_state":  "UNAVAILABLE",
+                              "ai_readiness_state":  "UNAVAILABLE",
+                              "ai_bridge_ready":  "FACT:False",
+                              "ai_advisory_active_or_blocked":  "FACT:ATAS_ADVISORY_INELIGIBLE",
+                              "ai_authority_gate_blocked":  "UNAVAILABLE",
+                              "ai_mattered_for_trade":  "INFERRED:non_authoritative_advisory_only"
+                          },
+        "narrative":  "FACT:Outcome=WIN profit=60.5 | FACT:Context regime=TREND_DOWN vol=HIGH_VOL sr=SR_CANONICAL_NEAR | FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+    },
+    {
+        "identity":  {
+                         "index":  5,
+                         "decision_id":  "XAUUSD-1775683413-100461-310",
+                         "ticket_or_position_id":  "FACT:8116245706",
+                         "close_deal_id":  "FACT:7661956776",
+                         "symbol":  "FACT:XAUUSD",
+                         "direction":  "FACT:SELL"
+                     },
+        "timing":  {
+                       "entry_time_utc":  "FACT:2026-04-08 21:24:54",
+                       "exit_time_utc":  "FACT:2026-04-08 21:42:03",
+                       "holding_duration":  "INFERRED:1029s",
+                       "session":  "INFERRED:US",
+                       "trading_day":  "INFERRED:2026-04-08"
+                   },
+        "entry_decision_context":  {
+                                       "strategy":  "FACT:trend_momentum",
+                                       "strategy_family":  "FACT:TREND_CONTINUATION",
+                                       "plan_mode":  "FACT:HYBRID",
+                                       "decision_engine_mode":  "FACT:COUNCIL",
+                                       "regime_label":  "FACT:EXPANSION",
+                                       "regime_confidence":  "FACT:0.62",
+                                       "volatility_regime":  "FACT:HIGH_VOL",
+                                       "structure_context":  "FACT:CLEAN",
+                                       "council_decision_summary":  "FACT:[AI-EA] [INFO] Runtime decision (COUNCIL): [Regime=EXPANSION conf=0.62 trad=0.52] SELL | Mode=COUNCIL | Final=SELL | Zone=TREND_CONTINUATION | ZoneConf=0.88 | PrefStyle=CONTINUATION | EnvScore=0.86 | CouncilQ=0.70 | Consensus=0.81 | ConsensusLabel=NARROW | Conflict=0.23 | Dominant=SELL | Best=trend_momentum | Regime=TREND_BEAR|HIGH_VOL|TIGHT_SPREAD|CLEAN | Council pipeline passed | zone=TREND_CONTINUATION | pref_style=CONTINUATION | best_strategy=trend_momentum | support=bollinger_reclaim,trend_momentum | consensus=NARROW | diversity=0.35 | gov_state=DEFENSIVE | fail_pressure=NONE | governor=AI Governor: narrow or conflicted consensus, tightened gate and nudged leader | state=DEFENSIVE | best_strategy=trend_momentum | consensus=NARROW | diversity=0.35 | conflict=0.23",
+                                       "final_decision_reason":  "FACT:runtime_decision_log_present",
+                                       "trade_profile":  "FACT:CONTINUATION"
+                                   },
+        "confidence_policy_learning":  {
+                                           "base_confidence_score":  "UNAVAILABLE",
+                                           "final_confidence_score":  "UNAVAILABLE",
+                                           "policy_risk_score":  "UNAVAILABLE",
+                                           "regime_fit_score":  "FACT:0.52",
+                                           "learning_adjustment_applied":  "UNAVAILABLE",
+                                           "learning_confidence_delta":  "UNAVAILABLE",
+                                           "learning_caution_delta":  "UNAVAILABLE",
+                                           "learning_reason_codes":  "UNAVAILABLE",
+                                           "evidence_threshold_met":  "UNAVAILABLE"
+                                       },
+        "advisory_external":  {
+                                  "atas_advisory_eligible":  "FACT:false",
+                                  "atas_advisory_direction_or_type":  "FACT:SELL",
+                                  "atas_advisory_strength":  "FACT:0.302",
+                                  "contradiction_flag":  "FACT:False",
+                                  "hold_bias_flag":  "FACT:False",
+                                  "external_advisory_influenced_envelope":  "FACT:false",
+                                  "external_advisory_not_used_reason":  "FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+                              },
+        "support_resistance":  {
+                                   "sr_interaction_bucket":  "FACT:SR_UNKNOWN",
+                                   "confluence_state":  "FACT:context_captured",
+                                   "level_conflict_or_rejection_risk_flags":  "UNAVAILABLE",
+                                   "sr_helped_or_hurt":  "UNAVAILABLE"
+                               },
+        "lifecycle":  {
+                          "requested_entry_price":  "UNAVAILABLE",
+                          "actual_fill_price":  "UNAVAILABLE",
+                          "slippage":  "UNAVAILABLE",
+                          "initial_stop_loss":  "UNAVAILABLE",
+                          "initial_take_profit":  "UNAVAILABLE",
+                          "later_management_changes":  "FACT:see_MQL5_log_for_ticket_8116245706",
+                          "exit_reason":  "UNAVAILABLE",
+                          "exit_classification":  "UNAVAILABLE"
+                      },
+        "outcome_attribution":  {
+                                    "result_points":  "UNAVAILABLE",
+                                    "result_money":  "FACT:102.7",
+                                    "r_multiple":  "UNAVAILABLE",
+                                    "outcome_class":  "FACT:WIN",
+                                    "primary_attribution":  "UNAVAILABLE",
+                                    "secondary_attribution":  "UNAVAILABLE",
+                                    "failure_or_success_motif_tags":  "FACT:strategy=trend_momentum|direction=SELL|regime=EXPANSION|vol=HIGH_VOL|struct=CLEAN|setup=SETUP_NEUTRAL|sr=SR_UNKNOWN|contradiction=0",
+                                    "environment_fit":  "INFERRED:bucket=EXPANSION",
+                                    "setup_quality":  "FACT:SETUP_NEUTRAL"
+                                },
+        "ai_governance":  {
+                              "ai_authority_state":  "UNAVAILABLE",
+                              "ai_readiness_state":  "UNAVAILABLE",
+                              "ai_bridge_ready":  "FACT:False",
+                              "ai_advisory_active_or_blocked":  "FACT:ATAS_ADVISORY_INELIGIBLE",
+                              "ai_authority_gate_blocked":  "UNAVAILABLE",
+                              "ai_mattered_for_trade":  "INFERRED:non_authoritative_advisory_only"
+                          },
+        "narrative":  "FACT:Outcome=WIN profit=102.7 | FACT:Context regime=EXPANSION vol=HIGH_VOL sr=SR_UNKNOWN | FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+    },
+    {
+        "identity":  {
+                         "index":  6,
+                         "decision_id":  "XAUUSD-1775681784-100434-290",
+                         "ticket_or_position_id":  "FACT:8115655071",
+                         "close_deal_id":  "FACT:7660947990",
+                         "symbol":  "FACT:XAUUSD",
+                         "direction":  "FACT:SELL"
+                     },
+        "timing":  {
+                       "entry_time_utc":  "FACT:2026-04-08 20:57:40",
+                       "exit_time_utc":  "FACT:2026-04-08 21:00:13",
+                       "holding_duration":  "INFERRED:153s",
+                       "session":  "INFERRED:US",
+                       "trading_day":  "INFERRED:2026-04-08"
+                   },
+        "entry_decision_context":  {
+                                       "strategy":  "FACT:trend_momentum",
+                                       "strategy_family":  "FACT:TREND_CONTINUATION",
+                                       "plan_mode":  "FACT:HYBRID",
+                                       "decision_engine_mode":  "FACT:COUNCIL",
+                                       "regime_label":  "FACT:TREND_DOWN",
+                                       "regime_confidence":  "FACT:0.85",
+                                       "volatility_regime":  "FACT:HIGH_VOL",
+                                       "structure_context":  "FACT:CLEAN",
+                                       "council_decision_summary":  "FACT:[AI-EA] [INFO] Runtime decision (COUNCIL): [Regime=TREND_DOWN conf=0.85 trad=0.62] SELL | Mode=COUNCIL | Final=SELL | Zone=TREND_CONTINUATION | ZoneConf=0.91 | PrefStyle=CONTINUATION | EnvScore=0.89 | CouncilQ=0.71 | Consensus=0.81 | ConsensusLabel=NARROW | Conflict=0.23 | Dominant=SELL | Best=trend_momentum | Regime=TREND_BEAR|HIGH_VOL|TIGHT_SPREAD|CLEAN | Council pipeline passed | zone=TREND_CONTINUATION | pref_style=CONTINUATION | best_strategy=trend_momentum | support=bollinger_reclaim,trend_momentum | consensus=NARROW | diversity=0.35 | gov_state=DEFENSIVE | fail_pressure=NONE | governor=AI Governor: narrow or conflicted consensus, tightened gate and nudged leader | state=DEFENSIVE | best_strategy=trend_momentum | consensus=NARROW | diversity=0.35 | conflict=0.23",
+                                       "final_decision_reason":  "FACT:runtime_decision_log_present",
+                                       "trade_profile":  "FACT:CONTINUATION"
+                                   },
+        "confidence_policy_learning":  {
+                                           "base_confidence_score":  "UNAVAILABLE",
+                                           "final_confidence_score":  "UNAVAILABLE",
+                                           "policy_risk_score":  "UNAVAILABLE",
+                                           "regime_fit_score":  "FACT:0.62",
+                                           "learning_adjustment_applied":  "UNAVAILABLE",
+                                           "learning_confidence_delta":  "UNAVAILABLE",
+                                           "learning_caution_delta":  "UNAVAILABLE",
+                                           "learning_reason_codes":  "UNAVAILABLE",
+                                           "evidence_threshold_met":  "UNAVAILABLE"
+                                       },
+        "advisory_external":  {
+                                  "atas_advisory_eligible":  "FACT:false",
+                                  "atas_advisory_direction_or_type":  "FACT:SELL",
+                                  "atas_advisory_strength":  "FACT:0.382",
+                                  "contradiction_flag":  "FACT:False",
+                                  "hold_bias_flag":  "FACT:False",
+                                  "external_advisory_influenced_envelope":  "FACT:false",
+                                  "external_advisory_not_used_reason":  "FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+                              },
+        "support_resistance":  {
+                                   "sr_interaction_bucket":  "FACT:SR_CONTINUATION_OBSTRUCTED",
+                                   "confluence_state":  "FACT:context_captured",
+                                   "level_conflict_or_rejection_risk_flags":  "UNAVAILABLE",
+                                   "sr_helped_or_hurt":  "UNAVAILABLE"
+                               },
+        "lifecycle":  {
+                          "requested_entry_price":  "UNAVAILABLE",
+                          "actual_fill_price":  "UNAVAILABLE",
+                          "slippage":  "UNAVAILABLE",
+                          "initial_stop_loss":  "UNAVAILABLE",
+                          "initial_take_profit":  "UNAVAILABLE",
+                          "later_management_changes":  "FACT:see_MQL5_log_for_ticket_8115655071",
+                          "exit_reason":  "UNAVAILABLE",
+                          "exit_classification":  "UNAVAILABLE"
+                      },
+        "outcome_attribution":  {
+                                    "result_points":  "UNAVAILABLE",
+                                    "result_money":  "FACT:49",
+                                    "r_multiple":  "UNAVAILABLE",
+                                    "outcome_class":  "FACT:WIN",
+                                    "primary_attribution":  "UNAVAILABLE",
+                                    "secondary_attribution":  "UNAVAILABLE",
+                                    "failure_or_success_motif_tags":  "FACT:strategy=trend_momentum|direction=SELL|regime=TREND_DOWN|vol=HIGH_VOL|struct=CLEAN|setup=SETUP_NEUTRAL|sr=SR_CONTINUATION_OBSTRUCTED|contradiction=0",
+                                    "environment_fit":  "INFERRED:bucket=TREND_DOWN",
+                                    "setup_quality":  "FACT:SETUP_NEUTRAL"
+                                },
+        "ai_governance":  {
+                              "ai_authority_state":  "UNAVAILABLE",
+                              "ai_readiness_state":  "UNAVAILABLE",
+                              "ai_bridge_ready":  "FACT:False",
+                              "ai_advisory_active_or_blocked":  "FACT:ATAS_ADVISORY_INELIGIBLE",
+                              "ai_authority_gate_blocked":  "UNAVAILABLE",
+                              "ai_mattered_for_trade":  "INFERRED:non_authoritative_advisory_only"
+                          },
+        "narrative":  "FACT:Outcome=WIN profit=49 | FACT:Context regime=TREND_DOWN vol=HIGH_VOL sr=SR_CONTINUATION_OBSTRUCTED | FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+    },
+    {
+        "identity":  {
+                         "index":  7,
+                         "decision_id":  "XAUUSD-1775678857-100385-256",
+                         "ticket_or_position_id":  "FACT:8114718143",
+                         "close_deal_id":  "FACT:7659899479",
+                         "symbol":  "FACT:XAUUSD",
+                         "direction":  "FACT:BUY"
+                     },
+        "timing":  {
+                       "entry_time_utc":  "FACT:2026-04-08 20:08:48",
+                       "exit_time_utc":  "FACT:2026-04-08 20:12:43",
+                       "holding_duration":  "INFERRED:235s",
+                       "session":  "INFERRED:US",
+                       "trading_day":  "INFERRED:2026-04-08"
+                   },
+        "entry_decision_context":  {
+                                       "strategy":  "FACT:sweep_reversal",
+                                       "strategy_family":  "FACT:LIQUIDITY_REVERSAL",
+                                       "plan_mode":  "FACT:HYBRID",
+                                       "decision_engine_mode":  "FACT:COUNCIL",
+                                       "regime_label":  "FACT:RANGE_BALANCED",
+                                       "regime_confidence":  "FACT:0.58",
+                                       "volatility_regime":  "FACT:HIGH_VOL",
+                                       "structure_context":  "FACT:CLEAN",
+                                       "council_decision_summary":  "FACT:[AI-EA] [INFO] Runtime decision (COUNCIL): [Regime=RANGE_BALANCED conf=0.58 trad=0.57] BUY | Mode=COUNCIL | Final=BUY | Zone=RANGE_MEAN_RECLAIM | ZoneConf=0.82 | PrefStyle=MEAN_RECLAIM | EnvScore=0.75 | CouncilQ=0.85 | Consensus=1.00 | ConsensusLabel=HIGH_CONVICTION | Conflict=0.00 | Dominant=BUY | Best=sweep_reversal | Regime=RANGE|HIGH_VOL|TIGHT_SPREAD|CLEAN | Council pipeline passed | zone=RANGE_MEAN_RECLAIM | pref_style=MEAN_RECLAIM | best_strategy=sweep_reversal | support=sweep_reversal,bollinger_reclaim | consensus=HIGH_CONVICTION | diversity=0.70 | gov_state=EXHAUSTION_SENSITIVE | fail_pressure=NONE | governor=AI Governor: exhaustion-sensitive mode | zone=RANGE_MEAN_RECLAIM | best_strategy=sweep_reversal | quality=0.85 | exhaustion=true",
+                                       "final_decision_reason":  "FACT:runtime_decision_log_present",
+                                       "trade_profile":  "FACT:MEAN_RECLAIM"
+                                   },
+        "confidence_policy_learning":  {
+                                           "base_confidence_score":  "UNAVAILABLE",
+                                           "final_confidence_score":  "UNAVAILABLE",
+                                           "policy_risk_score":  "UNAVAILABLE",
+                                           "regime_fit_score":  "FACT:0.57",
+                                           "learning_adjustment_applied":  "UNAVAILABLE",
+                                           "learning_confidence_delta":  "UNAVAILABLE",
+                                           "learning_caution_delta":  "UNAVAILABLE",
+                                           "learning_reason_codes":  "UNAVAILABLE",
+                                           "evidence_threshold_met":  "UNAVAILABLE"
+                                       },
+        "advisory_external":  {
+                                  "atas_advisory_eligible":  "FACT:false",
+                                  "atas_advisory_direction_or_type":  "FACT:BUY",
+                                  "atas_advisory_strength":  "FACT:0.333",
+                                  "contradiction_flag":  "FACT:False",
+                                  "hold_bias_flag":  "FACT:False",
+                                  "external_advisory_influenced_envelope":  "FACT:false",
+                                  "external_advisory_not_used_reason":  "FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+                              },
+        "support_resistance":  {
+                                   "sr_interaction_bucket":  "FACT:SR_CANONICAL_NEAR",
+                                   "confluence_state":  "FACT:context_captured",
+                                   "level_conflict_or_rejection_risk_flags":  "UNAVAILABLE",
+                                   "sr_helped_or_hurt":  "INFERRED:potentially_helpful"
+                               },
+        "lifecycle":  {
+                          "requested_entry_price":  "UNAVAILABLE",
+                          "actual_fill_price":  "UNAVAILABLE",
+                          "slippage":  "UNAVAILABLE",
+                          "initial_stop_loss":  "UNAVAILABLE",
+                          "initial_take_profit":  "UNAVAILABLE",
+                          "later_management_changes":  "FACT:see_MQL5_log_for_ticket_8114718143",
+                          "exit_reason":  "UNAVAILABLE",
+                          "exit_classification":  "UNAVAILABLE"
+                      },
+        "outcome_attribution":  {
+                                    "result_points":  "UNAVAILABLE",
+                                    "result_money":  "FACT:8.6",
+                                    "r_multiple":  "UNAVAILABLE",
+                                    "outcome_class":  "FACT:WIN",
+                                    "primary_attribution":  "UNAVAILABLE",
+                                    "secondary_attribution":  "UNAVAILABLE",
+                                    "failure_or_success_motif_tags":  "FACT:strategy=sweep_reversal|direction=BUY|regime=RANGE_BALANCED|vol=HIGH_VOL|struct=CLEAN|setup=SETUP_NEUTRAL|sr=SR_CANONICAL_NEAR|contradiction=0",
+                                    "environment_fit":  "INFERRED:bucket=RANGE_BALANCED",
+                                    "setup_quality":  "FACT:SETUP_NEUTRAL"
+                                },
+        "ai_governance":  {
+                              "ai_authority_state":  "UNAVAILABLE",
+                              "ai_readiness_state":  "UNAVAILABLE",
+                              "ai_bridge_ready":  "FACT:False",
+                              "ai_advisory_active_or_blocked":  "FACT:ATAS_ADVISORY_INELIGIBLE",
+                              "ai_authority_gate_blocked":  "UNAVAILABLE",
+                              "ai_mattered_for_trade":  "INFERRED:non_authoritative_advisory_only"
+                          },
+        "narrative":  "FACT:Outcome=WIN profit=8.6 | FACT:Context regime=RANGE_BALANCED vol=HIGH_VOL sr=SR_CANONICAL_NEAR | FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+    },
+    {
+        "identity":  {
+                         "index":  8,
+                         "decision_id":  "XAUUSD-1775676870-100352-228",
+                         "ticket_or_position_id":  "FACT:8114174336",
+                         "close_deal_id":  "FACT:7659306455",
+                         "symbol":  "FACT:XAUUSD",
+                         "direction":  "FACT:SELL"
+                     },
+        "timing":  {
+                       "entry_time_utc":  "FACT:2026-04-08 19:35:40",
+                       "exit_time_utc":  "FACT:2026-04-08 19:40:05",
+                       "holding_duration":  "INFERRED:265s",
+                       "session":  "INFERRED:US",
+                       "trading_day":  "INFERRED:2026-04-08"
+                   },
+        "entry_decision_context":  {
+                                       "strategy":  "FACT:bollinger_reclaim",
+                                       "strategy_family":  "FACT:MEAN_RECLAIM",
+                                       "plan_mode":  "FACT:HYBRID",
+                                       "decision_engine_mode":  "FACT:COUNCIL",
+                                       "regime_label":  "FACT:TREND_DOWN",
+                                       "regime_confidence":  "FACT:0.85",
+                                       "volatility_regime":  "FACT:HIGH_VOL",
+                                       "structure_context":  "FACT:CLEAN",
+                                       "council_decision_summary":  "FACT:[AI-EA] [INFO] Runtime decision (COUNCIL): [Regime=TREND_DOWN conf=0.85 trad=0.60] SELL | Mode=COUNCIL | Final=SELL | Zone=RANGE_MEAN_RECLAIM | ZoneConf=0.82 | PrefStyle=MEAN_RECLAIM | EnvScore=0.78 | CouncilQ=0.70 | Consensus=1.00 | ConsensusLabel=NARROW | Conflict=0.00 | Dominant=SELL | Best=bollinger_reclaim | Regime=RANGE|HIGH_VOL|TIGHT_SPREAD|CLEAN | Council pipeline passed | zone=RANGE_MEAN_RECLAIM | pref_style=MEAN_RECLAIM | best_strategy=bollinger_reclaim | support=bollinger_reclaim | consensus=NARROW | diversity=0.35 | gov_state=EXHAUSTION_SENSITIVE | fail_pressure=NONE | governor=AI Governor: narrow or conflicted consensus, tightened gate and nudged leader | state=EXHAUSTION_SENSITIVE | best_strategy=bollinger_reclaim | consensus=NARROW | diversity=0.35 | conflict=0.00",
+                                       "final_decision_reason":  "FACT:runtime_decision_log_present",
+                                       "trade_profile":  "FACT:MEAN_RECLAIM"
+                                   },
+        "confidence_policy_learning":  {
+                                           "base_confidence_score":  "UNAVAILABLE",
+                                           "final_confidence_score":  "UNAVAILABLE",
+                                           "policy_risk_score":  "UNAVAILABLE",
+                                           "regime_fit_score":  "FACT:0.60",
+                                           "learning_adjustment_applied":  "UNAVAILABLE",
+                                           "learning_confidence_delta":  "UNAVAILABLE",
+                                           "learning_caution_delta":  "UNAVAILABLE",
+                                           "learning_reason_codes":  "UNAVAILABLE",
+                                           "evidence_threshold_met":  "UNAVAILABLE"
+                                       },
+        "advisory_external":  {
+                                  "atas_advisory_eligible":  "FACT:false",
+                                  "atas_advisory_direction_or_type":  "FACT:SELL",
+                                  "atas_advisory_strength":  "FACT:0.377",
+                                  "contradiction_flag":  "FACT:False",
+                                  "hold_bias_flag":  "FACT:False",
+                                  "external_advisory_influenced_envelope":  "FACT:false",
+                                  "external_advisory_not_used_reason":  "FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+                              },
+        "support_resistance":  {
+                                   "sr_interaction_bucket":  "FACT:SR_CANONICAL_NEAR",
+                                   "confluence_state":  "FACT:context_captured",
+                                   "level_conflict_or_rejection_risk_flags":  "UNAVAILABLE",
+                                   "sr_helped_or_hurt":  "INFERRED:potentially_helpful"
+                               },
+        "lifecycle":  {
+                          "requested_entry_price":  "UNAVAILABLE",
+                          "actual_fill_price":  "UNAVAILABLE",
+                          "slippage":  "UNAVAILABLE",
+                          "initial_stop_loss":  "UNAVAILABLE",
+                          "initial_take_profit":  "UNAVAILABLE",
+                          "later_management_changes":  "FACT:see_MQL5_log_for_ticket_8114174336",
+                          "exit_reason":  "UNAVAILABLE",
+                          "exit_classification":  "UNAVAILABLE"
+                      },
+        "outcome_attribution":  {
+                                    "result_points":  "UNAVAILABLE",
+                                    "result_money":  "FACT:-35.2",
+                                    "r_multiple":  "UNAVAILABLE",
+                                    "outcome_class":  "FACT:LOSS",
+                                    "primary_attribution":  "UNAVAILABLE",
+                                    "secondary_attribution":  "UNAVAILABLE",
+                                    "failure_or_success_motif_tags":  "FACT:strategy=bollinger_reclaim|direction=SELL|regime=TREND_DOWN|vol=HIGH_VOL|struct=CLEAN|setup=SETUP_NEUTRAL|sr=SR_CANONICAL_NEAR|contradiction=0",
+                                    "environment_fit":  "INFERRED:bucket=TREND_DOWN",
+                                    "setup_quality":  "FACT:SETUP_NEUTRAL"
+                                },
+        "ai_governance":  {
+                              "ai_authority_state":  "UNAVAILABLE",
+                              "ai_readiness_state":  "UNAVAILABLE",
+                              "ai_bridge_ready":  "FACT:False",
+                              "ai_advisory_active_or_blocked":  "FACT:ATAS_ADVISORY_INELIGIBLE",
+                              "ai_authority_gate_blocked":  "UNAVAILABLE",
+                              "ai_mattered_for_trade":  "INFERRED:non_authoritative_advisory_only"
+                          },
+        "narrative":  "FACT:Outcome=LOSS profit=-35.2 | FACT:Context regime=TREND_DOWN vol=HIGH_VOL sr=SR_CANONICAL_NEAR | FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+    },
+    {
+        "identity":  {
+                         "index":  9,
+                         "decision_id":  "XAUUSD-1775674237-100308-192",
+                         "ticket_or_position_id":  "FACT:8113340742",
+                         "close_deal_id":  "FACT:7658357635",
+                         "symbol":  "FACT:XAUUSD",
+                         "direction":  "FACT:SELL"
+                     },
+        "timing":  {
+                       "entry_time_utc":  "FACT:2026-04-08 18:51:51",
+                       "exit_time_utc":  "FACT:2026-04-08 18:55:15",
+                       "holding_duration":  "INFERRED:204s",
+                       "session":  "INFERRED:US",
+                       "trading_day":  "INFERRED:2026-04-08"
+                   },
+        "entry_decision_context":  {
+                                       "strategy":  "FACT:sweep_reversal",
+                                       "strategy_family":  "FACT:LIQUIDITY_REVERSAL",
+                                       "plan_mode":  "FACT:HYBRID",
+                                       "decision_engine_mode":  "FACT:COUNCIL",
+                                       "regime_label":  "FACT:COMPRESSION",
+                                       "regime_confidence":  "FACT:0.62",
+                                       "volatility_regime":  "FACT:HIGH_VOL",
+                                       "structure_context":  "FACT:CLEAN",
+                                       "council_decision_summary":  "FACT:[AI-EA] [INFO] Runtime decision (COUNCIL): [Regime=COMPRESSION conf=0.62 trad=0.57] SELL | Mode=COUNCIL | Final=SELL | Zone=RANGE_MEAN_RECLAIM | ZoneConf=0.82 | PrefStyle=MEAN_RECLAIM | EnvScore=0.87 | CouncilQ=0.87 | Consensus=1.00 | ConsensusLabel=HIGH_CONVICTION | Conflict=0.00 | Dominant=SELL | Best=sweep_reversal | Regime=RANGE|HIGH_VOL|TIGHT_SPREAD|CLEAN | Council pipeline passed | zone=RANGE_MEAN_RECLAIM | pref_style=MEAN_RECLAIM | best_strategy=sweep_reversal | support=sweep_reversal,bollinger_reclaim | consensus=HIGH_CONVICTION | diversity=0.70 | gov_state=EXHAUSTION_SENSITIVE | fail_pressure=NONE | governor=AI Governor: exhaustion-sensitive mode | zone=RANGE_MEAN_RECLAIM | best_strategy=sweep_reversal | quality=0.87 | exhaustion=true",
+                                       "final_decision_reason":  "FACT:runtime_decision_log_present",
+                                       "trade_profile":  "FACT:MEAN_RECLAIM"
+                                   },
+        "confidence_policy_learning":  {
+                                           "base_confidence_score":  "UNAVAILABLE",
+                                           "final_confidence_score":  "UNAVAILABLE",
+                                           "policy_risk_score":  "UNAVAILABLE",
+                                           "regime_fit_score":  "FACT:0.57",
+                                           "learning_adjustment_applied":  "UNAVAILABLE",
+                                           "learning_confidence_delta":  "UNAVAILABLE",
+                                           "learning_caution_delta":  "UNAVAILABLE",
+                                           "learning_reason_codes":  "UNAVAILABLE",
+                                           "evidence_threshold_met":  "UNAVAILABLE"
+                                       },
+        "advisory_external":  {
+                                  "atas_advisory_eligible":  "FACT:false",
+                                  "atas_advisory_direction_or_type":  "FACT:SELL",
+                                  "atas_advisory_strength":  "FACT:0.305",
+                                  "contradiction_flag":  "FACT:False",
+                                  "hold_bias_flag":  "FACT:False",
+                                  "external_advisory_influenced_envelope":  "FACT:false",
+                                  "external_advisory_not_used_reason":  "FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+                              },
+        "support_resistance":  {
+                                   "sr_interaction_bucket":  "FACT:SR_UNKNOWN",
+                                   "confluence_state":  "FACT:context_captured",
+                                   "level_conflict_or_rejection_risk_flags":  "UNAVAILABLE",
+                                   "sr_helped_or_hurt":  "UNAVAILABLE"
+                               },
+        "lifecycle":  {
+                          "requested_entry_price":  "UNAVAILABLE",
+                          "actual_fill_price":  "UNAVAILABLE",
+                          "slippage":  "UNAVAILABLE",
+                          "initial_stop_loss":  "UNAVAILABLE",
+                          "initial_take_profit":  "UNAVAILABLE",
+                          "later_management_changes":  "FACT:see_MQL5_log_for_ticket_8113340742",
+                          "exit_reason":  "UNAVAILABLE",
+                          "exit_classification":  "UNAVAILABLE"
+                      },
+        "outcome_attribution":  {
+                                    "result_points":  "UNAVAILABLE",
+                                    "result_money":  "FACT:47.6",
+                                    "r_multiple":  "UNAVAILABLE",
+                                    "outcome_class":  "FACT:WIN",
+                                    "primary_attribution":  "UNAVAILABLE",
+                                    "secondary_attribution":  "UNAVAILABLE",
+                                    "failure_or_success_motif_tags":  "FACT:strategy=sweep_reversal|direction=SELL|regime=COMPRESSION|vol=HIGH_VOL|struct=CLEAN|setup=SETUP_NEUTRAL|sr=SR_UNKNOWN|contradiction=0",
+                                    "environment_fit":  "INFERRED:bucket=COMPRESSION",
+                                    "setup_quality":  "FACT:SETUP_NEUTRAL"
+                                },
+        "ai_governance":  {
+                              "ai_authority_state":  "UNAVAILABLE",
+                              "ai_readiness_state":  "UNAVAILABLE",
+                              "ai_bridge_ready":  "FACT:False",
+                              "ai_advisory_active_or_blocked":  "FACT:ATAS_ADVISORY_INELIGIBLE",
+                              "ai_authority_gate_blocked":  "UNAVAILABLE",
+                              "ai_mattered_for_trade":  "INFERRED:non_authoritative_advisory_only"
+                          },
+        "narrative":  "FACT:Outcome=WIN profit=47.6 | FACT:Context regime=COMPRESSION vol=HIGH_VOL sr=SR_UNKNOWN | FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+    },
+    {
+        "identity":  {
+                         "index":  10,
+                         "decision_id":  "XAUUSD-1775664074-100139-38",
+                         "ticket_or_position_id":  "FACT:8108699225",
+                         "close_deal_id":  "FACT:7653114362",
+                         "symbol":  "FACT:XAUUSD",
+                         "direction":  "FACT:SELL"
+                     },
+        "timing":  {
+                       "entry_time_utc":  "FACT:2026-04-08 16:03:30",
+                       "exit_time_utc":  "FACT:2026-04-08 16:04:34",
+                       "holding_duration":  "INFERRED:64s",
+                       "session":  "INFERRED:US",
+                       "trading_day":  "INFERRED:2026-04-08"
+                   },
+        "entry_decision_context":  {
+                                       "strategy":  "FACT:sweep_reversal",
+                                       "strategy_family":  "FACT:LIQUIDITY_REVERSAL",
+                                       "plan_mode":  "FACT:HYBRID",
+                                       "decision_engine_mode":  "FACT:COUNCIL",
+                                       "regime_label":  "FACT:RANGE_DIRTY",
+                                       "regime_confidence":  "FACT:0.58",
+                                       "volatility_regime":  "FACT:HIGH_VOL",
+                                       "structure_context":  "FACT:CLEAN",
+                                       "council_decision_summary":  "FACT:[AI-EA] [INFO] Runtime decision (COUNCIL): [Regime=RANGE_DIRTY conf=0.58 trad=0.54] SELL | Mode=COUNCIL | Final=SELL | Zone=RANGE_MEAN_RECLAIM | ZoneConf=0.82 | PrefStyle=MEAN_RECLAIM | EnvScore=0.86 | CouncilQ=0.87 | Consensus=1.00 | ConsensusLabel=HIGH_CONVICTION | Conflict=0.00 | Dominant=SELL | Best=sweep_reversal | Regime=RANGE|HIGH_VOL|TIGHT_SPREAD|CLEAN | Council pipeline passed | zone=RANGE_MEAN_RECLAIM | pref_style=MEAN_RECLAIM | best_strategy=sweep_reversal | support=sweep_reversal,bollinger_reclaim | consensus=HIGH_CONVICTION | diversity=0.70 | gov_state=EXHAUSTION_SENSITIVE | fail_pressure=NONE | governor=AI Governor: exhaustion-sensitive mode | zone=RANGE_MEAN_RECLAIM | best_strategy=sweep_reversal | quality=0.87 | exhaustion=true",
+                                       "final_decision_reason":  "FACT:runtime_decision_log_present",
+                                       "trade_profile":  "FACT:MEAN_RECLAIM"
+                                   },
+        "confidence_policy_learning":  {
+                                           "base_confidence_score":  "UNAVAILABLE",
+                                           "final_confidence_score":  "UNAVAILABLE",
+                                           "policy_risk_score":  "UNAVAILABLE",
+                                           "regime_fit_score":  "FACT:0.54",
+                                           "learning_adjustment_applied":  "UNAVAILABLE",
+                                           "learning_confidence_delta":  "UNAVAILABLE",
+                                           "learning_caution_delta":  "UNAVAILABLE",
+                                           "learning_reason_codes":  "UNAVAILABLE",
+                                           "evidence_threshold_met":  "UNAVAILABLE"
+                                       },
+        "advisory_external":  {
+                                  "atas_advisory_eligible":  "FACT:false",
+                                  "atas_advisory_direction_or_type":  "FACT:SELL",
+                                  "atas_advisory_strength":  "FACT:0.459",
+                                  "contradiction_flag":  "FACT:False",
+                                  "hold_bias_flag":  "FACT:False",
+                                  "external_advisory_influenced_envelope":  "FACT:false",
+                                  "external_advisory_not_used_reason":  "FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+                              },
+        "support_resistance":  {
+                                   "sr_interaction_bucket":  "FACT:SR_REJECTION_RISK",
+                                   "confluence_state":  "FACT:context_captured",
+                                   "level_conflict_or_rejection_risk_flags":  "FACT:rejection_risk",
+                                   "sr_helped_or_hurt":  "INFERRED:potentially_hurt"
+                               },
+        "lifecycle":  {
+                          "requested_entry_price":  "UNAVAILABLE",
+                          "actual_fill_price":  "UNAVAILABLE",
+                          "slippage":  "UNAVAILABLE",
+                          "initial_stop_loss":  "UNAVAILABLE",
+                          "initial_take_profit":  "UNAVAILABLE",
+                          "later_management_changes":  "FACT:see_MQL5_log_for_ticket_8108699225",
+                          "exit_reason":  "UNAVAILABLE",
+                          "exit_classification":  "UNAVAILABLE"
+                      },
+        "outcome_attribution":  {
+                                    "result_points":  "UNAVAILABLE",
+                                    "result_money":  "FACT:51.3",
+                                    "r_multiple":  "UNAVAILABLE",
+                                    "outcome_class":  "FACT:WIN",
+                                    "primary_attribution":  "UNAVAILABLE",
+                                    "secondary_attribution":  "UNAVAILABLE",
+                                    "failure_or_success_motif_tags":  "FACT:strategy=sweep_reversal|direction=SELL|regime=RANGE_DIRTY|vol=HIGH_VOL|struct=CLEAN|setup=SETUP_NEUTRAL|sr=SR_REJECTION_RISK|contradiction=0",
+                                    "environment_fit":  "INFERRED:bucket=RANGE_DIRTY",
+                                    "setup_quality":  "FACT:SETUP_NEUTRAL"
+                                },
+        "ai_governance":  {
+                              "ai_authority_state":  "UNAVAILABLE",
+                              "ai_readiness_state":  "UNAVAILABLE",
+                              "ai_bridge_ready":  "FACT:False",
+                              "ai_advisory_active_or_blocked":  "FACT:ATAS_ADVISORY_INELIGIBLE",
+                              "ai_authority_gate_blocked":  "UNAVAILABLE",
+                              "ai_mattered_for_trade":  "INFERRED:non_authoritative_advisory_only"
+                          },
+        "narrative":  "FACT:Outcome=WIN profit=51.3 | FACT:Context regime=RANGE_DIRTY vol=HIGH_VOL sr=SR_REJECTION_RISK | FACT:state=ATAS_ADVISORY_INELIGIBLE;reasons=atas_shadow_not_attached"
+    }
+]

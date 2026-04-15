@@ -1,0 +1,119 @@
+﻿[
+    {
+        "source_key":  "council_feedback",
+        "path":  "C:\\Users\\INFINTY GROUP\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\AI\\council_feedback.json",
+        "exists":  true,
+        "role":  "trade outcome and close linkage",
+        "last_write_utc":  "2026-04-08 19:59:26",
+        "used":  true,
+        "note":  ""
+    },
+    {
+        "source_key":  "ai_strategy_memory_events",
+        "path":  "C:\\Users\\INFINTY GROUP\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\AI\\ai_strategy_memory_events.jsonl",
+        "exists":  true,
+        "role":  "trade entry events and strategy identity",
+        "last_write_utc":  "2026-04-08 20:00:30",
+        "used":  true,
+        "note":  ""
+    },
+    {
+        "source_key":  "ai_institutional_learning_decision_context",
+        "path":  "C:\\Users\\INFINTY GROUP\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\AI\\ai_institutional_learning_decision_context.jsonl",
+        "exists":  true,
+        "role":  "regime/SR/advisory context snapshots",
+        "last_write_utc":  "2026-04-08 19:40:05",
+        "used":  true,
+        "note":  ""
+    },
+    {
+        "source_key":  "ai_institutional_learning_events",
+        "path":  "C:\\Users\\INFINTY GROUP\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\AI\\ai_institutional_learning_events.jsonl",
+        "exists":  true,
+        "role":  "post-trade learning attribution",
+        "last_write_utc":  "2026-04-08 19:46:34",
+        "used":  true,
+        "note":  ""
+    },
+    {
+        "source_key":  "MQL5_log_20260408",
+        "path":  "C:\\Users\\INFINTY GROUP\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Logs\\20260408.log",
+        "exists":  true,
+        "role":  "runtime decision/advisory/close evidence lines",
+        "last_write_utc":  "2026-04-08 20:53:41",
+        "used":  true,
+        "note":  ""
+    },
+    {
+        "source_key":  "ai_trade_feedback",
+        "path":  "C:\\Users\\INFINTY GROUP\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\AI\\ai_trade_feedback.json",
+        "exists":  true,
+        "role":  "latest trade feedback surface",
+        "last_write_utc":  "2026-04-08 19:46:17",
+        "used":  true,
+        "note":  ""
+    },
+    {
+        "source_key":  "ai_activation_readiness_status",
+        "path":  "C:\\Users\\INFINTY GROUP\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\AI\\ai_activation_readiness_status.json",
+        "exists":  true,
+        "role":  "AI readiness posture",
+        "last_write_utc":  "2026-04-08 19:59:24",
+        "used":  true,
+        "note":  ""
+    },
+    {
+        "source_key":  "execution_authority_status",
+        "path":  "C:\\Users\\INFINTY GROUP\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\AI\\execution_authority_status.json",
+        "exists":  true,
+        "role":  "runtime authority posture",
+        "last_write_utc":  "2026-04-08 20:53:33",
+        "used":  true,
+        "note":  ""
+    },
+    {
+        "source_key":  "runtime_governance_status",
+        "path":  "C:\\Users\\INFINTY GROUP\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\AI\\runtime_governance_status.json",
+        "exists":  true,
+        "role":  "runtime governance posture",
+        "last_write_utc":  "2026-04-08 20:53:33",
+        "used":  true,
+        "note":  ""
+    },
+    {
+        "source_key":  "atas_governed_advisory_status",
+        "path":  "C:\\Users\\INFINTY GROUP\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\AI\\atas_governed_advisory_status.json",
+        "exists":  true,
+        "role":  "ATAS advisory status",
+        "last_write_utc":  "2026-04-08 19:59:24",
+        "used":  true,
+        "note":  ""
+    },
+    {
+        "source_key":  "atas_runtime_context",
+        "path":  "C:\\Users\\INFINTY GROUP\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\AI\\atas_runtime_context.json",
+        "exists":  true,
+        "role":  "shadow runtime context reference",
+        "last_write_utc":  "2026-04-08 08:03:03",
+        "used":  true,
+        "note":  ""
+    },
+    {
+        "source_key":  "atas_runtime_context_status",
+        "path":  "C:\\Users\\INFINTY GROUP\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\AI\\atas_runtime_context_status.json",
+        "exists":  true,
+        "role":  "shadow runtime status reference",
+        "last_write_utc":  "2026-04-08 19:59:26",
+        "used":  true,
+        "note":  ""
+    },
+    {
+        "source_key":  "ai_performance_journal",
+        "path":  "C:\\Users\\INFINTY GROUP\\AppData\\Roaming\\MetaQuotes\\Terminal\\D0E8209F77C8CF37AD8BF550E51FF075\\MQL5\\Files\\AI\\ai_performance_journal.jsonl",
+        "exists":  true,
+        "role":  "locked performance trace (not read this run)",
+        "last_write_utc":  "2026-04-08 20:00:49",
+        "used":  false,
+        "note":  "Skipped per AGENTS.md live-locked journal rule while MT5 may be running."
+    }
+]

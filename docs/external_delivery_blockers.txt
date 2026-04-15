@@ -1,0 +1,83 @@
+external_delivery_blockers
+document_version=S3_EXTERNAL_DELIVERY_BLOCKERS_V1
+document_role=FORMAL_EXTERNAL_DELIVERY_AND_PRODUCTIZATION_BLOCKER_REGISTER
+authority_class=NON_AUTHORITATIVE_GOVERNANCE_POLICY
+scope=BLOCKERS_BEFORE_TELEGRAM_EXTERNAL_DELIVERY_OR_BROADER_PRODUCTIZATION
+external_delivery_allowed=false
+
+PURPOSE
+State plainly what blocks external delivery, external integrations, Telegram delivery, or broader productization until security hygiene is satisfied.
+
+BLOCKER
+blocker_name=RAW_SECRET_AND_CREDENTIAL_SURFACES_NOT_EXTERNALLY_SAFE
+blocker_reason=secret-bearing and credential-bearing artifacts must not be exposed or copied into external packages, prompts, reports, or delivery payloads
+required_condition_to_clear=verified_isolation_and_non_inclusion_of_secret_and_credential_material
+
+BLOCKER
+blocker_name=AUTHORITATIVE_PLAN_AND_RUNTIME_CONTROL_SURFACES_NOT_DELIVERABLE
+blocker_reason=authoritative and control-bound artifacts such as ai_current_plan.json, ai_execution_contract.json, mutation rules, runtime governance state, and rollback state are not customer-safe or delivery-safe in raw form
+required_condition_to_clear=explicit_denylist_or_allowlist_and_verified_exclusion_from_external_packages
+
+BLOCKER
+blocker_name=SANITIZATION_PATH_NOT_YET_PROVEN_END_TO_END
+blocker_reason=repository, review, advisory, diagnostics, and learning artifacts can still leak unsafe identifiers, raw state, or control semantics unless a proven sanitization path exists
+required_condition_to_clear=verified_external_sanitization_and_minimization_workflow
+
+BLOCKER
+blocker_name=AI_BOUNDARY_HYGIENE_NOT_FULLY_ENFORCED_FOR_EXTERNALIZATION
+blocker_reason=AI/review/advisory/reporting layers must not inherit raw sensitive material or become indirect exfiltration paths
+required_condition_to_clear=explicit_access_boundary_enforcement_and_sanitized_input_proof
+
+BLOCKER
+blocker_name=EXTERNAL_DELIVERY_PACKAGE_RULES_NOT_FORMALLY_ENFORCED_IN_CODE_OR_RELEASE_PROCESS
+blocker_reason=without enforced package-content discipline, sensitive artifacts may be included accidentally in Telegram or customer deliveries
+required_condition_to_clear=formal_delivery_allowlist_denylist_and_release_gate_verification
+
+BLOCKER
+blocker_name=UNSANITIZED_OPERATIONAL_DIAGNOSTICS_AND_INTERNAL_MEMORY_NOT_CUSTOMER_SAFE
+blocker_reason=raw diagnostics, raw memory, raw feedback, and raw journals are internal-only surfaces and may leak strategy or control context
+required_condition_to_clear=customer_safe_derivative_artifacts_only_and_raw_artifact_exclusion
+
+BLOCKER
+blocker_name=SECURITY_HYGIENE_DEFINED_BUT_NOT_FULLY_IMPLEMENTED
+blocker_reason=this phase defines inventory, policy, and blockers but does not implement secret management, encryption, runtime auth, delivery integration hardening, or package scanners
+required_condition_to_clear=future_implementation_and_verification_beyond_policy_definition
+
+DELIVERY_RULES
+telegram_delivery_rule=BLOCKED_UNTIL_S3_BLOCKERS_ARE_CLEARED
+external_integration_rule=BLOCKED_UNTIL_SENSITIVE_SURFACE_ISOLATION_AND_SANITIZATION_ARE_VERIFIED
+customer_facing_productization_rule=BLOCKED_UNTIL_SECURITY_HYGIENE_MOVES_FROM_DEFINED_TO_IMPLEMENTED_AND_VERIFIED
+
+MINIMUM_EXTERNALIZATION_CONDITIONS
+- raw secret and credential surfaces excluded
+- authoritative and runtime control surfaces excluded
+- raw diagnostics, raw memory, and raw internal journals excluded
+- sanitized derivative artifacts only
+- AI/review/advisory outputs verified non-exfiltrative
+- release package rules explicitly enforced
+- external_delivery_allowed remains false until all blockers are cleared
+
+STATUS_SUMMARY
+security_hygiene_status=DEFINED_NOT_FULLY_IMPLEMENTED
+external_delivery_status=BLOCKED
+productization_status=BLOCKED_PENDING_IMPLEMENTED_HYGIENE
+
+CONTAINMENT_UPDATE
+package_name=POST_AUDIT_REMEDIATION_PACKAGE_A
+raw_secret_exposure_removed_from_transportable_code=true
+raw_secret_exposure_removed_from_transportable_project_file=true
+transportable_project_contains_live_secret=false
+operator_supplied_secret_required_for_future_local_use=true
+external_delivery_allowed=false
+note=Package A contains secret exposure only. It does not clear the broader external-delivery blocker set.
+
+BLOCKER
+blocker_name=EXPORT_RELEASE_GATE_DEFAULT_BLOCK_UNTIL_ALL_REQUIRED_CHECKS_PASS
+blocker_reason=a formal pre-export release gate now exists and remains blocked by default until all required export-safety checks pass
+required_condition_to_clear=verified_release_gate_pass_with_sanitized_export_subset
+
+POST_AUDIT_NOTE
+security_containment_package_a_completed=true
+export_release_gate_package_b_defined=true
+export_release_gate_status_path=MQL5/Files/AI/export_release_gate_status.json
+default_gate_result=BLOCKED

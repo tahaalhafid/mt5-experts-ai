@@ -1,0 +1,34 @@
+FACTORY-FIRST ADMISSION POLICY
+version=PACKAGE1_FACTORY_FIRST_ADMISSION_POLICY_V1
+policy_role=TRANSFER_POLICY_LOCK
+authority_class=NON_RUNTIME_GOVERNANCE_POLICY
+
+purpose
+- lock active execution under a factory-first admission rule
+- preserve all current strategies, families, compiled-plan primitives, and legacy materials as transferable lineage material
+- prevent strategy execution privilege from surviving by identity alone
+
+policy rules
+- no strategy is execution-eligible by identity alone
+- no legacy strategy regains execution privilege by identity alone
+- no council family, council strategy, compiled-plan primitive, or library strategy may remain execution-authoritative merely because it already exists in runtime code
+- future admission to active execution must occur through governed factory transfer packages only
+- this package preserves material presence, lineage, and transferability
+- this package does not perform reclassification, ingestion, primitive extraction, or re-admission
+
+this policy does not imply
+- migration complete
+- reclassification complete
+- ingestion complete
+- deletion
+- archive completion
+- replacement runtime architecture
+- strategy improvement
+- runtime execution permission
+
+lineage preservation
+- current strategies remain present
+- current family identities remain present
+- compiled-plan/runtime primitives remain present
+- library identities remain present
+- all remain eligible for later governed transfer handling

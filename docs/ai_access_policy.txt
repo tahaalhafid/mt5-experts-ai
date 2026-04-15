@@ -1,0 +1,83 @@
+AI ACCESS POLICY
+document_role=AI_ACCESS_POLICY
+document_authority_class=AUTHORITATIVE_AI_INPUT_ACCESS_POLICY
+policy_version=A1_AI_ACCESS_POLICY_V1
+linked_catalog=docs/ai_input_catalog.txt
+linked_task_matrix=docs/ai_task_input_matrix.txt
+linked_authority_gate=H6_AI_ACTIVATION_READINESS_GATE
+policy_objective=Broad visibility with selective retrieval, not raw everything all the time.
+
+ACCESS CLASSES
+
+1) ALWAYS_VISIBLE_SUMMARIES
+Definition=Compact summary artifacts and control docs that may be read by eligible AI tasks without raw deep retrieval.
+Operational meaning=Read first by default before any deeper investigation.
+Examples=baseline identity, current operational status, implementation state map, runtime governance status, risk safety status, diagnostic runtime summary, execution quality validation, replay validation summary, current council summaries when available.
+
+2) ON_DEMAND_RETRIEVAL
+Definition=Raw normalized investigation sources that may be retrieved only when summaries indicate need.
+Operational meaning=Not always-on. Use bounded retrieval only.
+Examples=ai_performance_journal.jsonl, council_feedback.json.
+
+3) SNAPSHOT_ONLY
+Definition=Metadata snapshots from live truth/mirror/backup state artifacts.
+Operational meaning=Expose only limited metadata needed for context and coherence checking. Do not treat as broad raw plan/state reads.
+Examples=ai_current_plan.json metadata, ai_evolution_state.json metadata, ai_previous_plan_backup.json metadata, AI readiness metadata.
+
+4) FORBIDDEN
+Definition=Inputs AI may not access in A1 regardless of authority state.
+Operational meaning=No direct access, no summary, no selective retrieval.
+Examples=secrets, credentials, direct execution permissions, mutable control surfaces, write-capable truth sources.
+
+SUMMARY-FIRST POLICY
+rule_id=SUMMARY_FIRST_SELECTIVE_RETRIEVAL
+- Step 1: Read ALWAYS_VISIBLE_SUMMARIES first.
+- Step 2: Decide whether the summaries already answer the task sufficiently.
+- Step 3: Only if summaries are insufficient, retrieve ON_DEMAND_RETRIEVAL slices using bounded scope.
+- Step 4: Use SNAPSHOT_ONLY metadata only for context, coherence, and limited state framing.
+- Step 5: Never escalate into FORBIDDEN sources.
+
+SELECTIVE RETRIEVAL POLICY
+default_raw_full_file_reads_allowed=false
+default_bounded_retrieval_required=true
+preferred_scope_order=decision_id>position_id>deal_id>incident_window>time_range>strategy_family>zone_regime
+operational_expectation=Target the narrowest slice that can answer the task.
+
+BOUNDED RETRIEVAL RULES
+- time_range_scoped_retrieval: Use bounded windows rather than full-history reads.
+- decision_id_scoped_retrieval: Preferred for decision-chain investigation.
+- position_id_scoped_retrieval: Preferred for trade lifecycle reconstruction.
+- deal_id_scoped_retrieval: Preferred for execution/open/close investigation.
+- incident_window_retrieval: Use tightly bounded incident windows around a known event.
+- strategy_family_scoped_retrieval: Use only when the question is specifically strategy-family focused.
+- zone_regime_scoped_retrieval: Use only when the question is specifically zone/regime focused.
+
+FORBIDDEN ACCESS RULES
+- AI may not access secrets.
+- AI may not access credentials.
+- AI may not access direct execution permissions.
+- AI may not access mutable live control surfaces.
+- AI may not write to truth sources.
+- AI may not use write-capable system surfaces as inputs for operational mutation.
+- AI may not convert input access into direct runtime control or auto-apply behavior.
+
+AUTHORITY COMPATIBILITY
+- A1 does not change H6 authority states.
+- AI_OFF: no task execution, regardless of catalog visibility definition.
+- AI_SHADOW_ONLY: may use policy-defined inputs only for shadow/internal/derived work.
+- AI_ADVISORY_ONLY: may use the same input policy with advisory/report/proposal outputs still remaining non-control and reviewable only.
+- No A1 path authorizes direct control, auto-apply, direct trade generation, or live plan mutation.
+
+COUNCIL ADVISORY ACCESS RULE
+- COUNCIL_CONTEXTUAL_ADVISORY uses compact candidate packet and latest summaries first.
+- Raw retrieval is allowed only when specifically needed to clarify anomaly, drift, or insufficient-evidence context.
+- Broad system-wide raw reads are not normal council advisory mode.
+
+LEARNING GOVERNANCE ACCESS RULE
+- LEARNING_GOVERNANCE_SUPPORT uses validation, replay, governance, and diagnostic evidence first.
+- Raw retrieval is allowed only to substantiate a bounded reviewable proposal or root-cause investigation.
+- No direct learning mutation is authorized.
+
+POLICY NOTE
+A1 defines what AI may read and how it must retrieve it.
+A1 does not create a retrieval engine, scheduler, or new authority path.

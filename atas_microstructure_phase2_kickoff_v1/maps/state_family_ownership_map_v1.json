@@ -1,0 +1,31 @@
+{
+  "version": "ATAS_PHASE2_STATE_FAMILY_OWNERSHIP_MAP_V1",
+  "phase": "PHASE_2_KICKOFF",
+  "ownership": [
+    {
+      "state_family": "OrderFlowState",
+      "ownership_class": "ATAS_EXTERNAL_NON_AUTHORITATIVE",
+      "authority_note": "Evidence-only; no final market/regime/tradability authority."
+    },
+    {
+      "state_family": "LiquidityState",
+      "ownership_class": "ATAS_EXTERNAL_NON_AUTHORITATIVE",
+      "authority_note": "Context-only; cannot emit execution/risk instructions."
+    },
+    {
+      "state_family": "LevelInteractionState",
+      "ownership_class": "ATAS_EXTERNAL_NON_AUTHORITATIVE",
+      "authority_note": "Non-binding level context; no canonical level ownership."
+    },
+    {
+      "state_family": "MicrostructureEnvironmentEvidence",
+      "ownership_class": "ATAS_EXTERNAL_NON_AUTHORITATIVE",
+      "authority_note": "Environment hints only; no final regime ownership."
+    },
+    {
+      "state_family": "QualityValidityState",
+      "ownership_class": "EXTERNAL_DERIVED_STATUS",
+      "authority_note": "Validation status only; no gate bypass semantics."
+    }
+  ]
+}

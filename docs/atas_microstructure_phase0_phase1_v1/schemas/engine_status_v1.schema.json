@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "atas.engine_status.v1",
+  "title": "ATAS Engine Status V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_family",
+    "status_id",
+    "status_timestamp_utc",
+    "stage_status",
+    "first_failing_gate",
+    "classification"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "ATAS_ENGINE_STATUS_V1"
+    },
+    "packet_family": {
+      "const": "engine_status"
+    },
+    "status_id": {
+      "type": "string"
+    },
+    "status_timestamp_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "stage_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observation_stage",
+        "exporter_stage",
+        "adapter_stage",
+        "mt5_intake_stage",
+        "advisory_stage"
+      ],
+      "properties": {
+        "observation_stage": {
+          "$ref": "#/$defs/stage_state"
+        },
+        "exporter_stage": {
+          "$ref": "#/$defs/stage_state"
+        },
+        "adapter_stage": {
+          "$ref": "#/$defs/stage_state"
+        },
+        "mt5_intake_stage": {
+          "$ref": "#/$defs/stage_state"
+        },
+        "advisory_stage": {
+          "$ref": "#/$defs/stage_state"
+        }
+      }
+    },
+    "first_failing_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stage",
+        "reason_code"
+      ],
+      "properties": {
+        "stage": {
+          "type": "string"
+        },
+        "reason_code": {
+          "type": "string"
+        }
+      }
+    },
+    "classification": {
+      "type": "string",
+      "enum": [
+        "LIVE_VALID",
+        "MIXED_FAILURE",
+        "NOT_ATTACHED",
+        "HISTORICAL_ONLY",
+        "UNKNOWN"
+      ]
+    }
+  },
+  "$defs": {
+    "stage_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "reason_code"
+      ],
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "LIVE_VALID",
+            "FRESH",
+            "STALE",
+            "EXPIRED",
+            "HISTORICAL_ONLY",
+            "NOT_ATTACHED",
+            "BLOCKED",
+            "INELIGIBLE",
+            "ERROR",
+            "UNKNOWN"
+          ]
+        },
+        "reason_code": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

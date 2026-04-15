@@ -1,0 +1,190 @@
+EDGE SOURCE INTAKE POLICY
+Authority: Institutional Edge Factory source-intake governance policy.
+Truth posture: Intake architecture and routing policy only. No runtime behavior change.
+
+============================================================
+PHASE IDENTITY
+============================================================
+Phase:
+- E0 — Edge Source Intake & Canon Gate
+
+Purpose:
+- Establish one institutional source-intake gate for every current, legacy, and future edge material.
+- Move knowledge authority for edge intake into MQL5/Files/AI/edge_factory/.
+- Ensure current canon seeds, legacy materials, primitive seeds, and future external sources all enter one controlled registration path.
+
+Non-goals:
+- No decomposition logic yet
+- No codifiability engine yet
+- No testing engine yet
+- No runtime export yet
+- No runtime family mutation
+- No code behavior change
+
+============================================================
+AUTHORITATIVE FACTORY ROOT
+============================================================
+Authoritative intake root:
+- MQL5/Files/AI/edge_factory/
+
+Authoritative intake index:
+- MQL5/Files/AI/edge_factory/edge_factory_manifest.json
+
+Subregistries:
+- registry/source_registry.json
+- registry/material_registry.json
+- registry/factory_intake_status.json
+
+Rule:
+- edge_factory_manifest.json is the single authoritative index for source-intake structure, registry locations, intake counts, and intake readiness status.
+- It is authoritative for intake architecture only.
+- It is not runtime trading authority.
+- It is not canon-promotion authority.
+- It is not decomposition/test/export authority.
+
+============================================================
+SOURCE CLASSES
+============================================================
+Defined source classes:
+- MARKET_NATIVE_SOURCE
+- INTERNAL_RUNTIME_SOURCE
+- INTERNAL_ANALYTICS_SOURCE
+- RESEARCH_SOURCE
+- PLAYBOOK_SOURCE
+- SCRIPT_SOURCE
+- COMMUNITY_IDEA_SOURCE
+- HUMAN_REVIEW_SOURCE
+- LEGACY_IMPORTED_SOURCE
+
+Policy meaning:
+1) MARKET_NATIVE_SOURCE
+   - native market-observed structure
+   - highest default trust when normalized and attributable
+   - still not self-promoting
+
+2) INTERNAL_RUNTIME_SOURCE
+   - current bounded runtime families, strategies, or compiled-plan primitives
+   - very high trust for intake because already tied to the operating baseline
+   - still not auto-canon and not auto-runtime for future materials
+
+3) INTERNAL_ANALYTICS_SOURCE
+   - internal support, attribution, regime, confidence, or validation materials
+   - strong structured trust but usually primitive/support routed
+
+4) RESEARCH_SOURCE / PLAYBOOK_SOURCE
+   - structured but partial
+   - admitted for research/decomposition gating, not direct promotion
+
+5) SCRIPT_SOURCE / COMMUNITY_IDEA_SOURCE
+   - default low trust ideation
+   - often research-only or early-rejection candidates
+
+6) HUMAN_REVIEW_SOURCE
+   - curated human synthesis
+   - useful as routing support, not self-sufficient canon proof
+
+7) LEGACY_IMPORTED_SOURCE
+   - old/current materials imported under control into the factory
+   - legacy presence is never proof of current value
+
+============================================================
+TRUST DISCIPLINE
+============================================================
+Trust tiers are defined separately in:
+- edge_source_trust_tiers.txt
+
+Conservative ordering:
+- TIER_1_HIGH_TRUST
+- TIER_2_STRUCTURED_TRUST
+- TIER_3_CURATED_BUT_PARTIAL
+- TIER_4_LOW_TRUST_IDEATION_ONLY
+
+Hard rule:
+- registration does not imply usefulness
+- admission does not imply codifiability
+- codifiability does not imply canon candidacy
+- quantity must never be confused with edge value
+
+============================================================
+INTAKE STATES
+============================================================
+Defined intake states:
+- INTAKE_REGISTERED
+- INTAKE_TRIAGED
+- INTAKE_REJECTED_EARLY
+- INTAKE_RESEARCH_ONLY
+- INTAKE_READY_FOR_DECOMPOSITION
+- INTAKE_IMPORTED_FROM_CURRENT_CANON
+- INTAKE_IMPORTED_FROM_LEGACY
+- INTAKE_IMPORTED_FROM_INTERNAL_RUNTIME
+
+Meaning:
+- REGISTERED: record exists but routing/triage still incomplete
+- TRIAGED: initial classification completed
+- REJECTED_EARLY: low-value or blocked material removed from active intake flow
+- RESEARCH_ONLY: kept for bounded research/reference only
+- READY_FOR_DECOMPOSITION: eligible for later decomposition phase
+- IMPORTED_FROM_CURRENT_CANON: imported from E-1 canon output
+- IMPORTED_FROM_LEGACY: imported from legacy/library/history layer
+- IMPORTED_FROM_INTERNAL_RUNTIME: imported from current runtime or current bounded internal analytics layer
+
+============================================================
+ROUTING DECISIONS
+============================================================
+Allowed routing decisions:
+- ROUTE_TO_DECOMPOSITION
+- ROUTE_TO_RESEARCH_ONLY
+- ROUTE_TO_EARLY_REJECTION
+- ROUTE_TO_SEED_IMPORT
+- ROUTE_TO_INTERNAL_RUNTIME_IMPORT
+- ROUTE_TO_LEGACY_IMPORT
+
+Routing meaning:
+- ROUTE_TO_DECOMPOSITION: eligible for later structured decomposition
+- ROUTE_TO_RESEARCH_ONLY: retained as bounded reference/research only
+- ROUTE_TO_EARLY_REJECTION: discarded from active intake consideration
+- ROUTE_TO_SEED_IMPORT: imported as current canon seed material
+- ROUTE_TO_INTERNAL_RUNTIME_IMPORT: imported because it is already part of the operating baseline
+- ROUTE_TO_LEGACY_IMPORT: imported as legacy/current historical material under controlled downgrade
+
+Hard rule:
+- no routing decision means runtime activation
+- no routing decision means canon promotion
+- no routing decision bypasses later decomposition, trust filtering, or testing
+
+============================================================
+CURRENT / LEGACY IMPORT HANDLING
+============================================================
+This phase explicitly supports:
+- importing current canon families from E-1
+- importing current runtime strategy members
+- importing active compiled-plan primitives
+- importing current support primitives
+- importing old library-derived strategy identities
+- importing legacy indicators, entry patterns, risk models, and filters
+- importing non-authoritative historical artifacts under research-only restrictions
+
+Result:
+- current knowledge is no longer outside the factory
+- legacy knowledge is no longer unmanaged residue
+- future external raw materials must enter the same intake system
+
+============================================================
+ANTI-BLOAT DISCIPLINE
+============================================================
+The following are explicitly forbidden as reasoning shortcuts:
+- “it is registered, therefore it is useful”
+- “it is coded, therefore it is canon-worthy”
+- “it is numerous, therefore the factory is stronger”
+- “it came from community/script source, therefore it deserves equal standing”
+- “it exists in the old libraries, therefore it should keep strategy identity”
+
+Edge-factory success in E0 means:
+- structured intake discipline
+- one manifest
+- one registry structure
+- one route into later decomposition
+
+It does not mean:
+- more sources equals more edge
+- raw accumulation equals institutional value

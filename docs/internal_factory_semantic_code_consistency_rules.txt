@@ -1,0 +1,26 @@
+INTERNAL FACTORY SEMANTIC-CODE CONSISTENCY RULES
+version=PHASE4_INTERNAL_FACTORY_SEMANTIC_CODE_CONSISTENCY_RULES_V1
+
+audit targets:
+- consistency between semantic claims and code candidate payloads
+- hidden behavior inserted by code
+- semantic claims unsupported by code
+- code precision unsupported by semantics
+- analytical delta clarity beyond decomposition
+
+statuses:
+- CONSISTENT
+- PARTIALLY_CONSISTENT
+- CODE_EXCEEDS_SEMANTIC
+- SEMANTIC_EXCEEDS_CODE
+- HIDDEN_BEHAVIOR_DETECTED
+- INSUFFICIENT_EVIDENCE
+
+rules:
+- code_exceeds_semantic must remain visible
+- semantic_exceeds_code must remain visible
+- contradiction flags must not be silently removed
+- insufficient evidence stays insufficient
+- consistency audit must not imply validation
+- consistency audit must not imply runtime use
+

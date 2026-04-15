@@ -1,0 +1,135 @@
+EDGE INVALIDATION POLICY
+Authority: Institutional Edge Factory invalidation policy only.
+Truth posture: Factory invalidation architecture only. No runtime behavior change.
+
+============================================================
+PHASE IDENTITY
+============================================================
+Phase:
+- E6 — Invalidation & Risk Geometry Engine
+
+Purpose:
+- Define the formal invalidation and risk-geometry architecture inside the factory.
+- Separate thesis failure from temporary noise.
+- Define family-specific invalidation concepts without granting runtime stop behavior.
+- Surface poor geometry, adverse selection, and false-precision risk.
+
+Non-goals:
+- No runtime stop execution
+- No runtime exit rewrite
+- No execution permission
+- No live licensing
+- No code behavior change
+
+============================================================
+WHAT INVALIDATION MEANS
+============================================================
+Invalidation means:
+- the point at which the edge thesis is no longer structurally credible
+- the point at which reclaim, acceptance, continuation, release, or exhaustion logic materially breaks down
+- a structural thesis-failure concept, not a generic discomfort concept
+
+Invalidation is NOT:
+- every adverse tick
+- every temporary wobble
+- every noisy excursion
+- "price moved against us a little"
+- a substitute for later execution or exit policy
+
+A valid invalidation concept should answer:
+- what part of the thesis failed
+- why that failure matters structurally
+- why ordinary noise should NOT be confused with thesis failure
+
+============================================================
+INVALIDATION VS NOISE
+============================================================
+Temporary noise may include:
+- small back-and-fill inside still-valid structure
+- wick noise that does not break the defended logic
+- incomplete follow-through that has not yet broken the core thesis
+- local hesitation before a clean accept/reclaim structure is resolved
+
+Invalidation becomes more credible when:
+- reclaim is materially lost
+- continuation hold/reset materially fails
+- break acceptance materially fails
+- release fails and structure returns into the prior premise
+- exhaustion/reversal thesis collapses into renewed initiative against it
+
+============================================================
+FAMILY-SPECIFIC INVALIDATION READ
+============================================================
+- LIQUIDITY_REVERSAL
+  Emphasize:
+  - sweep/reclaim thesis failure
+  - reclaim-loss
+  - reversal collapse back into initiative
+
+- MEAN_RECLAIM
+  Emphasize:
+  - edge rejection failure
+  - reclaim loss
+  - failed return into the rotation path
+
+- TREND_CONTINUATION
+  Emphasize:
+  - continuation hold failure
+  - structure reset failure
+  - no-follow-through deterioration after a supposed continuation trigger
+
+- TREND_PULLBACK_CONTINUATION
+  Emphasize:
+  - pullback hold failure
+  - pullback acceptance failure
+  - continuation not actually resuming after the hold thesis
+
+- COMPRESSION_BREAKOUT
+  Emphasize:
+  - failed release
+  - failed acceptance after release
+  - expansion promise collapsing back into compression body
+
+- VOL_BREAKOUT
+  Emphasize:
+  - breakout acceptance failure
+  - weak expansion becoming structurally non-credible
+  - breakout crowding into nearby opposing liquidity
+
+- EXPANSION_CONTINUATION
+  Emphasize:
+  - post-displacement reentry failure
+  - no reacceptance after the displacement
+  - continuation thesis losing room and edge freshness
+
+- MICRO_RANGE_BREAK
+  Emphasize:
+  - micro release failure
+  - failed micro acceptance
+  - local structure failing too quickly to support real expansion
+
+============================================================
+ANTI-FALSE-PRECISION DISCIPLINE
+============================================================
+- Invalidation should not be over-precisely defined when thesis structure is still ambiguous.
+- Geometry quality should not be faked when target clarity is poor.
+- A visually attractive trigger does not rescue bad asymmetry.
+- One neat entry candle does not rescue crowded geometry.
+- Poor geometry must remain visible even when timing looks attractive.
+- Where the factory cannot honestly distinguish noise from thesis failure, ambiguity must remain explicit.
+
+============================================================
+BOUNDARY RULES
+============================================================
+E6 invalidation/risk mapping remains:
+- non-runtime
+- non-executing
+- non-licensing
+- non-authoritative for live stop placement
+
+E6 does NOT:
+- grant runtime stop approval
+- rewrite exit logic
+- grant execution permission
+- bypass later exit architecture, scorecards, or governance
+

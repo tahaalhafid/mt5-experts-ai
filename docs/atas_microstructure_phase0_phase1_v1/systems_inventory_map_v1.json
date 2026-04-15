@@ -1,0 +1,75 @@
+{
+  "schema_version": "ATAS_SYSTEMS_INVENTORY_MAP_V1",
+  "phase_scope": "PHASE_0_AND_PHASE_1",
+  "operating_posture": "RESEARCH_BUILD_TRACK_ONLY",
+  "surface_groups": [
+    {
+      "group": "mt5_source_plane",
+      "class": "EXECUTION_ADJACENT",
+      "paths": [
+        "MQL5/Experts/AI/atas_runtime_contract.mqh",
+        "MQL5/Experts/AI/atas_intake_layer.mqh",
+        "MQL5/Experts/AI/atas_governed_advisory_contract.mqh",
+        "MQL5/Experts/AI/atas_governed_advisory_layer.mqh",
+        "MQL5/Experts/AI/atas_governed_advisory_artifacts.mqh",
+        "MQL5/Experts/AI/main_ea.mq5"
+      ]
+    },
+    {
+      "group": "external_adapter_plane",
+      "class": "EXTERNAL_NON_AUTHORITATIVE_TRANSFORM",
+      "paths": [
+        "MQL5/Files/AI/external_adapter/atas_semantic_adapter/atas_indicator_exporter/",
+        "MQL5/Files/AI/external_adapter/atas_semantic_adapter/future_exporter/",
+        "MQL5/Files/AI/external_adapter/atas_semantic_adapter/src/",
+        "MQL5/Files/AI/external_adapter/atas_semantic_adapter/runtime/"
+      ]
+    },
+    {
+      "group": "runtime_context_and_status",
+      "class": "RUNTIME_STATUS_AND_NON_AUTHORITATIVE_INPUT",
+      "paths": [
+        "MQL5/Files/AI/atas_runtime_context.json",
+        "MQL5/Files/AI/atas_runtime_context_status.json",
+        "MQL5/Files/AI/atas_governed_advisory_status.json",
+        "MQL5/Files/AI/atas_governed_advisory_effectiveness.json"
+      ]
+    },
+    {
+      "group": "pipeline_stage_surfaces",
+      "class": "PIPELINE_INTERMEDIATE_AND_STATUS",
+      "paths": [
+        "MQL5/Files/AI/external_adapter/atas_semantic_adapter/future_exporter/runtime/acquisition_source/atas_observation_export.json",
+        "MQL5/Files/AI/external_adapter/atas_semantic_adapter/future_exporter/runtime/acquisition_input/acquisition_input_payload.json",
+        "MQL5/Files/AI/external_adapter/atas_semantic_adapter/runtime/producer_input/atas_export_payload.json",
+        "MQL5/Files/AI/external_adapter/atas_semantic_adapter/future_exporter/runtime/exporter_status.json",
+        "MQL5/Files/AI/external_adapter/atas_semantic_adapter/runtime/adapter_status.json"
+      ]
+    },
+    {
+      "group": "governance_and_authority_status",
+      "class": "RUNTIME_AUTHORITATIVE_STATUS",
+      "paths": [
+        "MQL5/Files/AI/runtime_governance_status.json",
+        "MQL5/Files/AI/execution_authority_status.json",
+        "MQL5/Files/AI/operating_risk_envelope_status.json",
+        "MQL5/Files/AI/ai_activation_readiness_status.json"
+      ]
+    },
+    {
+      "group": "diagnostics_and_evidence",
+      "class": "HISTORICAL_LINEAGE_OR_EVIDENCE",
+      "paths": [
+        "MQL5/Files/AI/atas_live_capture/",
+        "MQL5/Files/AI/external_adapter/atas_semantic_adapter/runtime/evidence_archive/",
+        "MQL5/Experts/AI/external_dashboard/"
+      ]
+    }
+  ],
+  "explicit_exclusion_rules": [
+    {
+      "path": "MQL5/Files/AI/ai_performance_journal.jsonl",
+      "reason": "LIVE_LOCKED_APPEND_ONLY_JOURNAL"
+    }
+  ]
+}

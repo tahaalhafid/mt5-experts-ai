@@ -1,0 +1,90 @@
+LEARNING PROPOSAL RISK POLICY
+document_role=AUTHORITATIVE_LEARNING_PROPOSAL_RISK_AND_BOUNDEDNESS_POLICY
+document_version=L3_LEARNING_PROPOSAL_RISK_POLICY_V1
+authority_scope=LEARNING_PROPOSAL_RISK_CLASSIFICATION_AND_REVIEW_PREPARATION_ONLY
+linked_engine=docs/learning_proposal_engine.txt
+linked_proposal_types=docs/learning_proposal_types.txt
+linked_learning_contract=docs/learning_governance_contract.txt
+linked_human_review_workflow=docs/ai_human_review_workflow.txt
+trust_rule=defines_proposal_risk_classes_boundedness_and_review_preparation_without_authorizing_runtime_change
+policy_note=This policy classifies learning proposals for review handling and boundedness discipline. It does not authorize implementation, experimentation, activation, or mutation.
+
+RISK CLASSES
+- LOW_RISK_REVIEW
+  belongs_here=Observation-only and instrumentation proposals with narrow scope and no implied live logic effect.
+  rationale=These proposals usually improve understanding or observability rather than propose sensitive change subjects.
+  minimum_review_expectation=ADMIN_REVIEWER
+  escalation_expectation=Escalate only if cross-scope or governance ambiguity emerges.
+  experiment_only_handling_preferred=false
+
+- MEDIUM_RISK_REVIEW
+  belongs_here=Investigation proposals and other bounded review requests that may shape later decisions but do not yet seek sensitive review subjects.
+  rationale=These proposals can affect workload, prioritization, or future interpretation and therefore need clearer framing.
+  minimum_review_expectation=ADMIN_REVIEWER
+  escalation_expectation=Escalate to REVIEW_BOARD when repeated patterns, cross-family implications, or policy sensitivity appear.
+  experiment_only_handling_preferred=false
+
+- HIGH_RISK_REVIEW
+  belongs_here=Experiment-candidate and threshold-review proposals that touch sensitive interpretation, validation burden, or later controlled change preparation.
+  rationale=These proposals can influence later governed change pathways and therefore require stronger evidence discipline.
+  minimum_review_expectation=REVIEW_BOARD
+  escalation_expectation=May require committee visibility if cross-governance conflict appears.
+  experiment_only_handling_preferred=true
+
+- GOVERNANCE_SENSITIVE_REVIEW
+  belongs_here=Policy-review, gating-review, learning-scope tightening, learning-scope narrowing, or any proposal that could affect authority interpretation, scope boundaries, or review governance.
+  rationale=Governance-sensitive proposals can reshape how later learning is handled even without touching runtime logic directly.
+  minimum_review_expectation=REVIEW_BOARD
+  escalation_expectation=Escalate to COMMITTEE_REVIEWER when institutional boundary questions or authority concerns arise.
+  experiment_only_handling_preferred=case_dependent
+
+RISK DISCIPLINE RULES
+- Higher apparent sophistication does not lower risk class.
+- Broad scope raises risk class.
+- Weak evidence supporting a strong claim raises review caution and may disqualify the proposal.
+- Governance sensitivity may outweigh narrow technical scope.
+- Risk class assignment must be consistent with the proposal family and actual claim scope.
+
+PROPOSAL ELIGIBILITY VS RISK
+- Low risk does not excuse missing boundedness.
+- High-quality evidence does not remove review requirements.
+- Strong evidence may support stronger review attention, but not direct application.
+- Governance-sensitive proposals require explicit mutation prohibition and scope boundaries.
+
+PRE-REVIEW REJECTION CONDITIONS
+Reject or return a draft before formal review packaging when any of the following is true:
+- insufficient evidence for the claimed scope
+- unresolved ambiguity is too high
+- direct or hidden mutation intent is present
+- boundedness is missing or vague
+- evidence bundle is untraceable
+- risk framing omits obvious governance sensitivity
+- validation intent is absent
+- rollback note is absent where needed
+- the proposal uses broad performance rhetoric without exact scope
+- the proposal implies authority expansion, direct control, or live changes
+
+REVIEW PREPARATION REQUIREMENTS
+Before a proposal is considered review-ready, it should clearly state:
+- why this proposal family is the narrowest valid match
+- why the chosen risk class is appropriate
+- what evidence bundle supports it
+- what limitation or ambiguity remains
+- why review is warranted now
+- what next step is suggested
+- why the proposal remains non-mutative even if accepted for later handling
+
+RELATIONSHIP TO LATER PHASES
+This risk policy prepares proposals for later review-governed learning handling.
+It does not authorize:
+- experiment launch
+- runtime mutation
+- live threshold changes
+- policy changes by itself
+- rollback or promotion by itself
+
+FINAL RULE
+Learning proposals remain bounded, reviewable, and non-authoritative.
+direct_apply_allowed=false
+auto_apply_allowed=false
+authority_expansion_allowed=false

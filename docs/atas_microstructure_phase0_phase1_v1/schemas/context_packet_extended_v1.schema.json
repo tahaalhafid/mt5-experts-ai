@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "atas.context_packet_extended.v1",
+  "title": "ATAS Context Packet Extended V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_family",
+    "packet_id",
+    "trace_id",
+    "linked_core_packet_id",
+    "emitted_at_utc",
+    "availability_state",
+    "interpretive_block",
+    "governance_flags"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "ATAS_CONTEXT_PACKET_EXTENDED_V1"
+    },
+    "packet_family": {
+      "const": "context_packet_extended"
+    },
+    "packet_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "linked_core_packet_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "emitted_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "availability_state": {
+      "type": "string",
+      "enum": [
+        "DIRECT",
+        "DERIVED",
+        "UNAVAILABLE",
+        "STALE",
+        "NOT_PRODUCED",
+        "SUPPRESSED",
+        "INELIGIBLE"
+      ]
+    },
+    "interpretive_block": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "interpretive_confidence_ceiling",
+        "interpretive_hints",
+        "interpretive_summary"
+      ],
+      "properties": {
+        "interpretive_confidence_ceiling": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 0.49
+        },
+        "interpretive_hints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "hint_code",
+              "hint_text",
+              "hint_weight"
+            ],
+            "properties": {
+              "hint_code": {
+                "type": "string"
+              },
+              "hint_text": {
+                "type": "string"
+              },
+              "hint_weight": {
+                "type": "number",
+                "minimum": 0.0,
+                "maximum": 0.49
+              }
+            }
+          }
+        },
+        "interpretive_summary": {
+          "type": "string"
+        }
+      }
+    },
+    "governance_flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority_class",
+        "non_binding_for_runtime_authority",
+        "non_authoritative"
+      ],
+      "properties": {
+        "authority_class": {
+          "const": "EXTERNAL_NON_AUTHORITATIVE_EXTENDED_INTERPRETIVE_PACKET"
+        },
+        "non_binding_for_runtime_authority": {
+          "const": true
+        },
+        "non_authoritative": {
+          "const": true
+        }
+      }
+    }
+  }
+}

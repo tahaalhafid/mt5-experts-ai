@@ -1,0 +1,36 @@
+STRATEGY TRANSFER — PACKAGE 3 RECLASSIFICATION GATE CONTRACT
+Authority: Strategy-transfer Package 3 first-pass reclassification gate.
+Truth posture: First-pass gate only. Non-admissive and non-runtime.
+
+Purpose:
+- Apply a bounded first-pass reclassification to actually ingested legacy elements only.
+- Avoid over-promoting runtime prominence into factory value.
+- Preserve later packages for primitive extraction, shell collapse, archive finalization, and controlled re-admission.
+
+Allowed first-pass reclassification categories:
+- REJECT
+- PRIMITIVE
+- RESEARCH_ONLY
+- CONDITIONAL_CANDIDATE
+- DEEPER_CANDIDATE
+
+Meaning:
+- REJECT: weak enough to remain preserved but not worth forward promotion at this gate
+- PRIMITIVE: better treated later as support logic rather than standalone candidate identity
+- RESEARCH_ONLY: preserve for study/reference only at this stage
+- CONDITIONAL_CANDIDATE: bounded candidate requiring deeper later work
+- DEEPER_CANDIDATE: strong enough for deeper future work, but still not canon admission
+
+This gate does NOT imply:
+- primitive extraction complete
+- shell collapse complete
+- archive finalization complete
+- canon admission complete
+- controlled review complete
+- runtime permission
+- strategy quality proof
+- edge proof
+
+Truth rule:
+- First-pass reclassification applies only to actually ingested elements in Package 3.
+- Non-ingested prepared legacy elements remain unreclassified in Package 3.

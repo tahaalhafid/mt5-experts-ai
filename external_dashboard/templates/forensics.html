@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="panel">
+  <h2>Forensics / Evidence Surface Integrity</h2>
+  <p class="subtle">Classification legend: {% for c in payload.classification_legend %}<span class="badge {{ c|lower }}">{{ c }}</span>{% endfor %}</p>
+  <div class="badge-grid">
+    {% for k,v in payload.counts.items() %}
+    <div class="badge-card"><span class="badge {{ k|lower }}">{{ k }}</span><strong>{{ v }}</strong></div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Cross-Surface Health View</h2>
+  <p class="subtle">Health legend: {% for h in payload.health_legend %}<span class="badge {{ h|lower }}">{{ h }}</span>{% endfor %}</p>
+  <div class="badge-grid">
+    {% for k,v in payload.health_counts.items() %}
+    <div class="badge-card"><span class="badge {{ k|lower }}">{{ k }}</span><strong>{{ v }}</strong></div>
+    {% endfor %}
+  </div>
+</section>
+
+{% for section in payload.sections %}
+<section class="panel">
+  <h3>{{ section.name }}</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Surface</th>
+          <th>Classification</th>
+          <th>Health</th>
+          <th>Reason</th>
+          <th>Updated</th>
+          <th>Age(s)</th>
+          <th>Path</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in section.surfaces %}
+        <tr>
+          <td>{{ s.name }}</td>
+          <td><span class="badge {{ s.classification|lower }}">{{ s.classification }}</span></td>
+          <td><span class="badge {{ s.health_state|lower }}">{{ s.health_state }}</span></td>
+          <td>{{ s.reason }}</td>
+          <td>{{ s.updated_at }}</td>
+          <td>{{ s.age_seconds }}</td>
+          <td class="mono">{{ s.path }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endfor %}
+{% endblock %}

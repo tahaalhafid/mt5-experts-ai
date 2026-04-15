@@ -1,0 +1,94 @@
+{
+  "report_id": "cross_surface_lineage_consistency_forensic_v1",
+  "generated_at": "2026-04-09T01:24:30+03:00",
+  "scope": {
+    "focus": "last_10_entered_trades_from_prior_forensic_package",
+    "baseline_source": "forensic_exports/last10_trades_forensic_20260409_001811/last10_trades_master_table.json"
+  },
+  "sources": [
+    {
+      "path": "forensic_exports/last10_trades_forensic_20260409_001811/last10_trades_master_table.json",
+      "surface_role": "forensic_baseline",
+      "authority_class": "HISTORICAL_LINEAGE_OR_EVIDENCE",
+      "used": true,
+      "usage_note": "Provided decision_id/close_deal_id anchors for the 10-trade comparison set."
+    },
+    {
+      "path": "..\\..\\Files\\AI\\ai_institutional_learning_decision_context.jsonl",
+      "surface_role": "decision_context_event_stream",
+      "authority_class": "JOURNAL_OR_SUPPORT_ARTIFACT",
+      "used": true,
+      "usage_note": "Pre-trade context lineage: strategy, regime, volatility, structure, SR bucket, advisory contradiction flag."
+    },
+    {
+      "path": "..\\..\\Files\\AI\\ai_institutional_learning_events.jsonl",
+      "surface_role": "learning_event_stream",
+      "authority_class": "JOURNAL_OR_SUPPORT_ARTIFACT",
+      "used": true,
+      "usage_note": "Post-close learning event lineage and attribution fields."
+    },
+    {
+      "path": "..\\..\\Files\\AI\\ai_institutional_learning_memory.json",
+      "surface_role": "derived_learning_memory",
+      "authority_class": "DERIVED_OR_VISIBILITY_ONLY",
+      "used": true,
+      "usage_note": "Motif key specificity and aggregation-loss checks."
+    },
+    {
+      "path": "..\\..\\Files\\AI\\ai_strategy_memory_events.jsonl",
+      "surface_role": "strategy_runtime_event_stream",
+      "authority_class": "JOURNAL_OR_SUPPORT_ARTIFACT",
+      "used": true,
+      "usage_note": "Trade open/close identity linkage and strategy lineage cross-check."
+    },
+    {
+      "path": "..\\..\\Files\\AI\\council_feedback.json",
+      "surface_role": "governed_decision_feedback_surface",
+      "authority_class": "HISTORICAL_LINEAGE_OR_EVIDENCE",
+      "used": true,
+      "usage_note": "Close outcome records, decision linkage, result and attribution support."
+    },
+    {
+      "path": "..\\..\\Files\\AI\\atas_governed_advisory_status.json",
+      "surface_role": "advisory_status_snapshot",
+      "authority_class": "DERIVED_OR_VISIBILITY_ONLY",
+      "used": true,
+      "usage_note": "Current advisory eligibility/state/translation fields for consistency checks."
+    },
+    {
+      "path": "..\\..\\Files\\AI\\atas_governed_advisory_effectiveness.json",
+      "surface_role": "advisory_effectiveness_aggregate",
+      "authority_class": "DERIVED_OR_VISIBILITY_ONLY",
+      "used": true,
+      "usage_note": "Aggregate advisory counters; used to mark per-trade linkage limits."
+    },
+    {
+      "path": "..\\..\\Files\\AI\\ai_trade_feedback.json",
+      "surface_role": "trade_feedback_status_surface",
+      "authority_class": "RUNTIME_AUTHORITATIVE_STATUS",
+      "used": true,
+      "usage_note": "Supplemental outcome context for close events."
+    },
+    {
+      "path": "..\\Logs\\20260408.log",
+      "surface_role": "runtime_expert_log",
+      "authority_class": "JOURNAL_OR_SUPPORT_ARTIFACT",
+      "used": true,
+      "usage_note": "Supplemental timing/context correlation checks."
+    },
+    {
+      "path": "..\\..\\Files\\AI\\ai_performance_journal.jsonl",
+      "surface_role": "performance_journal",
+      "authority_class": "JOURNAL_OR_SUPPORT_ARTIFACT",
+      "used": false,
+      "usage_note": "Excluded by governed live-locked rule in AGENTS.md during live operation."
+    }
+  ],
+  "generated_outputs": [
+    "forensic_exports/lineage_consistency_audit_20260409_011214/last10_trade_lineage_consistency_table.csv",
+    "forensic_exports/lineage_consistency_audit_20260409_011214/last10_trade_lineage_consistency_table.json",
+    "forensic_exports/lineage_consistency_audit_20260409_011214/last10_trade_lineage_per_trade_matrix.json",
+    "forensic_exports/lineage_consistency_audit_20260409_011214/cross_surface_lineage_consistency_report.md",
+    "forensic_exports/lineage_consistency_audit_20260409_011214/lineage_raw_source_references.json"
+  ]
+}

@@ -1,0 +1,130 @@
+EDGE MATERIAL REGISTRATION SCHEMA
+Authority: Unified registration schema for Institutional Edge Factory source intake.
+Truth posture: Registration contract only. No runtime behavior change.
+
+============================================================
+SCHEMA PURPOSE
+============================================================
+Every current, legacy, and future edge material must be registerable through one unified record format.
+
+This schema must be able to represent:
+- current imported canon families
+- current runtime strategies
+- current runtime primitives
+- old library-derived materials
+- future PDF / URL / text / script / playbook inputs
+- internal runtime findings
+- human review submissions
+
+============================================================
+REQUIRED CONCEPTUAL FIELDS
+============================================================
+- material_id
+  Unique registration identifier inside the factory.
+
+- source_id
+  Registered source reference from source_registry.json.
+
+- source_class
+  One of the approved source classes.
+
+- source_type
+  More specific origin type inside the source class.
+
+- origin_reference
+  Path, artifact, URL, document, or bounded reference pointer.
+
+- trust_tier
+  TIER_1_HIGH_TRUST / TIER_2_STRUCTURED_TRUST / TIER_3_CURATED_BUT_PARTIAL / TIER_4_LOW_TRUST_IDEATION_ONLY
+
+- material_title
+  Human-readable material title.
+
+- material_form
+  Example forms:
+  - FAMILY_DEFINITION
+  - RUNTIME_STRATEGY_IMPLEMENTATION
+  - STRATEGY_BLUEPRINT
+  - INDICATOR_PRIMITIVE
+  - ENTRY_PATTERN_PRIMITIVE
+  - RISK_MODEL_PRIMITIVE
+  - FILTER_PRIMITIVE
+  - SUPPORT_MODULE_PRIMITIVE
+  - LEGACY_COMPOSITION_ARTIFACT
+
+- asset_scope
+  Bounded asset universe or current unknown/unspecified scope.
+
+- timeframe_scope
+  Bounded timeframe scope or current unknown/unspecified scope.
+
+- market_thesis_raw
+  Raw imported thesis statement, even if incomplete.
+
+- setup_archetype_raw
+  Raw setup/archetype description.
+
+- entry_logic_raw
+  Raw entry description or preserved note that decomposition is still pending.
+
+- invalidation_logic_raw
+  Raw invalidation/kill-switch description if known.
+
+- risk_logic_raw
+  Raw risk logic statement if known.
+
+- exit_logic_raw
+  Raw exit logic statement if known.
+
+- discretion_load
+  Initial judgment of how discretionary the material appears:
+  - LOW
+  - LOW_TO_MODERATE
+  - MODERATE
+  - HIGH
+  - UNKNOWN
+
+- codifiability_status_initial
+  Early bounded judgment only, such as:
+  - RUNTIME_PROVEN_CODED
+  - CODED_PRIMITIVE
+  - STRUCTURED_LEGACY_CODED
+  - CODED_SUPPORT_PRIMITIVE
+  - NON_AUTHORITATIVE_REFERENCE_ONLY
+  - UNKNOWN_PENDING_DECOMPOSITION
+
+- intake_status
+  Intake state from the approved intake model.
+
+- routing_decision
+  One approved intake-stage routing decision.
+
+- lineage_reference
+  Link to current canon audit, legacy inventory note, runtime source chain, or historical relationship.
+
+- notes
+  Free bounded notes that preserve uncertainty, downgrade context, or import restrictions.
+
+============================================================
+SCHEMA RULES
+============================================================
+1) missing decomposition detail is allowed at registration time
+2) missing detail must be stated honestly, not invented
+3) raw fields may contain “not normalized in E0 intake” where appropriate
+4) the same schema must work for future external inputs, not just current imports
+5) registration never implies canon status
+6) registration never implies codifiability success
+7) registration never implies runtime deployment
+8) registration records must preserve source class and trust tier explicitly
+9) legacy or weak material must still use the same schema rather than bypassing the factory
+
+============================================================
+SCHEMA ROLE IN THE FACTORY
+============================================================
+Registration is the start of institutional control.
+It is not:
+- decomposition
+- codifiability proof
+- testing
+- canon promotion
+- runtime export

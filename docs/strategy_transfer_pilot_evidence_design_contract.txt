@@ -1,0 +1,39 @@
+artifact_role=STRATEGY_TRANSFER_PILOT_EVIDENCE_DESIGN_CONTRACT
+artifact_authority_class=CONTROL_PLANE_PILOT_EVIDENCE_DESIGN
+pilot_evidence_design_version=POST_AUDIT_PACKAGE_C_PILOT_EVIDENCE_DESIGN_V1
+purpose=DEFINE_BOUNDED_PILOT_EVIDENCE_EXPECTATIONS_FOR_4_CONSIDERATION_READY_CANDIDATES_ONLY
+scope=EVIDENCE_FIRST_ONLY_NO_RUNTIME_REACTIVATION_NO_LIVE_PILOT_EXECUTION
+
+covered_candidates:
+- LIQUIDITY_REVERSAL
+- MEAN_RECLAIM
+- TREND_CONTINUATION
+- COMPRESSION_BREAKOUT
+
+pilot_evidence_design_means:
+- bounded evidence expectations for later controlled review
+- bounded review cadence
+- bounded hold conditions
+- no execution privilege restoration
+- no live pilot launch
+- no investor-ready claim
+- no trading-readiness claim
+
+pilot_ready_boundary:
+PILOT_COHORT_CONSIDERATION_READY means eligible for bounded evidence-first consideration only. It does not mean approved for live trading, runtime execution, or pilot launch.
+
+required_design_fields:
+- candidate_name
+- pilot_evidence_mode
+- pilot_review_cadence
+- pilot_evidence_expectations
+- pilot_hold_conditions
+- pilot_runtime_execution_allowed=false
+- live_pilot_execution_started=false
+- pilot_boundary_note
+
+cadence_rule:
+All four consideration-ready candidates remain under CADENCE_WEEKLY_EVIDENCE_REVIEW until a future separate package explicitly changes governance truth.
+
+hold_rule:
+If evidence depth, regime-fit integrity, trigger/invalidation clarity, or contradiction separation remain insufficient, the candidate stays held within evidence-first consideration and does not progress to runtime use.

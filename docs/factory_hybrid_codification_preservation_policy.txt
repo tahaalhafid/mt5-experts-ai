@@ -1,0 +1,37 @@
+FACTORY HYBRID CODIFICATION PRESERVATION POLICY
+version=V1
+
+core_rule:
+LOSSLESS_INTAKE_PRESERVATION_WHERE_PRACTICAL
+
+semantic_vs_code_priority:
+- semantic layer remains the primary authoritative interpretation layer
+- codification_layer remains supplementary and non-authoritative
+- code candidate presence must not imply runtime approval
+- code candidate presence must not replace semantic structure
+- code never overrides ambiguity, contradiction, weak boundedness, or missing component visibility
+
+preserve_mandatory:
+- market thesis richness
+- archetype richness
+- trigger/timing/invalidation/risk/exit richness
+- session/volatility/context richness
+- codifiability and discretion hints
+- limitations
+- missing components
+- ambiguity flags
+- contradiction flags
+- lineage and raw-to-normalized linkage
+
+anti_drop_rule:
+- ambiguity must not be dropped silently
+- limitations must not be dropped silently
+- contradiction flags must not be dropped silently
+- codifiability and discretion signals must not be dropped silently
+- embedded code candidate text must not displace structural semantic interpretation
+
+codification_boundary:
+- embedded code is candidate intelligence only
+- codification review is required by default
+- runtime authority remains false unless a later governed phase says otherwise
+- code_safe_for_runtime_use=false remains the default boundary

@@ -1,0 +1,92 @@
+dashboard_governance_addendum
+document_version=MT5_DASHBOARD_PHASE0_GOVERNANCE_ADDENDUM_V1
+document_role=FORMAL_DASHBOARD_GOVERNANCE_ADDENDUM
+authority_class=NON_RUNTIME_GOVERNANCE_CONSTRAINT_DOCUMENT
+scope=PHASE0_AND_PHASE1_BOUNDARY_DISCIPLINE
+
+PURPOSE
+Prevent the dashboard from becoming a pseudo-control layer, a competing truth source, a misleading readiness surface,
+or an authority-inflating interface.
+
+NON-NEGOTIABLE GOVERNANCE RULES
+1. The dashboard may describe posture; it may not change posture.
+2. The dashboard may aggregate visibility; it may not become canonical truth ahead of authoritative source files.
+3. The dashboard may summarize blocking states; it may not suppress them beneath positive bounded summaries.
+4. The dashboard may display local-only visual affordances; it may not dispatch runtime intents.
+5. The dashboard may export a sanitized visible snapshot; it may not export authoritative or unsafe internals.
+
+AUTHORITY DISCIPLINE
+- runtime authority remains in existing runtime/governance surfaces
+- export authority remains in export release gate surfaces and contract
+- pilot authority remains in strategy transfer package 5 / package C governance surfaces
+- AI authority remains bounded by AI_OFF / SHADOW_ONLY / ADVISORY_ONLY state model only
+- factory visibility does not imply canon promotion, validation, runtime permission, or trading permission
+
+FORBIDDEN DASHBOARD BEHAVIORS
+- runtime unfreeze
+- trading enablement
+- pilot activation
+- strategy activation or deactivation
+- governor mutation
+- plan overwrite
+- direct parameter mutation
+- threshold mutation
+- free-form TP/SL editing
+- AI authority escalation
+- source gateway commit
+- archive purge
+- rollback apply
+- release gate override
+- external delivery enablement
+- hidden side-channel control action
+- operator intent queue creation
+- asynchronous request dispatcher creation
+
+REQUEST-MODEL LIMIT
+Deferred architectural request buttons may be described in contracts only.
+They must not create:
+- request files
+- runtime queues
+- command objects
+- pending governance work items
+- side effects of any kind
+until a later approved package explicitly authorizes them.
+
+SOURCE-GOVERNANCE RULES
+- Tier A curated status surfaces may drive visible posture widgets.
+- Tier B structural surfaces may support secondary bounded details.
+- Tier C contextual surfaces may appear only as optional help/context.
+- Tier D surfaces must never be rendered directly.
+- parse failure, missing source, stale source, zero inconclusive source, and placeholder-only source must never render as healthy/green.
+
+MIXED-PLANE DISCIPLINE
+If one widget or page combines authoritative and derived or placeholder states:
+- dominant authoritative blocking truth stays primary
+- derived/transitional truth is demoted to note, warning, or badge
+- placeholder truth is marked as non-primary and never promoted to readiness evidence
+
+COPY DISCIPLINE
+- short
+- non-dramatic
+- non-marketing
+- non-investor-facing
+- non-authority-inflating
+- bounded by current governance truth
+
+SNAPSHOT DISCIPLINE
+Visible snapshot export is:
+- internal-only
+- sanitized
+- timestamped
+- derived
+- non-authoritative
+It must never be representable as official approval, runtime truth, release truth, or external-delivery truth.
+
+PHASE 1 LIMIT REMAINS
+Even after later rendering work begins:
+- no runtime mutation
+- no governance mutation
+- no AI authority expansion
+- no release-gate override
+- no pilot activation
+unless a separate future approved package explicitly changes those truths.

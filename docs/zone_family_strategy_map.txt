@@ -1,0 +1,183 @@
+DRAFT / NON-AUTHORITATIVE TECHNICAL REFERENCE
+Truth role: Technical zone/family reference only.
+It is NOT authoritative for:
+- current operational status
+- active baseline identity
+- release truth
+- active plan truth
+
+Use instead:
+- MQL5/Experts/AI/docs/current_system_status.txt
+- MQL5/Experts/AI/docs/baseline_identity.txt
+- MQL5/Experts/AI/docs/implementation_state_map.txt
+
+----------------------------------------------------------------
+
+ZONE / FAMILY / STRATEGY MAP
+Scope: Must match the current codebase. Reference-only.
+
+============================================================
+Active semantic zones (as produced by CouncilInferZoneSemantic)
+============================================================
+- NO_TRADE
+- TREND_CONTINUATION
+- TREND_PULLBACK (semantic subtype)
+- REVERSAL_EXHAUSTION
+- RANGE_MEAN_RECLAIM
+- RANGE_BALANCED (semantic subtype)
+- RANGE_DIRTY (semantic subtype)
+- COMPRESSION
+- EXPANSION_BREAKOUT
+- EXPANSION_CONTINUATION
+- MICRO_RANGE_EXPANSION
+- UNKNOWN
+
+============================================================
+Strategies by family (from council_strategies.mqh)
+============================================================
+LIQUIDITY_REVERSAL
+- sweep_reversal
+- fake_break_reversal
+
+MEAN_RECLAIM
+- bollinger_reclaim
+- mean_reversion_bounce
+- range_edge_fade
+
+TREND_CONTINUATION
+- trend_momentum
+- momentum_breakout_cont_v1
+- micro_structure_reentry_v1
+- breakdown_momentum_v1
+- lower_high_rejection_v1
+
+TREND_PULLBACK_CONTINUATION
+- trend_pullback_cont_v1
+
+MOMENTUM_REVERSAL_ASSIST
+- mfi_reversal_assist
+
+COMPRESSION_BREAKOUT
+- range_compression_breakout
+- volatility_squeeze_release
+
+VOL_BREAKOUT
+- volatility_breakout
+
+EXPANSION_CONTINUATION
+- expansion_continuation
+
+MICRO_RANGE_BREAK
+- micro_range_expansion
+
+============================================================
+Zone → aligned families → typical strategy set
+Notes: "aligned" here is architectural fit; activation is still zone-driven inside the runtime.
+============================================================
+
+ZONE: TREND_CONTINUATION
+Families (primary):
+- TREND_CONTINUATION
+Families (secondary / context dependent):
+- TREND_PULLBACK_CONTINUATION (when pullback semantics are present)
+Strategies (typical):
+- trend_momentum
+- momentum_breakout_cont_v1
+- micro_structure_reentry_v1
+- breakdown_momentum_v1
+- lower_high_rejection_v1
+- trend_pullback_cont_v1 (pullback-only)
+
+ZONE: TREND_PULLBACK (semantic subtype)
+Families:
+- TREND_PULLBACK_CONTINUATION
+- TREND_CONTINUATION (support / continuation resumption)
+Strategies:
+- trend_pullback_cont_v1
+- micro_structure_reentry_v1 (if coded to activate in that context)
+
+ZONE: RANGE_MEAN_RECLAIM
+Families (primary):
+- MEAN_RECLAIM
+Families (secondary):
+- LIQUIDITY_REVERSAL (failed-break / sweeps inside range)
+Strategies:
+- bollinger_reclaim
+- mean_reversion_bounce
+- range_edge_fade
+- sweep_reversal (when sweep is inside range)
+- fake_break_reversal
+
+ZONE: RANGE_BALANCED (semantic subtype)
+Families:
+- MEAN_RECLAIM
+- LIQUIDITY_REVERSAL (selectively)
+Strategies:
+- bollinger_reclaim
+- mean_reversion_bounce (selective)
+- sweep_reversal (selective)
+
+ZONE: RANGE_DIRTY (semantic subtype)
+Families:
+- LIQUIDITY_REVERSAL (selective)
+- MEAN_RECLAIM (conservative only; avoid collapse contexts)
+Strategies:
+- sweep_reversal
+- fake_break_reversal
+- mean_reversion_bounce (guarded)
+
+ZONE: COMPRESSION
+Families (primary):
+- COMPRESSION_BREAKOUT
+Notes:
+- This zone is about breakout readiness. Strategies should avoid acting after expansion is already underway.
+Strategies:
+- range_compression_breakout
+- volatility_squeeze_release
+
+ZONE: EXPANSION_BREAKOUT
+Families (primary):
+- VOL_BREAKOUT
+- COMPRESSION_BREAKOUT (only at the transition edge)
+Families (secondary):
+- MICRO_RANGE_BREAK (micro-structure within early expansion)
+Strategies:
+- volatility_breakout
+- range_compression_breakout (edge case / only if still valid)
+- volatility_squeeze_release (edge case / only if still valid)
+- micro_range_expansion (selective)
+
+ZONE: EXPANSION_CONTINUATION
+Families (primary):
+- EXPANSION_CONTINUATION
+Families (secondary):
+- MICRO_RANGE_BREAK
+Strategies:
+- expansion_continuation
+- micro_range_expansion
+
+ZONE: MICRO_RANGE_EXPANSION
+Families:
+- MICRO_RANGE_BREAK
+Strategies:
+- micro_range_expansion
+
+ZONE: REVERSAL_EXHAUSTION
+Families (primary):
+- LIQUIDITY_REVERSAL (when exhaustion is sweep-like)
+- MOMENTUM_REVERSAL_ASSIST (assist/confirm style)
+Strategies:
+- sweep_reversal (context dependent)
+- mfi_reversal_assist (assist)
+
+ZONE: NO_TRADE
+Families:
+- (none) → strategies should be WAIT/inactive.
+
+============================================================
+Architectural-only zones (defined but may not be produced by env builder)
+============================================================
+- COUNCIL_ZONE_RANGE_BALANCED / COUNCIL_ZONE_RANGE_DIRTY / COUNCIL_ZONE_COMPRESSION / COUNCIL_ZONE_EXPANSION_CONTINUATION
+These exist as enum options for harmonization, while runtime may still rely on regime_summary text for semantics.
+
+End of map.

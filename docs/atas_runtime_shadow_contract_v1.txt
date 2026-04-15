@@ -1,0 +1,74 @@
+ATAS Runtime Shadow Contract v1
+
+Scope
+- Phase: 0.5 (Shadow-only)
+- Runtime ingestion file: MQL5/Files/AI/atas_runtime_context.json
+- Runtime status file: MQL5/Files/AI/atas_runtime_context_status.json
+- Consumption mode: SHADOW_ONLY (mandatory in this phase)
+- Authority: Non-authoritative external shadow evidence only
+
+Required Metadata Fields
+- packet_id
+- schema_version (must be ATAS_RUNTIME_CONTEXT_V1)
+- source_platform
+- source_mode
+- source_symbol
+- execution_symbol
+- event_time
+- created_time
+- fresh_until
+- session_context
+- data_quality_state
+- packet_confidence
+- signal_stability_window_sec
+- replay_flag
+- market_state_class
+- ingestion_status
+
+Required Microstructure Fields
+- liquidity_sweep_state
+- absorption_state
+- delta_bias_state
+- imbalance_state
+- liquidity_stability_state
+- continuation_exhaustion_hint
+
+Required Level Evidence Fields
+- level_candidates (array, bounded)
+- Candidate cap: max 3 in Phase 0/0.5
+- Per candidate:
+  level_price
+  level_side_candidate
+  level_class
+  level_origin
+  session_context
+  absorption_strength
+  sweep_detected
+  reclaim_confirmed
+  imbalance_ratio
+  delta_divergence_state
+  exhaustion_hint
+  touch_count_local
+  reaction_strength
+  stability_score
+  fresh_until
+  invalidation_distance_ticks
+  candidate_role
+  market_behavior_tag
+
+Forbidden Semantics (must not exist in ATAS runtime shadow packet)
+- BUY/SELL intent
+- Entry trigger or execution trigger
+- Exit trigger
+- Final support/resistance authority outputs
+- Execution authority fields
+- Risk sizing / leverage fields
+- Governor state/action fields
+- AI actionability fields
+- Unbounded raw order-flow dumps
+
+Runtime Rules
+- MT5 base environment remains sole runtime owner.
+- ATAS may be attached only as descriptive shadow fields.
+- If invalid/stale/rejected/unavailable, fallback is MT5-only runtime view.
+- No score, tradability, zone, style, execution, or risk impact from ATAS shadow in this phase.

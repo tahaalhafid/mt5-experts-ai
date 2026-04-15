@@ -1,0 +1,167 @@
+MARKET-NATIVE TAXONOMY SPEC
+Authority: Compact taxonomy for Institutional Edge Factory market-native intelligence.
+Truth posture: Taxonomy specification only. No runtime behavior change.
+
+============================================================
+DESIGN PRINCIPLES
+============================================================
+- taxonomy must be market-behavior first
+- taxonomy must remain operationally useful
+- taxonomy must be compact enough for later decomposition/testing/canon work
+- taxonomy must not devolve into indicator aliases
+- taxonomy classes must remain interpretable across current and future sources
+
+============================================================
+CATEGORY A — LIQUIDITY-EVENT CLASSES
+============================================================
+- LOCAL_SWEEP_HIGH
+  Local liquidity raid above recent obvious highs.
+
+- LOCAL_SWEEP_LOW
+  Local liquidity raid below recent obvious lows.
+
+- EXTERNAL_RANGE_RAID
+  Raid through external range boundary liquidity.
+
+- INTERNAL_STOP_SWEEP
+  Internal stop-cleaning event inside a broader structure.
+
+- FAILED_SWEEP
+  Sweep that fails to produce meaningful acceptance or continuation.
+
+- SWEEP_AND_RECLAIM
+  Sweep followed by reclaim back through the violated level/edge.
+
+- SWEEP_AND_CONTINUATION
+  Sweep that resolves into initiative continuation.
+
+- LIQUIDITY_VACUUM_MOVE
+  Fast movement through thin liquidity with weak opposing participation.
+
+- LIQUIDITY_ABSORPTION_SIGNAL
+  Evidence that aggression is being absorbed at a key liquidity area.
+
+============================================================
+CATEGORY B — STRUCTURE-QUALITY CLASSES
+============================================================
+- CLEAN_TREND_STRUCTURE
+  Ordered directional structure with relatively coherent pullback hierarchy.
+
+- NOISY_TREND_STRUCTURE
+  Directional structure exists but is cluttered, unstable, or degraded.
+
+- RANGE_WITH_CLEAN_EDGES
+  Range with readable boundaries and repeatable edge behavior.
+
+- DEGRADED_RANGE_STRUCTURE
+  Range-like environment with weak edge clarity or repeated overshoot degradation.
+
+- TRANSITION_STRUCTURE
+  Structure is changing regime and directional quality is unresolved.
+
+- POST_DISPLACEMENT_STRUCTURE
+  Structure immediately after a meaningful displacement event.
+
+- COMPRESSED_STRUCTURE
+  Price compression with stored expansion potential.
+
+- FRAGMENTED_STRUCTURE
+  Broken, chopped, or incoherent structure unsuitable for clean edge framing.
+
+============================================================
+CATEGORY C — DISPLACEMENT / RECLAIM CLASSES
+============================================================
+- INITIATIVE_DISPLACEMENT
+  Strong initiative move with clear market displacement character.
+
+- WEAK_DISPLACEMENT
+  Break-like movement without strong initiative quality.
+
+- RECLAIM_AFTER_SWEEP
+  Reclaim sequence following a liquidity sweep event.
+
+- RECLAIM_AFTER_BREAK
+  Reclaim sequence after a structural break or acceptance failure.
+
+- FAILED_RECLAIM
+  Reclaim attempt that does not hold.
+
+- IMPULSE_WITHOUT_ACCEPTANCE
+  Impulse move that lacks meaningful acceptance afterward.
+
+- ACCEPTANCE_AFTER_BREAK
+  Post-break acceptance that supports continuation framing.
+
+============================================================
+CATEGORY D — SESSION / VOLATILITY CLASSES
+============================================================
+- ASIAN_RANGE_BEHAVIOR
+  Session behavior centered on contained range formation or pre-expansion balance.
+
+- LONDON_EXPANSION_BEHAVIOR
+  Session behavior centered on London-session expansion potential.
+
+- NEWYORK_CONTINUATION_BEHAVIOR
+  Session behavior centered on New York continuation or directional extension.
+
+- OVERLAP_EXPANSION
+  Expansion behavior emerging during key session overlap.
+
+- DEAD_HOURS_DRIFT
+  Low-quality directional drift during structurally weak hours.
+
+- VOLATILITY_CONTRACTION
+  Compression or contraction state.
+
+- VOLATILITY_EXPANSION
+  Expanding volatility state with greater movement potential.
+
+- UNSTABLE_NOISY_VOLATILITY
+  Volatility is elevated but poorly structured and not cleanly usable.
+
+- NEWS_LIKE_ABNORMAL_VOLATILITY
+  Abnormal volatility resembling event-shock conditions.
+
+============================================================
+CATEGORY E — TOXIC-CONTEXT CLASSES
+============================================================
+- BREAKOUT_INTO_NEAR_OPPOSING_LIQUIDITY
+  Breakout path is immediately constrained by nearby opposing liquidity.
+
+- OVEREXTENDED_BREAKOUT
+  Breakout is already overly extended relative to its clean opportunity window.
+
+- REVERSAL_ATTEMPT_AGAINST_ACTIVE_INITIATIVE
+  Countermove attempts fight still-active initiative.
+
+- CONTINUATION_WITHOUT_STRUCTURE_RESET
+  Continuation attempt occurs without enough reset/pullback/context repair.
+
+- FADE_BEFORE_LIQUIDITY_TARGET_COMPLETION
+  Fade attempt appears before the more obvious liquidity objective is completed.
+
+- BREAKOUT_WITHOUT_EXPANSION_CONFIRMATION
+  Breakout attempt lacks expansion/displacement/acceptance support.
+
+============================================================
+OBJECT ROLE ALIGNMENT
+============================================================
+Typical primary roles:
+- liquidity-event classes -> RAW_MARKET_EVENT or LIQUIDITY_CONTEXT_OBJECT
+- structure-quality classes -> STRUCTURAL_CONTEXT_OBJECT
+- displacement/reclaim classes -> DISPLACEMENT_CONTEXT_OBJECT
+- session/volatility classes -> SESSION_CONTEXT_OBJECT or VOLATILITY_CONTEXT_OBJECT
+- toxic-context classes -> TOXICITY_SUPPRESSION_OBJECT
+
+============================================================
+PROVISIONAL AFFINITY RULE
+============================================================
+Taxonomy classes may carry:
+- provisional zone fit
+- provisional regime fit
+- directional_bias_hint
+
+Taxonomy classes may NOT carry:
+- canon admission
+- runtime licensing
+- final trigger authority

@@ -1,0 +1,82 @@
+EDGE RISK GEOMETRY MODEL
+Authority: Institutional Edge Factory risk-geometry model only.
+Truth posture: Geometry interpretation only. No runtime behavior change.
+
+============================================================
+WHAT RISK GEOMETRY MEANS
+============================================================
+Risk geometry means:
+- where the thesis would logically fail
+- how far invalidation sits from the intended entry logic
+- how much clean path remains toward likely objective or rotation target
+- whether nearby opposing liquidity, structure, or crowding degrades asymmetry
+- whether the opportunity is being considered too late
+
+Geometry therefore depends on:
+- distance-to-invalidation
+- distance-to-target
+- crowding or toxic context
+- structural clarity of the thesis
+- freshness of the move
+
+Thesis quality and geometry quality are related but not identical.
+A thesis may be good while geometry is poor.
+A trigger may be valid while asymmetry is unattractive.
+
+============================================================
+STOP-LOCATION LOGIC (CONCEPTUAL ONLY)
+============================================================
+A conceptual stop location should sit:
+- beyond the thesis-failure point
+- beyond reclaim-loss where reclaim matters
+- beyond hold failure where hold matters
+- beyond failed acceptance where acceptance matters
+- beyond failed release where compression/release matters
+
+A conceptual stop location should NOT sit:
+- inside ordinary noise if the thesis expects noise
+- inside the body of the defended structure without thesis reason
+- at arbitrary tight distances chosen only for attractive math
+- in a location that ignores nearby structure and crowding
+
+============================================================
+GEOMETRY POSTURE CLASSES
+============================================================
+- GEOMETRY_FAVORABLE
+  The thesis is structurally clear and the path to target appears meaningfully better than the path to invalidation.
+
+- GEOMETRY_ACCEPTABLE
+  The opportunity is not ideal, but the distance-to-invalidation and path-to-objective remain structurally reasonable.
+
+- GEOMETRY_TIGHT_BUT_FRAGILE
+  Geometry can work only if the local hold/reclaim/release logic is very precise. False precision risk is elevated.
+
+- GEOMETRY_CROWDED
+  The thesis may remain valid, but nearby opposing liquidity, late expansion, or obvious crowding reduces edge quality.
+
+- GEOMETRY_POOR
+  The thesis may be interesting, but reward-to-risk or invalidation distance is structurally unattractive.
+
+- GEOMETRY_NOT_APPLICABLE
+  Under suppressive posture or non-licensable structure, geometry should not be treated as actionable.
+
+============================================================
+ADVERSE-SELECTION VISIBILITY
+============================================================
+Adverse-selection risk rises when:
+- entry is attempted after the clean move is already spent
+- nearby opposing liquidity leaves little room
+- structure is degraded or dirty
+- breakout is obvious and crowded
+- reversal is attempted against still-active initiative
+- micro expansion depends on fragile local precision
+
+============================================================
+DISCIPLINE
+============================================================
+- One good trigger does not rescue bad geometry.
+- Poor reward-to-risk posture must remain visible.
+- Tight geometry is not the same as good geometry.
+- If target clarity is weak, geometry confidence should remain conservative.
+- Geometry remains factory-level interpretation only until later scorecard and governance phases.
+

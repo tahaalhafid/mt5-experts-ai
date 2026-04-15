@@ -1,0 +1,151 @@
+LEARNING EVIDENCE CATALOG
+document_role=AUTHORITATIVE_LEARNING_EVIDENCE_CATALOG
+document_version=L2_LEARNING_EVIDENCE_CATALOG_V1
+authority_scope=EVIDENCE_FAMILIES_AND_SOURCE_HIERARCHY_ONLY
+linked_pipeline=docs/learning_evidence_pipeline.txt
+linked_quality_policy=docs/learning_evidence_quality_policy.txt
+linked_learning_contract=docs/learning_governance_contract.txt
+trust_rule=defines_allowed_learning_evidence_families_and_source_hierarchy_without_creating_mutative_authority
+policy_note=Evidence families and hierarchy are defined here for governed learning intake and bundle composition.
+
+EVIDENCE FAMILIES
+
+- DIAGNOSTIC_EVIDENCE
+  evidence_purpose=Support understanding of runtime conditions, execution context, observed diagnostics, and bounded issue characterization.
+  typical_source_artifacts=diagnostic reports, normalized runtime summaries, validation-linked diagnostic snapshots
+  authority_class=RUNTIME_LINKED_NON_MUTATIVE
+  reliability_notes=Usually strong when source linkage and scope are explicit; weaker when partial or stale.
+  allowed_learning_usage=Supports root-cause framing, repeated-pattern analysis, and proposal support when corroborated.
+
+- VALIDATION_EVIDENCE
+  evidence_purpose=Support claims about whether a proposed understanding or bounded change candidate is consistent with governed validation results.
+  typical_source_artifacts=validation summaries, replay-validation comparison notes, validation review records
+  authority_class=REVIEW_GOVERNED_NON_MUTATIVE
+  reliability_notes=Stronger when comparison basis, window, and limitations are explicit.
+  allowed_learning_usage=Proposal support, experiment-candidate support, impact-audit support.
+
+- REPLAY_EVIDENCE
+  evidence_purpose=Support replay-based understanding of behavior patterns, candidate failure modes, and historical scenario review.
+  typical_source_artifacts=replay outputs, replay summaries, scenario comparison notes
+  authority_class=ANALYTICS_DERIVED_NON_MUTATIVE
+  reliability_notes=Useful when replay scope is bounded and assumptions are disclosed; weaker when scenario selection is narrow.
+  allowed_learning_usage=Corroboration, pattern support, proposal support, and experiment-candidate framing.
+
+- DRIFT_EVIDENCE
+  evidence_purpose=Support understanding of repeated deterioration, regime instability, or distributional shift concerns.
+  typical_source_artifacts=drift outputs, drift cluster summaries, repeated drift review records
+  authority_class=ANALYTICS_DERIVED_REVIEW_SENSITIVE
+  reliability_notes=Requires bounded scope and strong duplicate/noise discipline; repeated alerts alone are not enough.
+  allowed_learning_usage=Watchlist support, proposal support when corroborated, effectiveness-informed narrowing.
+
+- ANOMALY_EVIDENCE
+  evidence_purpose=Support understanding of unusual or exceptional patterns requiring governed interpretation.
+  typical_source_artifacts=anomaly outputs, anomaly cluster records, incident-linked anomaly summaries
+  authority_class=ANALYTICS_DERIVED_REVIEW_SENSITIVE
+  reliability_notes=Useful as supporting evidence; often requires corroboration before strong learning conclusions.
+  allowed_learning_usage=Incident support, root-cause support, proposal support when linked and corroborated.
+
+- ROOT_CAUSE_EVIDENCE
+  evidence_purpose=Support governed explanation of why a repeated issue, incident, or pattern may have occurred.
+  typical_source_artifacts=root-cause reports, forensic summaries, incident closure analyses
+  authority_class=REVIEW_GOVERNED_ANALYTIC
+  reliability_notes=Strength depends on linkage quality, disclosed uncertainty, and corroboration breadth.
+  allowed_learning_usage=Proposal support, experiment-candidate rationale, impact-audit interpretation.
+
+- ADVISORY_EFFECTIVENESS_EVIDENCE
+  evidence_purpose=Support evaluation of whether council advisory behavior was useful, noisy, overly cautious, or materially protective.
+  typical_source_artifacts=advisory history, advisory effectiveness reviews, hold/outcome linkage notes, block-eligible audits
+  authority_class=POST_FACT_EFFECTIVENESS_GOVERNED
+  reliability_notes=Must remain post-fact and measured; intuition alone is insufficient.
+  allowed_learning_usage=Advisory tuning proposals, scope narrowing considerations, controlled experiment preparation.
+
+- REVIEW_OUTCOME_EVIDENCE
+  evidence_purpose=Support learning from governed human review decisions, rejection reasons, defer patterns, and escalation patterns.
+  typical_source_artifacts=review decisions, closure notes, escalation records, review-board summaries
+  authority_class=REVIEW_GOVERNED_HIGH_VALUE
+  reliability_notes=Strong when decision rationale is explicit; weaker when outcomes are sparse or poorly linked.
+  allowed_learning_usage=Proposal refinement, evidence sufficiency strengthening, learning-priority selection.
+
+- PROPOSAL_HISTORY_EVIDENCE
+  evidence_purpose=Support understanding of proposal relevance, boundedness, fatigue risk, and repeated acceptance/rejection patterns.
+  typical_source_artifacts=proposal records, proposal review outcomes, proposal effectiveness reviews
+  authority_class=REVIEW_GOVERNED_HIGH_VALUE
+  reliability_notes=Useful for governance quality and future proposal discipline; acceptance alone is not proof of runtime benefit.
+  allowed_learning_usage=Proposal quality improvement, experiment-candidate filtering, noise reduction.
+
+- LEARNING_HISTORY_EVIDENCE
+  evidence_purpose=Support continuity across governed learning cycles and impact audit history.
+  typical_source_artifacts=prior learning evidence bundles, prior impact findings, governed learning reviews
+  authority_class=HISTORICAL_REPOSITORY_GOVERNED
+  reliability_notes=Requires stale-status disclosure and explicit scope matching.
+  allowed_learning_usage=Continuity, comparison, supersession checks, repeated-pattern support.
+
+- GOVERNANCE_AUDIT_EVIDENCE
+  evidence_purpose=Support assessment of compliance with authority bounds, review discipline, and non-authoritative behavior.
+  typical_source_artifacts=governance audit outputs, authority-breach reviews, compliance summaries
+  authority_class=GOVERNANCE_CRITICAL
+  reliability_notes=High importance even when counts are low; boundary concerns may outweigh apparent usefulness.
+  allowed_learning_usage=Scope tightening, task-family disablement consideration, compliance-oriented learning limits.
+
+- OPERATOR_FEEDBACK_EVIDENCE
+  evidence_purpose=Provide bounded contextual feedback about usefulness, burden, ambiguity, or operational friction.
+  typical_source_artifacts=operator notes, bounded feedback annotations, review comments
+  authority_class=CONTEXTUAL_NON_AUTHORITATIVE_SUPPORTING
+  reliability_notes=Useful as supporting context only; must not outrank stronger normalized/runtime-linked evidence.
+  allowed_learning_usage=Context enrichment, burden assessment, ambiguity surfacing, proposal usability review.
+
+EVIDENCE SOURCE HIERARCHY
+
+- RUNTIME_DERIVED_NORMALIZED_EVIDENCE
+  trust_posture=Highest default trust among non-authoritative learning inputs when linkage and scope are explicit.
+  strengths=Direct runtime linkage, better comparability, stronger attributable grounding.
+  limitations=May still be partial, stale, or window-bounded.
+  corroboration_rule=May stand alone for bounded factual claims; broader learning claims still benefit from corroboration.
+  standalone_status=PRIMARY_EVIDENCE
+
+- ANALYTICS_DERIVED_EVIDENCE
+  trust_posture=Strong supporting evidence when methods and assumptions are bounded and disclosed.
+  strengths=Useful for replay, drift, anomaly, and comparative interpretation.
+  limitations=Can overstate patterns if scope is narrow or assumptions are hidden.
+  corroboration_rule=Preferred with runtime-linked or review-governed corroboration.
+  standalone_status=LIMITED_STANDALONE_FOR_BOUNDED_CLAIMS
+
+- REVIEW_GOVERNED_EVIDENCE
+  trust_posture=High governance value because human review outcomes provide institutional context and rejection/defer rationale.
+  strengths=Captures judgment, bounded acceptance criteria, and review significance.
+  limitations=Sparse review history may weaken generalization.
+  corroboration_rule=Strong for governance claims; combine with other families for behavior claims.
+  standalone_status=PRIMARY_FOR_GOVERNANCE_CLAIMS
+
+- AI_DERIVED_ANALYTIC_EVIDENCE
+  trust_posture=Supporting analytic layer only.
+  strengths=Useful for synthesis, pattern framing, evidence packaging, and limitation disclosure.
+  limitations=Must not outrank stronger runtime-linked or review-governed evidence by narrative alone.
+  corroboration_rule=Requires corroboration for strong learning claims.
+  standalone_status=SUPPORTING_ONLY
+
+- HISTORICAL_REPOSITORY_EVIDENCE
+  trust_posture=Useful continuity layer when traceable and scope-bounded.
+  strengths=Supports repeated-pattern claims, continuity checks, and supersession analysis.
+  limitations=Can be stale, regime-mismatched, or overgeneralized.
+  corroboration_rule=Requires recency and scope checks; broader claims need corroboration.
+  standalone_status=LIMITED_STANDALONE
+
+- CONTEXTUAL_OPERATOR_FEEDBACK_EVIDENCE
+  trust_posture=Lowest default hierarchy for learning claims but useful for burden and usability context.
+  strengths=Surfaces ambiguity, review friction, and operational usefulness.
+  limitations=Non-authoritative and potentially subjective.
+  corroboration_rule=Should ordinarily remain supporting evidence only.
+  standalone_status=SUPPORTING_ONLY
+
+SOURCE HIERARCHY RULE
+Default ranking for governed learning:
+1. RUNTIME_DERIVED_NORMALIZED_EVIDENCE
+2. REVIEW_GOVERNED_EVIDENCE
+3. ANALYTICS_DERIVED_EVIDENCE
+4. HISTORICAL_REPOSITORY_EVIDENCE
+5. AI_DERIVED_ANALYTIC_EVIDENCE
+6. CONTEXTUAL_OPERATOR_FEEDBACK_EVIDENCE
+
+This ranking is a default trust posture, not a claim that weaker sources are useless.
+Weaker sources may materially enrich interpretation, but they do not automatically justify strong learning claims.

@@ -1,0 +1,247 @@
+CURRENT CANON RECLASSIFICATION MAP
+Authority: Canon reclassification map for pre-intake control only.
+Truth posture: Reclassification only. No runtime behavior change.
+
+Legend:
+- CORE_CANON
+- CONDITIONAL_CANDIDATES
+- PRIMITIVE_LAYER
+- LEGACY_ARCHIVE
+
+Lifecycle state labels used:
+- ACTIVE_RUNTIME_CANON
+- ACTIVE_RUNTIME_BOUNDED
+- CANDIDATE_UNDER_REVIEW
+- PRIMITIVE_SUPPORT_ONLY
+- LEGACY_REFERENCE_ONLY
+- NON_AUTHORITATIVE_REFERENCE
+
+============================================================
+A) RUNTIME COUNCIL FAMILY LAYER
+============================================================
+
+material_name=LIQUIDITY_REVERSAL
+source_location=MQL5/Experts/AI/council_strategies.mqh
+material_type=runtime_council_family
+current_runtime_role=active_runtime_family
+current_relevance=high
+group=CORE_CANON
+state=ACTIVE_RUNTIME_CANON
+strategy_members=sweep_reversal|fake_break_reversal
+overlap_notes=shares some reclaim/reversal territory with mean-reclaim edge cases but remains structurally distinct
+likely_future_role=initial core canon seed family
+
+material_name=MEAN_RECLAIM
+source_location=MQL5/Experts/AI/council_strategies.mqh
+material_type=runtime_council_family
+current_runtime_role=active_runtime_family
+current_relevance=high
+group=CORE_CANON
+state=ACTIVE_RUNTIME_CANON
+strategy_members=bollinger_reclaim|mean_reversion_bounce|range_edge_fade
+overlap_notes=overlaps with old Bollinger-first library identities but is stronger as a family-level canon unit
+likely_future_role=initial core canon seed family
+
+material_name=TREND_CONTINUATION
+source_location=MQL5/Experts/AI/council_strategies.mqh
+material_type=runtime_council_family
+current_runtime_role=active_runtime_family
+current_relevance=high
+group=CORE_CANON
+state=ACTIVE_RUNTIME_CANON
+strategy_members=trend_momentum|momentum_breakout_cont_v1|micro_structure_reentry_v1|breakdown_momentum_v1|lower_high_rejection_v1
+overlap_notes=contains several internal variants already; should remain canon at family level rather than fragmenting into many equal identities
+likely_future_role=initial core canon seed family
+
+material_name=COMPRESSION_BREAKOUT
+source_location=MQL5/Experts/AI/council_strategies.mqh
+material_type=runtime_council_family
+current_runtime_role=active_runtime_family
+current_relevance=high
+group=CORE_CANON
+state=ACTIVE_RUNTIME_CANON
+strategy_members=range_compression_breakout|volatility_squeeze_release
+overlap_notes=adjacent to volatility-breakout and expansion-continuation but cleaner as a dedicated pre-expansion family
+likely_future_role=initial core canon seed family
+
+material_name=TREND_PULLBACK_CONTINUATION
+source_location=MQL5/Experts/AI/council_strategies.mqh
+material_type=runtime_council_family
+current_runtime_role=active_runtime_family
+current_relevance=moderate
+group=CONDITIONAL_CANDIDATES
+state=ACTIVE_RUNTIME_BOUNDED
+strategy_members=trend_pullback_cont_v1
+overlap_notes=specialized subset of trend-continuation rather than clearly separate first-tier canon
+likely_future_role=conditional specialist family under later evidence
+
+material_name=VOL_BREAKOUT
+source_location=MQL5/Experts/AI/council_strategies.mqh
+material_type=runtime_council_family
+current_runtime_role=active_runtime_family
+current_relevance=moderate
+group=CONDITIONAL_CANDIDATES
+state=ACTIVE_RUNTIME_BOUNDED
+strategy_members=volatility_breakout
+overlap_notes=breakout/expansion adjacency with compression-breakout and expansion-continuation
+likely_future_role=conditional specialist family
+
+material_name=EXPANSION_CONTINUATION
+source_location=MQL5/Experts/AI/council_strategies.mqh
+material_type=runtime_council_family
+current_runtime_role=active_runtime_family
+current_relevance=moderate
+group=CONDITIONAL_CANDIDATES
+state=ACTIVE_RUNTIME_BOUNDED
+strategy_members=expansion_continuation
+overlap_notes=follow-through specialization; not yet strong enough to outrank core breakout canon
+likely_future_role=conditional specialist family
+
+material_name=MICRO_RANGE_BREAK
+source_location=MQL5/Experts/AI/council_strategies.mqh
+material_type=runtime_council_family
+current_runtime_role=active_runtime_family
+current_relevance=moderate_to_low
+group=CONDITIONAL_CANDIDATES
+state=ACTIVE_RUNTIME_BOUNDED
+strategy_members=micro_range_expansion
+overlap_notes=very narrow micro-structure niche; useful but not equal-status canon by default
+likely_future_role=narrow conditional candidate
+
+material_name=MOMENTUM_REVERSAL_ASSIST
+source_location=MQL5/Experts/AI/council_strategies.mqh
+material_type=runtime_council_family
+current_runtime_role=active_runtime_family
+current_relevance=bounded_support_only
+group=PRIMITIVE_LAYER
+state=PRIMITIVE_SUPPORT_ONLY
+strategy_members=mfi_reversal_assist
+overlap_notes=assist-style and indicator-centric; better treated as support logic than independent canon family
+likely_future_role=momentum/reversal confirmation primitive
+
+============================================================
+B) STRATEGY-LIBRARY STYLE MATERIALS
+============================================================
+
+material_name=trend_pullback
+source_location=MQL5/Experts/AI/LIBRARIES/library_strategies.mqh
+material_type=library_strategy_definition
+current_runtime_role=loaded_reference_not_primary_runtime_driver
+current_relevance=moderate
+group=CONDITIONAL_CANDIDATES
+state=CANDIDATE_UNDER_REVIEW
+overlap_notes=maps into trend-pullback continuation space; better treated as blueprint than equal canon identity
+likely_future_role=conditional proposal seed / blueprint reference
+
+material_name=breakout_continuation
+source_location=MQL5/Experts/AI/LIBRARIES/library_strategies.mqh
+material_type=library_strategy_definition
+current_runtime_role=loaded_reference_not_primary_runtime_driver
+current_relevance=moderate
+group=CONDITIONAL_CANDIDATES
+state=CANDIDATE_UNDER_REVIEW
+overlap_notes=overlaps with compression-breakout, vol-breakout, and expansion-continuation
+likely_future_role=conditional blueprint reference
+
+material_name=dual_timeframe_reclaim
+source_location=MQL5/Experts/AI/LIBRARIES/library_strategies.mqh
+material_type=library_strategy_definition
+current_runtime_role=loaded_reference_not_primary_runtime_driver
+current_relevance=moderate
+group=CONDITIONAL_CANDIDATES
+state=CANDIDATE_UNDER_REVIEW
+overlap_notes=hybrid reclaim blueprint; not presently a first-class runtime family
+likely_future_role=conditional blueprint reference
+
+material_name=bollinger_mean_reversion
+source_location=MQL5/Experts/AI/LIBRARIES/library_strategies.mqh
+material_type=library_strategy_definition
+current_runtime_role=loaded_reference_not_primary_runtime_driver
+current_relevance=low_to_moderate
+group=LEGACY_ARCHIVE
+state=LEGACY_REFERENCE_ONLY
+overlap_notes=indicator-first identity already subsumed by mean-reclaim family and primitive Bollinger components
+likely_future_role=legacy benchmark/reference only
+
+material_name=bollinger_reclaim_reversal
+source_location=MQL5/Experts/AI/LIBRARIES/library_strategies.mqh
+material_type=library_strategy_definition
+current_runtime_role=loaded_reference_not_primary_runtime_driver
+current_relevance=low_to_moderate
+group=LEGACY_ARCHIVE
+state=LEGACY_REFERENCE_ONLY
+overlap_notes=split across mean-reclaim and liquidity-reversal family space; not needed as equal canon identity
+likely_future_role=legacy benchmark/reference only
+
+material_name=sweep_reversal__library_identity
+source_location=MQL5/Experts/AI/LIBRARIES/library_strategies.mqh
+material_type=library_strategy_definition
+current_runtime_role=loaded_reference_not_primary_runtime_driver
+current_relevance=low_as_separate_identity
+group=LEGACY_ARCHIVE
+state=LEGACY_REFERENCE_ONLY
+overlap_notes=runtime family already owns this space; keep family/strategy runtime version, archive the library-style duplicate identity
+likely_future_role=legacy benchmark/reference only
+
+============================================================
+C) INDICATOR / PATTERN / RISK / FILTER MATERIALS
+============================================================
+
+indicator_group_rule=all current indicators are reclassified to PRIMITIVE_LAYER by default unless later evidence elevates a family-level role
+indicator_items=bollinger_reclaim_trigger|bollinger_mean_reversion_bias|mfi_momentum|ema_trend_alignment|atr_volatility_filter|sweep_detector|reclaim_detector|candle_rejection_validation|vwap_deviation_bias|rsi_pressure_shift|session_volatility_state|volume_spike_context|range_compression_state
+indicator_group=PRIMITIVE_LAYER
+indicator_state=PRIMITIVE_SUPPORT_ONLY
+indicator_future_role=trigger_confirmation_context_filter_primitives
+
+entry_pattern_group_rule=all current entry patterns are PRIMITIVE_LAYER, not strategy identity
+entry_pattern_items=close_bar_entry|pullback_entry|breakout_entry|reclaim_entry|retest_entry|staged_entry|stacked_entry|intra_candle_trigger_entry|candle_rejection_validation
+entry_pattern_group=PRIMITIVE_LAYER
+entry_pattern_state=PRIMITIVE_SUPPORT_ONLY
+entry_pattern_future_role=execution_pattern_primitives
+
+risk_model_group_rule=all current risk models are PRIMITIVE_LAYER, not edge-family identity
+risk_model_items=atr_stop_rr_exit|middle_band_reversion_exit|opposite_band_exit|time_exit_with_move_sl|break_even_shift|partial_scale_out|trailing_progressive_exit
+risk_model_group=PRIMITIVE_LAYER
+risk_model_state=PRIMITIVE_SUPPORT_ONLY
+risk_model_future_role=exit_risk_primitives
+
+filter_group_rule=all current filter definitions are PRIMITIVE_LAYER, not edge-family identity
+filter_items=spread_filter|atr_volatility_filter|trend_alignment_filter|higher_timeframe_agreement_filter|flat_market_filter|breakout_risk_filter|session_activity_filter|position_limit_filter|cooldown_filter
+filter_group=PRIMITIVE_LAYER
+filter_state=PRIMITIVE_SUPPORT_ONLY
+filter_future_role=gating_and_context_primitives
+
+============================================================
+D) SUPPORTING ANALYTICAL / CONTEXT PRIMITIVES
+============================================================
+
+support_module_items=council_environment.mqh|market_regime.mqh|regime_classification_layer_v1.mqh|council_aggregator.mqh|unified_confidence.mqh|strategy_intelligence_layer_v1.mqh|level_awareness_brake.mqh|execution_estimator_v1.mqh|exit_intelligence.mqh|correlation_engine.mqh|council_pre_ai_filter.mqh|council_pre_ai_gate.mqh|council_attribution_intelligence.mqh
+support_module_group=PRIMITIVE_LAYER
+support_module_state=PRIMITIVE_SUPPORT_ONLY
+support_module_future_role=environment_confidence_validation_and_support_modules
+
+============================================================
+E) LEGACY / NON-AUTHORITATIVE EDGE-COMPOSITION ARTIFACT
+============================================================
+
+material_name=ai_build_zone.json
+source_location=MQL5/Files/AI/ai_build_zone.json
+material_type=free_composition_artifact
+current_runtime_role=present_but_not_referenced_by_active_runtime_path
+current_relevance=legacy_reference_only
+group=LEGACY_ARCHIVE
+state=NON_AUTHORITATIVE_REFERENCE
+overlap_notes=represents older autonomous/composition framing and should not compete with governed canon identity
+likely_future_role=historical reference only
+
+============================================================
+RECLASSIFICATION CONCLUSION
+============================================================
+Canon priority after E-1:
+1) CORE_CANON family layer
+2) CONDITIONAL_CANDIDATES for later evidence-driven intake
+3) PRIMITIVE_LAYER for reusable support material
+4) LEGACY_ARCHIVE for historical/benchmark/non-authoritative material
+
+Hard rule introduced by this audit:
+- old strategy-library identity does not automatically compete as full canon merely because it exists in LIBRARIES/.

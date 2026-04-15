@@ -1,0 +1,187 @@
+AI REPOSITORY RETENTION AND VISIBILITY POLICY
+document_role=AUTHORITATIVE_AI_REPOSITORY_RETENTION_VISIBILITY_POLICY
+policy_version=A5_AI_RETENTION_VISIBILITY_POLICY_V1
+authority_scope=AI_REPOSITORY_RETENTION_VISIBILITY_AND_NON_AUTHORITY_POLICY_ONLY
+linked_repository_design=docs/ai_intelligence_repository_design.txt
+linked_index_policy=docs/ai_repository_index_policy.txt
+linked_output_visibility_policy=docs/ai_output_visibility_policy.txt
+policy_note=Defines retention intent, visibility intent, promotion rules, non-authoritative repository status, and manifest concept only. No purge engine or archive writer is implemented in A5.
+
+NON-AUTHORITATIVE REPOSITORY STATUS
+- The AI repository is an intelligence archive and review archive.
+- The AI repository is derived and non-authoritative for runtime truth.
+- The AI repository is derived and non-authoritative for active plan truth.
+- The AI repository is not a control surface.
+- Repository storage of proposals, advisories, findings, or evidence does not grant direct control, runtime mutation, or plan mutation authority.
+
+RETENTION CATEGORY TAXONOMY
+- ROLLING_SHORT = current or recent rolling view with short horizon and supersedable entries.
+- ROLLING_MEDIUM = bounded rolling history for medium-horizon review and incident context.
+- REVIEW_CYCLE = retained across one formal review cycle or operator/admin review window.
+- LONG_REVIEW_HISTORY = retained for longer institutional review and governance traceability.
+- PROPOSAL_AUDIT_HISTORY = retained for proposal traceability, review, and later audit linkage.
+- INCIDENT_FORENSIC_HISTORY = retained for incident forensics and later retrospective analysis.
+
+RETENTION RULE FIELDS
+- retention_category
+- retention_purpose
+- supersedable_or_not
+- archive_worthy_or_not
+- purge_eligibility_note
+
+RETENTION INTENT BY OBJECT FAMILY
+
+1)
+repository_object_name=HOURLY_WATCH_RECORD
+retention_category=ROLLING_SHORT
+retention_purpose=Maintain current active watch context with short rolling recency.
+supersedable_or_not=supersedable
+archive_worthy_or_not=no_by_default
+purge_eligibility_note=Older short-horizon records may become purge-eligible once superseded and no incident linkage exists.
+
+2)
+repository_object_name=INCIDENT_REPORT_RECORD
+retention_category=INCIDENT_FORENSIC_HISTORY
+retention_purpose=Maintain forensic incident traceability and retrospective review evidence.
+supersedable_or_not=not_supersedable_for_core_incident_lineage
+archive_worthy_or_not=yes
+purge_eligibility_note=Purge only after formal forensic retention horizon and only if policy later defines such purge.
+
+3)
+repository_object_name=DAILY_INTELLIGENCE_RECORD
+retention_category=ROLLING_MEDIUM
+retention_purpose=Maintain recent operating intelligence for bounded rolling review.
+supersedable_or_not=partially_supersedable
+archive_worthy_or_not=selective
+purge_eligibility_note=Older daily records may be compacted after they are incorporated into broader review records.
+
+4)
+repository_object_name=THREE_DAY_REVIEW_RECORD
+retention_category=LONG_REVIEW_HISTORY
+retention_purpose=Maintain institutional review history and cross-cycle reference.
+supersedable_or_not=not_supersedable
+archive_worthy_or_not=yes
+purge_eligibility_note=Retain for long-horizon governance review unless a later policy defines archival compaction.
+
+5)
+repository_object_name=EXECUTIVE_BRIEF_RECORD
+retention_category=LONG_REVIEW_HISTORY
+retention_purpose=Maintain concise leadership-level summaries over time.
+supersedable_or_not=partially_supersedable
+archive_worthy_or_not=yes
+purge_eligibility_note=Older briefs may be archived but should remain traceable to review windows.
+
+6)
+repository_object_name=REVIEWABLE_PROPOSAL_RECORD
+retention_category=PROPOSAL_AUDIT_HISTORY
+retention_purpose=Maintain proposal lineage, review outcomes, and audit traceability.
+supersedable_or_not=not_supersedable_for_lineage
+archive_worthy_or_not=yes
+purge_eligibility_note=Proposal records are not purge candidates by default because lineage matters.
+
+7)
+repository_object_name=GOVERNANCE_AUDIT_RECORD
+retention_category=LONG_REVIEW_HISTORY
+retention_purpose=Maintain governance and compliance review traceability.
+supersedable_or_not=not_supersedable
+archive_worthy_or_not=yes
+purge_eligibility_note=Governance audit history should remain available for institutional review.
+
+8)
+repository_object_name=LEARNING_EVIDENCE_RECORD
+retention_category=PROPOSAL_AUDIT_HISTORY
+retention_purpose=Maintain learning-governance evidence lineage and review support.
+supersedable_or_not=not_supersedable_for_evidence_lineage
+archive_worthy_or_not=yes
+purge_eligibility_note=Evidence lineage should remain available for later review-board traceability.
+
+9)
+repository_object_name=COUNCIL_ADVISORY_RECORD
+retention_category=ROLLING_MEDIUM
+retention_purpose=Maintain bounded advisory history around candidate scopes.
+supersedable_or_not=partially_supersedable
+archive_worthy_or_not=selective
+purge_eligibility_note=Compact advisory history may be rolled forward after review windows close.
+
+10)
+repository_object_name=OPERATOR_COPILOT_RECORD
+retention_category=REVIEW_CYCLE
+retention_purpose=Maintain bounded operator/admin query-response traceability for review.
+supersedable_or_not=not_supersedable_per_query
+archive_worthy_or_not=selective
+purge_eligibility_note=Older query history may be purge-eligible after review cycles if no incident/proposal linkage exists.
+
+11)
+repository_object_name=ANOMALY_RECORD
+retention_category=INCIDENT_FORENSIC_HISTORY
+retention_purpose=Maintain anomaly lineage supporting incidents, drift, and investigations.
+supersedable_or_not=not_supersedable_for_lineage
+archive_worthy_or_not=yes
+purge_eligibility_note=Retain while incident or drift lineage remains relevant.
+
+12)
+repository_object_name=DRIFT_RECORD
+retention_category=LONG_REVIEW_HISTORY
+retention_purpose=Maintain drift lineage across daily and review cycles.
+supersedable_or_not=partially_supersedable
+archive_worthy_or_not=yes
+purge_eligibility_note=May be compacted after inclusion in broader review artifacts, but core lineage should remain.
+
+13)
+repository_object_name=ROOT_CAUSE_RECORD
+retention_category=INCIDENT_FORENSIC_HISTORY
+retention_purpose=Maintain root-cause traceability for major incidents.
+supersedable_or_not=not_supersedable
+archive_worthy_or_not=yes
+purge_eligibility_note=Retain for long forensic history unless later policy explicitly narrows retention.
+
+VISIBILITY TIER INTENT
+- INTERNAL_SHADOW_ONLY = internal shadow intelligence not surfaced as operator-facing by default.
+- OPERATOR_VISIBLE = operator-visible derived intelligence.
+- ADMIN_VISIBLE = admin-visible governance/intelligence outputs.
+- REVIEW_BOARD_VISIBLE = review-board visibility for proposals, learning evidence, and deeper review artifacts.
+- COMMITTEE_VISIBLE = high-level committee-facing summaries and review artifacts.
+
+VISIBILITY ESCALATION RULES
+- A record may be promoted from INTERNAL_SHADOW_ONLY to a higher tier only after explicit review in a later implementation phase.
+- Promotion in visibility does not change authority_class or convert the record into runtime truth.
+- REVIEWABLE_PROPOSAL_RECORD defaults to REVIEW_BOARD_VISIBLE and may be additionally ADMIN_VISIBLE.
+- Shadow-only records may remain internal indefinitely if no review/escalation is justified.
+- Council advisory records may be OPERATOR_VISIBLE but remain non-authoritative and non-directional.
+- Executive briefs may be ADMIN_VISIBLE and COMMITTEE_VISIBLE without becoming control instructions.
+
+REPOSITORY MANIFEST CONCEPT
+recommended_manifest_fields=
+repository_version,
+repository_design_version,
+index_policy_version,
+retention_policy_version,
+visibility_policy_version,
+repository_role,
+authority_class,
+current_repository_scopes_defined,
+manifest_status,
+delivery_mode,
+implementation_status
+
+MANIFEST POLICY
+- Any repository manifest in A5 is a design/manifest placeholder only.
+- A5 manifest files must be clearly labeled non-authoritative and pending future runtime repository implementation.
+- Manifest existence does not mean runtime archive writing is implemented.
+
+RELATIONSHIP TO DELIVERY LAYERS
+- Future Telegram/email/admin delivery is deferred.
+- Later delivery layers should read from repository-managed outputs, not ad hoc raw AI text.
+- Repository-first external delivery later is the intended architecture boundary.
+
+RELATIONSHIP TO LEARNING GOVERNANCE
+- Repository retention and visibility support later L1-L7 learning-governance review traceability.
+- Proposal records, evidence records, and review records are the main lineage surfaces for later governed learning discussions.
+- Future post-change impact records may link to proposal/evidence lineage; this is deferred beyond A5.
+
+ANTI-SPAM AND BOUNDED STORAGE INTENT
+- Repository storage must remain bounded and structured.
+- Duplicate incident outputs should not create uncontrolled duplicate repository entries.
+- Recurrent hourly records should be rolling and compact.
+- Council advisory history must remain compact and candidate-scoped.
+- Retention intent must stay aligned with A4 cooldown/dedupe/suppression policy.

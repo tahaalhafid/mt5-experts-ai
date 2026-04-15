@@ -1,0 +1,70 @@
+LEARNING PROHIBITED MUTATION PATHS
+document_role=AUTHORITATIVE_LEARNING_PROHIBITED_MUTATION_PATH_POLICY
+document_version=L1_LEARNING_PROHIBITED_MUTATION_PATHS_V1
+authority_scope=PROHIBITED_LEARNING_MUTATION_PATH_DEFINITION_ONLY
+linked_contract=docs/learning_governance_contract.txt
+linked_scope_boundaries=docs/learning_scope_boundaries.txt
+linked_authority_gate=H6_AI_ACTIVATION_READINESS_GATE
+trust_rule=explicitly_forbids_any_path_that_turns_learning_outputs_into_direct_runtime_mutation_or_authority_elevation
+policy_note=This document exists to remove ambiguity around forbidden learning mutation paths.
+
+GLOBAL PROHIBITION RULE
+- No learning artifact may mutate runtime directly.
+- No learning artifact may overwrite active plan truth.
+- No learning artifact may elevate AI authority.
+- No learning artifact may create a hidden or silent control path.
+
+EXPLICITLY PROHIBITED MUTATION PATHS
+prohibited_path_01=learning_output_to_live_strategy_mutation
+prohibited_path_01_rule=Evidence bundles, proposals, or impact findings may not write into or mutate strategy logic directly.
+
+prohibited_path_02=learning_output_to_live_entry_or_exit_mutation
+prohibited_path_02_rule=Learning outputs may not alter entry logic, exit logic, or direct directional behavior.
+
+prohibited_path_03=learning_output_to_governor_mutation
+prohibited_path_03_rule=Learning outputs may not directly alter governor formulas, safety rules, or live permission thresholds.
+
+prohibited_path_04=learning_output_to_failure_detector_mutation
+prohibited_path_04_rule=Learning outputs may not directly alter failure detector formulas or runtime failure gating.
+
+prohibited_path_05=learning_output_to_execution_mutation
+prohibited_path_05_rule=Learning outputs may not directly alter execution-quality formulas, execution routing, or live execution handling.
+
+prohibited_path_06=learning_output_to_dirty_environment_or_trend_logic_mutation
+prohibited_path_06_rule=Learning outputs may not directly alter dirty-environment logic, trend-continuation reinforcement logic, or related live behavior layers.
+
+prohibited_path_07=learning_output_to_live_threshold_or_weight_mutation
+prohibited_path_07_rule=Learning outputs may not directly change live thresholds, live weights, or runtime numeric control values.
+
+prohibited_path_08=learning_output_to_active_plan_overwrite
+prohibited_path_08_rule=Learning outputs may not overwrite ai_current_plan.json or any authoritative plan truth source.
+
+prohibited_path_09=learning_output_to_auto_apply
+prohibited_path_09_rule=No learning recommendation, proposal, or experiment candidate may auto-apply.
+
+prohibited_path_10=learning_output_to_ai_authority_elevation
+prohibited_path_10_rule=Learning outputs may not elevate AI from AI_OFF, AI_SHADOW_ONLY, or AI_ADVISORY_ONLY into any higher control state.
+
+prohibited_path_11=learning_output_to_direct_trade_control
+prohibited_path_11_rule=Learning outputs may not generate direct BUY/SELL control, direct execution commands, or direct runtime overrides.
+
+prohibited_path_12=learning_output_to_reserved_advisory_mode_enablement
+prohibited_path_12_rule=Learning outputs may not automatically enable reserved advisory block modes or any future higher-friction advisory mode.
+
+prohibited_path_13=learning_output_to_repository_truth_promotion
+prohibited_path_13_rule=Repository records, learning history, or derived artifacts may not be promoted silently into authoritative runtime truth.
+
+PROHIBITED ACTOR BEHAVIORS
+- AI may not self-authorize a learning conclusion.
+- AI may not treat proposal acceptance as deployment authority.
+- AI may not bypass A7 review workflow.
+- AI may not bypass A8 effectiveness review when later learning usefulness must be assessed.
+- Human reviewers may not interpret L1 as granting live mutation authority.
+
+SAFE INTERPRETATION RULE
+- If a future learning idea appears useful but creates a direct mutation path, it remains prohibited under L1 until separately re-governed in a later approved phase.
+- Ambiguity must be resolved conservatively in favor of bounded, review-only handling.
+
+ENFORCEMENT INTENT
+- This policy is normative and governance-defining.
+- L1 does not implement runtime blockers, but it does define what later phases must never violate without explicit re-governance.
