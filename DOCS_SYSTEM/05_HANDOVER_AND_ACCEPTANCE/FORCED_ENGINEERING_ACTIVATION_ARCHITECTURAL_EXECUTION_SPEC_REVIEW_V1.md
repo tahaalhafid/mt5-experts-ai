@@ -49,7 +49,7 @@ The interpretation of the prior Development Complete declaration: it was valid u
 
 **Problem:** Phase 4A (Package C) needs to determine whether the dominant-side primary executor has the same family as the confirming vote. This requires `execution_admission_family` to be known before Phase 4A fires. Package D (the proposed home for admission identity) runs after Phase 4A has already executed in Package C.
 
-**Fix:** 
+**Fix:**
 - Package A: Add `CouncilExecutionAdmissionIdentity` struct and `primary_thesis_strategy_id` + `execution_admission_family` fields
 - Package B: Add `IRREW_ResolveAdmissionIdentity()` computation after strategy set evaluation, store in the new report
 - Package C: Phase 4A reads `execution_admission_family` from the already-computed report (not from Package D)

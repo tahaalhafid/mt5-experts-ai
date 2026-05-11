@@ -135,7 +135,7 @@ input bool   EnableV1ConstructivePolicyEligibility      = true;
 
 **Classification:** PARTIAL — 2/3 named EQ-DIAG fields implemented at performance journal level; 1 never implemented (stop_anchor_state); 1 related field (stop_geometry_state) present in OL but uninformative.
 
-**M-04/M-18 impact (EQ_DIAG_AND_STOP_GEOMETRY_STATUS_VERIFICATION_V1):** Closed as PARTIAL_DONE. 
+**M-04/M-18 impact (EQ_DIAG_AND_STOP_GEOMETRY_STATUS_VERIFICATION_V1):** Closed as PARTIAL_DONE.
 - `sl_vs_m5_atr_ratio` and `level_context_at_entry` are DONE in performance journal — no action needed.
 - `stop_anchor_state` never existed and is not needed for production acceptance; remove from checklist as a named field.
 - `stop_geometry_state` in OL is structural placeholder pending shadow policy population; no package needed.

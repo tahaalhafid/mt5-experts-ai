@@ -1,11 +1,11 @@
 # IMPLEMENTATION_SPEC_PACKAGE_V1
 
-**Package type:** SPECIFICATION — Non-executed implementation design  
-**Date:** 2026-05-08  
-**Authority:** EVIDENCE_ONLY — No MT5 source change. No runtime change. No Nautilus change.  
-**Follows:** ARCHITECTURE_BUILD_PACKAGE_V1.md → Candidates 1–5  
-**System status:** DEVELOPING — unchanged  
-**Runtime authority:** V1 (MT5 EA) — permanent; not transferred to any document or layer  
+**Package type:** SPECIFICATION — Non-executed implementation design
+**Date:** 2026-05-08
+**Authority:** EVIDENCE_ONLY — No MT5 source change. No runtime change. No Nautilus change.
+**Follows:** ARCHITECTURE_BUILD_PACKAGE_V1.md → Candidates 1–5
+**System status:** DEVELOPING — unchanged
+**Runtime authority:** V1 (MT5 EA) — permanent; not transferred to any document or layer
 
 ---
 
@@ -88,9 +88,9 @@ The following constraints are absolute for every candidate in this package. Any 
 
 ## 5. Candidate 1 — OPPORTUNITY_LEDGER_PLAYBOOK_FIELDS_SHADOW_V1
 
-**Status: NOT_AUTHORIZED_HERE**  
-**Type:** Instrumentation-only / Attribution-layer schema extension  
-**Layer:** Layer 5 — Attribution  
+**Status: NOT_AUTHORIZED_HERE**
+**Type:** Instrumentation-only / Attribution-layer schema extension
+**Layer:** Layer 5 — Attribution
 **Runtime effect:** NONE
 
 ### 5.1 Objective
@@ -403,10 +403,10 @@ for(int ol_i = 0; ol_i < reportCount && ol_i < COUNCIL_MAX_STRATEGIES; ol_i++)
 
 ## 6. Candidate 2 — PLAYBOOK_STATE_SHADOW_EMITTER_V1
 
-**Status: NOT_AUTHORIZED_HERE**  
-**Type:** Shadow state assembly — observation only  
-**Layer:** Layer 5 — Attribution  
-**Runtime effect:** NONE  
+**Status: NOT_AUTHORIZED_HERE**
+**Type:** Shadow state assembly — observation only
+**Layer:** Layer 5 — Attribution
+**Runtime effect:** NONE
 **Prerequisite:** Candidate 1 must be implemented and live
 
 ### 6.1 Objective
@@ -549,10 +549,10 @@ All decision, gate, execution, and aggregation files. See §5.4.
 
 ## 7. Candidate 3 — EVENT_ORDER_TRACE_FIELDS_V1
 
-**Status: NOT_AUTHORIZED_HERE**  
-**Type:** Attribution instrumentation — event ordering timestamps  
-**Layer:** Layer 5 — Attribution  
-**Runtime effect:** NONE  
+**Status: NOT_AUTHORIZED_HERE**
+**Type:** Attribution instrumentation — event ordering timestamps
+**Layer:** Layer 5 — Attribution
+**Runtime effect:** NONE
 **Prerequisite:** Candidate 1 must be implemented and live
 
 ### 7.1 Objective
@@ -674,10 +674,10 @@ In MT5's single-threaded `OnTick()` execution, most timestamps between `context_
 
 ## 8. Candidate 4 — PACKET_REGISTRY_RUNTIME_ALIGNMENT_CHECK_V1
 
-**Status: NOT_AUTHORIZED_HERE**  
-**Type:** Diagnostic and reporting only  
-**Layer:** External reporting (outside MT5 decision pipeline)  
-**Runtime effect:** NONE  
+**Status: NOT_AUTHORIZED_HERE**
+**Type:** Diagnostic and reporting only
+**Layer:** External reporting (outside MT5 decision pipeline)
+**Runtime effect:** NONE
 **Prerequisite:** Candidates 1+2 live with ≥200 trigger_present=true records in V1C_PLAYBOOK_SHADOW schema
 
 ### 8.1 Objective
@@ -758,10 +758,10 @@ Two viable approaches — the correct choice requires a design review before imp
 
 ## 9. Candidate 5 — RCEM_V1_DOCUMENTATION_UPDATE
 
-**Status: NOT_AUTHORIZED_HERE**  
-**Type:** Documentation-only (PIML amendment)  
-**Layer:** Documentation / Governance  
-**Runtime effect:** NONE  
+**Status: NOT_AUTHORIZED_HERE**
+**Type:** Documentation-only (PIML amendment)
+**Layer:** Documentation / Governance
+**Runtime effect:** NONE
 **Prerequisite:** Phase 3 ≥8 strategies certified (currently 7/17 — one certification away)
 
 ### 9.1 Objective
@@ -819,8 +819,8 @@ All `.mqh`, `.mq5`, `.ex5`, `.set` files. All runtime `.json` and `.jsonl` files
 
 ### 9.6 PIML Insertion Format
 
-New section heading: `# §30 — RCEM_V1_DOCUMENTATION`  
-Type: `EVIDENCE_DOCUMENTATION — Design-intent documentation only. No source change. No runtime enforcement.`  
+New section heading: `# §30 — RCEM_V1_DOCUMENTATION`
+Type: `EVIDENCE_DOCUMENTATION — Design-intent documentation only. No source change. No runtime enforcement.`
 Includes: RCEM table (§9.3 above), regime split summary per strategy, design notes, and explicit "RCEM_V1 is documentation only — no source enforcement" disclaimer.
 
 ### 9.7 Prerequisite
@@ -934,7 +934,7 @@ Five levels applied sequentially. A failure at any level triggers rollback befor
 
 ### Level 3 — Decision Invariance Validation
 
-**Measurement window:** 30 consecutive M1 bars with trigger_present=true in at least one strategy  
+**Measurement window:** 30 consecutive M1 bars with trigger_present=true in at least one strategy
 **Baseline:** Statistics from the 30 bars immediately before deployment
 
 | Metric | Pass Criteria | Data Source |

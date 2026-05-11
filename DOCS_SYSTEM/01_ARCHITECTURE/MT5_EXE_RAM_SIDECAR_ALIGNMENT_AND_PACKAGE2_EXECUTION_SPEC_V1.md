@@ -465,31 +465,31 @@ This module implements `SidecarCache` class with:
 ```python
 class SidecarCache:
     """Thread-safe in-memory cache. Read-only relative to Files/AI."""
-    
+
     def __init__(self, files_ai_root: Path, config: dict) -> None:
         # fields: _files_ai_root, _config, _lock (threading.RLock),
         # _json_cache: dict[str, CacheEntry],
         # _jsonl_cursors: dict[str, JsonlCursor]
-        
+
     def poll(self) -> None:
         """Poll all monitored files. Called from background thread every poll_interval_seconds."""
         # For each Category A/B file: check mtime; if changed, reload JSON
         # For each Category C file: open from cursor, read new bytes, parse new lines, append to deque
         # Never read Category D files
         # Write sidecar_status.json and sidecar_diagnostics.json to EXE_RUNTIME_CACHE/
-        
+
     def get_json(self, filename: str) -> dict:
         """Return cached dict or _status error dict. Thread-safe."""
-        
+
     def get_jsonl_tail(self, filename: str, lines: int = 100) -> list:
         """Return last N records from tail. Thread-safe."""
-        
+
     def get_snapshot(self) -> dict:
         """Return all Category A+B cached content as {filename: content}. Thread-safe."""
-        
+
     def get_diagnostics(self) -> dict:
         """Return per-file diagnostics. Thread-safe."""
-        
+
     def get_manifest_status(self) -> dict:
         """Return manifest with per-file status (loaded/missing/excluded/error). Thread-safe."""
 ```
@@ -726,14 +726,14 @@ Add `SidecarClient` class before `ArtifactStore`:
 ```python
 class SidecarClient:
     """Optional proxy to the EXE sidecar. Falls back gracefully to direct reads."""
-    
+
     def __init__(self, base_url: str | None) -> None:
         self._url = base_url.rstrip("/") if base_url else None
         self._timeout = 0.15  # 150ms max — must not block dashboard
-    
+
     def available(self) -> bool:
         return self._url is not None
-    
+
     def get_json(self, filename: str) -> dict | None:
         if not self._url:
             return None
@@ -746,7 +746,7 @@ class SidecarClient:
                 return data
         except Exception:
             return None
-    
+
     def get_jsonl(self, filename: str, limit: int = 0) -> list | None:
         if not self._url:
             return None

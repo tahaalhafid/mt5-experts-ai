@@ -1,9 +1,9 @@
 # BEST_STRATEGY_ID_FUNCTIONAL_AUDIT_AFTER_IRREW_V1
 
-**Status:** AUDIT_COMPLETE  
-**Date:** 2026-05-09  
-**Scope:** Post-IRREW / PCEA V1C / IFR / FVG_TPB functional audit of best_strategy_id  
-**Method:** Full source inspection — council_aggregator.mqh, council_mode_types.mqh, council_ai_governor.mqh, council_governor.mqh, council_pre_ai_filter.mqh, council_mode_runtime.mqh, council_v1_state_composer.mqh, level_awareness_brake.mqh, main_ea.mq5  
+**Status:** AUDIT_COMPLETE
+**Date:** 2026-05-09
+**Scope:** Post-IRREW / PCEA V1C / IFR / FVG_TPB functional audit of best_strategy_id
+**Method:** Full source inspection — council_aggregator.mqh, council_mode_types.mqh, council_ai_governor.mqh, council_governor.mqh, council_pre_ai_filter.mqh, council_mode_runtime.mqh, council_v1_state_composer.mqh, level_awareness_brake.mqh, main_ea.mq5
 **Authority:** READ-ONLY. No changes, no patches, no compile, no reload.
 
 ---
@@ -522,10 +522,10 @@ Any rename must update all 23+ occurrences across council_mode_types.mqh, counci
 
 ### N1. HIGH PRIORITY: Update LAB_InferFamilyFromStrategyId for fvg_tpb
 
-**File:** level_awareness_brake.mqh  
-**Function:** `LAB_InferFamilyFromStrategyId`  
-**Location:** Line 61+  
-**Fix:** Add `if(strategy_id == "fvg_tpb") return "IMBALANCE_FILL_REVERSAL";` before the fallback `return "UNKNOWN"`  
+**File:** level_awareness_brake.mqh
+**Function:** `LAB_InferFamilyFromStrategyId`
+**Location:** Line 61+
+**Fix:** Add `if(strategy_id == "fvg_tpb") return "IMBALANCE_FILL_REVERSAL";` before the fallback `return "UNKNOWN"`
 **Why required:** Every consumer of `LAB_InferFamilyFromStrategyId("fvg_tpb")` currently gets "UNKNOWN". This causes:
 - Incorrect diagnostic trace in cohort admission ("UNKNOWN" vs "IMBALANCE_FILL_REVERSAL")
 - Incorrect family classification in SCM, AI advisory, performance journal
@@ -537,18 +537,18 @@ Any rename must update all 23+ occurrences across council_mode_types.mqh, counci
 
 ### N2. MEDIUM PRIORITY: Document cohort admission path's use of best_strategy_id
 
-**Scope:** Architecture documentation only  
-**Action:** Update PIML and/or report to acknowledge that `RuntimeOperatingCohortAdmissionAllowsExecution` uses best_strategy_id as the candidate identity, making best_strategy_id execution-blocking when its family is not in the operating cohort.  
+**Scope:** Architecture documentation only
+**Action:** Update PIML and/or report to acknowledge that `RuntimeOperatingCohortAdmissionAllowsExecution` uses best_strategy_id as the candidate identity, making best_strategy_id execution-blocking when its family is not in the operating cohort.
 **This is a property of the current architecture, not introduced by FVG_TPB.** It is a pre-existing design choice that becomes visible now because fvg_tpb's family (IMBALANCE_FILL_REVERSAL) is not in the cohort.
 
 ### N3. LOW PRIORITY: Consider aggregator trigger_present filter
 
-**Scope:** council_aggregator.mqh best_strategy_id selection logic  
-**Action:** Add `trigger_present` and `decision != WAIT` filter to the best_strategy_id selection at lines 282–286  
-**Current:** Any positive-weight strategy can be best_strategy_id regardless of trigger or direction  
-**Improved:** Only strategies that triggered AND have directional decisions (BUY/SELL) qualify  
-**Impact:** Makes best_strategy_id semantically "leading thesis" rather than "highest-weighted participant"  
-**Caveat:** Could result in best_strategy_id="" on bars where no strategy triggers but council still approves (based on aggregate direction). Need to evaluate impact on downstream consumers that assume non-empty best_strategy_id.  
+**Scope:** council_aggregator.mqh best_strategy_id selection logic
+**Action:** Add `trigger_present` and `decision != WAIT` filter to the best_strategy_id selection at lines 282–286
+**Current:** Any positive-weight strategy can be best_strategy_id regardless of trigger or direction
+**Improved:** Only strategies that triggered AND have directional decisions (BUY/SELL) qualify
+**Impact:** Makes best_strategy_id semantically "leading thesis" rather than "highest-weighted participant"
+**Caveat:** Could result in best_strategy_id="" on bars where no strategy triggers but council still approves (based on aggregate direction). Need to evaluate impact on downstream consumers that assume non-empty best_strategy_id.
 **Authorization status:** NOT authorized as part of this audit. Requires separate design + operator approval.
 
 ---

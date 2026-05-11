@@ -1,12 +1,12 @@
 # IRREW_PCEA_PENDING_WORK_STATUS_UPDATE_FAST_V1
 
-**Report type:** OPERATIONAL STATUS UPDATE — FAST SURVEY  
-**Date:** 2026-05-09  
-**Authority:** STATUS DOCUMENTATION ONLY — No MT5 source change. No runtime change. No compile. No reload.  
-**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory  
-**System status:** DEVELOPING — unchanged  
-**Runtime authority:** V1 (MT5 EA) — permanent; not transferred  
-**Scope:** IRREW / No-Score V1 / PCEA / Packet Registry / Playbook Registry / FVG_TPB / best_strategy_id governance  
+**Report type:** OPERATIONAL STATUS UPDATE — FAST SURVEY
+**Date:** 2026-05-09
+**Authority:** STATUS DOCUMENTATION ONLY — No MT5 source change. No runtime change. No compile. No reload.
+**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory
+**System status:** DEVELOPING — unchanged
+**Runtime authority:** V1 (MT5 EA) — permanent; not transferred
+**Scope:** IRREW / No-Score V1 / PCEA / Packet Registry / Playbook Registry / FVG_TPB / best_strategy_id governance
 
 **Evidence sources reviewed:**
 - PLAYBOOK_STRATEGY_PACKET_REGISTRY_V1.md

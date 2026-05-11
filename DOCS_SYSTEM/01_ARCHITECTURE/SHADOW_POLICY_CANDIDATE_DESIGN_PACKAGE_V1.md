@@ -1,12 +1,12 @@
 # SHADOW_POLICY_CANDIDATE_DESIGN_PACKAGE_V1
 
-**Package type:** DESIGN — Shadow Policy Candidate Specification  
-**Date:** 2026-05-09  
-**Authority:** EVIDENCE_ONLY — No MT5 source change. No runtime change. No compile. No reload.  
-**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory  
-**Based on:** PLAYBOOK_STRATEGY_PACKET_REGISTRY_V1.md + ARCHITECTURE_BUILD_PACKAGE_V1.md + IMPLEMENTATION_SPEC_PACKAGE_V1.md + PLAYBOOK_ARCHITECTURE_FULL_IMPLEMENTATION_PACKAGE_V1_REPORT.md + V1C_CLEANUP_PACKAGE_V1_REPORT.md + PCEA_V1C_RUNTIME_EVIDENCE_REVIEW_PACKAGE_V1 findings  
-**System status:** DEVELOPING — unchanged  
-**Runtime authority:** V1 (MT5 EA) — permanent; not transferred to any document, shadow layer, or policy candidate  
+**Package type:** DESIGN — Shadow Policy Candidate Specification
+**Date:** 2026-05-09
+**Authority:** EVIDENCE_ONLY — No MT5 source change. No runtime change. No compile. No reload.
+**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory
+**Based on:** PLAYBOOK_STRATEGY_PACKET_REGISTRY_V1.md + ARCHITECTURE_BUILD_PACKAGE_V1.md + IMPLEMENTATION_SPEC_PACKAGE_V1.md + PLAYBOOK_ARCHITECTURE_FULL_IMPLEMENTATION_PACKAGE_V1_REPORT.md + V1C_CLEANUP_PACKAGE_V1_REPORT.md + PCEA_V1C_RUNTIME_EVIDENCE_REVIEW_PACKAGE_V1 findings
+**System status:** DEVELOPING — unchanged
+**Runtime authority:** V1 (MT5 EA) — permanent; not transferred to any document, shadow layer, or policy candidate
 
 ---
 

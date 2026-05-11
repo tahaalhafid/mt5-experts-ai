@@ -1,11 +1,11 @@
 # BEST_STRATEGY_ID_SEMANTIC_GOVERNANCE_UPDATE_V1
 
-**Status:** ACCEPTED — DOCUMENTED  
-**Date:** 2026-05-09  
-**Classification:** SEMANTIC / IDENTITY / GOVERNANCE WORK  
-**Scope:** Post-IRREW / PCEA V1C / IFR / FVG_TPB governance and semantic boundary update  
-**Authority:** DOCUMENTATION ONLY — No MT5 source change. No runtime change. No compile. No reload.  
-**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory  
+**Status:** ACCEPTED — DOCUMENTED
+**Date:** 2026-05-09
+**Classification:** SEMANTIC / IDENTITY / GOVERNANCE WORK
+**Scope:** Post-IRREW / PCEA V1C / IFR / FVG_TPB governance and semantic boundary update
+**Authority:** DOCUMENTATION ONLY — No MT5 source change. No runtime change. No compile. No reload.
+**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory
 **Based on:** BEST_STRATEGY_ID_FUNCTIONAL_AUDIT_AFTER_IRREW_V1 (verdict: PASS_WITH_CAVEATS_NEEDS_SEMANTIC_CLEANUP)
 
 ---
@@ -133,7 +133,7 @@ After `LAB_INFER_FAMILY_REGISTRY_FVG_TPB_FIX_V1`:
 
 The IRREW doctrine requires:
 
-> `best_strategy_id` describes who formed the thesis.  
+> `best_strategy_id` describes who formed the thesis.
 > It must **not** be the source of execution-admission family.
 
 The current architecture uses `best_strategy_id` as the identity from which `candidateFamily` is derived for the cohort gate. This conflates two separate concerns:
@@ -230,12 +230,12 @@ The following fields are **shadow / ledger / attribution only**. They operate ex
 
 **Canonical governance rule:**
 
-> Playbook State may describe thesis completeness.  
+> Playbook State may describe thesis completeness.
 > It must not authorize execution.
 
-`PLAYBOOK_FORMING` means the alpha anchor is present. It is not a trade signal.  
-`PLAYBOOK_VALID` is currently withheld for IFR by design (no CONFIRMATION_PACKET defined). When eventually emitted, it remains attribution only.  
-`PLAYBOOK_CONTRADICTED` means the playbook thesis was contradicted. It does not mean block — V1 has already decided.  
+`PLAYBOOK_FORMING` means the alpha anchor is present. It is not a trade signal.
+`PLAYBOOK_VALID` is currently withheld for IFR by design (no CONFIRMATION_PACKET defined). When eventually emitted, it remains attribution only.
+`PLAYBOOK_CONTRADICTED` means the playbook thesis was contradicted. It does not mean block — V1 has already decided.
 `PLAYBOOK_NOT_PRESENT` means the playbook anchor was not triggered. It is an absence of evidence, not evidence of absence.
 
 **Static validation (audit-confirmed):** Zero `fvg_/ifr_` references exist in `council_aggregator.mqh`, `council_pre_ai_filter.mqh`, `council_ai_governor.mqh`, `core_trade_engine.mqh`, or the BUY/SELL execution path in `main_ea.mq5`. Firewall is intact as of 2026-05-09.

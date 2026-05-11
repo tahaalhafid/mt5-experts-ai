@@ -1,9 +1,9 @@
 # FVG_TPB_MT5_IMPLEMENTATION_PACKAGE_V1_REPORT
 
-**Status:** IMPLEMENTATION_COMPLETE — COMPILE_VERIFIED — RUNTIME_VALIDATION_PENDING  
-**Date:** 2026-05-09  
-**Binary timestamp:** 2026-05-09 05:29:15 local  
-**Compile result:** 0 errors, 0 warnings  
+**Status:** IMPLEMENTATION_COMPLETE — COMPILE_VERIFIED — RUNTIME_VALIDATION_PENDING
+**Date:** 2026-05-09
+**Binary timestamp:** 2026-05-09 05:29:15 local
+**Compile result:** 0 errors, 0 warnings
 
 ---
 
@@ -204,7 +204,7 @@ For each zone in sZones[]:
 
 ### E6. RunCouncilStrategySet — s18 Addition
 
-Added `CouncilStrategyReport &s18` as 19th parameter.  
+Added `CouncilStrategyReport &s18` as 19th parameter.
 Added `BuildCouncilStrategy_FVG_TPB(env, s18);` as 18th strategy call.
 
 ---
@@ -356,9 +356,9 @@ j += "\"ifr_state_seen_count\":" + IntegerToString(g_ol_ifr_state_seen_count) + 
 
 ## I. Hostile Gate Design
 
-**Gate:** SELL + TREND_DOWN  
-**Basis:** INEC certification — SELL_TREND_DOWN WR=38.37%, E[R]=−0.041R  
-**Implementation:** Inside BuildCouncilStrategy_FVG_TPB only — not in pre_ai_filter, not in aggregator  
+**Gate:** SELL + TREND_DOWN
+**Basis:** INEC certification — SELL_TREND_DOWN WR=38.37%, E[R]=−0.041R
+**Implementation:** Inside BuildCouncilStrategy_FVG_TPB only — not in pre_ai_filter, not in aggregator
 **Behavior when fired:**
 - trigger_present = true (trigger WAS detected — recorded for ledger)
 - decision = COUNCIL_DECISION_WAIT
@@ -392,7 +392,7 @@ j += "\"ifr_state_seen_count\":" + IntegerToString(g_ol_ifr_state_seen_count) + 
 
 ## K. Cold-Start Limitation
 
-**Classification:** KNOWN_LIMITATION — DOCUMENTED  
+**Classification:** KNOWN_LIMITATION — DOCUMENTED
 **Description:** Static zone arrays inside BuildCouncilStrategy_FVG_TPB are session-local. On EA reload, all tracked FVG zones are lost. The strategy starts with an empty zone set and repopulates within the 4-hour expiry window as new M5 bars form.
 
 **Why not fixed:** Hooking into OnInit() for zone replay requires modifying main_ea.mq5, which is forbidden in this package scope.
@@ -405,9 +405,9 @@ j += "\"ifr_state_seen_count\":" + IntegerToString(g_ol_ifr_state_seen_count) + 
 
 ## L. Factory Admission Lock Status
 
-**Code search result:** NO_CODE_FACTORY_LOCK_FOUND  
-No explicit `factory_admission_lock` variable, flag, or constant was found in any source file.  
-The governance condition (operator authorization) is satisfied by the explicit authorization issued for this package.  
+**Code search result:** NO_CODE_FACTORY_LOCK_FOUND
+No explicit `factory_admission_lock` variable, flag, or constant was found in any source file.
+The governance condition (operator authorization) is satisfied by the explicit authorization issued for this package.
 The lock remains in effect for all other external strategies by operator standing instruction — no code change required or made.
 
 ---

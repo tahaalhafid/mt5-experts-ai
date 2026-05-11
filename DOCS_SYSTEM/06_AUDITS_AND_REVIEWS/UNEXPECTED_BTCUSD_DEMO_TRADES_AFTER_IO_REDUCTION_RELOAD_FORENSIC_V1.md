@@ -1,10 +1,10 @@
 # UNEXPECTED_BTCUSD_DEMO_TRADES_AFTER_IO_REDUCTION_RELOAD_FORENSIC_V1
 
-**Report Type:** EMERGENCY_FORENSIC_INVESTIGATION  
-**Date:** 2026-05-10  
-**Investigator:** Claude Code (forensic read-only; no source changes)  
-**Triggering Event:** Two unexpected BTCUSD demo trades discovered after MT5_IO_REDUCTION_V1 Package 2 reload  
-**Context:** Operator identified BTCUSD trades in broker history that were not observed opening in MT5; both closed at SL loss; IRREW dev flags reportedly set true at time of observation; IO Reduction Package 2 had just been deployed and reloaded  
+**Report Type:** EMERGENCY_FORENSIC_INVESTIGATION
+**Date:** 2026-05-10
+**Investigator:** Claude Code (forensic read-only; no source changes)
+**Triggering Event:** Two unexpected BTCUSD demo trades discovered after MT5_IO_REDUCTION_V1 Package 2 reload
+**Context:** Operator identified BTCUSD trades in broker history that were not observed opening in MT5; both closed at SL loss; IRREW dev flags reportedly set true at time of observation; IO Reduction Package 2 had just been deployed and reloaded
 
 ---
 

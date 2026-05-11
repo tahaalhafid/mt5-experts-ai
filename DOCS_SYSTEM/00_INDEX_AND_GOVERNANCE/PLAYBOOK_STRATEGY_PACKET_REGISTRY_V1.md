@@ -1,11 +1,11 @@
 # PLAYBOOK_STRATEGY_PACKET_REGISTRY_V1
 
-**Registry type:** EVIDENCE_DOCUMENTATION — Strategy and Playbook Packet Registry  
-**Architecture:** PLAYBOOK_CENTRIC_EVIDENCE_ARCHITECTURE_V1 (PCEA)  
-**Date created:** 2026-05-08  
-**Authority:** EVIDENCE_ONLY — No MT5 source change. No runtime change. No weight change.  
-**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory  
-**System status:** DEVELOPING — unchanged  
+**Registry type:** EVIDENCE_DOCUMENTATION — Strategy and Playbook Packet Registry
+**Architecture:** PLAYBOOK_CENTRIC_EVIDENCE_ARCHITECTURE_V1 (PCEA)
+**Date created:** 2026-05-08
+**Authority:** EVIDENCE_ONLY — No MT5 source change. No runtime change. No weight change.
+**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory
+**System status:** DEVELOPING — unchanged
 
 ---
 
@@ -28,8 +28,8 @@ This registry is the canonical reference for the current evidence state of all 1
 
 **Governing principle:** Strategies are evidence packets within playbooks, not standalone trading systems. A strategy's value is measured by the packets it contributes to its playbook's causal chain. A strategy with no accepted packets contributes no confirmed evidence to its playbook, regardless of role assignment or vote weight.
 
-**Accepted packets count (system total as of 2026-05-08):** 1  
-— trend_pullback_cont_v1: CONFIRM_PACKET_SPARSE (research designation; not a mandatory gate)  
+**Accepted packets count (system total as of 2026-05-08):** 1
+— trend_pullback_cont_v1: CONFIRM_PACKET_SPARSE (research designation; not a mandatory gate)
 All other packet claims across all 17 strategies are REJECTED, RESEARCH_ONLY, or DATA_INSUFFICIENT.
 
 ---
@@ -75,7 +75,7 @@ Thirteen packet types are recognized under PCEA V1. All packet claims must be te
 | 12 | REJECTED_PACKET | N/A — this packet type is assigned when an acceptance rule is explicitly violated | Applied when: acceptance threshold not met; flag inverted; co-presence ubiquitous without lift; zone proxy degrades; geometric constraint prevents sampling | Rejection is definitive for the specific condition tested. Does not reject the strategy globally. |
 | 13 | DATA_INSUFFICIENT_PACKET | N/A — assigned when sample is too small to classify | Applied when: N < 30 in the relevant subset; or simulation window < 14 calendar days; or strategy has zero live W/L outcomes | Neither a pass nor a fail. The question was not answered. |
 
-**Breakeven WR:** 40.0% (spread=10pt + slippage=2pt = 12pt = 0.12 price; SL=ATR14(Wilder,M1,shift=1)×1.20; RR=1.50)  
+**Breakeven WR:** 40.0% (spread=10pt + slippage=2pt = 12pt = 0.12 price; SL=ATR14(Wilder,M1,shift=1)×1.20; RR=1.50)
 **Sample confidence labels:** SUFFICIENT (N≥100), ADEQUATE (N 50–99), MARGINAL (N 30–49), INSUFFICIENT (N<30)
 
 ---

@@ -1,13 +1,13 @@
 # IMBALANCE_FILL_REVERSAL_PLAYBOOK_DESIGN_PACKAGE_V1
 
-**Package type:** PLAYBOOK_DESIGN — Architecture definition and evidence mapping  
-**Date:** 2026-05-09  
-**Motivated by:** FVG_TPB_MT5_ADMISSION_DESIGN_PACKAGE_V1 (complete)  
-**Authority:** EVIDENCE_ONLY — No MT5 source change. No runtime change. No compile. No reload.  
-**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory  
-**Evidence source:** INEC_LAB_V1 (IRREW_NAUTILUS_EVIDENCE_CERTIFICATION_LAB_V1)  
-**System status:** DEVELOPING — unchanged  
-**Runtime authority:** V1 (MT5 EA) — permanent; not transferred to any document, playbook definition, or design package  
+**Package type:** PLAYBOOK_DESIGN — Architecture definition and evidence mapping
+**Date:** 2026-05-09
+**Motivated by:** FVG_TPB_MT5_ADMISSION_DESIGN_PACKAGE_V1 (complete)
+**Authority:** EVIDENCE_ONLY — No MT5 source change. No runtime change. No compile. No reload.
+**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory
+**Evidence source:** INEC_LAB_V1 (IRREW_NAUTILUS_EVIDENCE_CERTIFICATION_LAB_V1)
+**System status:** DEVELOPING — unchanged
+**Runtime authority:** V1 (MT5 EA) — permanent; not transferred to any document, playbook definition, or design package
 
 ---
 
@@ -31,13 +31,13 @@ This package does NOT authorize:
 - Production readiness claims
 - Playbook runtime authority of any kind
 
-**Playbook design is not implementation.**  
-**INEC certification is not runtime authority.**  
-**ALPHA_TRIGGER_PACKET acceptance is not strategy admission.**  
-**IFR_VALID does not mean trade. IFR_CONTRADICTED does not mean block.**  
-**Playbook state is evidence-layer attribution unless explicitly authorized otherwise by operator.**  
-**MT5 remains the sole runtime authority.**  
-**V1 remains the sole permission authority.**  
+**Playbook design is not implementation.**
+**INEC certification is not runtime authority.**
+**ALPHA_TRIGGER_PACKET acceptance is not strategy admission.**
+**IFR_VALID does not mean trade. IFR_CONTRADICTED does not mean block.**
+**Playbook state is evidence-layer attribution unless explicitly authorized otherwise by operator.**
+**MT5 remains the sole runtime authority.**
+**V1 remains the sole permission authority.**
 **Execution geometry remains the sole survivability authority.**
 
 ---
@@ -239,8 +239,8 @@ FVG_TPB's performance is exactly inverted relative to this requirement:
 | SELL_TREND_DOWN (TPC core SELL case) | −0.041R | EDGE_NOT_CONFIRMED — hostile |
 | BUY_TREND_DOWN (counter-trend to TC logic) | +0.194R | EDGE_SUPPORTED — strongest subset |
 
-**The strategy's best edge is where TPC would say "do not trade."**  
-**The strategy's worst edge is where TPC would say "trade here."**  
+**The strategy's best edge is where TPC would say "do not trade."**
+**The strategy's worst edge is where TPC would say "trade here."**
 
 This is not a marginal mismatch. It is a structural contradiction between FVG_TPB's evidence and TPC's causal hypothesis.
 

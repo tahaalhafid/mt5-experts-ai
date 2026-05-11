@@ -407,7 +407,7 @@ INTERPRETATION:
     - The plan JSON is the authoritative configuration source
     - Library initialization runs at startup
     - Personality injects into AI prompts
-  
+
   But they are GOVERNED because:
     - decision_engine_mode=COUNCIL in ai_current_plan.json directs all routing to RunCouncilModePipeline()
     - EvaluateCompiledPlan() (containing all legacy score gates and trigger evaluation) is NEVER called

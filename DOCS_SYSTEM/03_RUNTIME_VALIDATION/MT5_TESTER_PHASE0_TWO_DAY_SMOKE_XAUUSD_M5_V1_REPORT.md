@@ -176,4 +176,3 @@ Prepare an approved tester-only environment provisioning method for the active p
 ## L. Final Decision
 
 `TWO_DAY_SMOKE_COMPLETED_FVG_TPB_NOT_CONFIRMED`
-

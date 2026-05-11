@@ -1,15 +1,15 @@
 # IRREW_NAUTILUS_EVIDENCE_CERTIFICATION_LAB_V1
 
-**Lab type:** OFFICIAL_EVIDENCE_CERTIFICATION_ENVIRONMENT  
-**Short name:** INEC_LAB_V1  
-**Date established:** 2026-05-09  
-**Authority:** EVIDENCE_ONLY — No MT5 source change. No runtime change. No strategy change. No weight change.  
-**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory  
-**System status:** DEVELOPING — unchanged  
-**Runtime authority:** V1 (MT5 EA) — permanent; not transferred to this lab or any lab output  
-**Lab path:** `C:\Users\INFINTY GROUP\Documents\nautilus_lab\`  
-**Engine:** NautilusTrader | Python 3.14.3  
-**Data:** XAUUSD M1 + M5 OHLCV (2025-11-07 → 2026-05-07)  
+**Lab type:** OFFICIAL_EVIDENCE_CERTIFICATION_ENVIRONMENT
+**Short name:** INEC_LAB_V1
+**Date established:** 2026-05-09
+**Authority:** EVIDENCE_ONLY — No MT5 source change. No runtime change. No strategy change. No weight change.
+**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory
+**System status:** DEVELOPING — unchanged
+**Runtime authority:** V1 (MT5 EA) — permanent; not transferred to this lab or any lab output
+**Lab path:** `C:\Users\INFINTY GROUP\Documents\nautilus_lab\`
+**Engine:** NautilusTrader | Python 3.14.3
+**Data:** XAUUSD M1 + M5 OHLCV (2025-11-07 → 2026-05-07)
 
 ---
 
@@ -602,7 +602,7 @@ Each of the three registered playbooks has a defined causal chain that can be pa
 
 ### 10.1 RBSR — Range Boundary Sweep Reversal
 
-**Playbook state:** PLAYBOOK_FORMING  
+**Playbook state:** PLAYBOOK_FORMING
 **Anchor strategy:** sweep_reversal (RESEARCH_ONLY ALPHA_TRIGGER — counter-trend E[R]=+0.012R, positive but below +0.04R threshold)
 
 **Causal chain:**
@@ -646,7 +646,7 @@ A cross-family CONFIRM with co-presence WR lift ≥ +2pp AND E[R] lift ≥ +0.04
 
 ### 10.2 TPC — Trend Pullback Continuation
 
-**Playbook state:** PLAYBOOK_FORMING  
+**Playbook state:** PLAYBOOK_FORMING
 **Anchor strategy:** trend_momentum (RESEARCH_ONLY ALPHA — strongest alpha evidence in system; RANGE_NEUTRAL×SELL = EDGE_SUPPORTED with E[R]=+0.109R, N=1,402)
 
 **Causal chain:**
@@ -690,7 +690,7 @@ A cross-family CONFIRM with co-presence WR lift ≥ +2pp AND E[R] lift ≥ +0.04
 
 ### 10.3 VCR — Volatility Compression Release
 
-**Playbook state:** PLAYBOOK_NOT_PRESENT  
+**Playbook state:** PLAYBOOK_NOT_PRESENT
 **Anchor strategy:** range_compression_breakout (PENDING_CERTIFICATION — DATA_INSUFFICIENT)
 
 **Causal chain (design intent only — zero evidence):**
@@ -1163,7 +1163,7 @@ These limitations are permanent and structural. No version of this lab removes t
 
 ### IRREW_NAUTILUS_LAB_BOOTSTRAP_PACKAGE_V1
 
-**Recommended execution date:** After this document is approved; market-closed period acceptable  
+**Recommended execution date:** After this document is approved; market-closed period acceptable
 **Purpose:** Formalize the lab infrastructure to support all future certification work at the quality level defined in this document
 
 **Deliverables:**

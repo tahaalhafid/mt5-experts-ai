@@ -1,11 +1,11 @@
 # ARCHITECTURE_BUILD_PACKAGE_V1
 
-**Package type:** ARCHITECTURE_BUILD — Documentation and specification only  
-**Date:** 2026-05-08  
-**Authority:** EVIDENCE_ONLY — No MT5 source change. No runtime change. No Nautilus change.  
-**Based on:** PLAYBOOK_STRATEGY_PACKET_REGISTRY_V1.md + PROJECT_INTELLIGENCE_MEMORY_LAYER.md  
-**System status:** DEVELOPING — unchanged  
-**Runtime authority:** V1 (MT5 EA) — permanent; not transferred to any document or layer  
+**Package type:** ARCHITECTURE_BUILD — Documentation and specification only
+**Date:** 2026-05-08
+**Authority:** EVIDENCE_ONLY — No MT5 source change. No runtime change. No Nautilus change.
+**Based on:** PLAYBOOK_STRATEGY_PACKET_REGISTRY_V1.md + PROJECT_INTELLIGENCE_MEMORY_LAYER.md
+**System status:** DEVELOPING — unchanged
+**Runtime authority:** V1 (MT5 EA) — permanent; not transferred to any document or layer
 
 ---
 

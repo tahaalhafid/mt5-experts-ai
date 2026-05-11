@@ -1,11 +1,11 @@
 # DEVELOPMENT_COMPLETION_TO_PRODUCTION_ACCEPTANCE_PLAN_V1
 
-**Plan type:** MANAGEMENT / ARCHITECTURE GOVERNANCE — Planning only  
-**Date:** 2026-05-09  
-**Authority:** PLANNING ONLY — No MT5 source change. No runtime change. No compile. No reload.  
-**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory  
-**System status:** DEVELOPING — unchanged  
-**Runtime authority:** V1 (MT5 EA) — permanent; not transferred  
+**Plan type:** MANAGEMENT / ARCHITECTURE GOVERNANCE — Planning only
+**Date:** 2026-05-09
+**Authority:** PLANNING ONLY — No MT5 source change. No runtime change. No compile. No reload.
+**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory
+**System status:** DEVELOPING — unchanged
+**Runtime authority:** V1 (MT5 EA) — permanent; not transferred
 
 **Reference documents reviewed:**
 - IRREW_PCEA_PENDING_WORK_STATUS_UPDATE_FAST_V1.md (today's fast status survey — primary input)
@@ -236,7 +236,7 @@ The following behavior-changing changes are candidates for inclusion in the deve
 | Expected behavior change | NARROW consensus decisions with council_quality < 0.50 will receive COUNCIL_DECISION_WAIT instead of proceeding to trade |
 | Why architecturally required | IRREW Phase 4C; currently diagnostic-only; approved in architecture design §I Change I-3 |
 | Authority touched | V1 permission layer (council_pre_ai_filter.mqh) — adds WAIT path |
-| Precondition | Ledger must accumulate ≥200 records AND records must be examined to confirm suppressed trades would not have been wins at a higher rate than unsuppressed | 
+| Precondition | Ledger must accumulate ≥200 records AND records must be examined to confirm suppressed trades would not have been wins at a higher rate than unsuppressed |
 | How to prevent unsafe activation | Soft gate only (WAIT not REJECT); council_quality threshold 0.50 not 0.55; NARROW consensus only |
 | Review required | YES — scope review + source diff before implementation |
 | Checklist item | PAC-E-04: Confirm no new REJECT decisions from quality gate; only WAIT |

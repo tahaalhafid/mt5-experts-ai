@@ -5643,8 +5643,8 @@ IMPLEMENTATION_FORBIDDEN:        All items listed in §24.7
 
 # §25 — PLAYBOOK_CENTRIC_EVIDENCE_ARCHITECTURE_V1
 
-**Date:** 2026-05-08  
-**Authority:** DOCUMENTATION_ONLY — No MT5 modification. No runtime change. No implementation authorization.  
+**Date:** 2026-05-08
+**Authority:** DOCUMENTATION_ONLY — No MT5 modification. No runtime change. No implementation authorization.
 **Status:** REFERENCE_ARCHITECTURE_ADOPTED — Management formal decision documented.
 
 ---
@@ -5653,20 +5653,20 @@ IMPLEMENTATION_FORBIDDEN:        All items listed in §24.7
 
 **Formal adoption date:** 2026-05-08
 
-**Decision:**  
+**Decision:**
 PLAYBOOK_CENTRIC_EVIDENCE_ARCHITECTURE (PCEA) is formally adopted as the reference methodology and architecture for organizing strategies and extracting edge inside the MT5/IRREW project.
 
 **Reference statement (verbatim):**
 
-> Family organizes the domain.  
-> Playbook owns the executable edge thesis.  
-> Causal Chain proves whether the edge is complete.  
-> Strategy provides evidence packets.  
-> V1 owns permission.  
-> Execution Geometry owns survivability.  
+> Family organizes the domain.
+> Playbook owns the executable edge thesis.
+> Causal Chain proves whether the edge is complete.
+> Strategy provides evidence packets.
+> V1 owns permission.
+> Execution Geometry owns survivability.
 > Attribution owns learning.
 
-**Scope:** This is a reference architecture and research/design methodology only.  
+**Scope:** This is a reference architecture and research/design methodology only.
 It authorizes no runtime change. It authorizes no MT5 source modification. It does not alter any gate, weight, role, posture, or execution behavior. V1 remains permission authority. MT5 remains runtime and execution authority.
 
 ---
@@ -5727,7 +5727,7 @@ A Playbook does not own:
 - Gate thresholds (council architecture owns gates)
 - Weight values (EEWP owns weights, operator authorizes)
 
-**Why Playbook, not Strategy:**  
+**Why Playbook, not Strategy:**
 A strategy tested in isolation measures only whether that single detector is profitable at breakeven across all contexts — an excessively narrow question. The Playbook frames the complete evidence sequence. A strategy that does not individually beat breakeven may still:
 - Narrow the entry set to a higher-quality subset
 - Eliminate a known failure mode
@@ -5880,7 +5880,7 @@ VERSION:                V1 (design / evidence phase)
 REGISTRY_DATE:          2026-05-08
 ```
 
-**Thesis statement:**  
+**Thesis statement:**
 When price is at or near a range/reversal boundary (as defined by Bollinger Band envelope), sweeps liquidity beyond that boundary, and reclaims back inside the band, a mean-reversion trade is available. The thesis is strongest when MFI confirms the same direction and no failure-mode contradiction is present.
 
 **Causal Chain (ordered):**
@@ -5897,9 +5897,9 @@ When price is at or near a range/reversal boundary (as defined by Bollinger Band
 | 8 | Stop Geometry Valid | ATR-based stop distance < 80% of current band width | REQUIRED |
 | 9 | Outcome Attribution | Post-trade: was the playbook premise validated by price behavior? | ATTRIBUTION (no entry role) |
 
-**Required links:** 1, 2, 4, 8  
-**Optional links:** 3, 5, 7  
-**Invalidating links:** 6  
+**Required links:** 1, 2, 4, 8
+**Optional links:** 3, 5, 7
+**Invalidating links:** 6
 **Attribution links:** 9
 
 **Evidence Packet Map:**
@@ -6022,9 +6022,9 @@ State transitions are research classifications only. No transition triggers any 
 
 ## §25.7 — COMPOSITE_REVERSAL_RECLAIM_PLAYBOOK_ANALYSIS_V1 Summary
 
-**Source:** Nautilus Phase 3 composite pilot, run 2026-05-08  
-**Script:** composite_reversal_reclaim_playbook_v1.py  
-**Data:** XAUUSD M1 100,466 bars (2026-01-23 → 2026-05-07); M5 34,652 bars; GCF proxy NOT USED  
+**Source:** Nautilus Phase 3 composite pilot, run 2026-05-08
+**Script:** composite_reversal_reclaim_playbook_v1.py
+**Data:** XAUUSD M1 100,466 bars (2026-01-23 → 2026-05-07); M5 34,652 bars; GCF proxy NOT USED
 **Authority:** EVIDENCE_ONLY — no MT5 modification; lab only
 
 ### Standalone Baselines
@@ -6112,10 +6112,10 @@ The SR+MFI co-presence observation was first identified in prior Nautilus certif
 
 ## §25.8 — Phase and Roadmap Implications
 
-**Architecture status:**  
+**Architecture status:**
 PLAYBOOK_CENTRIC_EVIDENCE_ARCHITECTURE is now the reference model. PIML will track Playbooks and Packets as research/design classifications going forward. All future Nautilus certification work should be framed within a pre-defined Playbook with a stated causal claim and packet hypotheses before testing.
 
-**Composite methodology:**  
+**Composite methodology:**
 Composite methodology (COMPOSITE_EDGE_METHODOLOGY_V1) remains research-only. The RBSR pilot is the first completed composite analysis. No runtime implementation is justified from current results.
 
 **IRREW roadmap phase statuses (unchanged):**
@@ -6197,19 +6197,19 @@ IMPLEMENTATION_FORBIDDEN:        All items listed in §25.9
 
 # §26 — BREAKDOWN_MOMENTUM_PHASE3_CERTIFICATION_V1
 
-**Date:** 2026-05-08  
-**Authority:** EVIDENCE_ONLY — No MT5 modification. No runtime change. No implementation authorization.  
+**Date:** 2026-05-08
+**Authority:** EVIDENCE_ONLY — No MT5 modification. No runtime change. No implementation authorization.
 **Status:** CERTIFICATION_COMPLETE — REJECTED_PACKET in intended role; no active playbook assignment.
 
 ---
 
 ## §26.1 — Certification Summary
 
-**Strategy:** `breakdown_momentum_v1`  
-**Cert date:** 2026-05-08  
-**Overall label:** `EDGE_WEAK_BUT_RECOVERABLE` in aggregate; `EDGE_NOT_CONFIRMED` in intended TC/TREND_DOWN context  
-**Replication class:** PARTIAL_REPLICATION (trigger and dual-bear gate SOURCE_FAITHFUL; TC zone gate PROXY)  
-**Data:** Clean XAUUSD M1/M5 only. M1 rows: 100,466 (2026-01-23 → 2026-05-07). M5 rows: 34,652 (2025-11-07 → 2026-05-07). GCF proxy NOT USED.  
+**Strategy:** `breakdown_momentum_v1`
+**Cert date:** 2026-05-08
+**Overall label:** `EDGE_WEAK_BUT_RECOVERABLE` in aggregate; `EDGE_NOT_CONFIRMED` in intended TC/TREND_DOWN context
+**Replication class:** PARTIAL_REPLICATION (trigger and dual-bear gate SOURCE_FAITHFUL; TC zone gate PROXY)
+**Data:** Clean XAUUSD M1/M5 only. M1 rows: 100,466 (2026-01-23 → 2026-05-07). M5 rows: 34,652 (2025-11-07 → 2026-05-07). GCF proxy NOT USED.
 **Phase 3 count after this cert:** 4/17
 
 ---
@@ -6244,7 +6244,7 @@ IMPLEMENTATION_FORBIDDEN:        All items listed in §25.9
 
 ### Variant A — Source-Faithful Baseline
 
-Includes: trigger detection + M1TrendBear + M5TrendBear dual gate.  
+Includes: trigger detection + M1TrendBear + M5TrendBear dual gate.
 Excludes: TC zone hard gate (proxy gap).
 
 | Metric | Value |
@@ -6342,9 +6342,9 @@ Moderate cost sensitivity. Stress degrades label to EDGE_NOT_CONFIRMED. No robus
 
 **Severe temporal instability.** The monthly pattern alternates between reasonable and poor performance with no stable underlying trend. January 2026 showed exceptional results (N=158 only, likely noise-influenced). The last two full months (April, May 2026) are both EDGE_REJECTED. The LATE period is EDGE_REJECTED. Any future assumption of continued edge must be supported by fresh evidence, not extrapolation from earlier months.
 
-**Body quality split:**  
-High quality candles (bodyRatio ≥ 0.80): WR=37.91%, E[R]=-0.052R (N=1,857)  
-Low quality candles (bodyRatio < 0.80): WR=38.72%, E[R]=-0.032R (N=483)  
+**Body quality split:**
+High quality candles (bodyRatio ≥ 0.80): WR=37.91%, E[R]=-0.052R (N=1,857)
+Low quality candles (bodyRatio < 0.80): WR=38.72%, E[R]=-0.032R (N=483)
 The quality metric does not predict better outcomes. Higher body ratio does not produce better trades.
 
 ---
@@ -6415,9 +6415,9 @@ Classified under PLAYBOOK_CENTRIC_EVIDENCE_ARCHITECTURE_V1 (§25).
 
 ### Current Playbook Assignment
 
-**NONE.**  
-breakdown_momentum_v1 is not assigned to any active playbook as an accepted packet under current evidence.  
-Do not assign it to RANGE_BOUNDARY_SWEEP_RECLAIM (wrong direction — SELL_ONLY cannot serve a reversal/reclaim BUY thesis).  
+**NONE.**
+breakdown_momentum_v1 is not assigned to any active playbook as an accepted packet under current evidence.
+Do not assign it to RANGE_BOUNDARY_SWEEP_RECLAIM (wrong direction — SELL_ONLY cannot serve a reversal/reclaim BUY thesis).
 Do not assign it as an accepted Trend Continuation packet (REJECTED per P1/P2).
 
 ---
@@ -6556,10 +6556,10 @@ IMPLEMENTATION_FORBIDDEN:        All items listed in §26.8
 
 # §27 — lower_high_rejection_v1 Nautilus Phase 3 Certification
 
-**Date:** 2026-05-08  
-**Type:** Nautilus Phase 3 Certification  
-**Authority:** EVIDENCE_ONLY — No MT5 modification, no runtime change  
-**Phase 3 progress:** 5/17  
+**Date:** 2026-05-08
+**Type:** Nautilus Phase 3 Certification
+**Authority:** EVIDENCE_ONLY — No MT5 modification, no runtime change
+**Phase 3 progress:** 5/17
 **Artifacts:** cert_lower_high_rejection_v1_xauusd_v1.py · cert_lhr_v1_metrics.json · certification_lower_high_rejection_v1_xauusd_v1.md
 
 ---
@@ -6598,9 +6598,9 @@ IMPLEMENTATION_FORBIDDEN:        All items listed in §26.8
 | B — Dual-bear gate | 2,246 | 1,578 | 0.3986 | -0.0035R | EDGE_WEAK_BUT_RECOVERABLE |
 | C — TC proxy (M5 TREND_DOWN) | 2,601 | 1,751 | 0.4015 | **+0.0037R** | EDGE_WEAK_BUT_RECOVERABLE |
 
-**Gate impact (B vs A):** +0.0086pp WR, +0.021R E[R] — gate HELPS (unlike BDM where gate was counterproductive).  
-**TC proxy:** Only variant with positive E[R]. WR=40.15% is at breakeven; E[R] marginally positive.  
-**Fire rate:** A=113.6/day; B=30.2/day (~74.3 trading days).  
+**Gate impact (B vs A):** +0.0086pp WR, +0.021R E[R] — gate HELPS (unlike BDM where gate was counterproductive).
+**TC proxy:** Only variant with positive E[R]. WR=40.15% is at breakeven; E[R] marginally positive.
+**Fire rate:** A=113.6/day; B=30.2/day (~74.3 trading days).
 **Breakeven WR:** 40.0%.
 
 ---
@@ -6768,10 +6768,10 @@ IMPLEMENTATION_FORBIDDEN:        All items listed in §27.10
 
 # §28 — micro_structure_reentry_v1 Nautilus Phase 3 Certification
 
-**Date:** 2026-05-08  
-**Type:** Nautilus Phase 3 Certification  
-**Authority:** EVIDENCE_ONLY — No MT5 modification, no runtime change  
-**Phase 3 progress:** 6/17 — TC-CONFIRM family coverage complete  
+**Date:** 2026-05-08
+**Type:** Nautilus Phase 3 Certification
+**Authority:** EVIDENCE_ONLY — No MT5 modification, no runtime change
+**Phase 3 progress:** 6/17 — TC-CONFIRM family coverage complete
 **Artifacts:** cert_micro_structure_reentry_v1_xauusd_v1.py · micro_structure_reentry_v1_xauusd_v1_trades.csv · micro_structure_reentry_v1_xauusd_v1_metrics.json · micro_structure_reentry_v1_packet_classification_v1.json · micro_structure_reentry_v1_overlay_v1.json · certification_micro_structure_reentry_v1_xauusd_v1.md
 
 ---
@@ -6809,9 +6809,9 @@ IMPLEMENTATION_FORBIDDEN:        All items listed in §27.10
 | B — Alignment gated | 2,185 | 1,735 | 0.3948 | -0.0130R | EDGE_WEAK_BUT_RECOVERABLE |
 | C — TC proxy (M5 regime) | 3,636 | 2,703 | 0.3814 | -0.0464R | EDGE_WEAK_BUT_RECOVERABLE |
 
-**Gate helps:** +0.98pp WR, +0.025R E[R] (B vs A).  
-**TC proxy hurts:** C worse than A — opposite of LHR behaviour. MSR pattern fires equally across regime contexts.  
-**Fire rate:** A=157.6/day (highest TC-CONFIRM); B=29.4/day.  
+**Gate helps:** +0.98pp WR, +0.025R E[R] (B vs A).
+**TC proxy hurts:** C worse than A — opposite of LHR behaviour. MSR pattern fires equally across regime contexts.
+**Fire rate:** A=157.6/day (highest TC-CONFIRM); B=29.4/day.
 **Breakeven WR:** 40.0%.
 
 ---
@@ -6847,8 +6847,8 @@ IMPLEMENTATION_FORBIDDEN:        All items listed in §27.10
 | LHR without MSR nearby | 2,287 (27.1%) | 1,697 | 0.4832 | +0.208R | EDGE_SUPPORTED |
 | LHR standalone baseline | — | 5,597 | 0.3900 | -0.0249R | — |
 
-**E[R] degradation (with vs baseline):** -0.068R — exceeds -0.06R failure-mode threshold.  
-**WR degradation:** -2.71pp — below -3.0pp threshold.  
+**E[R] degradation (with vs baseline):** -0.068R — exceeds -0.06R failure-mode threshold.
+**WR degradation:** -2.71pp — below -3.0pp threshold.
 **FAILURE_MODE_PACKET: ACCEPTED on E[R] criterion** (N=4,268, SUFFICIENT).
 
 Interpretation: MSR fires on 72.9% of LHR trigger bars, making it near-ubiquitous. When MSR's 2-bar pullback-reclaim pattern is active near LHR, LHR's rejection signal quality degrades. The "without-MSR" WR=48.32% is likely inflated by selection bias (unusual market states where MSR doesn't fire) rather than a reliable filter mechanism.
@@ -6866,7 +6866,7 @@ Interpretation: MSR fires on 72.9% of LHR trigger bars, making it near-ubiquitou
 | EARLY | 4,053 | 0.3906 | -0.0236R | EDGE_WEAK_BUT_RECOVERABLE |
 | LATE | 2,703 | 0.3766 | -0.0585R | EDGE_NOT_CONFIRMED |
 
-**Monthly:** April worst (WR=37.39%, NOT_CONFIRMED). May partial recovery (WR=41.67%, positive E[R], N=396).  
+**Monthly:** April worst (WR=37.39%, NOT_CONFIRMED). May partial recovery (WR=41.67%, positive E[R], N=396).
 **Degradation hint: TRUE.** Third consecutive TC-CONFIRM strategy degrading at 2026-03-26 split — shared market structure change, not individual strategy failure.
 
 ---
@@ -7169,9 +7169,9 @@ NEXT_PHASE3_TARGET:              fake_break_reversal OR mean_reversion_bounce
 
 # PLAYBOOK_GOVERNANCE_AND_REGISTRY_RULES_V1 — Governing Principles for Playbook-Centric Evidence Architecture
 
-**Date:** 2026-05-08  
-**Authority:** Advisory Layer memo — documentation only  
-**Status:** DESIGN_REFERENCE — no runtime authority  
+**Date:** 2026-05-08
+**Authority:** Advisory Layer memo — documentation only
+**Status:** DESIGN_REFERENCE — no runtime authority
 **Scope:** Governs all future Playbook, Packet, Nautilus, Registry, and MT5-interface design work
 
 ---
@@ -7393,7 +7393,7 @@ Optional and supporting packets are not gates. Absence does not reject a trade. 
 
 Cross-family evidence can strengthen thesis classification but absence of cross-family evidence must not automatically reject a trade unless frequency and causal value are separately proven.
 
-**Correct framing:** cross-family evidence = stronger thesis classification  
+**Correct framing:** cross-family evidence = stronger thesis classification
 **Incorrect framing:** no cross-family evidence = automatic reject
 
 This is distinct from the Phase 4A cross-family CRR gate in the V1 architecture, which has its own governing rules. Playbook evidence classification and V1 gate rules are separate systems.
@@ -7693,9 +7693,9 @@ SYSTEM_STATUS:            DEVELOPING
 
 # FULL_STRATEGY_PACKET_AND_PLAYBOOK_REGISTRY_V1 — Comprehensive Evidence Packet Registry and Initial Playbook Registry
 
-**Date:** 2026-05-08  
-**Authority:** Advisory Layer — documentation only  
-**Status:** DESIGN_REFERENCE — no runtime authority  
+**Date:** 2026-05-08
+**Authority:** Advisory Layer — documentation only
+**Status:** DESIGN_REFERENCE — no runtime authority
 **Scope:** All 17 active strategies; 3 approved Playbooks (RBSR, TPC, VCR)
 
 ---
@@ -8867,8 +8867,8 @@ If none of R1–R5 apply: **do not run full certification now.**
 | 7. MSR market-state-controlled overlay | micro_structure_reentry_v1 | R3 | TPC | PENDING |
 | 8. Composite RBSR chain | sweep_reversal + BR + MFI | R1+R3 | RBSR | PENDING |
 
-Tests 2–3 are bounded variants inside existing cert scripts (no new full cert required).  
-Tests 4–6 are source reads only (no Nautilus run yet).  
+Tests 2–3 are bounded variants inside existing cert scripts (no new full cert required).
+Tests 4–6 are source reads only (no Nautilus run yet).
 Tests 7–8 require design before execution.
 
 **BUY × TREND_DOWN H2 (range_edge_fade):** Optional, LOW_PRIORITY — do not run unless RBSR architecture explicitly requires it. E[R]=+0.008R is too thin to justify prioritization.
@@ -8984,10 +8984,10 @@ SYSTEM_STATUS:            DEVELOPING
 
 ## BEST_STRATEGY_ID_SEMANTIC_GOVERNANCE_UPDATE_V1
 
-**Section type:** GOVERNANCE RECORD  
-**Date:** 2026-05-09  
-**Based on:** BEST_STRATEGY_ID_FUNCTIONAL_AUDIT_AFTER_IRREW_V1 (PASS_WITH_CAVEATS_NEEDS_SEMANTIC_CLEANUP)  
-**Authority:** DOCUMENTATION ONLY — No source change. No runtime change. No compile. No reload.  
+**Section type:** GOVERNANCE RECORD
+**Date:** 2026-05-09
+**Based on:** BEST_STRATEGY_ID_FUNCTIONAL_AUDIT_AFTER_IRREW_V1 (PASS_WITH_CAVEATS_NEEDS_SEMANTIC_CLEANUP)
+**Authority:** DOCUMENTATION ONLY — No source change. No runtime change. No compile. No reload.
 **See also:** BEST_STRATEGY_ID_SEMANTIC_GOVERNANCE_UPDATE_V1.md (standalone document)
 
 ### SGU.1 Audit Verdict Accepted

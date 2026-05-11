@@ -1,13 +1,13 @@
 # FVG_TPB_MT5_ADMISSION_DESIGN_PACKAGE_V1
 
-**Package type:** ADMISSION_DESIGN — Evidence review, architecture placement, and implementation boundary specification  
-**Date:** 2026-05-09  
-**Precedes:** FVG_TPB_MT5_IMPLEMENTATION_PACKAGE_V1 (not yet authorized)  
-**Authority:** EVIDENCE_ONLY — No MT5 source change. No runtime change. No compile. No reload.  
-**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory  
-**Evidence source:** EXTERNAL_FVG_STRATEGY_DISCOVERY_AND_INEC_CERTIFICATION_PACKAGE_V1 (complete)  
-**System status:** DEVELOPING — unchanged  
-**Runtime authority:** V1 (MT5 EA) — permanent; not transferred to any document, shadow layer, or policy candidate  
+**Package type:** ADMISSION_DESIGN — Evidence review, architecture placement, and implementation boundary specification
+**Date:** 2026-05-09
+**Precedes:** FVG_TPB_MT5_IMPLEMENTATION_PACKAGE_V1 (not yet authorized)
+**Authority:** EVIDENCE_ONLY — No MT5 source change. No runtime change. No compile. No reload.
+**Governed by:** PROJECT_INTELLIGENCE_MEMORY_LAYER.md (PIML) — sole authoritative project memory
+**Evidence source:** EXTERNAL_FVG_STRATEGY_DISCOVERY_AND_INEC_CERTIFICATION_PACKAGE_V1 (complete)
+**System status:** DEVELOPING — unchanged
+**Runtime authority:** V1 (MT5 EA) — permanent; not transferred to any document, shadow layer, or policy candidate
 
 ---
 
@@ -31,11 +31,11 @@ This design package does NOT authorize:
 - Playbook state changes in runtime
 - PIML updates
 
-**Admission design is not implementation.**  
-**INEC certification is not runtime authority.**  
-**ALPHA_TRIGGER_PACKET acceptance does not mean strategy admission.**  
-**RBSR or playbook candidate fit does not mean trade permission.**  
-**Factory admission lock remains ACTIVE.**  
+**Admission design is not implementation.**
+**INEC certification is not runtime authority.**
+**ALPHA_TRIGGER_PACKET acceptance does not mean strategy admission.**
+**RBSR or playbook candidate fit does not mean trade permission.**
+**Factory admission lock remains ACTIVE.**
 **MT5 remains the sole runtime authority.**
 
 ---
@@ -589,7 +589,7 @@ The zone state machine requires persistence across M1 bars within a session. Two
 ```
 // DESIGN CONCEPT ONLY — Not authorized
 // Inside BuildCouncilStrategy_FVG_TPB():
-if(triggered_zone.direction == TRADE_DIRECTION_SELL && 
+if(triggered_zone.direction == TRADE_DIRECTION_SELL &&
    env.m5_regime == REGIME_TREND_DOWN)
 {
    // Hostile gate: SELL in TREND_DOWN is EDGE_NOT_CONFIRMED (E[R]=-0.041R)

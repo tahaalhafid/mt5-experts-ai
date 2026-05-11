@@ -671,14 +671,14 @@ The following events MUST trigger `PJ_FlushAllBuffers()` before any return path:
 if(is_new_m1_bar)
 {
    gM1BarCounter++;
-   
+
    // PJ flush check
    if(EnablePJBuffer && g_PJ_BufferCount > 0 &&
       (gM1BarCounter % PJFlushIntervalBars == 0))
    {
       PJ_FlushBuffer(PERF_JOURNAL_PATH);
    }
-   
+
    // Honesty gate check
    bool honesty_due = !EnableHonestyIntervalGate
       || (g_LastHonestyEmitBarCount < 0)
@@ -688,8 +688,8 @@ if(is_new_m1_bar)
       RuntimeHonestyEmitSurfacesBestEffort(...);
       g_LastHonestyEmitBarCount = gM1BarCounter;
    }
-   
-   // TrendCont gate check  
+
+   // TrendCont gate check
    if(!EnableTrendContGate ||
       (gM1BarCounter - g_LastTrendContStatusWriteBar) >= TrendContStatusIntervalBars)
    {
@@ -705,7 +705,7 @@ if(is_new_m1_bar)
 void OnDeinit(const int reason)
 {
    EventKillTimer();
-   
+
    // --- PACKAGE 2 ADDITION ---
    // Force immediate flush of all pending journal buffers
    PJ_FlushAllBuffers();
@@ -716,7 +716,7 @@ void OnDeinit(const int reason)
    g_ForceGovernanceWrite = true;
    SaveRuntimeGovernanceStatusBestEffort(gRuntimeGovernance);
    // --- END ADDITION ---
-   
+
    // ... existing OnDeinit code ...
 }
 ```

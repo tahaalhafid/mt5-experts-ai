@@ -4,11 +4,11 @@
 
 This document was created during Stage 0 discovery only. It inventories and classifies the existing file-based MT5 system. It does not implement an EXE, does not change trading logic, does not change config formats, does not modify runtime/state/log files, and does not move or rename files.
 
-Generated from uploaded archive: `pre_change_20260420_160325_plan5_stage1_unified.zip`  
-Workspace root observed inside archive: `AI\`  
-Discovery date: 2026-04-25  
-Existing `MT5_EXE_MIGRATION_PLAN.md`: not found in archive, so no timestamped plan backup was created.  
-Read `AGENTS.md`: yes.  
+Generated from uploaded archive: `pre_change_20260420_160325_plan5_stage1_unified.zip`
+Workspace root observed inside archive: `AI\`
+Discovery date: 2026-04-25
+Existing `MT5_EXE_MIGRATION_PLAN.md`: not found in archive, so no timestamped plan backup was created.
+Read `AGENTS.md`: yes.
 Read `OPERATION_GUARDRAILS.md`: yes.
 
 ---
@@ -92,7 +92,7 @@ Primary authority boundary observed from governance docs:
 
 ### Inventory counts
 
-Total files inspected by archive metadata and targeted content/path scans: **2931**  
+Total files inspected by archive metadata and targeted content/path scans: **2931**
 Total uncompressed bytes inspected by metadata: **82402860**
 
 | Extension | Count |
@@ -398,8 +398,8 @@ All `.mq5` and `.mqh` entries in the archive are listed below. No source file wa
 
 ### Runtime/file surfaces referenced by MQL source
 
-Unique `AI\...` data/status/config/report paths referenced by MQL scan: **117**.  
-Present in archive: **100**.  
+Unique `AI\...` data/status/config/report paths referenced by MQL scan: **117**.
+Present in archive: **100**.
 Referenced but missing from archive: **17**.
 
 | Referenced path | Archive status | Classification | Risk | Authority source | Safe-to-cache | Write sensitivity | Refresh condition | Invalidation condition | Failure behavior recommendation | Stale dangerous? |
@@ -825,8 +825,8 @@ No runtime rollback is required for this Stage 0 archive update because no runti
 |---|---|---|---|---|
 | 2026-04-25 | 0 | Created Stage 0 discovery plan from archive inspection | `AI\MT5_EXE_MIGRATION_PLAN.md` | Discovery-only. No trading/config/runtime/status/log/source modifications. |
 
-PIML_READ: NO  
-PIML_UPDATE: NO  
+PIML_READ: NO
+PIML_UPDATE: NO
 PIML_SECTIONS: N/A
 
 ---
@@ -1622,8 +1622,8 @@ Bounded future tasks only:
 - Future Codex task backlog updated without implementation: **complete**.
 ## Stage 2A — RAM Cache Registry Design Spec
 
-Generated: 2026-04-25  
-Scope: design-only cache registry specification based on Stage 0, Stage 1, Stage 1.5, and Stage 1.6 findings.  
+Generated: 2026-04-25
+Scope: design-only cache registry specification based on Stage 0, Stage 1, Stage 1.5, and Stage 1.6 findings.
 Gate state inherited from Stage 1.6: Stage 2 design-only is approved; Stage 2 prototype/implementation remains blocked.
 
 ### 1. Design Scope and Non-Goals
