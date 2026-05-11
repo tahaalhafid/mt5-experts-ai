@@ -25,3 +25,9 @@ backup/
 
 # Local Claude settings
 .claude/settings.local.json
+
+# Compiled MT5 binaries
+*.ex5
+
+# One-off tester runs
+tester_phase0_*.ini
