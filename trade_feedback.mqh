@@ -509,12 +509,18 @@ string TradeFeedbackRecordToJson(TradeFeedbackRecord &r)
    json += "\"decision_reasoning_flags_at_entry\":\"" + EscapeJsonMini(r.decision_reasoning_flags_at_entry) + "\",";
 
    json += "\"regime_summary\":\"" + EscapeJsonMini(r.regime_summary) + "\",";
+   json += "\"regime_summary_source\":\"MARKET_REGIME_SNAPSHOT_CLOSE_TIME\",";
+   json += "\"regime_summary_semantics\":\"MARKET_REGIME_SUMMARY\",";
+   json += "\"regime_summary_time_basis\":\"TRADE_CLOSE_TIME_M1_M5_SNAPSHOT\",";
    json += "\"trend_state\":\"" + EscapeJsonMini(r.trend_state) + "\",";
    json += "\"volatility_state\":\"" + EscapeJsonMini(r.volatility_state) + "\",";
    json += "\"spread_state\":\"" + EscapeJsonMini(r.spread_state) + "\",";
    json += "\"structure_state\":\"" + EscapeJsonMini(r.structure_state) + "\",";
 
    json += "\"regime_label\":\"" + EscapeJsonMini(r.regime_label) + "\",";
+   json += "\"regime_label_source\":\"REGIME_CLASSIFICATION_V1_CLOSE_TIME\",";
+   json += "\"regime_label_semantics\":\"REGIME_CLASSIFICATION_LABEL\",";
+   json += "\"regime_label_time_basis\":\"TRADE_CLOSE_TIME_M1_M5_SNAPSHOT\",";
    json += "\"regime_confidence\":" + DoubleToString(r.regime_confidence, 3) + ",";
    json += "\"tradability_score\":" + DoubleToString(r.tradability_score, 3) + ",";
    json += "\"volatility_state_rc\":\"" + EscapeJsonMini(r.rc_volatility_state) + "\",";
@@ -806,6 +812,206 @@ bool ResolveEntryDealTicket(ulong closeDealTicket, ulong &entryDealTicket, ulong
    return (entryDealTicket != 0);
 }
 
+bool TF_NormalizeTradeDirection(string direction, string &outDirection)
+{
+   outDirection = TrimString(direction);
+   StringToUpper(outDirection);
+   return (outDirection == "BUY" || outDirection == "SELL");
+}
+
+double TF_TickPriceForExcursion(const MqlTick &tick, const string direction)
+{
+   if(direction == "BUY")
+   {
+      if(tick.bid > 0.0) return tick.bid;
+      if(tick.last > 0.0) return tick.last;
+      if(tick.ask > 0.0) return tick.ask;
+   }
+   else if(direction == "SELL")
+   {
+      if(tick.ask > 0.0) return tick.ask;
+      if(tick.last > 0.0) return tick.last;
+      if(tick.bid > 0.0) return tick.bid;
+   }
+
+   return 0.0;
+}
+
+void TF_AccumulateExcursionPointMove(
+   const string direction,
+   const double entryPrice,
+   const double observedPrice,
+   const double point,
+   double &mfePoints,
+   double &maePoints
+)
+{
+   if(observedPrice <= 0.0 || entryPrice <= 0.0 || point <= 0.0)
+      return;
+
+   double favorable = 0.0;
+   double adverse = 0.0;
+
+   if(direction == "BUY")
+   {
+      favorable = (observedPrice - entryPrice) / point;
+      adverse = (entryPrice - observedPrice) / point;
+   }
+   else if(direction == "SELL")
+   {
+      favorable = (entryPrice - observedPrice) / point;
+      adverse = (observedPrice - entryPrice) / point;
+   }
+   else
+      return;
+
+   if(favorable > mfePoints)
+      mfePoints = favorable;
+   if(adverse > maePoints)
+      maePoints = adverse;
+}
+
+bool TF_ComputeExcursionsFromTicks(
+   const string symbol,
+   const string direction,
+   const datetime entryTime,
+   const datetime closeTime,
+   const double entryPrice,
+   const double point,
+   double &mfePoints,
+   double &maePoints
+)
+{
+   mfePoints = 0.0;
+   maePoints = 0.0;
+
+   if(StringLen(symbol) <= 0 || entryTime <= 0 || closeTime <= 0 || closeTime < entryTime || entryPrice <= 0.0 || point <= 0.0)
+      return false;
+
+   ulong fromMs = ((ulong)entryTime) * 1000;
+   ulong toMs = ((ulong)(closeTime + 1)) * 1000;
+   if(toMs <= fromMs)
+      toMs = fromMs + 1000;
+
+   MqlTick ticks[];
+   int copied = CopyTicksRange(symbol, ticks, COPY_TICKS_ALL, fromMs, toMs);
+   if(copied <= 0)
+      return false;
+
+   int validObservedTicks = 0;
+   for(int i = 0; i < copied; i++)
+   {
+      double px = TF_TickPriceForExcursion(ticks[i], direction);
+      if(px <= 0.0)
+         continue;
+
+      TF_AccumulateExcursionPointMove(direction, entryPrice, px, point, mfePoints, maePoints);
+      validObservedTicks++;
+   }
+
+   return (validObservedTicks > 0);
+}
+
+bool TF_ComputeExcursionsFromM1Bars(
+   const string symbol,
+   const string direction,
+   const datetime entryTime,
+   const datetime closeTime,
+   const double entryPrice,
+   const double point,
+   double &mfePoints,
+   double &maePoints
+)
+{
+   mfePoints = 0.0;
+   maePoints = 0.0;
+
+   if(StringLen(symbol) <= 0 || entryTime <= 0 || closeTime <= 0 || closeTime < entryTime || entryPrice <= 0.0 || point <= 0.0)
+      return false;
+
+   int entryShift = iBarShift(symbol, PERIOD_M1, entryTime, false);
+   int closeShift = iBarShift(symbol, PERIOD_M1, closeTime, false);
+   if(entryShift < 0 || closeShift < 0)
+      return false;
+
+   int startPos = MathMin(entryShift, closeShift);
+   int endPos = MathMax(entryShift, closeShift);
+   int count = endPos - startPos + 1;
+   if(count <= 0)
+      return false;
+
+   MqlRates rates[];
+   ArraySetAsSeries(rates, true);
+   int copied = CopyRates(symbol, PERIOD_M1, startPos, count, rates);
+   if(copied <= 0)
+      return false;
+
+   int validObservedBars = 0;
+   for(int i = 0; i < copied; i++)
+   {
+      if(rates[i].high <= 0.0 || rates[i].low <= 0.0)
+         continue;
+
+      if(direction == "BUY")
+      {
+         TF_AccumulateExcursionPointMove(direction, entryPrice, rates[i].high, point, mfePoints, maePoints);
+         TF_AccumulateExcursionPointMove(direction, entryPrice, rates[i].low, point, mfePoints, maePoints);
+      }
+      else if(direction == "SELL")
+      {
+         TF_AccumulateExcursionPointMove(direction, entryPrice, rates[i].low, point, mfePoints, maePoints);
+         TF_AccumulateExcursionPointMove(direction, entryPrice, rates[i].high, point, mfePoints, maePoints);
+      }
+
+      validObservedBars++;
+   }
+
+   return (validObservedBars > 0);
+}
+
+void TF_PopulateExcursionDiagnostics(TradeFeedbackRecord &r)
+{
+   r.max_favorable_excursion_points = 0.0;
+   r.max_adverse_excursion_points = 0.0;
+   r.excursion_source = "UNAVAILABLE_NOT_CAPTURED";
+
+   string direction = "";
+   if(!TF_NormalizeTradeDirection(r.direction, direction))
+      return;
+
+   string symbol = r.symbol;
+   if(StringLen(symbol) <= 0)
+      symbol = _Symbol;
+
+   double point = SymbolInfoDouble(symbol, SYMBOL_POINT);
+   if(point <= 0.0 || r.actual_entry_fill_price <= 0.0 || r.close_time <= 0)
+      return;
+
+   double mfe = 0.0;
+   double mae = 0.0;
+   datetime entryTime = 0;
+   if(r.entry_deal_id > 0)
+      entryTime = (datetime)HistoryDealGetInteger(r.entry_deal_id, DEAL_TIME);
+
+   if(entryTime <= 0 || r.close_time < entryTime)
+      return;
+
+   if(TF_ComputeExcursionsFromTicks(symbol, direction, entryTime, r.close_time, r.actual_entry_fill_price, point, mfe, mae))
+   {
+      r.max_favorable_excursion_points = MathMax(0.0, mfe);
+      r.max_adverse_excursion_points = MathMax(0.0, mae);
+      r.excursion_source = "DIRECT_TICK_DERIVED";
+      return;
+   }
+
+   if(TF_ComputeExcursionsFromM1Bars(symbol, direction, entryTime, r.close_time, r.actual_entry_fill_price, point, mfe, mae))
+   {
+      r.max_favorable_excursion_points = MathMax(0.0, mfe);
+      r.max_adverse_excursion_points = MathMax(0.0, mae);
+      r.excursion_source = "BAR_M1_DERIVED";
+   }
+}
+
 //---------------------------------------------------------
 // Build feedback record
 //---------------------------------------------------------
@@ -965,6 +1171,7 @@ bool BuildTradeFeedbackRecord(
    r.failure_basis = "";
 
    r.close_time = (datetime)HistoryDealGetInteger(dealTicket, DEAL_TIME);
+   TF_PopulateExcursionDiagnostics(r);
 
    // Exit intelligence (optional, rule-based)
    ExitIntelligence ei;

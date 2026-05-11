@@ -7,6 +7,7 @@
 #include "regime_classification_layer_v1.mqh"
 #include "unified_confidence.mqh"
 #include "trade_feedback.mqh"
+#include "mt5_io_reduction_v1.mqh"
 
 struct AdvisoryEnvelopeFields
 {
@@ -47,6 +48,14 @@ struct DecisionReasoningFields
 #define DECISION_ENVELOPE_STATUS_PATH "AI\\ai_decision_envelope_observability_status.json"
 #define TRADE_EVIDENCE_STATUS_PATH "AI\\ai_trade_evidence_completeness_status.json"
 
+string g_PJ_PerformanceBuffer[MT5_IO_PJ_BUFFER_CAPACITY];
+string g_PJ_EnvelopeBuffer[MT5_IO_PJ_BUFFER_CAPACITY];
+int    g_PJ_PerformanceBufferCount = 0;
+int    g_PJ_EnvelopeBufferCount    = 0;
+
+bool PJ_AppendLine(string relativePath, string line, bool immediate = false);
+bool PJ_FlushAllBuffers(string reason = "manual_flush");
+
 string PJ_NowAsText()
 {
    return TimeToString(TimeCurrent(), TIME_DATE|TIME_SECONDS);
@@ -54,13 +63,7 @@ string PJ_NowAsText()
 
 bool PJ_AppendJsonLine(string relativePath, string jsonLine)
 {
-   int handle = FileOpen(relativePath, FILE_WRITE|FILE_READ|FILE_TXT|FILE_ANSI);
-   if(handle == INVALID_HANDLE) return false;
-   FileSeek(handle, 0, SEEK_END);
-   FileWriteString(handle, jsonLine);
-   FileWriteString(handle, "\n");
-   FileClose(handle);
-   return true;
+   return PJ_AppendLine(relativePath, jsonLine + "\n");
 }
 bool PJ_AppendJsonLine(string relativePath, string jsonLine, string &logMessage)
 {
@@ -157,6 +160,33 @@ double PJ_Clamp(double v, double lo, double hi)
 
 double PJ_Clamp01(double v) { return PJ_Clamp(v, 0.0, 1.0); }
 
+string PJ_RegimeLabelProvenanceDecisionJsonFields()
+{
+   string s = "";
+   s += "\"regime_label_source\":\"REGIME_CLASSIFICATION_V1_DECISION_TIME\"";
+   s += ",\"regime_label_semantics\":\"REGIME_CLASSIFICATION_LABEL\"";
+   s += ",\"regime_label_time_basis\":\"DECISION_TIME_M1_M5_SNAPSHOT\",";
+   return s;
+}
+
+string PJ_RegimeLabelProvenanceTradeCloseJsonFields()
+{
+   string s = "";
+   s += "\"regime_label_source\":\"REGIME_CLASSIFICATION_V1_CLOSE_TIME\"";
+   s += ",\"regime_label_semantics\":\"REGIME_CLASSIFICATION_LABEL\"";
+   s += ",\"regime_label_time_basis\":\"TRADE_CLOSE_TIME_M1_M5_SNAPSHOT\",";
+   return s;
+}
+
+string PJ_RegimeSummaryProvenanceTradeCloseJsonFields()
+{
+   string s = "";
+   s += "\"regime_summary_source\":\"MARKET_REGIME_SNAPSHOT_CLOSE_TIME\"";
+   s += ",\"regime_summary_semantics\":\"MARKET_REGIME_SUMMARY\"";
+   s += ",\"regime_summary_time_basis\":\"TRADE_CLOSE_TIME_M1_M5_SNAPSHOT\",";
+   return s;
+}
+
 
 string PJ_LastZoneCoverageLabel = "";
 double PJ_LastZoneCoverageDiversity = 0.0;
@@ -186,12 +216,838 @@ string PJ_ZoneCoverageJsonFields()
    return s;
 }
 
+static string PJ_LastP2BZoneName = "";
+static int    PJ_LastP2BZoneType = -1;
+static double PJ_LastP2BZoneConfidence = 0.0;
+static string PJ_LastP2BPreferredStyle = "";
+static string PJ_LastP2BBlockedStyle = "";
+
+void PJ_ClearP2BDualTruthBridgeSnapshot()
+{
+   PJ_LastP2BZoneName = "";
+   PJ_LastP2BZoneType = -1;
+   PJ_LastP2BZoneConfidence = 0.0;
+   PJ_LastP2BPreferredStyle = "";
+   PJ_LastP2BBlockedStyle = "";
+}
+
+void PJ_SetP2BDualTruthBridgeSnapshot(RoutedRuntimeEvaluation &routed)
+{
+   PJ_ClearP2BDualTruthBridgeSnapshot();
+
+   if(routed.active_mode != "COUNCIL" || !routed.council.valid)
+      return;
+
+   PJ_LastP2BZoneName = CouncilZoneTypeToText(routed.council.env.zone_type);
+   PJ_LastP2BZoneType = (int)routed.council.env.zone_type;
+   PJ_LastP2BZoneConfidence = routed.council.env.zone_confidence;
+   PJ_LastP2BPreferredStyle = routed.council.env.preferred_style_text;
+   PJ_LastP2BBlockedStyle = routed.council.env.blocked_style_text;
+}
+
+string PJ_P2BDualTruthBridgeJsonFields()
+{
+   string s = "";
+   s += "\"zone_name\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastP2BZoneName) + "\",";
+   s += "\"zone_type\":" + IntegerToString(PJ_LastP2BZoneType) + ",";
+   s += "\"zone_confidence\":" + DoubleToString(PJ_LastP2BZoneConfidence, 4) + ",";
+   s += "\"preferred_style\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastP2BPreferredStyle) + "\",";
+   s += "\"blocked_style\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastP2BBlockedStyle) + "\",";
+
+   PJ_ClearP2BDualTruthBridgeSnapshot();
+   return s;
+}
+
+static string PJ_LastP4DirtyEnvObservationVersion = "P4_DIRTY_ENV_OBSERVABILITY_V1";
+static bool   PJ_LastP4DirtyEnvAssessmentAvailable = false;
+static bool   PJ_LastP4DirtyEnvLegacyGateEnabled = false;
+static bool   PJ_LastP4DirtyEnvObservationOnly = true;
+static bool   PJ_LastP4DirtyEnvWouldBlock = false;
+static string PJ_LastP4DirtyEnvReasonCode = "NOT_APPLICABLE";
+static string PJ_LastP4DirtyEnvEraRegimeLabel = "";
+static double PJ_LastP4DirtyEnvEraTradability = 0.0;
+static double PJ_LastP4DirtyEnvEraConfidence = 0.0;
+static string PJ_LastP4DirtyEnvExraZoneName = "";
+static int    PJ_LastP4DirtyEnvExraZoneType = -1;
+static double PJ_LastP4DirtyEnvExraZoneConfidence = 0.0;
+static double PJ_LastP4DirtyEnvEnvironmentScore = 0.0;
+static double PJ_LastP4DirtyEnvCouncilQuality = 0.0;
+static double PJ_LastP4DirtyEnvTradabilityFloorUsed = 0.0;
+static double PJ_LastP4DirtyEnvEnvironmentScoreFloorUsed = 0.0;
+static double PJ_LastP4DirtyEnvCouncilQualityFloorUsed = 0.0;
+static string PJ_LastP4DirtyEnvThresholdProfile = "NONE";
+static string PJ_LastP4DirtyEnvDivergenceState = "UNKNOWN";
+static string PJ_LastP4DirtyEnvActionTaken = "OBSERVED_ONLY";
+
+void PJ_ClearP4DirtyEnvironmentObservationSnapshot()
+{
+   PJ_LastP4DirtyEnvObservationVersion = "P4_DIRTY_ENV_OBSERVABILITY_V1";
+   PJ_LastP4DirtyEnvAssessmentAvailable = false;
+   PJ_LastP4DirtyEnvLegacyGateEnabled = false;
+   PJ_LastP4DirtyEnvObservationOnly = true;
+   PJ_LastP4DirtyEnvWouldBlock = false;
+   PJ_LastP4DirtyEnvReasonCode = "NOT_APPLICABLE";
+   PJ_LastP4DirtyEnvEraRegimeLabel = "";
+   PJ_LastP4DirtyEnvEraTradability = 0.0;
+   PJ_LastP4DirtyEnvEraConfidence = 0.0;
+   PJ_LastP4DirtyEnvExraZoneName = "";
+   PJ_LastP4DirtyEnvExraZoneType = -1;
+   PJ_LastP4DirtyEnvExraZoneConfidence = 0.0;
+   PJ_LastP4DirtyEnvEnvironmentScore = 0.0;
+   PJ_LastP4DirtyEnvCouncilQuality = 0.0;
+   PJ_LastP4DirtyEnvTradabilityFloorUsed = 0.0;
+   PJ_LastP4DirtyEnvEnvironmentScoreFloorUsed = 0.0;
+   PJ_LastP4DirtyEnvCouncilQualityFloorUsed = 0.0;
+   PJ_LastP4DirtyEnvThresholdProfile = "NONE";
+   PJ_LastP4DirtyEnvDivergenceState = "UNKNOWN";
+   PJ_LastP4DirtyEnvActionTaken = "OBSERVED_ONLY";
+}
+
+void PJ_SetP4DirtyEnvironmentObservationSnapshot(
+   bool assessmentAvailable,
+   bool legacyGateEnabled,
+   bool wouldBlock,
+   string reasonCode,
+   string eraRegimeLabel,
+   double eraTradability,
+   double eraConfidence,
+   string exraZoneName,
+   int exraZoneType,
+   double exraZoneConfidence,
+   double environmentScore,
+   double councilQuality,
+   double tradabilityFloorUsed,
+   double environmentScoreFloorUsed,
+   double councilQualityFloorUsed,
+   string thresholdProfile,
+   string divergenceState
+)
+{
+   PJ_ClearP4DirtyEnvironmentObservationSnapshot();
+
+   PJ_LastP4DirtyEnvAssessmentAvailable = assessmentAvailable;
+   PJ_LastP4DirtyEnvLegacyGateEnabled = legacyGateEnabled;
+   PJ_LastP4DirtyEnvWouldBlock = wouldBlock;
+   PJ_LastP4DirtyEnvReasonCode = reasonCode;
+   PJ_LastP4DirtyEnvEraRegimeLabel = eraRegimeLabel;
+   PJ_LastP4DirtyEnvEraTradability = eraTradability;
+   PJ_LastP4DirtyEnvEraConfidence = eraConfidence;
+   PJ_LastP4DirtyEnvExraZoneName = exraZoneName;
+   PJ_LastP4DirtyEnvExraZoneType = exraZoneType;
+   PJ_LastP4DirtyEnvExraZoneConfidence = exraZoneConfidence;
+   PJ_LastP4DirtyEnvEnvironmentScore = environmentScore;
+   PJ_LastP4DirtyEnvCouncilQuality = councilQuality;
+   PJ_LastP4DirtyEnvTradabilityFloorUsed = tradabilityFloorUsed;
+   PJ_LastP4DirtyEnvEnvironmentScoreFloorUsed = environmentScoreFloorUsed;
+   PJ_LastP4DirtyEnvCouncilQualityFloorUsed = councilQualityFloorUsed;
+   PJ_LastP4DirtyEnvThresholdProfile = thresholdProfile;
+   PJ_LastP4DirtyEnvDivergenceState = divergenceState;
+}
+
+string PJ_P4DirtyEnvironmentObservationJsonFields()
+{
+   string s = "";
+   s += "\"p4_dirty_env_observation_version\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastP4DirtyEnvObservationVersion) + "\",";
+   s += "\"p4_dirty_env_assessment_available\":" + PJ_BoolText(PJ_LastP4DirtyEnvAssessmentAvailable) + ",";
+   s += "\"p4_dirty_env_legacy_gate_enabled\":" + PJ_BoolText(PJ_LastP4DirtyEnvLegacyGateEnabled) + ",";
+   s += "\"p4_dirty_env_observation_only\":" + PJ_BoolText(PJ_LastP4DirtyEnvObservationOnly) + ",";
+   s += "\"p4_dirty_env_would_block\":" + PJ_BoolText(PJ_LastP4DirtyEnvWouldBlock) + ",";
+   s += "\"p4_dirty_env_reason_code\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastP4DirtyEnvReasonCode) + "\",";
+   s += "\"p4_dirty_env_era_regime_label\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastP4DirtyEnvEraRegimeLabel) + "\",";
+   s += "\"p4_dirty_env_era_tradability\":" + DoubleToString(PJ_LastP4DirtyEnvEraTradability, 4) + ",";
+   s += "\"p4_dirty_env_era_confidence\":" + DoubleToString(PJ_LastP4DirtyEnvEraConfidence, 4) + ",";
+   s += "\"p4_dirty_env_exra_zone_name\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastP4DirtyEnvExraZoneName) + "\",";
+   s += "\"p4_dirty_env_exra_zone_type\":" + IntegerToString(PJ_LastP4DirtyEnvExraZoneType) + ",";
+   s += "\"p4_dirty_env_exra_zone_confidence\":" + DoubleToString(PJ_LastP4DirtyEnvExraZoneConfidence, 4) + ",";
+   s += "\"p4_dirty_env_environment_score\":" + DoubleToString(PJ_LastP4DirtyEnvEnvironmentScore, 4) + ",";
+   s += "\"p4_dirty_env_council_quality\":" + DoubleToString(PJ_LastP4DirtyEnvCouncilQuality, 4) + ",";
+   s += "\"p4_dirty_env_tradability_floor_used\":" + DoubleToString(PJ_LastP4DirtyEnvTradabilityFloorUsed, 4) + ",";
+   s += "\"p4_dirty_env_environment_score_floor_used\":" + DoubleToString(PJ_LastP4DirtyEnvEnvironmentScoreFloorUsed, 4) + ",";
+   s += "\"p4_dirty_env_council_quality_floor_used\":" + DoubleToString(PJ_LastP4DirtyEnvCouncilQualityFloorUsed, 4) + ",";
+   s += "\"p4_dirty_env_threshold_profile\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastP4DirtyEnvThresholdProfile) + "\",";
+   s += "\"p4_dirty_env_divergence_state\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastP4DirtyEnvDivergenceState) + "\",";
+   s += "\"p4_dirty_env_action_taken\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastP4DirtyEnvActionTaken) + "\",";
+
+   PJ_ClearP4DirtyEnvironmentObservationSnapshot();
+   return s;
+}
+
+static string PJ_LastV1ShadowSemanticsVersion = "V1_SHADOW_STATE_POLICY_V1";
+static string PJ_LastV1ShadowStateLabel = "V1_NOT_EVALUATED";
+static string PJ_LastV1ShadowEraPosture = "UNKNOWN";
+static string PJ_LastV1ShadowExraPosture = "UNKNOWN";
+static string PJ_LastV1ShadowDivergenceClass = "UNKNOWN";
+static string PJ_LastV1ShadowPolicyPosture = "OBSERVE_ONLY";
+static string PJ_LastV1ShadowPolicyAllowedFamilies = "";
+static string PJ_LastV1ShadowPolicyDeprioritizedFamilies = "";
+static string PJ_LastV1ShadowPolicyConditionalFamilies = "";
+static string PJ_LastV1ShadowPolicyReasonCode = "NOT_EVALUATED";
+static string PJ_LastV1ShadowAuthorityClass = "DERIVED_VISIBILITY_ONLY";
+static string PJ_LastV1ShadowActionTaken = "OBSERVED_ONLY";
+static bool   PJ_LastV1ShadowPolicyIsShadow = true;
+static string PJ_LastV1ShadowPolicySpecialistVersion = "V1_POLICY_SPECIALIST_MAP_V1";
+static string PJ_LastV1ShadowRoleNativeFamilies = "";
+static string PJ_LastV1ShadowRoleConditionalFamilies = "";
+static string PJ_LastV1ShadowRoleDeprioritizedFamilies = "";
+static string PJ_LastV1ShadowRoleInformationalFamilies = "";
+static string PJ_LastV1ShadowLiveFamily = "NOT_AVAILABLE";
+static string PJ_LastV1ShadowLiveFamilyRole = "NOT_AVAILABLE";
+static string PJ_LastV1ShadowPolicyLiveAlignment = "LIVE_FAMILY_NOT_AVAILABLE";
+static string PJ_LastV1ShadowCounterfactualAction = "UNKNOWN";
+static string PJ_LastV1ShadowCounterfactualReasonCode = "NOT_EVALUATED";
+static string PJ_LastV1ShadowPromotionReadiness = "NOT_READY";
+static string PJ_LastV1ShadowScoringQuarantineVersion = "V1_SCORING_QUARANTINE_V3_ENFORCEMENT";
+static bool   PJ_LastV1ShadowDqPolicyEnabled = false;
+static string PJ_LastV1ShadowDqScoreRole = "UNKNOWN";
+static string PJ_LastV1ShadowEntryQualityRole = "UNKNOWN";
+static string PJ_LastV1ShadowExecutionGeometryRole = "UNKNOWN";
+static string PJ_LastV1ShadowLearningRole = "UNKNOWN";
+static string PJ_LastV1ShadowAdvisoryRole = "UNKNOWN";
+static string PJ_LastV1ShadowScoreAuthorityWarning = "UNKNOWN_AUTHORITY_PATH";
+
+void PJ_ClearV1ShadowStateSnapshot()
+{
+   PJ_LastV1ShadowSemanticsVersion = "V1_SHADOW_STATE_POLICY_V1";
+   PJ_LastV1ShadowStateLabel = "V1_NOT_EVALUATED";
+   PJ_LastV1ShadowEraPosture = "UNKNOWN";
+   PJ_LastV1ShadowExraPosture = "UNKNOWN";
+   PJ_LastV1ShadowDivergenceClass = "UNKNOWN";
+   PJ_LastV1ShadowPolicyPosture = "OBSERVE_ONLY";
+   PJ_LastV1ShadowPolicyAllowedFamilies = "";
+   PJ_LastV1ShadowPolicyDeprioritizedFamilies = "";
+   PJ_LastV1ShadowPolicyConditionalFamilies = "";
+   PJ_LastV1ShadowPolicyReasonCode = "NOT_EVALUATED";
+   PJ_LastV1ShadowAuthorityClass = "DERIVED_VISIBILITY_ONLY";
+   PJ_LastV1ShadowActionTaken = "OBSERVED_ONLY";
+   PJ_LastV1ShadowPolicyIsShadow = true;
+   PJ_LastV1ShadowPolicySpecialistVersion = "V1_POLICY_SPECIALIST_MAP_V1";
+   PJ_LastV1ShadowRoleNativeFamilies = "";
+   PJ_LastV1ShadowRoleConditionalFamilies = "";
+   PJ_LastV1ShadowRoleDeprioritizedFamilies = "";
+   PJ_LastV1ShadowRoleInformationalFamilies = "";
+   PJ_LastV1ShadowLiveFamily = "NOT_AVAILABLE";
+   PJ_LastV1ShadowLiveFamilyRole = "NOT_AVAILABLE";
+   PJ_LastV1ShadowPolicyLiveAlignment = "LIVE_FAMILY_NOT_AVAILABLE";
+   PJ_LastV1ShadowCounterfactualAction = "UNKNOWN";
+   PJ_LastV1ShadowCounterfactualReasonCode = "NOT_EVALUATED";
+   PJ_LastV1ShadowPromotionReadiness = "NOT_READY";
+   PJ_LastV1ShadowScoringQuarantineVersion = "V1_SCORING_QUARANTINE_V3_ENFORCEMENT";
+   PJ_LastV1ShadowDqPolicyEnabled = false;
+   PJ_LastV1ShadowDqScoreRole = "UNKNOWN";
+   PJ_LastV1ShadowEntryQualityRole = "UNKNOWN";
+   PJ_LastV1ShadowExecutionGeometryRole = "UNKNOWN";
+   PJ_LastV1ShadowLearningRole = "UNKNOWN";
+   PJ_LastV1ShadowAdvisoryRole = "UNKNOWN";
+   PJ_LastV1ShadowScoreAuthorityWarning = "UNKNOWN_AUTHORITY_PATH";
+}
+
+void PJ_SetV1ShadowStateSnapshot(
+   string stateLabel,
+   string eraPosture,
+   string exraPosture,
+   string divergenceClass,
+   string policyPosture,
+   string allowedFamilies,
+   string deprioritizedFamilies,
+   string conditionalFamilies,
+   string policyReasonCode,
+   string authorityClass,
+   string actionTaken,
+   bool policyIsShadow,
+   string policySpecialistVersion,
+   string roleNativeFamilies,
+   string roleConditionalFamilies,
+   string roleDeprioritizedFamilies,
+   string roleInformationalFamilies,
+   string liveFamily,
+   string liveFamilyRole,
+   string policyLiveAlignment,
+   string counterfactualAction,
+   string counterfactualReasonCode,
+   string promotionReadiness,
+   string scoringQuarantineVersion,
+   bool dqPolicyEnabled,
+   string dqScoreRole,
+   string entryQualityRole,
+   string executionGeometryRole,
+   string learningRole,
+   string advisoryRole,
+   string scoreAuthorityWarning
+)
+{
+   PJ_ClearV1ShadowStateSnapshot();
+
+   PJ_LastV1ShadowStateLabel = stateLabel;
+   PJ_LastV1ShadowEraPosture = eraPosture;
+   PJ_LastV1ShadowExraPosture = exraPosture;
+   PJ_LastV1ShadowDivergenceClass = divergenceClass;
+   PJ_LastV1ShadowPolicyPosture = policyPosture;
+   PJ_LastV1ShadowPolicyAllowedFamilies = allowedFamilies;
+   PJ_LastV1ShadowPolicyDeprioritizedFamilies = deprioritizedFamilies;
+   PJ_LastV1ShadowPolicyConditionalFamilies = conditionalFamilies;
+   PJ_LastV1ShadowPolicyReasonCode = policyReasonCode;
+   PJ_LastV1ShadowAuthorityClass = authorityClass;
+   PJ_LastV1ShadowActionTaken = actionTaken;
+   PJ_LastV1ShadowPolicyIsShadow = policyIsShadow;
+   PJ_LastV1ShadowPolicySpecialistVersion = policySpecialistVersion;
+   PJ_LastV1ShadowRoleNativeFamilies = roleNativeFamilies;
+   PJ_LastV1ShadowRoleConditionalFamilies = roleConditionalFamilies;
+   PJ_LastV1ShadowRoleDeprioritizedFamilies = roleDeprioritizedFamilies;
+   PJ_LastV1ShadowRoleInformationalFamilies = roleInformationalFamilies;
+   PJ_LastV1ShadowLiveFamily = liveFamily;
+   PJ_LastV1ShadowLiveFamilyRole = liveFamilyRole;
+   PJ_LastV1ShadowPolicyLiveAlignment = policyLiveAlignment;
+   PJ_LastV1ShadowCounterfactualAction = counterfactualAction;
+   PJ_LastV1ShadowCounterfactualReasonCode = counterfactualReasonCode;
+   PJ_LastV1ShadowPromotionReadiness = promotionReadiness;
+   PJ_LastV1ShadowScoringQuarantineVersion = scoringQuarantineVersion;
+   PJ_LastV1ShadowDqPolicyEnabled = dqPolicyEnabled;
+   PJ_LastV1ShadowDqScoreRole = dqScoreRole;
+   PJ_LastV1ShadowEntryQualityRole = entryQualityRole;
+   PJ_LastV1ShadowExecutionGeometryRole = executionGeometryRole;
+   PJ_LastV1ShadowLearningRole = learningRole;
+   PJ_LastV1ShadowAdvisoryRole = advisoryRole;
+   PJ_LastV1ShadowScoreAuthorityWarning = scoreAuthorityWarning;
+}
+
+string PJ_V1ShadowStateJsonFields()
+{
+   string s = "";
+   s += "\"v1_shadow_semantics_version\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowSemanticsVersion) + "\",";
+   s += "\"v1_shadow_state_label\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowStateLabel) + "\",";
+   s += "\"v1_shadow_era_posture\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowEraPosture) + "\",";
+   s += "\"v1_shadow_exra_posture\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowExraPosture) + "\",";
+   s += "\"v1_shadow_divergence_class\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowDivergenceClass) + "\",";
+   s += "\"v1_shadow_policy_posture\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowPolicyPosture) + "\",";
+   s += "\"v1_shadow_policy_allowed_families\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowPolicyAllowedFamilies) + "\",";
+   s += "\"v1_shadow_policy_deprioritized_families\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowPolicyDeprioritizedFamilies) + "\",";
+   s += "\"v1_shadow_policy_conditional_families\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowPolicyConditionalFamilies) + "\",";
+   s += "\"v1_shadow_policy_reason_code\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowPolicyReasonCode) + "\",";
+   s += "\"v1_shadow_authority_class\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowAuthorityClass) + "\",";
+   s += "\"v1_shadow_action_taken\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowActionTaken) + "\",";
+   s += "\"v1_shadow_policy_is_shadow\":" + PJ_BoolText(PJ_LastV1ShadowPolicyIsShadow) + ",";
+   s += "\"v1_shadow_policy_specialist_version\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowPolicySpecialistVersion) + "\",";
+   s += "\"v1_shadow_role_native_families\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowRoleNativeFamilies) + "\",";
+   s += "\"v1_shadow_role_conditional_families\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowRoleConditionalFamilies) + "\",";
+   s += "\"v1_shadow_role_deprioritized_families\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowRoleDeprioritizedFamilies) + "\",";
+   s += "\"v1_shadow_role_informational_families\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowRoleInformationalFamilies) + "\",";
+   s += "\"v1_shadow_live_family\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowLiveFamily) + "\",";
+   s += "\"v1_shadow_live_family_role\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowLiveFamilyRole) + "\",";
+   s += "\"v1_shadow_policy_live_alignment\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowPolicyLiveAlignment) + "\",";
+   s += "\"v1_shadow_counterfactual_action\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowCounterfactualAction) + "\",";
+   s += "\"v1_shadow_counterfactual_reason_code\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowCounterfactualReasonCode) + "\",";
+   s += "\"v1_shadow_promotion_readiness\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowPromotionReadiness) + "\",";
+   s += "\"v1_shadow_scoring_quarantine_version\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowScoringQuarantineVersion) + "\",";
+   s += "\"v1_shadow_dq_policy_enabled\":" + PJ_BoolText(PJ_LastV1ShadowDqPolicyEnabled) + ",";
+   s += "\"v1_shadow_dq_score_role\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowDqScoreRole) + "\",";
+   s += "\"v1_shadow_entry_quality_role\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowEntryQualityRole) + "\",";
+   s += "\"v1_shadow_execution_geometry_role\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowExecutionGeometryRole) + "\",";
+   s += "\"v1_shadow_learning_role\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowLearningRole) + "\",";
+   s += "\"v1_shadow_advisory_role\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowAdvisoryRole) + "\",";
+   s += "\"v1_shadow_score_authority_warning\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ShadowScoreAuthorityWarning) + "\",";
+   // v1_shadow_live_family_semantics clarifies that live_family is the council aggregate's
+   // best candidate strategy family at evaluation time — NOT the executed/opened trade family.
+   // Emitted on all DECISION records including REJECT records where no trade was opened.
+   string v1ShadowLiveFamilySemantics;
+   if(PJ_LastV1ShadowLiveFamily == "NOT_AVAILABLE" || StringLen(TrimString(PJ_LastV1ShadowLiveFamily)) <= 0)
+      v1ShadowLiveFamilySemantics = "NO_CANDIDATE_FAMILY_AVAILABLE";
+   else if(PJ_LastV1ShadowLiveFamily == "NON_COUNCIL_MODE")
+      v1ShadowLiveFamilySemantics = "NON_COUNCIL_MODE";
+   else
+      v1ShadowLiveFamilySemantics = "COUNCIL_AGGREGATE_BEST_STRATEGY_FAMILY_NOT_EXECUTED_FAMILY";
+   s += "\"v1_shadow_live_family_semantics\":\"" + v1ShadowLiveFamilySemantics + "\",";
+
+   PJ_ClearV1ShadowStateSnapshot();
+   return s;
+}
+
+static bool   PJ_LastV1FswEnabled = false;
+static bool   PJ_LastV1FswPhase2Active = false;
+static string PJ_LastV1FswVersion = "V1_FSW_PHASE1";
+static string PJ_LastV1FswAuthorityClass = "BOUNDED_PARTICIPATION_INFLUENCE_ONLY";
+static string PJ_LastV1FswActionTaken = "DISABLED_NO_ADJUSTMENT";
+static string PJ_LastV1FswStateLabel = "V1_FSW_NOT_EVALUATED";
+static string PJ_LastV1FswPolicyPosture = "OBSERVE_ONLY";
+static string PJ_LastV1FswNativeFamilies = "";
+static string PJ_LastV1FswConditionalFamilies = "";
+static string PJ_LastV1FswDeprioritizedFamilies = "";
+static string PJ_LastV1FswBypassReason = "NOT_EVALUATED";
+static int    PJ_LastV1FswInfluencedStrategyCount = 0;
+static int    PJ_LastV1FswMappedStrategyCount = 0;
+static int    PJ_LastV1FswNonzeroImpactCount = 0;
+static int    PJ_LastV1FswNativeNonzeroCount = 0;
+static int    PJ_LastV1FswConditionalNonzeroCount = 0;
+static int    PJ_LastV1FswDeprioritizedNonzeroCount = 0;
+static double PJ_LastV1FswNativeWeightDelta = 0.0;
+static double PJ_LastV1FswConditionalWeightDelta = 0.0;
+static double PJ_LastV1FswDeprioritizedWeightDelta = 0.0;
+static double PJ_LastV1FswTotalWeightDelta = 0.0;
+static string PJ_LastV1FswStrategyAttributions = "";
+static string PJ_LastV1FswUnknownFamilyWarning = "";
+static bool   PJ_LastV1FswNoVeto = true;
+static bool   PJ_LastV1FswNoFinalPermissionEffect = true;
+static bool   PJ_LastV1FswWasActiveAtDecision = false;
+
+void PJ_ClearV1FswSnapshot()
+{
+   PJ_LastV1FswEnabled = false;
+   PJ_LastV1FswPhase2Active = false;
+   PJ_LastV1FswVersion = "V1_FSW_PHASE1";
+   PJ_LastV1FswAuthorityClass = "BOUNDED_PARTICIPATION_INFLUENCE_ONLY";
+   PJ_LastV1FswActionTaken = "DISABLED_NO_ADJUSTMENT";
+   PJ_LastV1FswStateLabel = "V1_FSW_NOT_EVALUATED";
+   PJ_LastV1FswPolicyPosture = "OBSERVE_ONLY";
+   PJ_LastV1FswNativeFamilies = "";
+   PJ_LastV1FswConditionalFamilies = "";
+   PJ_LastV1FswDeprioritizedFamilies = "";
+   PJ_LastV1FswBypassReason = "NOT_EVALUATED";
+   PJ_LastV1FswInfluencedStrategyCount = 0;
+   PJ_LastV1FswMappedStrategyCount = 0;
+   PJ_LastV1FswNonzeroImpactCount = 0;
+   PJ_LastV1FswNativeNonzeroCount = 0;
+   PJ_LastV1FswConditionalNonzeroCount = 0;
+   PJ_LastV1FswDeprioritizedNonzeroCount = 0;
+   PJ_LastV1FswNativeWeightDelta = 0.0;
+   PJ_LastV1FswConditionalWeightDelta = 0.0;
+   PJ_LastV1FswDeprioritizedWeightDelta = 0.0;
+   PJ_LastV1FswTotalWeightDelta = 0.0;
+   PJ_LastV1FswStrategyAttributions = "";
+   PJ_LastV1FswUnknownFamilyWarning = "";
+   PJ_LastV1FswNoVeto = true;
+   PJ_LastV1FswNoFinalPermissionEffect = true;
+   PJ_LastV1FswWasActiveAtDecision = false;
+}
+
+void PJ_SetV1FswSnapshot(
+   bool enabled,
+   bool phase2Active,
+   string version,
+   string authorityClass,
+   string actionTaken,
+   string stateLabel,
+   string policyPosture,
+   string nativeFamilies,
+   string conditionalFamilies,
+   string deprioritizedFamilies,
+   string bypassReason,
+   int influencedStrategyCount,
+   int mappedStrategyCount,
+   int nonzeroImpactCount,
+   int nativeNonzeroCount,
+   int conditionalNonzeroCount,
+   int deprioritizedNonzeroCount,
+   double nativeWeightDelta,
+   double conditionalWeightDelta,
+   double deprioritizedWeightDelta,
+   double totalWeightDelta,
+   string strategyAttributions,
+   string unknownFamilyWarning,
+   bool noVeto,
+   bool noFinalPermissionEffect,
+   bool wasActiveAtDecision
+)
+{
+   PJ_ClearV1FswSnapshot();
+
+   PJ_LastV1FswEnabled = enabled;
+   PJ_LastV1FswPhase2Active = phase2Active;
+   PJ_LastV1FswVersion = version;
+   PJ_LastV1FswAuthorityClass = authorityClass;
+   PJ_LastV1FswActionTaken = actionTaken;
+   PJ_LastV1FswStateLabel = stateLabel;
+   PJ_LastV1FswPolicyPosture = policyPosture;
+   PJ_LastV1FswNativeFamilies = nativeFamilies;
+   PJ_LastV1FswConditionalFamilies = conditionalFamilies;
+   PJ_LastV1FswDeprioritizedFamilies = deprioritizedFamilies;
+   PJ_LastV1FswBypassReason = bypassReason;
+   PJ_LastV1FswInfluencedStrategyCount = influencedStrategyCount;
+   PJ_LastV1FswMappedStrategyCount = mappedStrategyCount;
+   PJ_LastV1FswNonzeroImpactCount = nonzeroImpactCount;
+   PJ_LastV1FswNativeNonzeroCount = nativeNonzeroCount;
+   PJ_LastV1FswConditionalNonzeroCount = conditionalNonzeroCount;
+   PJ_LastV1FswDeprioritizedNonzeroCount = deprioritizedNonzeroCount;
+   PJ_LastV1FswNativeWeightDelta = nativeWeightDelta;
+   PJ_LastV1FswConditionalWeightDelta = conditionalWeightDelta;
+   PJ_LastV1FswDeprioritizedWeightDelta = deprioritizedWeightDelta;
+   PJ_LastV1FswTotalWeightDelta = totalWeightDelta;
+   PJ_LastV1FswStrategyAttributions = strategyAttributions;
+   PJ_LastV1FswUnknownFamilyWarning = unknownFamilyWarning;
+   PJ_LastV1FswNoVeto = noVeto;
+   PJ_LastV1FswNoFinalPermissionEffect = noFinalPermissionEffect;
+   PJ_LastV1FswWasActiveAtDecision = wasActiveAtDecision;
+}
+
+string PJ_V1FswJsonFields()
+{
+   string s = "";
+   s += "\"v1_fsw_enabled\":" + PJ_BoolText(PJ_LastV1FswEnabled) + ",";
+   s += "\"v1_fsw_phase2_active\":" + PJ_BoolText(PJ_LastV1FswPhase2Active) + ",";
+   s += "\"v1_fsw_version\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1FswVersion) + "\",";
+   s += "\"v1_fsw_authority_class\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1FswAuthorityClass) + "\",";
+   s += "\"v1_fsw_action_taken\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1FswActionTaken) + "\",";
+   s += "\"v1_fsw_state_label\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1FswStateLabel) + "\",";
+   s += "\"v1_fsw_policy_posture\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1FswPolicyPosture) + "\",";
+   s += "\"v1_fsw_native_families\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1FswNativeFamilies) + "\",";
+   s += "\"v1_fsw_conditional_families\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1FswConditionalFamilies) + "\",";
+   s += "\"v1_fsw_deprioritized_families\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1FswDeprioritizedFamilies) + "\",";
+   s += "\"v1_fsw_bypass_reason\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1FswBypassReason) + "\",";
+   s += "\"v1_fsw_influenced_strategy_count\":" + IntegerToString(PJ_LastV1FswInfluencedStrategyCount) + ",";
+   s += "\"v1_fsw_mapped_strategy_count\":" + IntegerToString(PJ_LastV1FswMappedStrategyCount) + ",";
+   s += "\"v1_fsw_nonzero_impact_count\":" + IntegerToString(PJ_LastV1FswNonzeroImpactCount) + ",";
+   s += "\"v1_fsw_native_nonzero_count\":" + IntegerToString(PJ_LastV1FswNativeNonzeroCount) + ",";
+   s += "\"v1_fsw_conditional_nonzero_count\":" + IntegerToString(PJ_LastV1FswConditionalNonzeroCount) + ",";
+   s += "\"v1_fsw_deprioritized_nonzero_count\":" + IntegerToString(PJ_LastV1FswDeprioritizedNonzeroCount) + ",";
+   s += "\"v1_fsw_native_weight_delta\":" + DoubleToString(PJ_LastV1FswNativeWeightDelta, 4) + ",";
+   s += "\"v1_fsw_conditional_weight_delta\":" + DoubleToString(PJ_LastV1FswConditionalWeightDelta, 4) + ",";
+   s += "\"v1_fsw_deprioritized_weight_delta\":" + DoubleToString(PJ_LastV1FswDeprioritizedWeightDelta, 4) + ",";
+   s += "\"v1_fsw_total_weight_delta\":" + DoubleToString(PJ_LastV1FswTotalWeightDelta, 4) + ",";
+   s += "\"v1_fsw_strategy_attributions\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1FswStrategyAttributions) + "\",";
+   s += "\"v1_fsw_unknown_family_warning\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1FswUnknownFamilyWarning) + "\",";
+   s += "\"v1_fsw_no_veto\":" + PJ_BoolText(PJ_LastV1FswNoVeto) + ",";
+   s += "\"v1_fsw_no_final_permission_effect\":" + PJ_BoolText(PJ_LastV1FswNoFinalPermissionEffect) + ",";
+   s += "\"v1_fsw_was_active_at_decision\":" + PJ_BoolText(PJ_LastV1FswWasActiveAtDecision) + ",";
+
+   PJ_ClearV1FswSnapshot();
+   return s;
+}
+
+static string PJ_LastV1ScoreQuarantineVersion = "V1_SCORING_QUARANTINE_V3_ENFORCEMENT";
+static bool   PJ_LastV1ScoreQuarantineEnforced = true;
+static string PJ_LastV1ScoreQuarantineScope = "FSW_MULTIPLIER_IS_CATEGORICAL_ONLY,DQ_DISABLED,LEARNING_FIELD_ONLY,ADVISORY_NON_AUTHORITATIVE";
+static string PJ_LastV1ScoreQuarantineDqRole = "DISABLED";
+static string PJ_LastV1ScoreQuarantineLearningRole = "FIELD_ADJUSTMENT_ONLY";
+static string PJ_LastV1ScoreQuarantineAdvisoryRole = "NON_AUTHORITATIVE_OBSERVE_ONLY";
+static string PJ_LastV1ScoreQuarantineStrategyScoreRole = "LOCAL_RANKING_WITHIN_V1_PARTICIPATION";
+static string PJ_LastV1ScoreQuarantineForbiddenScoreInputs = "score_final,zone_alignment_score,confidence,consensus_strength,council_quality,conflict_score,family_diversity";
+static string PJ_LastV1ScoreQuarantineWarning = "";
+
+void PJ_ClearV1ScoreQuarantineSnapshot()
+{
+   PJ_LastV1ScoreQuarantineVersion = "V1_SCORING_QUARANTINE_V3_ENFORCEMENT";
+   PJ_LastV1ScoreQuarantineEnforced = true;
+   PJ_LastV1ScoreQuarantineScope = "FSW_MULTIPLIER_IS_CATEGORICAL_ONLY,DQ_DISABLED,LEARNING_FIELD_ONLY,ADVISORY_NON_AUTHORITATIVE";
+   PJ_LastV1ScoreQuarantineDqRole = "DISABLED";
+   PJ_LastV1ScoreQuarantineLearningRole = "FIELD_ADJUSTMENT_ONLY";
+   PJ_LastV1ScoreQuarantineAdvisoryRole = "NON_AUTHORITATIVE_OBSERVE_ONLY";
+   PJ_LastV1ScoreQuarantineStrategyScoreRole = "LOCAL_RANKING_WITHIN_V1_PARTICIPATION";
+   PJ_LastV1ScoreQuarantineForbiddenScoreInputs = "score_final,zone_alignment_score,confidence,consensus_strength,council_quality,conflict_score,family_diversity";
+   PJ_LastV1ScoreQuarantineWarning = "";
+}
+
+void PJ_SetV1ScoreQuarantineSnapshot(const bool enforced)
+{
+   PJ_ClearV1ScoreQuarantineSnapshot();
+   PJ_LastV1ScoreQuarantineEnforced = enforced;
+}
+
+string PJ_V1ScoreQuarantineJsonFields()
+{
+   string s = "";
+   s += "\"v1_score_quarantine_version\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ScoreQuarantineVersion) + "\",";
+   s += "\"v1_score_quarantine_enforced\":" + PJ_BoolText(PJ_LastV1ScoreQuarantineEnforced) + ",";
+   s += "\"v1_score_quarantine_scope\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ScoreQuarantineScope) + "\",";
+   s += "\"v1_score_quarantine_dq_role\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ScoreQuarantineDqRole) + "\",";
+   s += "\"v1_score_quarantine_learning_role\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ScoreQuarantineLearningRole) + "\",";
+   s += "\"v1_score_quarantine_advisory_role\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ScoreQuarantineAdvisoryRole) + "\",";
+   s += "\"v1_score_quarantine_strategy_score_role\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ScoreQuarantineStrategyScoreRole) + "\",";
+   s += "\"v1_score_quarantine_forbidden_score_inputs\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ScoreQuarantineForbiddenScoreInputs) + "\",";
+   s += "\"v1_score_quarantine_warning\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ScoreQuarantineWarning) + "\",";
+
+   PJ_ClearV1ScoreQuarantineSnapshot();
+   return s;
+}
+
+static string PJ_LastV1ConstructivePolicyVersion = "DISABLED";
+static bool   PJ_LastV1PolicyConstructiveActive = false;
+static string PJ_LastV1PolicyStateLabel = "";
+static string PJ_LastV1PolicyPosture = "";
+static string PJ_LastV1PolicyNativeFamilies = "";
+static string PJ_LastV1PolicyConditionalFamilies = "";
+static string PJ_LastV1PolicyDeprioritizedFamilies = "";
+static string PJ_LastV1PolicyInformationalFamilies = "";
+static int    PJ_LastV1PolicyEligibleStrategyCount = 0;
+static int    PJ_LastV1PolicySuppressedStrategyCount = 0;
+static int    PJ_LastV1PolicyInformationalStrategyCount = 0;
+static int    PJ_LastV1PolicyUnknownStrategyCount = 0;
+static bool   PJ_LastV1PolicyScoreSovereigntyBlocked = false;
+static string PJ_LastV1PolicyScoreRole = "PRE_EXISTING_SCORE_AGGREGATION";
+static bool   PJ_LastV1PolicyScoreCouldNotAdmitSuppressed = false;
+static bool   PJ_LastV1PolicyScoreCouldNotOverrideState = false;
+static string PJ_LastV1PolicyAuthorityClass = "V1_CONSTRUCTIVE_ELIGIBILITY_DISABLED";
+static string PJ_LastV1PolicyStrategyAttributions = "";
+
+void PJ_ClearV1ConstructivePolicySnapshot()
+{
+   PJ_LastV1ConstructivePolicyVersion = "DISABLED";
+   PJ_LastV1PolicyConstructiveActive = false;
+   PJ_LastV1PolicyStateLabel = "";
+   PJ_LastV1PolicyPosture = "";
+   PJ_LastV1PolicyNativeFamilies = "";
+   PJ_LastV1PolicyConditionalFamilies = "";
+   PJ_LastV1PolicyDeprioritizedFamilies = "";
+   PJ_LastV1PolicyInformationalFamilies = "";
+   PJ_LastV1PolicyEligibleStrategyCount = 0;
+   PJ_LastV1PolicySuppressedStrategyCount = 0;
+   PJ_LastV1PolicyInformationalStrategyCount = 0;
+   PJ_LastV1PolicyUnknownStrategyCount = 0;
+   PJ_LastV1PolicyScoreSovereigntyBlocked = false;
+   PJ_LastV1PolicyScoreRole = "PRE_EXISTING_SCORE_AGGREGATION";
+   PJ_LastV1PolicyScoreCouldNotAdmitSuppressed = false;
+   PJ_LastV1PolicyScoreCouldNotOverrideState = false;
+   PJ_LastV1PolicyAuthorityClass = "V1_CONSTRUCTIVE_ELIGIBILITY_DISABLED";
+   PJ_LastV1PolicyStrategyAttributions = "";
+}
+
+void PJ_SetV1ConstructivePolicySnapshot(
+   const string version,
+   const bool active,
+   const string stateLabel,
+   const string policyPosture,
+   const string nativeFamilies,
+   const string conditionalFamilies,
+   const string deprioritizedFamilies,
+   const string informationalFamilies,
+   const int eligibleStrategyCount,
+   const int suppressedStrategyCount,
+   const int informationalStrategyCount,
+   const int unknownStrategyCount,
+   const bool scoreSovereigntyBlocked,
+   const string scoreRole,
+   const bool scoreCouldNotAdmitSuppressed,
+   const bool scoreCouldNotOverrideState,
+   const string authorityClass,
+   const string strategyAttributions
+)
+{
+   PJ_ClearV1ConstructivePolicySnapshot();
+
+   PJ_LastV1ConstructivePolicyVersion = version;
+   PJ_LastV1PolicyConstructiveActive = active;
+   PJ_LastV1PolicyStateLabel = stateLabel;
+   PJ_LastV1PolicyPosture = policyPosture;
+   PJ_LastV1PolicyNativeFamilies = nativeFamilies;
+   PJ_LastV1PolicyConditionalFamilies = conditionalFamilies;
+   PJ_LastV1PolicyDeprioritizedFamilies = deprioritizedFamilies;
+   PJ_LastV1PolicyInformationalFamilies = informationalFamilies;
+   PJ_LastV1PolicyEligibleStrategyCount = eligibleStrategyCount;
+   PJ_LastV1PolicySuppressedStrategyCount = suppressedStrategyCount;
+   PJ_LastV1PolicyInformationalStrategyCount = informationalStrategyCount;
+   PJ_LastV1PolicyUnknownStrategyCount = unknownStrategyCount;
+   PJ_LastV1PolicyScoreSovereigntyBlocked = scoreSovereigntyBlocked;
+   PJ_LastV1PolicyScoreRole = scoreRole;
+   PJ_LastV1PolicyScoreCouldNotAdmitSuppressed = scoreCouldNotAdmitSuppressed;
+   PJ_LastV1PolicyScoreCouldNotOverrideState = scoreCouldNotOverrideState;
+   PJ_LastV1PolicyAuthorityClass = authorityClass;
+   PJ_LastV1PolicyStrategyAttributions = strategyAttributions;
+}
+
+string PJ_V1ConstructivePolicyJsonFields()
+{
+   string s = "";
+   s += "\"v1_constructive_policy_version\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1ConstructivePolicyVersion) + "\",";
+   s += "\"v1_policy_constructive_active\":" + PJ_BoolText(PJ_LastV1PolicyConstructiveActive) + ",";
+   s += "\"v1_policy_state_label\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1PolicyStateLabel) + "\",";
+   s += "\"v1_policy_posture\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1PolicyPosture) + "\",";
+   s += "\"v1_policy_native_families\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1PolicyNativeFamilies) + "\",";
+   s += "\"v1_policy_conditional_families\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1PolicyConditionalFamilies) + "\",";
+   s += "\"v1_policy_deprioritized_families\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1PolicyDeprioritizedFamilies) + "\",";
+   s += "\"v1_policy_informational_families\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1PolicyInformationalFamilies) + "\",";
+   s += "\"v1_policy_eligible_strategy_count\":" + IntegerToString(PJ_LastV1PolicyEligibleStrategyCount) + ",";
+   s += "\"v1_policy_suppressed_strategy_count\":" + IntegerToString(PJ_LastV1PolicySuppressedStrategyCount) + ",";
+   s += "\"v1_policy_informational_strategy_count\":" + IntegerToString(PJ_LastV1PolicyInformationalStrategyCount) + ",";
+   s += "\"v1_policy_unknown_strategy_count\":" + IntegerToString(PJ_LastV1PolicyUnknownStrategyCount) + ",";
+   s += "\"v1_policy_score_sovereignty_blocked\":" + PJ_BoolText(PJ_LastV1PolicyScoreSovereigntyBlocked) + ",";
+   s += "\"v1_policy_score_role\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1PolicyScoreRole) + "\",";
+   s += "\"v1_policy_score_could_not_admit_suppressed\":" + PJ_BoolText(PJ_LastV1PolicyScoreCouldNotAdmitSuppressed) + ",";
+   s += "\"v1_policy_score_could_not_override_state\":" + PJ_BoolText(PJ_LastV1PolicyScoreCouldNotOverrideState) + ",";
+   s += "\"v1_policy_authority_class\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1PolicyAuthorityClass) + "\",";
+   s += "\"v1_policy_strategy_attributions\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastV1PolicyStrategyAttributions) + "\",";
+
+   PJ_ClearV1ConstructivePolicySnapshot();
+   return s;
+}
+
+static string PJ_LastAuthorityStackVersion = "AUTHORITY_STACK_PILOT_V1";
+static bool   PJ_LastAuthorityStackEnabled = false;
+static string PJ_LastAuthorityStackOrder = "P4,DQ,V1";
+static string PJ_LastAuthorityStackEnabledLayers = "NONE";
+static string PJ_LastAuthorityStackStatus = "NOT_EVALUATED";
+static string PJ_LastAuthorityStackPrimaryLayer = "NONE";
+static string PJ_LastAuthorityStackBlockingAuthority = "NONE";
+static string PJ_LastAuthorityStackBlockingReason = "";
+static string PJ_LastAuthorityStackBaselineDecision = "";
+static string PJ_LastAuthorityStackAdjustedDecision = "";
+static bool   PJ_LastAuthorityStackChangedOutcome = false;
+static string PJ_LastAuthorityStackTriggeredLayers = "NONE";
+static string PJ_LastAuthorityStackReasonCodes = "";
+static string PJ_LastAuthorityStackTrace = "";
+static string PJ_LastAuthorityP4DivergenceObserved = "";
+static bool   PJ_LastAuthorityP4WouldBlock = false;
+static double PJ_LastAuthorityDQProxyScore = -1.0;
+static double PJ_LastAuthorityDQThreshold = -1.0;
+static bool   PJ_LastAuthorityDQWouldBlock = false;
+static string PJ_LastAuthorityV1PostureObserved = "";
+static string PJ_LastAuthorityV1StateObserved = "";
+static bool   PJ_LastAuthorityV1WouldBlock = false;
+
+void PJ_ClearAuthorityStackSnapshot()
+{
+   PJ_LastAuthorityStackVersion = "AUTHORITY_STACK_PILOT_V1";
+   PJ_LastAuthorityStackEnabled = false;
+   PJ_LastAuthorityStackOrder = "P4,DQ,V1";
+   PJ_LastAuthorityStackEnabledLayers = "NONE";
+   PJ_LastAuthorityStackStatus = "NOT_EVALUATED";
+   PJ_LastAuthorityStackPrimaryLayer = "NONE";
+   PJ_LastAuthorityStackBlockingAuthority = "NONE";
+   PJ_LastAuthorityStackBlockingReason = "";
+   PJ_LastAuthorityStackBaselineDecision = "";
+   PJ_LastAuthorityStackAdjustedDecision = "";
+   PJ_LastAuthorityStackChangedOutcome = false;
+   PJ_LastAuthorityStackTriggeredLayers = "NONE";
+   PJ_LastAuthorityStackReasonCodes = "";
+   PJ_LastAuthorityStackTrace = "";
+   PJ_LastAuthorityP4DivergenceObserved = "";
+   PJ_LastAuthorityP4WouldBlock = false;
+   PJ_LastAuthorityDQProxyScore = -1.0;
+   PJ_LastAuthorityDQThreshold = -1.0;
+   PJ_LastAuthorityDQWouldBlock = false;
+   PJ_LastAuthorityV1PostureObserved = "";
+   PJ_LastAuthorityV1StateObserved = "";
+   PJ_LastAuthorityV1WouldBlock = false;
+}
+
+void PJ_SetAuthorityStackSnapshot(
+   const string version,
+   const bool enabled,
+   const string order,
+   const string enabledLayers,
+   const string status,
+   const string primaryLayer,
+   const string blockingAuthority,
+   const string blockingReason,
+   const string baselineDecision,
+   const string adjustedDecision,
+   const bool changedOutcome,
+   const string triggeredLayers,
+   const string reasonCodes,
+   const string trace,
+   const string p4DivergenceObserved,
+   const bool p4WouldBlock,
+   const double dqProxyScore,
+   const double dqThreshold,
+   const bool dqWouldBlock,
+   const string v1PostureObserved,
+   const string v1StateObserved,
+   const bool v1WouldBlock
+)
+{
+   PJ_ClearAuthorityStackSnapshot();
+
+   PJ_LastAuthorityStackVersion = version;
+   PJ_LastAuthorityStackEnabled = enabled;
+   PJ_LastAuthorityStackOrder = order;
+   PJ_LastAuthorityStackEnabledLayers = enabledLayers;
+   PJ_LastAuthorityStackStatus = status;
+   PJ_LastAuthorityStackPrimaryLayer = primaryLayer;
+   PJ_LastAuthorityStackBlockingAuthority = blockingAuthority;
+   PJ_LastAuthorityStackBlockingReason = blockingReason;
+   PJ_LastAuthorityStackBaselineDecision = baselineDecision;
+   PJ_LastAuthorityStackAdjustedDecision = adjustedDecision;
+   PJ_LastAuthorityStackChangedOutcome = changedOutcome;
+   PJ_LastAuthorityStackTriggeredLayers = triggeredLayers;
+   PJ_LastAuthorityStackReasonCodes = reasonCodes;
+   PJ_LastAuthorityStackTrace = trace;
+   PJ_LastAuthorityP4DivergenceObserved = p4DivergenceObserved;
+   PJ_LastAuthorityP4WouldBlock = p4WouldBlock;
+   PJ_LastAuthorityDQProxyScore = dqProxyScore;
+   PJ_LastAuthorityDQThreshold = dqThreshold;
+   PJ_LastAuthorityDQWouldBlock = dqWouldBlock;
+   PJ_LastAuthorityV1PostureObserved = v1PostureObserved;
+   PJ_LastAuthorityV1StateObserved = v1StateObserved;
+   PJ_LastAuthorityV1WouldBlock = v1WouldBlock;
+}
+
+string PJ_AuthorityStackJsonFields()
+{
+   string s = "";
+   s += "\"authority_stack_version\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastAuthorityStackVersion) + "\",";
+   s += "\"authority_stack_enabled\":" + PJ_BoolText(PJ_LastAuthorityStackEnabled) + ",";
+   s += "\"authority_stack_order\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastAuthorityStackOrder) + "\",";
+   s += "\"authority_stack_enabled_layers\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastAuthorityStackEnabledLayers) + "\",";
+   s += "\"authority_stack_status\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastAuthorityStackStatus) + "\",";
+   s += "\"authority_stack_primary_layer\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastAuthorityStackPrimaryLayer) + "\",";
+   s += "\"authority_stack_blocking_authority\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastAuthorityStackBlockingAuthority) + "\",";
+   s += "\"authority_stack_blocking_reason\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastAuthorityStackBlockingReason) + "\",";
+   s += "\"authority_stack_baseline_decision\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastAuthorityStackBaselineDecision) + "\",";
+   s += "\"authority_stack_adjusted_decision\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastAuthorityStackAdjustedDecision) + "\",";
+   s += "\"authority_stack_changed_outcome\":" + PJ_BoolText(PJ_LastAuthorityStackChangedOutcome) + ",";
+   s += "\"authority_stack_triggered_layers\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastAuthorityStackTriggeredLayers) + "\",";
+   s += "\"authority_stack_reason_codes\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastAuthorityStackReasonCodes) + "\",";
+   s += "\"authority_stack_trace\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastAuthorityStackTrace) + "\",";
+   s += "\"authority_p4_divergence_observed\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastAuthorityP4DivergenceObserved) + "\",";
+   s += "\"authority_p4_would_block\":" + PJ_BoolText(PJ_LastAuthorityP4WouldBlock) + ",";
+   s += "\"authority_dq_proxy_score\":" + DoubleToString(PJ_LastAuthorityDQProxyScore, 4) + ",";
+   s += "\"authority_dq_threshold\":" + DoubleToString(PJ_LastAuthorityDQThreshold, 4) + ",";
+   s += "\"authority_dq_would_block\":" + PJ_BoolText(PJ_LastAuthorityDQWouldBlock) + ",";
+   s += "\"authority_v1_posture_observed\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastAuthorityV1PostureObserved) + "\",";
+   s += "\"authority_v1_state_observed\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastAuthorityV1StateObserved) + "\",";
+   s += "\"authority_v1_would_block\":" + PJ_BoolText(PJ_LastAuthorityV1WouldBlock) + ",";
+
+   PJ_ClearAuthorityStackSnapshot();
+   return s;
+}
+
 
 static string PJ_LastDecisionFinalBlockingLayer = "";
 static string PJ_LastDecisionFinalBlockReasonCode = "";
 static string PJ_LastDecisionExecutionPath = "";
 static string PJ_LastDecisionValidationOutcomeClass = "";
 static string PJ_LastDecisionRejectionFamily = "";
+
+static bool   PJ_LastC1TcActive = false;
+static bool   PJ_LastC1HighConvictionActive = false;
+static bool   PJ_LastC1OverextensionActive = false;
+static bool   PJ_LastC1PreGovernorCandidate = false;
+static bool   PJ_LastC1ShadowedByExhaustion = false;
+static string PJ_LastC1ShadowReason = "";
+static bool   PJ_LastC2OverextensionM5Active = false;
+static bool   PJ_LastC2ConsensusTighteningApplied = false;
+static double PJ_LastC2ConsensusTighteningDelta = 0.0;
+static double PJ_LastC2PreConsensusRequirement = 0.0;
+static double PJ_LastC2PostConsensusRequirement = 0.0;
+static bool   PJ_LastC2EffectiveOnOutcome = false;
+static string PJ_LastC2GateOutcome = "NOT_APPLICABLE";
+static bool   PJ_LastC3LowStructureTcActive = false;
+static double PJ_LastC3StructureScore = 0.0;
+static bool   PJ_LastC3LogicApplied = false;
+static bool   PJ_LastC3EffectiveOnOutcome = false;
+static string PJ_LastC3GateOutcome = "NOT_APPLICABLE";
+static string PJ_LastC123ObstacleSummary = "";
+static string PJ_LastC123ObstacleSemanticsVersion = "C123_OBSERVABILITY_V1";
+static bool   PJ_LastPreAIScoreGatesDemoted = false;
+static double PJ_LastPreAIObsCouncilQuality = 0.0;
+static double PJ_LastPreAIObsConsensusStrength = 0.0;
+static double PJ_LastPreAIObsConflictScore = 0.0;
+static bool   PJ_LastPreAIWouldHaveGatedQuality = false;
+static bool   PJ_LastPreAIWouldHaveGatedConsensus = false;
+static bool   PJ_LastPreAIWouldHaveGatedConflict = false;
+static string PJ_LastStructuralRejectGate = "UNKNOWN";
+static string PJ_LastStructuralRejectGateDetail = "";
+static bool   PJ_LastPreAIStructuralPassed = false;
+static string PJ_LastGovernorState = "";
+static string PJ_LastGovernorStateSource = "";
+static bool   PJ_LastGovernorCategoricalStateActive = false;
+
+// CHOKE_ATTRIBUTION_V1 state (diagnostic only — must be set before every JournalAppendDecisionV3 call)
+static string PJ_ChokeV1_StructuralGate       = "";
+static string PJ_ChokeV1_GateDetail           = "";
+static string PJ_ChokeV1_DominantSideRaw      = "";
+static bool   PJ_ChokeV1_ConfirmRolePresent   = false;
+static double PJ_ChokeV1_FamilyDiversityScore = -1.0;
+static string PJ_ChokeV1_EraLabel             = "";
+static string PJ_ChokeV1_ZoneName             = "";
+static bool   PJ_ChokeV1_TpcConfirmFired      = false;
+static string PJ_ChokeV1_TpcBlockedReason     = "";
 
 string PJ_NormalizeValidationOutcomeClass(string value)
 {
@@ -216,6 +1072,167 @@ string PJ_NormalizeRejectionFamily(string value)
       return value;
 
    return "";
+}
+
+void PJ_ClearC123ObstacleSnapshot()
+{
+   PJ_LastC1TcActive = false;
+   PJ_LastC1HighConvictionActive = false;
+   PJ_LastC1OverextensionActive = false;
+   PJ_LastC1PreGovernorCandidate = false;
+   PJ_LastC1ShadowedByExhaustion = false;
+   PJ_LastC1ShadowReason = "";
+
+   PJ_LastC2OverextensionM5Active = false;
+   PJ_LastC2ConsensusTighteningApplied = false;
+   PJ_LastC2ConsensusTighteningDelta = 0.0;
+   PJ_LastC2PreConsensusRequirement = 0.0;
+   PJ_LastC2PostConsensusRequirement = 0.0;
+   PJ_LastC2EffectiveOnOutcome = false;
+   PJ_LastC2GateOutcome = "NOT_APPLICABLE";
+
+   PJ_LastC3LowStructureTcActive = false;
+   PJ_LastC3StructureScore = 0.0;
+   PJ_LastC3LogicApplied = false;
+   PJ_LastC3EffectiveOnOutcome = false;
+   PJ_LastC3GateOutcome = "NOT_APPLICABLE";
+
+   PJ_LastC123ObstacleSummary = "";
+   PJ_LastC123ObstacleSemanticsVersion = "C123_OBSERVABILITY_V1";
+
+   PJ_LastPreAIScoreGatesDemoted = false;
+   PJ_LastPreAIObsCouncilQuality = 0.0;
+   PJ_LastPreAIObsConsensusStrength = 0.0;
+   PJ_LastPreAIObsConflictScore = 0.0;
+   PJ_LastPreAIWouldHaveGatedQuality = false;
+   PJ_LastPreAIWouldHaveGatedConsensus = false;
+   PJ_LastPreAIWouldHaveGatedConflict = false;
+   PJ_LastStructuralRejectGate = "UNKNOWN";
+   PJ_LastStructuralRejectGateDetail = "";
+   PJ_LastPreAIStructuralPassed = false;
+   PJ_LastGovernorState = "";
+   PJ_LastGovernorStateSource = "";
+   PJ_LastGovernorCategoricalStateActive = false;
+}
+
+void PJ_SetC123ObstacleSnapshot(RoutedRuntimeEvaluation &routed)
+{
+   PJ_ClearC123ObstacleSnapshot();
+
+   if(routed.active_mode != "COUNCIL" || !routed.council.valid)
+      return;
+
+   PJ_LastC1TcActive = routed.council.c1_tc_active;
+   PJ_LastC1HighConvictionActive = routed.council.c1_high_conviction_active;
+   PJ_LastC1OverextensionActive = routed.council.c1_overextension_active;
+   PJ_LastC1PreGovernorCandidate = routed.council.c1_pre_governor_candidate;
+   PJ_LastC1ShadowedByExhaustion = routed.council.c1_shadowed_by_exhaustion;
+   PJ_LastC1ShadowReason = routed.council.c1_shadow_reason;
+
+   PJ_LastC2OverextensionM5Active = routed.council.pre_ai_gate.c2_overextension_m5_active;
+   PJ_LastC2ConsensusTighteningApplied = routed.council.pre_ai_gate.c2_consensus_tightening_applied;
+   PJ_LastC2ConsensusTighteningDelta = routed.council.pre_ai_gate.c2_consensus_tightening_delta;
+   PJ_LastC2PreConsensusRequirement = routed.council.pre_ai_gate.c2_pre_consensus_requirement;
+   PJ_LastC2PostConsensusRequirement = routed.council.pre_ai_gate.c2_post_consensus_requirement;
+   PJ_LastC2EffectiveOnOutcome = routed.council.pre_ai_gate.c2_effective_on_outcome;
+   PJ_LastC2GateOutcome = routed.council.pre_ai_gate.c2_gate_outcome;
+
+   PJ_LastC3LowStructureTcActive = routed.council.pre_ai_gate.c3_low_structure_tc_active;
+   PJ_LastC3StructureScore = routed.council.pre_ai_gate.c3_structure_score;
+   PJ_LastC3LogicApplied = routed.council.pre_ai_gate.c3_logic_applied;
+   PJ_LastC3EffectiveOnOutcome = routed.council.pre_ai_gate.c3_effective_on_outcome;
+   PJ_LastC3GateOutcome = routed.council.pre_ai_gate.c3_gate_outcome;
+
+   PJ_LastC123ObstacleSummary = BuildC123ObstacleSummaryFromRuntimeResult(routed.council);
+   PJ_LastPreAIScoreGatesDemoted = routed.council.pre_ai_gate.pre_ai_score_gates_demoted;
+   PJ_LastPreAIObsCouncilQuality = routed.council.pre_ai_gate.pre_ai_obs_council_quality;
+   PJ_LastPreAIObsConsensusStrength = routed.council.pre_ai_gate.pre_ai_obs_consensus_strength;
+   PJ_LastPreAIObsConflictScore = routed.council.pre_ai_gate.pre_ai_obs_conflict_score;
+   PJ_LastPreAIWouldHaveGatedQuality = routed.council.pre_ai_gate.pre_ai_would_have_gated_quality;
+   PJ_LastPreAIWouldHaveGatedConsensus = routed.council.pre_ai_gate.pre_ai_would_have_gated_consensus;
+   PJ_LastPreAIWouldHaveGatedConflict = routed.council.pre_ai_gate.pre_ai_would_have_gated_conflict;
+   PJ_LastStructuralRejectGate = routed.council.pre_ai_gate.structural_reject_gate;
+   PJ_LastStructuralRejectGateDetail = routed.council.pre_ai_gate.structural_reject_gate_detail;
+   PJ_LastPreAIStructuralPassed = routed.council.pre_ai_gate.pre_ai_structural_passed;
+   PJ_LastGovernorState = routed.council.governor_state;
+   PJ_LastGovernorStateSource = routed.council.governor_state_source;
+   PJ_LastGovernorCategoricalStateActive = routed.council.governor_categorical_state_active;
+}
+
+void PJ_SetChokeAttributionV1(
+   string structural_gate,
+   string gate_detail,
+   string dominant_side_raw,
+   bool   confirm_role_present,
+   double family_diversity_score,
+   string era_label,
+   string zone_name,
+   bool   tpc_confirm_fired,
+   string tpc_blocked_reason
+)
+{
+   PJ_ChokeV1_StructuralGate       = structural_gate;
+   PJ_ChokeV1_GateDetail           = gate_detail;
+   PJ_ChokeV1_DominantSideRaw      = dominant_side_raw;
+   PJ_ChokeV1_ConfirmRolePresent   = confirm_role_present;
+   PJ_ChokeV1_FamilyDiversityScore = family_diversity_score;
+   PJ_ChokeV1_EraLabel             = era_label;
+   PJ_ChokeV1_ZoneName             = zone_name;
+   PJ_ChokeV1_TpcConfirmFired      = tpc_confirm_fired;
+   PJ_ChokeV1_TpcBlockedReason     = tpc_blocked_reason;
+}
+
+string PJ_C123ObstacleJsonFields()
+{
+   string s = "";
+   s += ",\"c1_tc_active\":" + PJ_BoolText(PJ_LastC1TcActive);
+   s += ",\"c1_high_conviction_active\":" + PJ_BoolText(PJ_LastC1HighConvictionActive);
+   s += ",\"c1_overextension_active\":" + PJ_BoolText(PJ_LastC1OverextensionActive);
+   s += ",\"c1_pre_governor_candidate\":" + PJ_BoolText(PJ_LastC1PreGovernorCandidate);
+   s += ",\"c1_shadowed_by_exhaustion\":" + PJ_BoolText(PJ_LastC1ShadowedByExhaustion);
+   s += ",\"c1_shadow_reason\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastC1ShadowReason) + "\"";
+   s += ",\"c2_overextension_m5_active\":" + PJ_BoolText(PJ_LastC2OverextensionM5Active);
+   s += ",\"c2_consensus_tightening_applied\":" + PJ_BoolText(PJ_LastC2ConsensusTighteningApplied);
+   s += ",\"c2_consensus_tightening_delta\":" + DoubleToString(PJ_LastC2ConsensusTighteningDelta, 4);
+   s += ",\"c2_pre_consensus_requirement\":" + DoubleToString(PJ_LastC2PreConsensusRequirement, 4);
+   s += ",\"c2_post_consensus_requirement\":" + DoubleToString(PJ_LastC2PostConsensusRequirement, 4);
+   s += ",\"c2_effective_on_outcome\":" + PJ_BoolText(PJ_LastC2EffectiveOnOutcome);
+   s += ",\"c2_gate_outcome\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastC2GateOutcome) + "\"";
+   s += ",\"c3_low_structure_tc_active\":" + PJ_BoolText(PJ_LastC3LowStructureTcActive);
+   s += ",\"c3_structure_score\":" + DoubleToString(PJ_LastC3StructureScore, 4);
+   s += ",\"c3_logic_applied\":" + PJ_BoolText(PJ_LastC3LogicApplied);
+   s += ",\"c3_effective_on_outcome\":" + PJ_BoolText(PJ_LastC3EffectiveOnOutcome);
+   s += ",\"c3_gate_outcome\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastC3GateOutcome) + "\"";
+   s += ",\"c123_obstacle_summary\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastC123ObstacleSummary) + "\"";
+   s += ",\"c123_obstacle_semantics_version\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastC123ObstacleSemanticsVersion) + "\"";
+   s += ",\"pre_ai_score_gates_demoted\":" + PJ_BoolText(PJ_LastPreAIScoreGatesDemoted);
+   s += ",\"pre_ai_obs_council_quality\":" + DoubleToString(PJ_LastPreAIObsCouncilQuality, 4);
+   s += ",\"pre_ai_obs_consensus_strength\":" + DoubleToString(PJ_LastPreAIObsConsensusStrength, 4);
+   s += ",\"pre_ai_obs_conflict_score\":" + DoubleToString(PJ_LastPreAIObsConflictScore, 4);
+   s += ",\"pre_ai_would_have_gated_quality\":" + PJ_BoolText(PJ_LastPreAIWouldHaveGatedQuality);
+   s += ",\"pre_ai_would_have_gated_consensus\":" + PJ_BoolText(PJ_LastPreAIWouldHaveGatedConsensus);
+   s += ",\"pre_ai_would_have_gated_conflict\":" + PJ_BoolText(PJ_LastPreAIWouldHaveGatedConflict);
+   s += ",\"structural_reject_gate\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastStructuralRejectGate) + "\"";
+   s += ",\"structural_reject_gate_detail\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastStructuralRejectGateDetail) + "\"";
+   s += ",\"pre_ai_structural_passed\":" + PJ_BoolText(PJ_LastPreAIStructuralPassed);
+
+   PJ_ClearC123ObstacleSnapshot();
+   return s;
+}
+
+string PJ_ChokeAttributionV1JsonFields()
+{
+   string s = "";
+   s += ",\"choke_v1_structural_gate\":\"" + PJ_PJ_EscapeJsonMini(PJ_ChokeV1_StructuralGate) + "\"";
+   s += ",\"choke_v1_gate_detail\":\"" + PJ_PJ_EscapeJsonMini(PJ_ChokeV1_GateDetail) + "\"";
+   s += ",\"choke_v1_dominant_side_raw\":\"" + PJ_PJ_EscapeJsonMini(PJ_ChokeV1_DominantSideRaw) + "\"";
+   s += ",\"choke_v1_confirm_role_present\":" + PJ_BoolText(PJ_ChokeV1_ConfirmRolePresent);
+   s += ",\"choke_v1_family_diversity_score\":" + DoubleToString(PJ_Clamp01(MathMax(0.0, PJ_ChokeV1_FamilyDiversityScore)), 3);
+   s += ",\"choke_v1_era_label\":\"" + PJ_PJ_EscapeJsonMini(PJ_ChokeV1_EraLabel) + "\"";
+   s += ",\"choke_v1_zone\":\"" + PJ_PJ_EscapeJsonMini(PJ_ChokeV1_ZoneName) + "\"";
+   s += ",\"choke_v1_tpc_confirm_fired\":" + PJ_BoolText(PJ_ChokeV1_TpcConfirmFired);
+   s += ",\"choke_v1_tpc_blocked_reason\":\"" + PJ_PJ_EscapeJsonMini(PJ_ChokeV1_TpcBlockedReason) + "\"";
+   return s;
 }
 
 void PJ_SetDecisionValidationContext(
@@ -425,39 +1442,79 @@ bool JournalAppendDecisionEnvelopeTrace(
 //---------------------------------------------------------
 // Level Awareness v2 — Environmental Brake snapshot (one-shot)
 //---------------------------------------------------------
+bool   PJ_LastLevelBrakeSnapshotSet = false;
+bool   PJ_LastLevelBrakeFired = false;
 string PJ_LastLevelBrakeVerdict = "";
 string PJ_LastLevelBrakeReason  = "";
+string PJ_LastLevelBrakeReasonCode = "NONE";
+string PJ_LastLevelBrakeObstructionClass = "NONE";
 double PJ_LastLevelBrakeRoom    = 0.0;
+int    PJ_LastLevelBrakeRoomPoints = -1;
 double PJ_LastLevelBrakeRejRisk = 0.0;
+int    PJ_LastLevelBrakeSrResolutionCount = 0;
 string PJ_LastLevelBrakeSummary = "";
 
-void PJ_SetLevelBrakeSnapshot(string verdict, string reason, double room_score, double rejection_risk, string summary)
+void PJ_ClearLevelBrakeSnapshot()
 {
+   PJ_LastLevelBrakeSnapshotSet = false;
+   PJ_LastLevelBrakeFired = false;
+   PJ_LastLevelBrakeVerdict = "";
+   PJ_LastLevelBrakeReason  = "";
+   PJ_LastLevelBrakeReasonCode = "NONE";
+   PJ_LastLevelBrakeObstructionClass = "NONE";
+   PJ_LastLevelBrakeRoom    = 0.0;
+   PJ_LastLevelBrakeRoomPoints = -1;
+   PJ_LastLevelBrakeRejRisk = 0.0;
+   PJ_LastLevelBrakeSrResolutionCount = 0;
+   PJ_LastLevelBrakeSummary = "";
+}
+
+void PJ_SetLevelBrakeSnapshot(
+   string verdict,
+   string reason,
+   string reason_code,
+   string obstruction_class,
+   double room_score,
+   int room_points,
+   double rejection_risk,
+   int sr_resolution_count,
+   string summary
+)
+{
+   PJ_LastLevelBrakeSnapshotSet = true;
+   PJ_LastLevelBrakeFired = (verdict == "HARD_REJECT");
    PJ_LastLevelBrakeVerdict = verdict;
    PJ_LastLevelBrakeReason  = reason;
+   PJ_LastLevelBrakeReasonCode = (StringLen(TrimString(reason_code)) > 0 ? reason_code : "NONE");
+   PJ_LastLevelBrakeObstructionClass = (StringLen(TrimString(obstruction_class)) > 0 ? obstruction_class : "NONE");
    PJ_LastLevelBrakeRoom    = PJ_Clamp01(room_score);
+   PJ_LastLevelBrakeRoomPoints = room_points;
    PJ_LastLevelBrakeRejRisk = PJ_Clamp01(rejection_risk);
+   PJ_LastLevelBrakeSrResolutionCount = sr_resolution_count;
    PJ_LastLevelBrakeSummary = summary;
 }
 
 string PJ_LevelBrakeJsonFields()
 {
-   if(StringLen(PJ_LastLevelBrakeVerdict) <= 0)
-      return "";
-
    string s = "";
-   s += ",\"level_brake_verdict\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastLevelBrakeVerdict) + "\"";
-   s += ",\"level_brake_reason\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastLevelBrakeReason) + "\"";
-   s += ",\"breakout_room_score\":" + DoubleToString(PJ_LastLevelBrakeRoom, 2);
-   s += ",\"rejection_risk_score\":" + DoubleToString(PJ_LastLevelBrakeRejRisk, 2);
-   s += ",\"location_context_summary\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastLevelBrakeSummary) + "\"";
+   s += ",\"level_brake_fired\":" + PJ_BoolText(PJ_LastLevelBrakeFired);
+   s += ",\"level_brake_reason_code\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastLevelBrakeReasonCode) + "\"";
+   s += ",\"level_brake_obstruction_class\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastLevelBrakeObstructionClass) + "\"";
+   s += ",\"level_brake_room_points\":" + IntegerToString(PJ_LastLevelBrakeRoomPoints);
+   s += ",\"level_brake_rejection_risk\":" + DoubleToString(PJ_LastLevelBrakeRejRisk, 2);
+   s += ",\"level_brake_sr_resolution_count\":" + IntegerToString(PJ_LastLevelBrakeSrResolutionCount);
+
+   if(PJ_LastLevelBrakeSnapshotSet)
+   {
+      s += ",\"level_brake_verdict\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastLevelBrakeVerdict) + "\"";
+      s += ",\"level_brake_reason\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastLevelBrakeReason) + "\"";
+      s += ",\"breakout_room_score\":" + DoubleToString(PJ_LastLevelBrakeRoom, 2);
+      s += ",\"rejection_risk_score\":" + DoubleToString(PJ_LastLevelBrakeRejRisk, 2);
+      s += ",\"location_context_summary\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastLevelBrakeSummary) + "\"";
+   }
 
    // one-shot snapshot (avoid stale carry)
-   PJ_LastLevelBrakeVerdict = "";
-   PJ_LastLevelBrakeReason  = "";
-   PJ_LastLevelBrakeRoom    = 0.0;
-   PJ_LastLevelBrakeRejRisk = 0.0;
-   PJ_LastLevelBrakeSummary = "";
+   PJ_ClearLevelBrakeSnapshot();
 
    return s;
 }
@@ -552,21 +1609,10 @@ bool PJ_FileEndsWithNewline(string relativePath)
    return (b == '\n');
 }
 
-bool PJ_AppendLine(string relativePath, string line)
+bool PJ_NormalizeJsonLine(string &line)
 {
    if(!PJ_IsJsonLineProbablyValid(line))
    {
-      // Do not crash trading; just drop malformed journal line and keep a trace.
-      Print("PJ_AppendLine: dropped malformed JSONL line for ", relativePath);
-      int rh = FileOpen("AI\\\\ai_journal_rejects.txt", FILE_READ | FILE_WRITE | FILE_TXT | FILE_ANSI);
-      if(rh == INVALID_HANDLE)
-         rh = FileOpen("AI\\\\ai_journal_rejects.txt", FILE_WRITE | FILE_TXT | FILE_ANSI);
-      if(rh != INVALID_HANDLE)
-      {
-         FileSeek(rh, 0, SEEK_END);
-         FileWriteString(rh, line + "\n");
-         FileClose(rh);
-      }
       return false;
    }
 
@@ -580,30 +1626,249 @@ bool PJ_AppendLine(string relativePath, string line)
          break;
    }
    line += "\n";
+   return true;
+}
 
+bool PJ_IsIOReductionBufferablePath(const string relativePath)
+{
+   return (relativePath == PERF_JOURNAL_PATH || relativePath == DECISION_ENVELOPE_TRACE_PATH ||
+           relativePath == "AI\\ai_performance_journal.jsonl" ||
+           relativePath == "AI\\ai_decision_envelope_trace.jsonl");
+}
+
+bool PJ_IsPerformanceJournalPath(const string relativePath)
+{
+   return (relativePath == PERF_JOURNAL_PATH || relativePath == "AI\\ai_performance_journal.jsonl");
+}
+
+bool PJ_LineRequiresImmediateFlush(const string line)
+{
+   string u = line;
+   StringToUpper(u);
+   if(StringFind(u, "\"RECORD_TYPE\":\"TRADE") >= 0) return true;
+   if(StringFind(u, "\"EVENT_FAMILY\":\"TRADE_LIFECYCLE\"") >= 0) return true;
+   if(StringFind(u, "RISK_BLOCK") >= 0) return true;
+   if(StringFind(u, "RUNTIME_RISK") >= 0) return true;
+   if(StringFind(u, "EXECUTION_BLOCK") >= 0) return true;
+   if(StringFind(u, "EXECUTION_OPEN_FAILED") >= 0) return true;
+   if(StringFind(u, "GUARDRAIL") >= 0) return true;
+   if(StringFind(u, "TRUTH_NOT_READY") >= 0) return true;
+   if(StringFind(u, "ACTIVE_PLAN_MISSING") >= 0) return true;
+   if(StringFind(u, "ABNORMAL") >= 0) return true;
+   if(StringFind(u, "SOFT_ROLLBACK_WARNING") >= 0) return true;
+   if(StringFind(u, "HARD_ROLLBACK_TRIGGER") >= 0) return true;
+   if(StringFind(u, "AUTHORITY_TRANSITION") >= 0) return true;
+   if(StringFind(u, "COHORT_TRANSITION") >= 0) return true;
+   if(StringFind(u, "RISK_ENVELOPE_TRANSITION") >= 0) return true;
+   if(StringFind(u, "FILEOPEN_FAILURE") >= 0) return true;
+   if(StringFind(u, "FILEWRITE_FAILURE") >= 0) return true;
+   return false;
+}
+
+bool PJ_WriteLineDirect(string relativePath, string line)
+{
    string prefix = "";
    if(!PJ_FileEndsWithNewline(relativePath))
       prefix = "\n";
 
+   MT5IO_RecordFileOpenCall();
    int h = FileOpen(relativePath, FILE_READ | FILE_WRITE | FILE_TXT | FILE_ANSI);
 
    if(h == INVALID_HANDLE)
    {
+      MT5IO_RecordFileOpenCall();
       h = FileOpen(relativePath, FILE_WRITE | FILE_TXT | FILE_ANSI);
       if(h == INVALID_HANDLE)
+      {
+         MT5IO_RecordError("pj_direct_fileopen_failed");
          return false;
+      }
 
+      MT5IO_RecordFileWriteCall();
       FileWriteString(h, line);
       FileClose(h);
+      g_mt5io_pj_direct_write_count++;
       return true;
    }
 
    FileSeek(h, 0, SEEK_END);
    if(StringLen(prefix) > 0)
+   {
+      MT5IO_RecordFileWriteCall();
       FileWriteString(h, prefix);
+   }
+   MT5IO_RecordFileWriteCall();
    FileWriteString(h, line);
    FileClose(h);
+   g_mt5io_pj_direct_write_count++;
    return true;
+}
+
+bool PJ_WriteBatchDirect(const string relativePath, string &lines[], int count, const string reason)
+{
+   if(count <= 0)
+      return true;
+
+   string prefix = "";
+   if(!PJ_FileEndsWithNewline(relativePath))
+      prefix = "\n";
+
+   MT5IO_RecordFileOpenCall();
+   int h = FileOpen(relativePath, FILE_READ | FILE_WRITE | FILE_TXT | FILE_ANSI);
+   if(h == INVALID_HANDLE)
+   {
+      MT5IO_RecordFileOpenCall();
+      h = FileOpen(relativePath, FILE_WRITE | FILE_TXT | FILE_ANSI);
+      if(h == INVALID_HANDLE)
+      {
+         MT5IO_RecordError("pj_batch_fileopen_failed:" + reason);
+         return false;
+      }
+   }
+
+   FileSeek(h, 0, SEEK_END);
+   if(StringLen(prefix) > 0)
+   {
+      MT5IO_RecordFileWriteCall();
+      FileWriteString(h, prefix);
+   }
+
+   for(int i = 0; i < count; i++)
+   {
+      MT5IO_RecordFileWriteCall();
+      FileWriteString(h, lines[i]);
+   }
+   FileFlush(h);
+   FileClose(h);
+
+   g_mt5io_pj_flushed_records_total += count;
+   g_mt5io_pj_direct_write_avoided_estimate += MathMax(0, count - 1);
+   g_mt5io_last_flush_reason = reason;
+   g_mt5io_last_flush_time = TimeCurrent();
+   return true;
+}
+
+bool PJ_FlushPerformanceBuffer(const string reason)
+{
+   if(g_PJ_PerformanceBufferCount <= 0)
+      return true;
+   int count = g_PJ_PerformanceBufferCount;
+   if(!PJ_WriteBatchDirect(PERF_JOURNAL_PATH, g_PJ_PerformanceBuffer, count, reason))
+      return false;
+   for(int i = 0; i < count; i++)
+      g_PJ_PerformanceBuffer[i] = "";
+   g_PJ_PerformanceBufferCount = 0;
+   return true;
+}
+
+bool PJ_FlushEnvelopeBuffer(const string reason)
+{
+   if(g_PJ_EnvelopeBufferCount <= 0)
+      return true;
+   int count = g_PJ_EnvelopeBufferCount;
+   if(!PJ_WriteBatchDirect(DECISION_ENVELOPE_TRACE_PATH, g_PJ_EnvelopeBuffer, count, reason))
+      return false;
+   for(int i = 0; i < count; i++)
+      g_PJ_EnvelopeBuffer[i] = "";
+   g_PJ_EnvelopeBufferCount = 0;
+   return true;
+}
+
+bool PJ_FlushAllBuffers(string reason)
+{
+   bool ok1 = PJ_FlushPerformanceBuffer(reason);
+   bool ok2 = PJ_FlushEnvelopeBuffer(reason);
+   if(ok1 && ok2)
+      g_mt5io_pj_batched_flush_count++;
+   return (ok1 && ok2);
+}
+
+int PJ_BufferDepth()
+{
+   return g_PJ_PerformanceBufferCount + g_PJ_EnvelopeBufferCount;
+}
+
+bool PJ_BufferLine(const string relativePath, const string line)
+{
+   int capacity = MT5IO_PJBufferCapacity();
+   if(PJ_IsPerformanceJournalPath(relativePath))
+   {
+      if(g_PJ_PerformanceBufferCount >= capacity)
+      {
+         if(!PJ_FlushPerformanceBuffer("buffer_full"))
+            return PJ_WriteLineDirect(relativePath, line);
+      }
+      g_PJ_PerformanceBuffer[g_PJ_PerformanceBufferCount] = line;
+      g_PJ_PerformanceBufferCount++;
+   }
+   else
+   {
+      if(g_PJ_EnvelopeBufferCount >= capacity)
+      {
+         if(!PJ_FlushEnvelopeBuffer("buffer_full"))
+            return PJ_WriteLineDirect(relativePath, line);
+      }
+      g_PJ_EnvelopeBuffer[g_PJ_EnvelopeBufferCount] = line;
+      g_PJ_EnvelopeBufferCount++;
+   }
+
+   int depth = PJ_BufferDepth();
+   if(depth > g_mt5io_max_buffer_depth_observed)
+      g_mt5io_max_buffer_depth_observed = depth;
+   g_mt5io_pj_buffered_records_total++;
+   return true;
+}
+
+bool PJ_AppendLine(string relativePath, string line, bool immediate)
+{
+   string normalized = line;
+   if(!PJ_NormalizeJsonLine(normalized))
+   {
+      // Do not crash trading; just drop malformed journal line and keep a trace.
+      Print("PJ_AppendLine: dropped malformed JSONL line for ", relativePath);
+      MT5IO_RecordFileOpenCall();
+      int rh = FileOpen("AI\\\\ai_journal_rejects.txt", FILE_READ | FILE_WRITE | FILE_TXT | FILE_ANSI);
+      if(rh == INVALID_HANDLE)
+      {
+         MT5IO_RecordFileOpenCall();
+         rh = FileOpen("AI\\\\ai_journal_rejects.txt", FILE_WRITE | FILE_TXT | FILE_ANSI);
+      }
+      if(rh != INVALID_HANDLE)
+      {
+         FileSeek(rh, 0, SEEK_END);
+         MT5IO_RecordFileWriteCall();
+         FileWriteString(rh, line + "\n");
+         FileClose(rh);
+      }
+      MT5IO_RecordError("pj_malformed_line_rejected");
+      return false;
+   }
+
+   bool forceImmediate = (immediate || PJ_LineRequiresImmediateFlush(normalized));
+   bool canBuffer = (MT5IO_PJBufferActive() && PJ_IsIOReductionBufferablePath(relativePath) && !forceImmediate);
+
+   if(!canBuffer)
+   {
+      if(forceImmediate && PJ_BufferDepth() > 0)
+      {
+         g_mt5io_pj_immediate_flush_count++;
+         PJ_FlushAllBuffers("critical_preflush");
+      }
+      return PJ_WriteLineDirect(relativePath, normalized);
+   }
+
+   return PJ_BufferLine(relativePath, normalized);
+}
+
+void PJ_FlushOnM1Bar(const int m1BarCounter)
+{
+   if(!MT5IO_PJBufferActive())
+      return;
+   if(PJ_BufferDepth() <= 0)
+      return;
+   int interval = MT5IO_PJFlushIntervalBars();
+   if(interval <= 0 || (m1BarCounter % interval) == 0)
+      PJ_FlushAllBuffers("periodic_bar_flush");
 }
 
 string PJ_PlanFingerprint(RuntimePlan &plan)
@@ -735,6 +2000,7 @@ string PJ_BuildDecisionJson(
    json += "\"active_mode\":\"" + PJ_PJ_EscapeJsonMini(activeMode) + "\",";
    json += "\"regime_label\":\"" + PJ_PJ_EscapeJsonMini(regime.regime_label) + "\",";
    json += "\"regime_confidence\":" + DoubleToString(regime.regime_confidence, 3) + ",";
+   json += PJ_RegimeLabelProvenanceDecisionJsonFields();
    json += "\"direction\":\"" + PJ_PJ_EscapeJsonMini(PJ_NormalizeDirectionText(conf.direction)) + "\",";
    json += "\"raw_signal_score\":" + DoubleToString(conf.raw_signal_score, 3) + ",";
    json += "\"confidence_score\":" + DoubleToString(conf.confidence_score, 3) + ",";
@@ -795,6 +2061,7 @@ string PJ_BuildDecisionJsonV2(
    json += "\"policy_state_reason\":\"" + PJ_PJ_EscapeJsonMini(policy_state_reason) + "\",";
    json += "\"regime_label\":\"" + PJ_PJ_EscapeJsonMini(regime.regime_label) + "\",";
    json += "\"regime_confidence\":" + DoubleToString(regime.regime_confidence, 3) + ",";
+   json += PJ_RegimeLabelProvenanceDecisionJsonFields();
    json += "\"direction\":\"" + PJ_PJ_EscapeJsonMini(PJ_NormalizeDirectionText(conf.direction)) + "\",";
    json += "\"raw_signal_score\":" + DoubleToString(conf.raw_signal_score, 3) + ",";
    json += "\"confidence_score\":" + DoubleToString(conf.confidence_score, 3) + ",";
@@ -935,10 +2202,14 @@ string PJ_BuildDecisionJsonV3(
    int dominant_failure_count,
    double failure_cluster_score,
    string dominant_regime,
-   string regime_perf_summary
+   string regime_perf_summary,
+   string best_strategy_id = ""
 )
 {
    string fp = PJ_PlanFingerprint(plan);
+   string effective_governor_state = governor_state;
+   if(StringLen(PJ_LastGovernorState) > 0)
+      effective_governor_state = PJ_LastGovernorState;
 
    string json = "{";
    json += "\"record_type\":\"DECISION\",";
@@ -954,6 +2225,15 @@ string PJ_BuildDecisionJsonV3(
    json += "\"tf\":\"M1\",";
    json += "\"regime_label\":\"" + PJ_PJ_EscapeJsonMini(regime.regime_label) + "\",";
    json += "\"regime_confidence\":" + DoubleToString(PJ_Clamp01(regime.regime_confidence), 3) + ",";
+   json += "\"regime_tradability\":" + DoubleToString(regime.tradability_score, 4) + ",";
+   json += PJ_RegimeLabelProvenanceDecisionJsonFields();
+   json += PJ_P2BDualTruthBridgeJsonFields();
+   json += PJ_P4DirtyEnvironmentObservationJsonFields();
+   json += PJ_V1ShadowStateJsonFields();
+   json += PJ_V1FswJsonFields();
+   json += PJ_V1ScoreQuarantineJsonFields();
+   json += PJ_V1ConstructivePolicyJsonFields();
+   json += PJ_AuthorityStackJsonFields();
    json += "\"direction\":\"" + PJ_PJ_EscapeJsonMini(PJ_NormalizeDirectionText(conf.direction)) + "\",";
    json += "\"raw_signal_score\":" + DoubleToString(PJ_Clamp(conf.raw_signal_score, -1.0, 1.0), 3) + ",";
    json += "\"confidence_score\":" + DoubleToString(PJ_Clamp01(conf.confidence_score), 3) + ",";
@@ -1057,7 +2337,9 @@ string PJ_BuildDecisionJsonV3(
    json += "\"failure_severity\":" + DoubleToString(PJ_Clamp01(failure_severity), 3) + ",";
    json += "\"failure_basis\":\"" + PJ_PJ_EscapeJsonMini(failure_basis) + "\",";
    json += "\"council_summary\":\"" + PJ_PJ_EscapeJsonMini(council_summary) + "\",";
-   json += "\"governor_state\":\"" + PJ_PJ_EscapeJsonMini(governor_state) + "\",";
+   json += "\"governor_state\":\"" + PJ_PJ_EscapeJsonMini(effective_governor_state) + "\",";
+   json += "\"governor_state_source\":\"" + PJ_PJ_EscapeJsonMini(PJ_LastGovernorStateSource) + "\",";
+   json += "\"governor_categorical_state_active\":" + PJ_BoolText(PJ_LastGovernorCategoricalStateActive) + ",";
    json += "\"evolution_version\":\"" + PJ_PJ_EscapeJsonMini(evolution_version) + "\",";
    json += "\"entry_quality\":\"\",";
    json += "\"exit_class\":\"\",";
@@ -1070,8 +2352,12 @@ string PJ_BuildDecisionJsonV3(
    json += "\"failure_cluster_score\":" + DoubleToString(PJ_Clamp01(failure_cluster_score), 3) + ",";
    json += "\"dominant_regime\":\"" + PJ_PJ_EscapeJsonMini(dominant_regime) + "\",";
    json += "\"regime_perf_summary\":\"" + PJ_PJ_EscapeJsonMini(regime_perf_summary) + "\",";
+   json += "\"best_strategy\":\"" + PJ_PJ_EscapeJsonMini(best_strategy_id) + "\",";
    json += "\"final_decision_reason\":\"" + PJ_PJ_EscapeJsonMini(conf.final_decision_reason) + "\",";
    json += "\"spread_points\":" + DoubleToString(m1.spread_points, 1);
+   json += PJ_LevelBrakeJsonFields();
+   json += PJ_C123ObstacleJsonFields();
+   json += PJ_ChokeAttributionV1JsonFields();
    json += "}";
    return json;
 }
@@ -1103,7 +2389,8 @@ bool JournalAppendDecisionV3(
    double failure_cluster_score,
    string dominant_regime,
    string regime_perf_summary,
-   string &logMessage
+   string &logMessage,
+   string best_strategy_id = ""
 )
 {
    logMessage = "";
@@ -1134,7 +2421,8 @@ bool JournalAppendDecisionV3(
       dominant_failure_count,
       failure_cluster_score,
       dominant_regime,
-      regime_perf_summary
+      regime_perf_summary,
+      best_strategy_id
    );
 
    if(!PJ_AppendLine(PERF_JOURNAL_PATH, json + "\n"))
@@ -1167,6 +2455,7 @@ string PJ_BuildCouncilAttributionJson(
    json += "\"symbol\":\"" + PJ_PJ_EscapeJsonMini(_Symbol) + "\",";
    json += "\"decision_id\":\"" + PJ_PJ_EscapeJsonMini(decision_id) + "\",";
    json += "\"regime_label\":\"" + PJ_PJ_EscapeJsonMini(regime_label) + "\",";
+   json += PJ_RegimeLabelProvenanceDecisionJsonFields();
    json += "\"final_decision\":\"" + PJ_PJ_EscapeJsonMini(CouncilDecisionToText(council.final_decision)) + "\",";
    json += "\"dominant_strategy_id\":\"" + PJ_PJ_EscapeJsonMini(a.dominant_strategy_id) + "\",";
    json += "\"dominant_strategy_role\":\"" + PJ_PJ_EscapeJsonMini(a.dominant_strategy_role) + "\",";
@@ -1319,6 +2608,7 @@ string PJ_BuildCouncilOutcomeAttributionJson(
    json += "\"position_id\":" + PJ_U64(fb.position_id) + ",";
    json += "\"close_deal_id\":" + PJ_U64(fb.close_deal_id) + ",";
    json += "\"regime_label\":\"" + PJ_PJ_EscapeJsonMini(fb.regime_label) + "\",";
+   json += PJ_RegimeLabelProvenanceTradeCloseJsonFields();
    json += "\"direction\":\"" + PJ_PJ_EscapeJsonMini(PJ_NormalizeDirectionText(fb.direction)) + "\",";
    json += "\"executed_direction\":\"" + PJ_PJ_EscapeJsonMini(PJ_NormalizeDirectionText(fb.direction)) + "\",";
    json += "\"trade_result\":\"" + PJ_PJ_EscapeJsonMini(PJ_NormalizeTradeResultText(fb.result)) + "\",";
@@ -1432,6 +2722,9 @@ string PJ_BuildTradeJson(TradeFeedbackRecord &fb)
    json += "\"active_mode\":\"" + PJ_PJ_EscapeJsonMini(fb.decision_engine_mode) + "\",";
    json += "\"regime_label\":\"" + PJ_PJ_EscapeJsonMini(fb.regime_label) + "\",";
    json += "\"regime_confidence\":" + DoubleToString(fb.regime_confidence, 3) + ",";
+   json += PJ_RegimeLabelProvenanceTradeCloseJsonFields();
+   json += "\"regime_summary\":\"" + PJ_PJ_EscapeJsonMini(fb.regime_summary) + "\",";
+   json += PJ_RegimeSummaryProvenanceTradeCloseJsonFields();
    json += "\"direction\":\"" + PJ_PJ_EscapeJsonMini(PJ_NormalizeDirectionText(fb.direction)) + "\",";
    json += "\"executed_direction\":\"" + PJ_PJ_EscapeJsonMini(PJ_NormalizeDirectionText(fb.direction)) + "\",";
    json += "\"position_id\":" + PJ_U64(fb.position_id) + ",";
@@ -1765,6 +3058,111 @@ string PJ_BuildTradeOpenJsonV4(
    return json;
 }
 
+bool PJ_ReadM5Atr14AtEntryPoints(const datetime entry_time, double &atrPoints)
+{
+   atrPoints = -1.0;
+
+   double point = SymbolInfoDouble(_Symbol, SYMBOL_POINT);
+   if(point <= 0.0)
+      return false;
+
+   int shift = 1;
+   if(entry_time > 0)
+   {
+      int entryShift = iBarShift(_Symbol, PERIOD_M5, entry_time, false);
+      if(entryShift >= 0)
+         shift = entryShift + 1; // Diagnostic uses the completed M5 bar before entry context.
+   }
+
+   int h = iATR(_Symbol, PERIOD_M5, 14);
+   if(h == INVALID_HANDLE)
+      return false;
+
+   double buf[];
+   ArraySetAsSeries(buf, true);
+   bool ok = (CopyBuffer(h, 0, shift, 1, buf) == 1 && buf[0] > 0.0);
+   if(ok)
+      atrPoints = buf[0] / point;
+
+   IndicatorRelease(h);
+   return ok;
+}
+
+double PJ_InitialStopDistancePoints(const double actual_fill_price, const double initial_stop_loss)
+{
+   double point = SymbolInfoDouble(_Symbol, SYMBOL_POINT);
+   if(point <= 0.0 || actual_fill_price <= 0.0 || initial_stop_loss <= 0.0)
+      return -1.0;
+
+   return MathAbs(actual_fill_price - initial_stop_loss) / point;
+}
+
+bool PJ_DiagnosticStateContains(string state, string token)
+{
+   return (StringFind(state, token) >= 0);
+}
+
+string PJ_LevelContextAtEntry(
+   string level_interaction_type,
+   bool level_context_supported,
+   bool level_context_obstructed,
+   bool level_context_degraded,
+   bool level_context_mixed_conflicted
+)
+{
+   string ctx = TrimString(level_interaction_type);
+   if(StringLen(ctx) > 0 && ctx != "LEVEL_CONTEXT_UNSET")
+      return ctx;
+
+   if(level_context_mixed_conflicted)
+      return "LEVEL_CONTEXT_MIXED_CONFLICTED";
+   if(level_context_obstructed)
+      return "LEVEL_CONTEXT_OBSTRUCTED";
+   if(level_context_degraded)
+      return "LEVEL_CONTEXT_DEGRADED";
+   if(level_context_supported)
+      return "LEVEL_CONTEXT_SUPPORTED";
+
+   return "LEVEL_CONTEXT_UNAVAILABLE";
+}
+
+string PJ_EntryGeometryWarning(
+   string support_resistance_confluence_state,
+   string canonical_level_state,
+   string level_interaction_type,
+   bool level_context_obstructed,
+   bool level_context_degraded,
+   bool level_context_mixed_conflicted
+)
+{
+   string sr = TrimString(support_resistance_confluence_state);
+   string canonical = TrimString(canonical_level_state);
+   string levelType = TrimString(level_interaction_type);
+   string combined = sr + "|" + canonical + "|" + levelType;
+
+   if(PJ_DiagnosticStateContains(combined, "CANONICAL_TP_PATH_OBSTRUCTED") ||
+      PJ_DiagnosticStateContains(combined, "TP_PATH_OBSTRUCTED"))
+      return "CANONICAL_TP_PATH_OBSTRUCTED_DIAGNOSTIC_ONLY";
+
+   if(level_context_obstructed)
+      return "LEVEL_CONTEXT_OBSTRUCTED";
+
+   if(level_context_mixed_conflicted)
+      return "LEVEL_CONTEXT_MIXED_CONFLICTED";
+
+   if(PJ_DiagnosticStateContains(combined, "CONTINUATION_PATH_OBSTRUCTED") ||
+      PJ_DiagnosticStateContains(combined, "CONTINUATION_OBSTRUCTED"))
+      return "CONTINUATION_PATH_OBSTRUCTED";
+
+   if(PJ_DiagnosticStateContains(combined, "BREAKOUT_ROOM_TIGHT"))
+      return "BREAKOUT_ROOM_TIGHT";
+
+   if(level_context_degraded)
+      return "LEVEL_CONTEXT_DEGRADED";
+
+   return "NONE";
+}
+
 
 string PJ_BuildTradeOpenJsonV5(
    string decision_id,
@@ -1897,6 +3295,44 @@ string PJ_BuildTradeOpenJsonV5(
    string srObservationSourceOut = supportResistanceObservationSource;
    if(StringLen(TrimString(support_resistance_observation_source)) > 0)
       srObservationSourceOut = support_resistance_observation_source;
+
+   double initialStopDistancePoints = PJ_InitialStopDistancePoints(actual_fill_price, requested_stop_loss);
+   double m5Atr14AtEntryPoints = -1.0;
+   if(!PJ_ReadM5Atr14AtEntryPoints(entry_time, m5Atr14AtEntryPoints))
+      m5Atr14AtEntryPoints = -1.0;
+   double slVsM5AtrRatio = -1.0;
+   if(initialStopDistancePoints >= 0.0 && m5Atr14AtEntryPoints > 0.0)
+      slVsM5AtrRatio = initialStopDistancePoints / m5Atr14AtEntryPoints;
+
+   bool levelContextMixedConflicted =
+      (level_context_supported && level_context_obstructed) ||
+      sr_conflicted_flag ||
+      (TrimString(level_interaction_type) == "LEVEL_CONTEXT_MIXED_CONFLICTED");
+   string levelContextAtEntry = PJ_LevelContextAtEntry(
+      level_interaction_type,
+      level_context_supported,
+      level_context_obstructed,
+      level_context_degraded,
+      levelContextMixedConflicted
+   );
+   string entryGeometryWarning = PJ_EntryGeometryWarning(
+      support_resistance_confluence_state,
+      canonical_level_state,
+      level_interaction_type,
+      level_context_obstructed,
+      level_context_degraded,
+      levelContextMixedConflicted
+   );
+
+   json += ",\"initial_stop_distance_points\":" + DoubleToString(initialStopDistancePoints, 2);
+   json += ",\"m5_atr14_at_entry_points\":" + DoubleToString(m5Atr14AtEntryPoints, 2);
+   json += ",\"sl_vs_m5_atr_ratio\":" + DoubleToString(slVsM5AtrRatio, 4);
+   json += ",\"level_context_at_entry\":\"" + PJ_EscapeJsonMini(levelContextAtEntry) + "\"";
+   json += ",\"level_context_degraded_at_entry\":" + PJ_BoolText(level_context_degraded);
+   json += ",\"level_context_obstructed_at_entry\":" + PJ_BoolText(level_context_obstructed);
+   json += ",\"level_context_mixed_conflicted_at_entry\":" + PJ_BoolText(levelContextMixedConflicted);
+   json += ",\"entry_geometry_warning\":\"" + PJ_EscapeJsonMini(entryGeometryWarning) + "\"";
+
    json += ",\"base_confidence_score\":" + DoubleToString(PJ_Clamp01(base_confidence_score), 4);
    json += ",\"final_confidence_score\":" + DoubleToString(PJ_Clamp01(final_confidence_score), 4);
    json += ",\"confidence_delta_from_base\":" + DoubleToString(final_confidence_score - base_confidence_score, 4);

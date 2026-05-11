@@ -440,15 +440,29 @@ bool Correlation_ResolveForClosedDeal(
    ulong positionId = (ulong)HistoryDealGetInteger(closeDealTicket, DEAL_POSITION_ID);
    out.position_id = positionId;
 
-   // 1) try direct comment extraction (fallback)
-   string dealComment = HistoryDealGetString(closeDealTicket, DEAL_COMMENT);
+   // 1) try comment extraction from ENTRY deal (broker overwrites close deal comment)
    string did = "";
-   if(ExtractDecisionIdFromComment(dealComment, did) && StringLen(did) > 0)
+   if(positionId != 0)
+   {
+      int histTotal = HistoryDealsTotal();
+      for(int hi = histTotal - 1; hi >= 0; hi--)
+      {
+         ulong hTicket = HistoryDealGetTicket(hi);
+         if(hTicket == 0) continue;
+         long hEntry = HistoryDealGetInteger(hTicket, DEAL_ENTRY);
+         if(hEntry != DEAL_ENTRY_IN) continue;
+         ulong hPosId = (ulong)HistoryDealGetInteger(hTicket, DEAL_POSITION_ID);
+         if(hPosId != positionId) continue;
+         string entryComment = HistoryDealGetString(hTicket, DEAL_COMMENT);
+         ExtractDecisionIdFromComment(entryComment, did);
+         break;
+      }
+   }
+   if(StringLen(did) > 0)
    {
       out.decision_id = did;
       out.correlation_method = "COMMENT";
       out.correlation_quality = 0.60;
-
       // still attempt to upgrade via position_id
    }
 
@@ -459,7 +473,7 @@ bool Correlation_ResolveForClosedDeal(
       string method = "";
       double q = 0.0;
 
-      if(PJ_FindDecisionIdByPositionId(PERF_JOURNAL_PATH, positionId, 200, matchedId, method, q))
+      if(PJ_FindDecisionIdByPositionId(PERF_JOURNAL_PATH, positionId, 2000, matchedId, method, q))
       {
          out.decision_id = matchedId;
          out.correlation_method = method;

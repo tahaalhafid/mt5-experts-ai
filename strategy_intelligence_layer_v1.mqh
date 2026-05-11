@@ -6,6 +6,7 @@
 #include "market_regime.mqh"
 #include "strategy_runtime.mqh"
 #include "execution_estimator_v1.mqh"
+#include "council_mode_types.mqh"
 
 //---------------------------------------------------------
 // Strategy Intelligence Layer v1 (rule-based, explainable)
@@ -239,6 +240,28 @@ string SI_InferStyleTag(string activeMode, RegimeClassification &reg, RuntimeDec
    return "NEUTRAL";
 }
 
+string SI_InferStyleTag(string activeMode, RegimeClassification &reg, RuntimeDecision d, CouncilZoneType council_zone_type)
+{
+   if(activeMode == "COUNCIL" &&
+      council_zone_type != COUNCIL_ZONE_UNDEFINED &&
+      council_zone_type != COUNCIL_ZONE_NO_TRADE)
+   {
+      if(council_zone_type == COUNCIL_ZONE_TREND_CONTINUATION ||
+         council_zone_type == COUNCIL_ZONE_BREAKOUT_EXPANSION ||
+         council_zone_type == COUNCIL_ZONE_EXPANSION_CONTINUATION)
+         return "TREND_FOLLOW";
+
+      if(council_zone_type == COUNCIL_ZONE_RANGE_MEAN_RECLAIM ||
+         council_zone_type == COUNCIL_ZONE_RANGE_BALANCED ||
+         council_zone_type == COUNCIL_ZONE_RANGE_DIRTY ||
+         council_zone_type == COUNCIL_ZONE_COMPRESSION ||
+         council_zone_type == COUNCIL_ZONE_REVERSAL_EXHAUSTION)
+         return "MEAN_REVERT";
+   }
+
+   return SI_InferStyleTag(activeMode, reg, d);
+}
+
 void SI_InitEntryQuality(EntryQualityResult &e)
 {
    e.entry_quality_score    = 0.55;
@@ -307,6 +330,7 @@ void ComputeEntryQualityV1(
    RegimeClassification &reg,
    string activeMode,
    RuntimeDecision decision,
+   CouncilZoneType council_zone_type,
    EntryQualityResult &out
 )
 {
@@ -334,8 +358,22 @@ void ComputeEntryQualityV1(
    double pos = SI_RangePositionM5(24, price); // 2h on M5
    double location = 0.55;
 
-   bool trendish = (reg.regime_label == "TREND_UP" || reg.regime_label == "TREND_DOWN" || reg.regime_label == "EXPANSION");
-   bool rangish  = (reg.regime_label == "RANGE_BALANCED" || reg.regime_label == "RANGE_DIRTY" || reg.regime_label == "COMPRESSION");
+   bool trendish, rangish;
+   if(activeMode == "COUNCIL" && council_zone_type != COUNCIL_ZONE_UNDEFINED)
+   {
+      trendish = (council_zone_type == COUNCIL_ZONE_TREND_CONTINUATION ||
+                  council_zone_type == COUNCIL_ZONE_BREAKOUT_EXPANSION ||
+                  council_zone_type == COUNCIL_ZONE_EXPANSION_CONTINUATION);
+      rangish  = (council_zone_type == COUNCIL_ZONE_RANGE_MEAN_RECLAIM ||
+                  council_zone_type == COUNCIL_ZONE_RANGE_BALANCED ||
+                  council_zone_type == COUNCIL_ZONE_RANGE_DIRTY ||
+                  council_zone_type == COUNCIL_ZONE_COMPRESSION);
+   }
+   else
+   {
+      trendish = (reg.regime_label == "TREND_UP" || reg.regime_label == "TREND_DOWN" || reg.regime_label == "EXPANSION");
+      rangish  = (reg.regime_label == "RANGE_BALANCED" || reg.regime_label == "RANGE_DIRTY" || reg.regime_label == "COMPRESSION");
+   }
 
    if(rangish)
    {
@@ -445,6 +483,17 @@ void ComputeStrategyRegimeFitV1(
    StrategyRegimeFitResult &out
 )
 {
+   ComputeStrategyRegimeFitV1(reg, activeMode, decision, COUNCIL_ZONE_UNDEFINED, out);
+}
+
+void ComputeStrategyRegimeFitV1(
+   RegimeClassification &reg,
+   string activeMode,
+   RuntimeDecision decision,
+   CouncilZoneType council_zone_type,
+   StrategyRegimeFitResult &out
+)
+{
    SI_InitFit(out);
 
    if(!SI_IsTradeDecision(decision))
@@ -455,7 +504,7 @@ void ComputeStrategyRegimeFitV1(
       return;
    }
 
-   string style = SI_InferStyleTag(activeMode, reg, decision);
+   string style = SI_InferStyleTag(activeMode, reg, decision, council_zone_type);
    string rl = reg.regime_label;
 
    double score = 0.55;

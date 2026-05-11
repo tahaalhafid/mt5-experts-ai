@@ -178,6 +178,15 @@ void InitUnifiedDecisionConfidence(UnifiedDecisionConfidence &c)
    c.follow_through_quality_label = "";
    c.follow_through_reason        = "";
 
+   c.expected_stop_distance                = 0.0;
+   c.expected_target_distance              = 0.0;
+   c.expected_rr_estimate                  = 0.0;
+   c.adverse_excursion_risk_score          = 0.0;
+   c.favorable_excursion_potential_score   = 0.0;
+   c.execution_geometry_score              = 0.0;
+   c.execution_geometry_label              = "";
+   c.execution_geometry_reason             = "";
+
    c.learning_confidence_delta    = 0.0;
    c.learning_caution_score       = 0.0;
    c.learning_context_fit_score   = 0.5;

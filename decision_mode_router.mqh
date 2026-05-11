@@ -137,12 +137,19 @@ void EvaluateDecisionModeRoutedEx(
 
       string councilLog = "";
 
+      // Generate a fresh decision_id for this council cycle BEFORE RunCouncilModePipeline
+      // writes the DECISION_SNAPSHOT. This guarantees the DS decision_id and the trade
+      // comment always carry the same ID, fixing 86.7% attribution failure on EA restarts.
+      if(!isShadow)
+         gCurrentDecisionId = PJ_MakeDecisionId();
+
       if(!RunCouncilModePipeline(
             routed.council,
             (isShadow ? "" : "AI\\council_feedback.json"),
             (isShadow ? "" : "AI\\council_report.txt"),
             (isShadow ? "" : "AI\\council_memory.txt"),
-            councilLog))
+            councilLog,
+            gCurrentDecisionId))
       {
          routed.base_eval.decision = RUNTIME_REJECT;
          routed.base_eval.reason   = "COUNCIL runtime failed | " + councilLog;

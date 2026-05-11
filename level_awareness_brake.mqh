@@ -7,6 +7,7 @@
 */
 
 #include "council_mode_types.mqh"
+#include "structural_sr_engine.mqh"
 
 enum LevelBrakeVerdict
 {
@@ -32,6 +33,16 @@ struct LevelAwarenessBrakeReport
    double rejection_risk_score;           // 0..1
    double continuation_obstacle_risk;     // 0..1
    double reversal_trap_risk;             // 0..1
+   int    room_points;                    // diagnostic runway to opposing side
+   int    sr_resolution_count;            // diagnostic SRE support+resistance count
+
+   // Slice 2 — enriched structural profile (diagnostic, no authority change)
+   double  opposing_freshness;      // freshness_score of nearest opposing SRE zone
+   double  opposing_credibility;    // credibility_score of nearest opposing SRE zone
+   double  opposing_openness;       // openness_score of nearest opposing SRE zone
+   double  backing_class_score;     // 0..1 normalised class of structural backing zone
+   string  obstruction_label;       // WEAK_OBSTACLE/MODERATE_OBSTACLE/HARD_OBSTACLE/SEVERE_OBSTACLE
+   string  structural_profile;      // full Slice 2 structural context diagnostic line
 
    string location_context_summary;
 
@@ -73,6 +84,8 @@ string LAB_InferFamilyFromStrategyId(string strategy_id)
    if(StringFind(strategy_id, "trend") >= 0) return "TREND_CONTINUATION";
    if(StringFind(strategy_id, "pullback") >= 0) return "TREND_PULLBACK_CONTINUATION";
    if(StringFind(strategy_id, "momentum") >= 0) return "MOMENTUM_REVERSAL_ASSIST";
+
+   if(strategy_id == "fvg_tpb") return "IMBALANCE_FILL_REVERSAL";
 
    return "UNKNOWN";
 }
@@ -259,6 +272,28 @@ void LAB_CollectRangeBoundsIfNeeded(string zone_semantic, string symbol, double 
    }
 }
 
+// Classify opposing zone obstruction severity — DIAGNOSTIC ONLY
+// Does NOT change the hard-brake gate (opposeClass >= ZONE_STRONG remains authoritative)
+string LAB_ObstructionLabel(StructuralZoneClass cls, double freshness, double credibility)
+{
+   if(cls < ZONE_STRONG)
+      return "WEAK_OBSTACLE";
+   if(cls == ZONE_MAJOR && freshness >= 0.70 && credibility >= 0.50)
+      return "SEVERE_OBSTACLE";
+   if(freshness >= 0.50 && credibility >= 0.35)
+      return "HARD_OBSTACLE";
+   return "MODERATE_OBSTACLE";
+}
+
+// Normalise backing zone class to 0..1 for diagnostic scoring
+double LAB_NormBackingClass(StructuralZoneClass cls)
+{
+   if(cls == ZONE_MAJOR)  return 1.00;
+   if(cls == ZONE_STRONG) return 0.67;
+   if(cls == ZONE_MEDIUM) return 0.33;
+   return 0.00;
+}
+
 bool BuildLevelAwarenessBrakeReport(
    string symbol,
    int direction, // +1 BUY, -1 SELL
@@ -268,6 +303,14 @@ bool BuildLevelAwarenessBrakeReport(
 {
    out.direction_under_review = (direction > 0 ? "BUY" : "SELL");
    out.zone_semantic = CouncilInferZoneSemantic(rt.env);
+   out.opposing_freshness    = 0.0;
+   out.opposing_credibility  = 0.0;
+   out.opposing_openness     = 0.0;
+   out.backing_class_score   = 0.0;
+   out.obstruction_label     = "WEAK_OBSTACLE";
+   out.structural_profile    = "";
+   out.room_points           = -1;
+   out.sr_resolution_count   = 0;
 
    out.strategy_id = rt.aggregate.best_strategy_id;
    out.strategy_family = LAB_InferFamilyFromStrategyId(out.strategy_id);
@@ -278,14 +321,17 @@ bool BuildLevelAwarenessBrakeReport(
    else
       SymbolInfoDouble(symbol, SYMBOL_BID, price);
 
-   double bestSupport = 0.0;
-   double bestResist  = 0.0;
+   // Update structural S/R engine (no-op if already updated this bar)
+   SRE_UpdateZones(symbol);
 
-   // Structure pivots + extremes
-   LAB_CollectFractalLevels(symbol, PERIOD_M5, price, bestSupport, bestResist);
-   LAB_CollectSwingExtremes(symbol, PERIOD_M15, price, bestSupport, bestResist);
+   // Primary level source: structural zones (any class) for distance, STRONG/MAJOR for hard brakes
+   double sreSupport = SRE_NearestSupportAny(price);
+   double sreResist  = SRE_NearestResistanceAny(price);
 
-   // Intraday + prev day
+   double bestSupport = sreSupport;
+   double bestResist  = sreResist;
+
+   // Intraday + prev day as fallback / supplement
    double sessH=0.0, sessL=0.0;
    if(LAB_GetTodaySessionLevels(symbol, sessH, sessL))
    {
@@ -300,8 +346,14 @@ bool BuildLevelAwarenessBrakeReport(
       LAB_UpdateNearestLevels(price, prevL, bestSupport, bestResist);
    }
 
-   // Range bounds hint
+   // Range bounds hint (kept for semantic context)
    LAB_CollectRangeBoundsIfNeeded(out.zone_semantic, symbol, price, bestSupport, bestResist);
+
+   // Resolve the class of the opposing structural zone for the hard-brake gate
+   StructuralZoneClass opposeClass = (direction > 0)
+      ? SRE_NearestResistanceClass(price)
+      : SRE_NearestSupportClass(price);
+   bool opposeIsStructural = (opposeClass >= ZONE_STRONG);
 
    out.nearest_support_price = bestSupport;
    out.nearest_resistance_price = bestResist;
@@ -322,6 +374,7 @@ bool BuildLevelAwarenessBrakeReport(
    double atrPts = (atr > 0.0 ? atr / pt : 0.0);
 
    int roomPts = (direction > 0 ? distResistPts : distSupportPts);
+   out.room_points = roomPts;
    double roomNorm = (atrPts > 1.0 ? (roomPts / (atrPts * 1.20)) : 1.0);
    out.breakout_room_score = LAB_Clamp01(roomNorm);
 
@@ -345,13 +398,53 @@ bool BuildLevelAwarenessBrakeReport(
    }
    out.reversal_trap_risk = revTrap;
 
+   // Slice 2 — Query enriched structural profile from Slice 1 SRE contract
+   double oppFreshness   = SRE_NearestOpposingFreshness(price, direction);
+   double oppCredibility = SRE_NearestOpposingCredibility(price, direction);
+   double oppOpenness    = SRE_NearestOpposingOpenness(price, direction);
+
+   // Backing zone: structural zone on the same side as the trade entry
+   // BUY backing = nearest support below  (structural floor behind entry)
+   // SELL backing = nearest resistance above (structural ceiling behind entry)
+   StructuralZoneClass backingClass = (direction > 0)
+      ? SRE_NearestSupportClass(price)
+      : SRE_NearestResistanceClass(price);
+
+   out.opposing_freshness   = oppFreshness;
+   out.opposing_credibility = oppCredibility;
+   out.opposing_openness    = oppOpenness;
+   out.backing_class_score  = LAB_NormBackingClass(backingClass);
+   out.obstruction_label    = LAB_ObstructionLabel(opposeClass, oppFreshness, oppCredibility);
+   out.sr_resolution_count  = gSRZonesResistanceCount + gSRZonesSupportCount;
+
+   string opposeClassStr = (opposeClass == ZONE_MAJOR  ? "MAJOR"  :
+                            opposeClass == ZONE_STRONG ? "STRONG" :
+                            opposeClass == ZONE_MEDIUM ? "MEDIUM" : "WEAK");
+
    out.location_context_summary =
       "zone=" + out.zone_semantic +
       " fam=" + out.strategy_family +
       " room=" + DoubleToString(out.breakout_room_score, 2) +
       " rej=" + DoubleToString(out.rejection_risk_score, 2) +
       " supPts=" + IntegerToString(distSupportPts) +
-      " resPts=" + IntegerToString(distResistPts);
+      " resPts=" + IntegerToString(distResistPts) +
+      " oppClass=" + opposeClassStr +
+      " obst=" + out.obstruction_label +
+      " oppFresh=" + DoubleToString(oppFreshness, 2) +
+      " oppCred=" + DoubleToString(oppCredibility, 2) +
+      " oppOpen=" + DoubleToString(oppOpenness, 2) +
+      " backing=" + DoubleToString(out.backing_class_score, 2) +
+      " srRes=" + IntegerToString(gSRZonesResistanceCount) +
+      " srSup=" + IntegerToString(gSRZonesSupportCount);
+
+   out.structural_profile =
+      "SVS_PROFILE"
+      " | obstruct=" + out.obstruction_label +
+      " | oppFresh=" + DoubleToString(oppFreshness, 2) +
+      " | oppCred=" + DoubleToString(oppCredibility, 2) +
+      " | oppOpen=" + DoubleToString(oppOpenness, 2) +
+      " | backing=" + DoubleToString(out.backing_class_score, 2) +
+      " | sre=[" + gSRELastUpdateSummary + "]";
 
    // Default verdict
    out.brake_verdict = "ALLOW";
@@ -362,30 +455,32 @@ bool BuildLevelAwarenessBrakeReport(
 
    // ----------------------------
    // Rule A — Continuation Into Obstacle
+   // Hard brake only when the opposing level is STRONG or MAJOR (structural zone class).
+   // WEAK/MEDIUM noise pivots no longer trigger a hard brake.
    // ----------------------------
    if(LAB_IsContinuationFamily(out.strategy_family))
    {
       double hardOppose = (atrPts > 1.0 ? atrPts * 0.35 : 55.0);
-      if(opposePts < (int)hardOppose && out.breakout_room_score < 0.35)
+      if(opposeIsStructural && opposePts < (int)hardOppose && out.breakout_room_score < 0.35)
       {
          out.brake_verdict = "HARD_REJECT";
          out.brake_reason_code = "continuation_entry_blocked_by_near_opposing_level";
-         out.brake_reason = "continuation into near obstacle without sufficient room";
+         out.brake_reason = "continuation into near STRONG/MAJOR obstacle without sufficient room";
          return true;
       }
    }
 
    // ----------------------------
    // Rule B — Reclaim Into Rejection
+   // Hard brake only when the opposing zone is STRONG or MAJOR.
    // ----------------------------
    if(LAB_IsReclaimFamily(out.strategy_family))
    {
-      // block only when reclaim is clearly driving straight into rejection with low room
-      if(out.rejection_risk_score > 0.80 && out.breakout_room_score < 0.40)
+      if(opposeIsStructural && out.rejection_risk_score > 0.80 && out.breakout_room_score < 0.40)
       {
          out.brake_verdict = "HARD_REJECT";
          out.brake_reason_code = "reclaim_entry_conflicts_with_rejection_zone";
-         out.brake_reason = "reclaim/mean entry points into strong rejection zone";
+         out.brake_reason = "reclaim/mean entry points into STRONG/MAJOR rejection zone";
          return true;
       }
    }
@@ -441,6 +536,42 @@ bool BuildLevelAwarenessBrakeReport(
       out.brake_reason_code = "strategy_location_misfit_reclaim_in_compression";
       out.brake_reason = "reclaim family misfit in compression zone";
       return true;
+   }
+
+   // ----------------------------
+   // Rule E — Reversal Trap (entry materially far from structural edge)
+   // Promotes reversal_trap_risk from dead computation to live brake.
+   // Fires only for LIQUIDITY_REVERSAL / MOMENTUM_REVERSAL_ASSIST families.
+   // ----------------------------
+   if(LAB_IsLiquidityReversalFamily(out.strategy_family) && out.reversal_trap_risk > 0.75)
+   {
+      out.brake_verdict = "HARD_REJECT";
+      out.brake_reason_code = "reversal_trap_entry_far_from_structural_edge";
+      out.brake_reason = "reversal family entry is materially distant from expected structural edge";
+      return true;
+   }
+
+   // ----------------------------
+   // Rule F — Continuation Obstacle (SRE structural room gate)
+   // Uses SRE zones only — excludes session extremes which track price in trending markets.
+   // Fires only when a genuine structural zone is within 25% of ATR*1.20 in the continuation direction.
+   // BUY: room = distance to nearest sreResist above.
+   // SELL: room = distance to nearest sreSupport below.
+   // Silent (does not fire) when no SRE zone is in range (sreOppPts = 999999).
+   // ----------------------------
+   if(LAB_IsContinuationFamily(out.strategy_family))
+   {
+      int sreOppPts = (direction > 0)
+         ? (sreResist > 0.0 ? (int)MathRound((sreResist - price) / pt) : 999999)
+         : (sreSupport > 0.0 ? (int)MathRound((price - sreSupport) / pt) : 999999);
+      double sreRoomScore = (atrPts > 1.0 ? LAB_Clamp01((double)sreOppPts / (atrPts * 1.20)) : 1.0);
+      if(sreRoomScore < 0.25 && opposeIsStructural)
+      {
+         out.brake_verdict = "HARD_REJECT";
+         out.brake_reason_code = "continuation_obstacle_insufficient_sre_room";
+         out.brake_reason = "continuation entry has insufficient runway to nearest structural zone";
+         return true;
+      }
    }
 
    // conservative default: allow

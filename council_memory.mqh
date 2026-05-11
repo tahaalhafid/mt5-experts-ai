@@ -523,6 +523,66 @@ bool ParseCouncilFeedbackRecordFromJson(string json, CouncilFeedbackRecord &r)
    if(ExtractJsonBoolField(json, "exhaustion_warning", b))
       r.exhaustion_warning = b;
 
+   if(ExtractJsonBoolField(json, "c1_tc_active", b))
+      r.c1_tc_active = b;
+
+   if(ExtractJsonBoolField(json, "c1_high_conviction_active", b))
+      r.c1_high_conviction_active = b;
+
+   if(ExtractJsonBoolField(json, "c1_overextension_active", b))
+      r.c1_overextension_active = b;
+
+   if(ExtractJsonBoolField(json, "c1_pre_governor_candidate", b))
+      r.c1_pre_governor_candidate = b;
+
+   if(ExtractJsonBoolField(json, "c1_shadowed_by_exhaustion", b))
+      r.c1_shadowed_by_exhaustion = b;
+
+   if(ExtractJsonStringField(json, "c1_shadow_reason", s))
+      r.c1_shadow_reason = s;
+
+   if(ExtractJsonBoolField(json, "c2_overextension_m5_active", b))
+      r.c2_overextension_m5_active = b;
+
+   if(ExtractJsonBoolField(json, "c2_consensus_tightening_applied", b))
+      r.c2_consensus_tightening_applied = b;
+
+   if(ExtractJsonDoubleField(json, "c2_consensus_tightening_delta", d))
+      r.c2_consensus_tightening_delta = d;
+
+   if(ExtractJsonDoubleField(json, "c2_pre_consensus_requirement", d))
+      r.c2_pre_consensus_requirement = d;
+
+   if(ExtractJsonDoubleField(json, "c2_post_consensus_requirement", d))
+      r.c2_post_consensus_requirement = d;
+
+   if(ExtractJsonBoolField(json, "c2_effective_on_outcome", b))
+      r.c2_effective_on_outcome = b;
+
+   if(ExtractJsonStringField(json, "c2_gate_outcome", s))
+      r.c2_gate_outcome = s;
+
+   if(ExtractJsonBoolField(json, "c3_low_structure_tc_active", b))
+      r.c3_low_structure_tc_active = b;
+
+   if(ExtractJsonDoubleField(json, "c3_structure_score", d))
+      r.c3_structure_score = d;
+
+   if(ExtractJsonBoolField(json, "c3_logic_applied", b))
+      r.c3_logic_applied = b;
+
+   if(ExtractJsonBoolField(json, "c3_effective_on_outcome", b))
+      r.c3_effective_on_outcome = b;
+
+   if(ExtractJsonStringField(json, "c3_gate_outcome", s))
+      r.c3_gate_outcome = s;
+
+   if(ExtractJsonStringField(json, "c123_obstacle_summary", s))
+      r.c123_obstacle_summary = s;
+
+   if(ExtractJsonStringField(json, "c123_obstacle_semantics_version", s))
+      r.c123_obstacle_semantics_version = s;
+
    if(ExtractJsonIntField(json, "close_time", i))
       r.close_time = (datetime)i;
 
