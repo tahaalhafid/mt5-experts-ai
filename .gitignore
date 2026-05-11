@@ -1,0 +1,24 @@
+﻿# Local AI/editor tooling
+.claude/
+.continue/
+.vscode/
+.ai/reports/
+
+# Python/local environment
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Logs
+*.log
+compile_*.log
+
+# Backups / temporary artifacts
+*.bak_*
+*.zip
+system_backup_*.zip
+desktop.ini
+
+# Optional local MT5 backups
+backup/
