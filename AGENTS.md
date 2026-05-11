@@ -99,20 +99,25 @@ If these distinctions are unclear, stop and state the ambiguity explicitly befor
 Before modifying any file, you MUST create a full backup of the current system state.
 
 Required behavior:
-- create or use terminal-root folder `backup_archives/`
-- create a timestamped backup archive before any edit
+- create a timestamped backup archive in the external governed backup root before any edit
 - do not overwrite old backups
 - the backup must cover all files relevant to the requested scope
-- backup destination must remain outside source scope
+- backup destination must be external to the MQL5/terminal project tree (see Section 2.1)
 - if backup creation fails, STOP and do not modify anything
 
-Preferred naming:
-`backup_archives/pre_change_<YYYYMMDD_HHMMSS>_<short_scope>.zip`
+Governed external backup root (forward policy):
+`D:\MT5_Project_Backups\`
+
+Naming convention (unchanged):
+`D:\MT5_Project_Backups\pre_change_<YYYYMMDD_HHMMSS>_<short_scope>.zip`
 
 If a backup script exists, use it.
 If no backup script exists yet, create the backup carefully and explicitly before any modification.
 
 No edit is allowed before backup exists.
+
+**PIML Backup Exception**
+`PROJECT_INTELLIGENCE_MEMORY_LAYER.md` and its linked archival `.txt` files (in `plans/archive/`) are governed internal memory artifacts — not runtime files, not source authority files, not execution logic. Editing these files does not require creating a backup before edit. This exception is narrow: it applies only to these memory/archive files and must not be generalised to any other project file. All other backup duties remain fully in force.
 
 ### 2.1) Explicit governed backup scope
 Every pre-change backup must explicitly include the two governed roots below:
@@ -121,8 +126,14 @@ Every pre-change backup must explicitly include the two governed roots below:
 - `MQL5/Files/AI`
 
 Backup destination rule:
-- backup output must be written to terminal-root `backup_archives/`
-- do not write backup zips inside `MQL5/Experts/AI` or `MQL5/Files/AI`
+- backup output must be written to the external governed root: `D:\MT5_Project_Backups\`
+- do not write backup zips inside `MQL5/Experts/AI`, `MQL5/Files/AI`, or anywhere inside the terminal installation tree
+- in-tree backup creation (e.g., `terminal-root/backup_archives/`) is no longer the governed default
+
+Historical backup note:
+- archives already created under `backup_archives/` inside the terminal tree remain valid for rollback purposes
+- they are grandfathered as past artifacts and do not need to be moved
+- the external-path policy applies to all future backup-requiring missions only
 
 Recursive-archive exclusion rule:
 - existing `.zip` backup artifacts inside source trees must not be re-archived
@@ -405,6 +416,63 @@ If AI review is present while AI authority is OFF or NOT_READY, preserve that di
 
 ---
 
+## Regime Authority Discipline
+
+This system operates with three primary computation chains and a derivative consumer network. All three chains are intentional and architecturally valid. Their roles are canonically declared here.
+
+### Three Primary Computation Chains
+
+1. **MarketRegimeSnapshot** (`market_regime.mqh` `BuildMarketRegimeSnapshot()`) — 4-axis intermediate descriptor (TREND_BULL/TREND_BEAR/RANGE | HIGH_VOL/NORMAL_VOL/LOW_VOL | TIGHT/NORMAL/WIDE_SPREAD | CLEAN/NOISY). This is an upstream input to `ClassifyCouncilZone()`, NOT equivalent to gRegime. Its summary string never contains "COMPRESSION" or any gRegime 8-label value. Shared indicator inputs (EMA20/50, ATR14 on M1/M5) with gRegime are a deliberate design choice, not contamination.
+
+2. **RegimeClassificationV1 / gRegime** (`regime_classification_layer_v1.mqh` `BuildRegimeClassificationV1()`) — 8-label complex classifier. COMPRESSION detected via `ATR14_M1/ATR100_M1 ≤ 0.72`. Admission Authority (see ERA below).
+
+3. **Council Zone** (`council_environment.mqh` `ClassifyCouncilZone()`) — 7-label routing classifier. Takes `MarketRegimeSnapshot &reg` as input, NOT gRegime. COMPRESSION detected via `!continuation_bias && !reversal_bias && momentum_score < 0.45 && volatility_score < 0.55`. Routing/Execution Authority (see ExRA below).
+
+**Label vocabulary overlap is not identity.** Both gRegime and council zone use "COMPRESSION" but compute it via different indicator chains and different temporal windows. `gRegime=COMPRESSION` and `council_zone=COMPRESSION` are not the same fact. Disagreement between gRegime and council zone is a measurement question arising from their different detection logic, NOT a signal that one invalidates the other.
+
+### External Regime Authority (ERA) = gRegime (REGIME_CLASSIFICATION_V1)
+
+`gRegime` is the sole authority for all external admission and structural governance decisions:
+
+- Trade admission gates (allowed_regimes CSV, confidence/tradability floors) — `main_ea.mq5:10541`
+- CouncilDirtyEnvironmentGate (gRegime="COMPRESSION" post-routing block) — `main_ea.mq5:9633`
+- AI scope key indexing (`"COUNCIL|" + direction + "|" + gRegime.regime_label`) — `main_ea.mq5:7568`
+- Failure classification (`failure_taxonomy.mqh` — `ClassifyDecisionFailureV1`)
+- Journal analytics stratification (`journal_analytics.mqh`)
+
+ERA must not be replaced or shadowed by council zone labels in these surfaces.
+
+### Execution Routing Authority (ExRA) = council zone (ClassifyCouncilZone)
+
+The council zone is the sole authority for all execution routing and strategy-layer decisions:
+
+- Strategy eligibility routing (`CouncilAssignStrategyMeta` — ACTIVE/REDUCED/OBSERVE_ONLY/BLOCKED)
+- Zone alignment scoring (`CouncilZoneAlignmentScore` — `council_strategies.mqh:435`)
+- Pre-AI filter threshold selection (zone-adaptive block in `RunCouncilPreAIFilter`)
+- Preferred and blocked style assignment
+
+ExRA must not be replaced or shadowed by gRegime labels in these surfaces.
+
+### Cross-Authority Rules
+
+1. **No cross-reading without reconciliation contract.** A surface that is ERA-owned must not read or substitute council zone labels. A surface that is ExRA-owned must not read or substitute gRegime labels. The six known violations are governed exceptions documented in PLAN-ARCH-DR and OPERATION_GUARDRAILS.md — they are being resolved in stages, not silently tolerated.
+
+2. **New surfaces must declare authority.** Any new surface that reads regime state must declare in its implementation whether it is ERA-governed or ExRA-governed. No undeclared cross-reads are allowed.
+
+3. **Analytics carry both.** Any analytics surface spanning ERA and ExRA decisions must carry both `regime_label` (ERA) and `zone_name` (ExRA) as independent fields. Neither field substitutes for the other.
+
+4. **Vocabulary overlap is not identity.** Both systems use the label "COMPRESSION" but compute it via different indicator chains at different decision layers. `gRegime=COMPRESSION` (REGIME_CLASSIFICATION_V1, ATR14/ATR100 ≤ 0.72) and `council_zone=COMPRESSION` (ClassifyCouncilZone, !continuation_bias && !reversal_bias && momentum_score < 0.45 && volatility_score < 0.55) are not the same fact and must not be conflated.
+
+5. **AI and advisory/learning consumers must key council-mode outputs by council zone.** Any surface that provides AI advisory, advisory scope, or learning motif services in council-mode execution must be keyed by the council zone (ExRA), not by gRegime (ERA). The six confirmed violations include LEARNING_CONTAMINATION in `institutional_learning_layer_v1.mqh:338` where all council-mode motifs are keyed by gRegime — this causes learning contamination across distinct routing situations. P3.1A (AI scope rebind) and P3.1B (motif-key extension) are one AI deconfliction bundle and must be implemented together.
+
+6. **Bridge is measurement-only.** Adding gRegime to DECISION records (P2.B) or adding zone_bucket to learning motifs (P3.1B) are the only permitted bridges between ERA and ExRA. No bridge for governance, control, threshold modification, or veto logic. A bridge that says "route X is invalid if ERA is Y" reproduces the CouncilDirtyEnvironmentGate violation at a higher abstraction level and is forbidden.
+
+7. **gRegime=COMPRESSION does NOT veto council routing.** The CouncilDirtyEnvironmentGate (P4 violation) that blocks execution after council has already routed is a known harmful asymmetry being addressed in Stage P4. Do not reproduce this pattern in any new logic. gRegime=COMPRESSION is admission-layer signal only. It says nothing about whether council routing to TREND_CONTINUATION or any other zone was correct.
+
+8. **P2.A is FULLY_CLOSED (2026-04-22).** The double-comma serialization defect was repaired by correcting three provenance helper functions in `performance_journal.mqh` (lines 160–185). Current TRADE records (post 2026-04-22 19:55 binary timestamp) parse cleanly under strict json.loads(). Historical TRADE records written before 2026-04-22 19:55 may still contain double commas before the provenance block — consumers replaying pre-fix journal history must apply substring/regex extraction for those records only. Do not apply double-comma workarounds to current runtime records.
+
+---
+
 ## Freshness and Coherence Discipline
 
 Where freshness or coherence surfaces exist, treat them seriously.
@@ -448,6 +516,76 @@ After every modification, report exactly:
 Do not give vague summaries.
 Do not hide scope.
 Do not imply broader success than what was actually changed.
+
+---
+
+## Project Intelligence Memory Layer (PIML)
+
+The file `PROJECT_INTELLIGENCE_MEMORY_LAYER.md` is the governed execution/intelligence memory for this project.
+
+### Purpose
+
+It exists to reduce rediscovery cost and improve execution continuity across sessions. It holds the master architecture tree, execution program registry, functional tree, file/function index, and other structured project truth.
+
+### State Anchor Fast-Read Rule
+
+`PROJECT_INTELLIGENCE_MEMORY_LAYER.md` contains a `## CURRENT STATE ANCHOR` block positioned near the top of the file (after Section 0 governance). This is the primary fast-read entry point.
+
+When a mission is primarily about **current status, next step, waiting condition, active plan state, frozen boundaries, or what changed**, read the `CURRENT STATE ANCHOR` block first — not the full file, not Section 7, not Section 2. If the anchor provides sufficient context, stop there.
+
+Only read deeper sections (e.g. Section 7.2 for plan detail, Section 2 for architecture nodes) when the anchor is insufficient for the specific mission.
+
+After any execution that changes project truth at the anchor level, update the `CURRENT STATE ANCHOR` immediately. Anchor-level changes include:
+- A compile completes or fails
+- An observation window starts or closes
+- A plan state changes (e.g. PARTIALLY_EXECUTED → ACTIVE)
+- A waiting gate resolves or a new one appears
+- A deferred branch moves
+- A major milestone completes
+- The immediate next step changes
+
+### Lightweight Selective-Read Rule
+
+Do NOT read the whole file on every task. Use a selective read:
+
+- For status / next-step questions: read the `CURRENT STATE ANCHOR` block only
+- For plan detail: read the relevant Section 7.2 entry only
+- For architecture context: read the specific node(s) in Section 2 only
+- If the mission clearly does not need the file: skip the read entirely
+- Full-file reads are justified only for deep architecture discovery or file-level population missions
+
+### Automatic Update Rule
+
+After every execution mission, ask:
+
+> Did this mission change any project truth that belongs in the memory file?
+
+If YES — update only the directly impacted section(s) immediately.
+If NO — no update required.
+
+Examples of truth changes that require a PIML update:
+- A source file was created or deleted
+- A subsystem was materially evolved (architecture node truth changed)
+- A plan stage completed or plan status changed
+- A plan was split, merged, deferred, or cancelled
+- A new dependency or consumer relationship became real
+- A completed slice changed the active plan truth
+
+### Update Scope Rule
+
+Update only the directly impacted section(s). Do not sweep the whole file after every mission. Do not redesign the file structure — update only the data inside the existing structure.
+
+### Monitoring Output Convention
+
+After every execution mission, include at the end of the report:
+
+```
+PIML_READ: YES / NO
+PIML_UPDATE: YES / NO
+PIML_SECTIONS: <brief section refs — only if update was YES>
+```
+
+Keep monitoring lines brief. This is short confirmation only, not a verbose memory log.
 
 ---
 
