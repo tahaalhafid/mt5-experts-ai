@@ -222,10 +222,12 @@ void BuildCouncilFailureRiskScores(
          ((agg.consensus_label == "NARROW") ? 0.10 : 0.0)
       );
 
+   // CEIS evolution: use continuous ceis_source_score instead of binary exhaustion_hint.
+   // Maximum contribution unchanged (0.20). Now graded: 0.0 to 0.20 based on signal strength.
    r.exhaustion_ignore_risk_score =
       CouncilFailureClamp01(
          exhaustionIgnoredBase +
-         (env.exhaustion_hint ? 0.20 : 0.0) +
+         (env.ceis_source_score * 0.20) +
          (agg.exhaustion_warning ? 0.15 : 0.0)
       );
 

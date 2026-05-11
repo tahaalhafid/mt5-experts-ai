@@ -376,7 +376,7 @@ bool RunShadowReplayV1(
    StrategyRegimeFitResult fit;
    DecisionQualityResult dq;
 
-   ComputeEntryQualityV1(m1, regime, shadowRouted.active_mode, shadowEval.decision, eq);
+   ComputeEntryQualityV1(m1, regime, shadowRouted.active_mode, shadowEval.decision, shadowRouted.council.env.zone_type, eq);
    ComputeStrategyRegimeFitV1(regime, shadowRouted.active_mode, shadowEval.decision, fit);
 
    EntryEdgeResult edge;

@@ -263,6 +263,7 @@ bool BuildBuyTradeLevels(
    double atrMultiplier,
    int atrPeriod,
    double extraStopBufferPoints,
+   double m5AtrFloorFraction,
    TradeLevels &levels
 )
 {
@@ -297,7 +298,17 @@ bool BuildBuyTradeLevels(
 
    double brokerMinDistance = (stopLevelPts + extraStopBufferPoints) * point;
    double atrDistance       = atrRaw * atrMultiplier;
-   double finalStopDistance = MathMax(brokerMinDistance, atrDistance);
+   double safeM5Fraction    = MathMax(0.0, m5AtrFloorFraction);
+   double m5AtrFloor        = 0.0;
+
+   if(safeM5Fraction > 0.0)
+   {
+      double m5AtrRaw = 0.0;
+      if(ReadATRRaw(PERIOD_M5, atrPeriod, 1, m5AtrRaw) && m5AtrRaw > 0.0)
+         m5AtrFloor = m5AtrRaw * safeM5Fraction;
+   }
+
+   double finalStopDistance = MathMax(brokerMinDistance, MathMax(atrDistance, m5AtrFloor));
 
    if(finalStopDistance <= 0.0)
    {
@@ -332,6 +343,7 @@ bool BuildSellTradeLevels(
    double atrMultiplier,
    int atrPeriod,
    double extraStopBufferPoints,
+   double m5AtrFloorFraction,
    TradeLevels &levels
 )
 {
@@ -366,7 +378,17 @@ bool BuildSellTradeLevels(
 
    double brokerMinDistance = (stopLevelPts + extraStopBufferPoints) * point;
    double atrDistance       = atrRaw * atrMultiplier;
-   double finalStopDistance = MathMax(brokerMinDistance, atrDistance);
+   double safeM5Fraction    = MathMax(0.0, m5AtrFloorFraction);
+   double m5AtrFloor        = 0.0;
+
+   if(safeM5Fraction > 0.0)
+   {
+      double m5AtrRaw = 0.0;
+      if(ReadATRRaw(PERIOD_M5, atrPeriod, 1, m5AtrRaw) && m5AtrRaw > 0.0)
+         m5AtrFloor = m5AtrRaw * safeM5Fraction;
+   }
+
+   double finalStopDistance = MathMax(brokerMinDistance, MathMax(atrDistance, m5AtrFloor));
 
    if(finalStopDistance <= 0.0)
    {

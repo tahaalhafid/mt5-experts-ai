@@ -731,32 +731,12 @@ void CouncilFinalizeStrategyReport(CouncilStrategyReport &r)
 //---------------------------------------------------------
 bool CouncilIsCompressionContext(CouncilEnvironmentReport &env)
 {
-   if(env.zone_type == COUNCIL_ZONE_COMPRESSION)
-      return true;
-
-   // Prefer explicit regime label text. Zone COMPRESSION may not exist in baseline.
-   if(CouncilStringContains(env.regime_summary, "COMPRESSION"))
-      return true;
-
-   if(CouncilStringContains(env.zone_name, "COMPRESSION"))
-      return true;
-
-   return false;
+   return (env.zone_type == COUNCIL_ZONE_COMPRESSION);
 }
 
 bool CouncilIsExpansionContext(CouncilEnvironmentReport &env)
 {
-   if(env.zone_type == COUNCIL_ZONE_BREAKOUT_EXPANSION || env.zone_type == COUNCIL_ZONE_EXPANSION_CONTINUATION)
-
-      return true;
-
-   if(CouncilStringContains(env.regime_summary, "EXPANSION"))
-      return true;
-
-   if(CouncilStringContains(env.zone_name, "EXPANSION"))
-      return true;
-
-   return false;
+   return (env.zone_type == COUNCIL_ZONE_BREAKOUT_EXPANSION || env.zone_type == COUNCIL_ZONE_EXPANSION_CONTINUATION);
 }
 
 bool CouncilIsCompressionOrExpansionAllowedZone(CouncilEnvironmentReport &env)
@@ -812,7 +792,7 @@ void BuildCouncilStrategy_SweepReversal(
    r.strategy_id     = "sweep_reversal";
    r.strategy_family = "LIQUIDITY_REVERSAL";
    r.direction_bias  = "BOTH";
-   r.vote_weight     = 1.15;
+   r.vote_weight     = 0.60; // Demoted from 1.15: 26.7% win rate after 46 obs, degradation_hint=TRUE
 
    CouncilAssignStrategyMeta(env, r, COUNCIL_ROLE_SCOUT);
 
@@ -946,6 +926,18 @@ void BuildCouncilStrategy_BollingerReclaim(
       r.score_final     = 0.0;
       r.vote_weight     = CouncilApplyEligibilityWeight(r, r.vote_weight);
       CouncilFinalizeStrategyReport(r);
+      return;
+   }
+
+   if(tr.dir == CORE_SELL && StringFind(env.era_label_v1, "TREND_UP") >= 0)
+   {
+      r.decision     = COUNCIL_DECISION_WAIT;
+      r.short_reason = "SELL blocked: TREND_UP regime counter-sell gate";
+      r.explanation  = "bollinger_reclaim SELL blocked in TREND_UP (V1 gate, replay-authorized)";
+      r.score_final  = 0.0;
+      r.vote_weight  = 0.0;
+      CouncilFinalizeStrategyReport(r);
+      r.vote_weight  = 0.0;
       return;
    }
 
@@ -1151,7 +1143,7 @@ TriggerResult DetectTrendPullbackContinuationTrigger()
 
    if(bull)
    {
-      bool pullback = (c2 < o2) && (l2 <= emaFastM5 + atrM1 * 0.25) && (l2 >= emaSlowM5 - atrM1 * 0.50);
+      bool pullback = (c2 < o2) && (l2 <= emaFastM5 + atrM1 * 0.70) && (l2 >= emaSlowM5 - atrM1 * 0.50);
       bool confirm  = (c1 > o1) && (RT_BullishRejection(PERIOD_M1, 1) || (c1 >= emaFastM5));
       bool not_late  = ((c1 - emaFastM5) <= atrM1 * 1.20);
 
@@ -1173,7 +1165,7 @@ TriggerResult DetectTrendPullbackContinuationTrigger()
    }
 
    // bear
-   bool pullback = (c2 > o2) && (h2 >= emaFastM5 - atrM1 * 0.25) && (h2 <= emaSlowM5 + atrM1 * 0.50);
+   bool pullback = (c2 > o2) && (h2 >= emaFastM5 - atrM1 * 0.70) && (h2 <= emaSlowM5 + atrM1 * 0.50);
    bool confirm  = (c1 < o1) && (RT_BearishRejection(PERIOD_M1, 1) || (c1 <= emaFastM5));
    bool not_late  = ((emaFastM5 - c1) <= atrM1 * 1.20);
 
@@ -1195,6 +1187,83 @@ TriggerResult DetectTrendPullbackContinuationTrigger()
    return tr;
 }
 
+// Diagnostic-only variant for V2B path (zone=RMR + eraIsTrendV1=true).
+// IDENTICAL condition logic and return values (valid/dir/quality) as base function.
+// Difference: tr.reason is specific to failure location instead of generic.
+// eraLabel passed for reason-string context only — not used in any condition.
+TriggerResult DetectTrendPullbackContinuationTriggerDiag(string eraLabel)
+{
+   TriggerResult tr;
+   tr.dir = CORE_NONE;
+   tr.quality = 0.0;
+   tr.reason = "No trend pullback continuation";
+   tr.valid = false;
+
+   bool bull = RT_M1TrendBull() && RT_M5TrendBull();
+   bool bear = RT_M1TrendBear() && RT_M5TrendBear();
+
+   if(!bull && !bear)
+   {
+      tr.reason = "No trigger [V2B era=" + eraLabel + "]: direction check failed";
+      return tr;
+   }
+
+   double emaFastM5 = 0.0, emaSlowM5 = 0.0, atrM1 = 0.0;
+   if(!RT_GetEMA(PERIOD_M5, 20, 1, emaFastM5)) return tr;
+   if(!RT_GetEMA(PERIOD_M5, 50, 1, emaSlowM5)) return tr;
+   if(!RT_GetATR(PERIOD_M1, 14, 1, atrM1))     return tr;
+   if(atrM1 <= 0.0)                             return tr;
+
+   double o1 = RT_Open(PERIOD_M1, 1), c1 = RT_Close(PERIOD_M1, 1);
+   double o2 = RT_Open(PERIOD_M1, 2), c2 = RT_Close(PERIOD_M1, 2);
+   double h2 = RT_High(PERIOD_M1, 2), l2 = RT_Low(PERIOD_M1, 2);
+
+   if(bull)
+   {
+      bool pullback = (c2 < o2) && (l2 <= emaFastM5 + atrM1 * 0.70) && (l2 >= emaSlowM5 - atrM1 * 0.50);
+      bool confirm  = (c1 > o1) && (RT_BullishRejection(PERIOD_M1, 1) || (c1 >= emaFastM5));
+      bool not_late = ((c1 - emaFastM5) <= atrM1 * 1.20);
+
+      if(!pullback) { tr.reason = "No trigger [V2B era=" + eraLabel + "]: pullback candle failed"; return tr; }
+      if(!confirm)  { tr.reason = "No trigger [V2B era=" + eraLabel + "]: confirm candle failed";  return tr; }
+      if(!not_late) { tr.reason = "No trigger [V2B era=" + eraLabel + "]: not_late check failed";  return tr; }
+
+      double depth         = (emaFastM5 - l2) / atrM1;
+      double depthScore    = 1.0 - MathMin(MathAbs(depth - 0.70), 1.20) / 1.20;
+      depthScore           = CouncilClamp01_Strategy(depthScore);
+      double confirmScore  = RT_BullishRejection(PERIOD_M1, 1) ? 1.0 : 0.70;
+      double locationScore = 1.0 - MathMin((c1 - emaFastM5) / (atrM1 * 1.20), 1.0);
+
+      tr.dir     = CORE_BUY;
+      tr.valid   = true;
+      tr.quality = CouncilClamp01_Strategy(depthScore * 0.45 + confirmScore * 0.35 + locationScore * 0.20);
+      tr.reason  = "Trend pullback -> continuation (BUY) [V2B era=" + eraLabel + "]";
+      return tr;
+   }
+
+   // bear
+   bool pullback = (c2 > o2) && (h2 >= emaFastM5 - atrM1 * 0.70) && (h2 <= emaSlowM5 + atrM1 * 0.50);
+   bool confirm  = (c1 < o1) && (RT_BearishRejection(PERIOD_M1, 1) || (c1 <= emaFastM5));
+   bool not_late = ((emaFastM5 - c1) <= atrM1 * 1.20);
+
+   if(!pullback) { tr.reason = "No trigger [V2B era=" + eraLabel + "]: pullback candle failed"; return tr; }
+   if(!confirm)  { tr.reason = "No trigger [V2B era=" + eraLabel + "]: confirm candle failed";  return tr; }
+   if(!not_late) { tr.reason = "No trigger [V2B era=" + eraLabel + "]: not_late check failed";  return tr; }
+
+   double depth         = (h2 - emaFastM5) / atrM1;
+   double depthScore    = 1.0 - MathMin(MathAbs(depth - 0.70), 1.20) / 1.20;
+   depthScore           = CouncilClamp01_Strategy(depthScore);
+   double confirmScore  = RT_BearishRejection(PERIOD_M1, 1) ? 1.0 : 0.70;
+   double locationScore = 1.0 - MathMin((emaFastM5 - c1) / (atrM1 * 1.20), 1.0);
+
+   tr.dir     = CORE_SELL;
+   tr.valid   = true;
+   tr.quality = CouncilClamp01_Strategy(depthScore * 0.45 + confirmScore * 0.35 + locationScore * 0.20);
+   tr.reason  = "Trend pullback -> continuation (SELL) [V2B era=" + eraLabel + "]";
+
+   return tr;
+}
+
 void BuildCouncilStrategy_TrendPullbackContinuation(
    CouncilEnvironmentReport &env,
    CouncilStrategyReport &r
@@ -1210,12 +1279,18 @@ void BuildCouncilStrategy_TrendPullbackContinuation(
 
    CouncilAssignStrategyMeta(env, r, COUNCIL_ROLE_CONFIRM);
 
-   // Strict scope: TREND_CONTINUATION zone only.
-   if(env.zone_type != COUNCIL_ZONE_TREND_CONTINUATION)
+   // V2B: TC zone (unchanged) + RMR zone when V1 ERA is TREND_UP or TREND_DOWN.
+   // era_label_v1 = gRegime.regime_label — per-decision V1 ERA truth source (not MarketRegimeSnapshot).
+   // Excludes: RANGE_BALANCED, RANGE_DIRTY, NO_TRADE, COMPRESSION, REVERSAL_RISK, EXPANSION, empty.
+   bool eraIsTrendV1 = (env.era_label_v1 == "TREND_UP" || env.era_label_v1 == "TREND_DOWN");
+   bool zoneAllowed  = (env.zone_type == COUNCIL_ZONE_TREND_CONTINUATION) ||
+                       (env.zone_type == COUNCIL_ZONE_RANGE_MEAN_RECLAIM && eraIsTrendV1);
+   if(!zoneAllowed)
    {
       r.decision     = COUNCIL_DECISION_WAIT;
       r.short_reason = "Non-trend zone";
-      r.explanation  = "Trend pullback continuation only active in TREND_CONTINUATION zone";
+      r.explanation  = "Trend pullback continuation: zone=" + env.zone_name +
+                       " era_v1=" + env.era_label_v1;
       r.score_final  = 0.0;
       r.vote_weight  = 0.0;
       CouncilFinalizeStrategyReport(r);
@@ -1233,7 +1308,9 @@ void BuildCouncilStrategy_TrendPullbackContinuation(
       return;
    }
 
-   TriggerResult tr = DetectTrendPullbackContinuationTrigger();
+   TriggerResult tr = (env.zone_type == COUNCIL_ZONE_RANGE_MEAN_RECLAIM && eraIsTrendV1)
+                      ? DetectTrendPullbackContinuationTriggerDiag(env.era_label_v1)
+                      : DetectTrendPullbackContinuationTrigger();
 
    r.trigger_present = tr.valid;
    r.trigger_quality = tr.valid ? tr.quality : 0.0;
@@ -1321,8 +1398,8 @@ void BuildCouncilStrategy_MFIReversalAssist(
       return;
    }
 
-   bool buySignal  = (mfi1 > mfi2 && mfi1 < 45.0 && RT_BullishRejection(PERIOD_M1, 1));
-   bool sellSignal = (mfi1 < mfi2 && mfi1 > 55.0 && RT_BearishRejection(PERIOD_M1, 1));
+   bool buySignal  = (mfi1 > mfi2 && mfi1 < 55.0 && RT_BullishRejection(PERIOD_M1, 1));
+   bool sellSignal = (mfi1 < mfi2 && mfi1 > 45.0 && RT_BearishRejection(PERIOD_M1, 1));
 
    if(buySignal && !sellSignal)
       r.decision = COUNCIL_DECISION_BUY;
@@ -1472,12 +1549,19 @@ TriggerResult DetectMicroStructureReentryTrigger(CoreDirection trendDir)
    double o2 = RT_Open(PERIOD_M1, 2);
    double c2 = RT_Close(PERIOD_M1, 2);
 
+   double ema20Msr = 0.0;
+   bool emaOkMsr = RT_GetEMA(PERIOD_M1, 20, 1, ema20Msr);
+   const double MSR_NOT_LATE_MULT = 1.20;
+   bool msrNotLateBuy = (!emaOkMsr || ema20Msr <= 0.0) ? true : ((c1 - ema20Msr) <= atr * MSR_NOT_LATE_MULT);
+   bool msrNotLateSell = (!emaOkMsr || ema20Msr <= 0.0) ? true : ((ema20Msr - c1) <= atr * MSR_NOT_LATE_MULT);
+
    if(trendDir == CORE_BUY)
    {
       // pullback then reclaim
       if(!(c2 < o2)) return tr;
       if(!(c1 > o1)) return tr;
       if(!(c1 > h2)) return tr;
+      if(!msrNotLateBuy) { tr.reason = "Micro re-entry BUY late: dist>ATR*1.20"; return tr; }
 
       double pullDepth = MathMax(0.0, (h2 - l2)) / atr;
       double q = 0.60;
@@ -1496,6 +1580,7 @@ TriggerResult DetectMicroStructureReentryTrigger(CoreDirection trendDir)
       if(!(c2 > o2)) return tr;
       if(!(c1 < o1)) return tr;
       if(!(c1 < l2)) return tr;
+      if(!msrNotLateSell) { tr.reason = "Micro re-entry SELL late: dist>ATR*1.20"; return tr; }
 
       double pullDepth = MathMax(0.0, (h2 - l2)) / atr;
       double q = 0.60;
@@ -1598,6 +1683,19 @@ void BuildCouncilStrategy_MomentumBreakoutContinuation(
 
    CouncilAssignStrategyMeta(env, r, COUNCIL_ROLE_CONFIRM);
 
+   // FREEZE_V1 - momentum_breakout_cont_v1 demoted from active CONFIRM. 2026-05-06.
+   // Evidence: 1W/10L (9.1% WR). Trigger fires on large-body late-continuation candle >=0.55*ATR
+   // closing beyond prior high/low - late continuation confirmation; retained for future redesign.
+   // See PIML STRATEGY_REHABILITATION_AND_CONFIRM_ENGINEERING_EXECUTION_PLAN_V1.
+   r.decision = COUNCIL_DECISION_WAIT;
+   r.short_reason = "Frozen: study/rework status";
+   r.explanation = "momentum_breakout_cont_v1 frozen pending redesign (SRCEV1)";
+   r.score_final = 0.0;
+   r.vote_weight = 0.0;
+   CouncilFinalizeStrategyReport(r);
+   r.vote_weight = 0.0;
+   return;
+
    if(env.zone_type != COUNCIL_ZONE_TREND_CONTINUATION || r.blocked_by_zone)
    {
       r.decision      = COUNCIL_DECISION_WAIT;
@@ -1691,8 +1789,8 @@ void BuildCouncilStrategy_MicroStructureReentry(
    if(!tr.valid)
    {
       r.decision      = COUNCIL_DECISION_WAIT;
-      r.short_reason  = "No micro re-entry";
-      r.explanation   = "No clean micro structure reclaim/break found";
+      r.short_reason  = (tr.reason == "" ? "No micro re-entry" : tr.reason);
+      r.explanation   = (tr.reason == "" ? "No clean micro structure reclaim/break found" : tr.reason + " | zone=" + r.zone_name);
       r.environment_fit = env.total_score;
       r.score_final   = 0.0;
       r.vote_weight   = CouncilApplyEligibilityWeight(r, r.vote_weight);
@@ -1916,7 +2014,7 @@ void BuildCouncilStrategy_MeanReversionBounce(
 
    double mid = (hi + lo) / 2.0;
    double atrPts = CouncilGetATRPoints(PERIOD_M5, 14, 1);
-   double buf = MathMax(4.0, atrPts * 0.18) * _Point;
+   double buf = MathMax(4.0, atrPts * 0.30) * _Point;
 
    double c1 = iClose(_Symbol, PERIOD_M1, 1);
    double o1 = iOpen(_Symbol, PERIOD_M1, 1);
@@ -2840,6 +2938,392 @@ void BuildCouncilStrategy_MicroRangeExpansion(
    CouncilFinalizeStrategyReport(r);
 }
 
+//---------------------------------------------------------
+// Strategy 18: FVG Trend Pullback (fvg_tpb)
+// Playbook lane: IMBALANCE_FILL_REVERSAL (IFR)
+// Packet role:   ALPHA_TRIGGER_PACKET (FORMALLY_ACCEPTABLE)
+// Admission:     EXTERNAL_ADMITTED_BY_OPERATOR_AUTHORIZATION
+// Certified:     INEC_LAB_V1 — N=2442, WR=43.41%, E[R]=+0.085R
+// FVG_TPB_MT5_IMPLEMENTATION_PACKAGE_V1
+//---------------------------------------------------------
+
+// FVG zone state — static across calls (session persistence).
+// Zones lost on EA reload (cold-start limitation; documented in report).
+#define FVG_MAX_ACTIVE_ZONES  20
+#define FVG_EXPIRY_MINS       240   // 4 hours = 48 M5 bars
+#define FVG_ATR_THRESH        0.05  // gap must be >= ATR14_M5 * 0.05
+#define FVG_VOTE_WEIGHT       0.65  // conservative initial weight (SCOUT, ALPHA_TRIGGER)
+
+// FVG attribution global — populated by BuildCouncilStrategy_FVG_TPB each bar.
+// Read only in WriteOpportunityLedgerRecord (council_mode_runtime.mqh) for fvg_tpb records.
+// NO decision path reads this struct.
+SFVGTriggerAttribution g_fvg_attribution;
+
+// Reset attribution to empty default
+void FVG_ResetAttribution()
+{
+   g_fvg_attribution.has_data                  = false;
+   g_fvg_attribution.fvg_direction             = "";
+   g_fvg_attribution.fvg_gap_low              = 0.0;
+   g_fvg_attribution.fvg_gap_high             = 0.0;
+   g_fvg_attribution.fvg_regime_context       = "";
+   g_fvg_attribution.fvg_subset_classification = "";
+   g_fvg_attribution.fvg_hostile_gate_fired   = false;
+   g_fvg_attribution.fvg_size_atr             = 0.0;
+   g_fvg_attribution.fvg_age_bars             = 0;
+   g_fvg_attribution.fvg_active_zone_count    = 0;
+   g_fvg_attribution.fvg_mitigation_pct       = 0.0;
+}
+
+// Classify the direction+regime combination for attribution
+string FVG_SubsetClassification(int dir, const string regime)
+{
+   bool isBuy  = (dir ==  1);
+   bool isSell = (dir == -1);
+   bool isTrendDown  = (StringFind(regime, "TREND_DOWN")  >= 0);
+   bool isRangeNeut  = (StringFind(regime, "RANGE_NEUTRAL") >= 0 ||
+                        StringFind(regime, "RANGE") >= 0);
+   bool isTrendUp    = (StringFind(regime, "TREND_UP") >= 0);
+
+   if(isBuy  && isTrendDown) return "BUY_TREND_DOWN";    // EDGE_SUPPORTED WR=47.76%
+   if(isSell && isRangeNeut) return "SELL_RANGE_NEUTRAL"; // EDGE_SUPPORTED WR=47.06%
+   if(isSell && isTrendDown) return "SELL_TREND_DOWN";    // HOSTILE WR=38.37%
+   if(isBuy  && isTrendUp)   return "BUY_TREND_UP";
+   if(isSell && isTrendUp)   return "SELL_TREND_UP";
+   return "OTHER";
+}
+
+void BuildCouncilStrategy_FVG_TPB(
+   CouncilEnvironmentReport &env,
+   CouncilStrategyReport    &r
+)
+{
+   InitCouncilStrategyReport(r);
+
+   r.strategy_id     = "fvg_tpb";
+   r.strategy_name   = "FVG Trend Pullback";
+   r.strategy_family = "IMBALANCE_FILL_REVERSAL";
+   r.direction_bias  = "BOTH";
+   r.vote_weight     = FVG_VOTE_WEIGHT;
+
+   // IFR/FVG is a SCOUT: independent alpha, not a confirmer.
+   // Zone routing: ACTIVE in REV/RMR (counter-trend / range), REDUCED elsewhere, OBSERVE_ONLY in TC.
+   // We override CouncilAssignStrategyMeta's default SCOUT routing for TC zones.
+   CouncilAssignStrategyMeta(env, r, COUNCIL_ROLE_SCOUT);
+
+   // Additional IFR-specific eligibility: OBSERVE_ONLY in pure TREND_CONTINUATION.
+   // SELL_TREND_DOWN hostile gate is handled below, not at zone level.
+   if(env.zone_type == COUNCIL_ZONE_TREND_CONTINUATION)
+   {
+      r.eligibility_state = COUNCIL_ELIGIBILITY_OBSERVE_ONLY;
+      r.observe_only = true;
+      r.eligibility_text = CouncilEligibilityStateToText(r.eligibility_state);
+   }
+
+   FVG_ResetAttribution();
+   g_fvg_attribution.fvg_regime_context = env.era_label_v1;
+
+   // --- Static FVG zone state across M1 bars ---
+   static SFVGZone sZones[FVG_MAX_ACTIVE_ZONES];
+   static int      sZoneCount   = 0;
+   static datetime sLastM5Bar   = 0;
+
+   datetime nowTime = TimeCurrent();
+
+   // --- Step 1: Detect new FVG zones on each new closed M5 bar ---
+   datetime curM5BarTime = iTime(_Symbol, PERIOD_M5, 1); // last fully closed M5 bar
+   if(curM5BarTime != sLastM5Bar && curM5BarTime > 0)
+   {
+      sLastM5Bar = curM5BarTime;
+
+      // M5 bars used: shift=1 (bar[j]), shift=2 (bar[j-1]), shift=3 (bar[j-2])
+      // All are confirmed closed bars; no lookahead.
+      double m5Hi1 = iHigh(_Symbol,  PERIOD_M5, 1);
+      double m5Lo1 = iLow(_Symbol,   PERIOD_M5, 1);
+      double m5Hi3 = iHigh(_Symbol,  PERIOD_M5, 3);
+      double m5Lo3 = iLow(_Symbol,   PERIOD_M5, 3);
+
+      if(m5Hi1 > 0.0 && m5Lo1 > 0.0 && m5Hi3 > 0.0 && m5Lo3 > 0.0 && _Point > 0.0)
+      {
+         double atr5 = 0.0;
+         RT_GetATR(PERIOD_M5, 14, 1, atr5); // ATR14 on M5 at shift=1
+
+         double atrPts5 = (atr5 > 0.0 && _Point > 0.0) ? atr5 / _Point : 0.0;
+
+         // Bullish FVG: low[1] > high[3]
+         bool bullFVG = (m5Lo1 > m5Hi3);
+         // Bearish FVG: high[1] < low[3]
+         bool bearFVG = (m5Hi1 < m5Lo3);
+
+         if(bullFVG || bearFVG)
+         {
+            double gapLo, gapHi;
+            int    gapDir;
+
+            if(bullFVG)
+            {
+               gapLo  = m5Hi3;
+               gapHi  = m5Lo1;
+               gapDir = 1; // BUY
+            }
+            else
+            {
+               gapLo  = m5Hi1;
+               gapHi  = m5Lo3;
+               gapDir = -1; // SELL
+            }
+
+            double gapPts = (gapHi - gapLo) / _Point;
+
+            // Size filter: gap must be >= ATR14_M5 * FVG_ATR_THRESH
+            bool sizeOk = (atrPts5 > 0.0 && gapPts >= atrPts5 * FVG_ATR_THRESH);
+
+            if(sizeOk && sZoneCount < FVG_MAX_ACTIVE_ZONES)
+            {
+               // activation_time = M5 bar[j] close time = bar time + 5 minutes
+               datetime actTime = iTime(_Symbol, PERIOD_M5, 1) + 5 * 60;
+
+               SFVGZone z;
+               z.activation_time = actTime;
+               z.expiry_time     = actTime + FVG_EXPIRY_MINS * 60;
+               z.fvg_lo          = gapLo;
+               z.fvg_hi          = gapHi;
+               z.gap_size_pts    = gapPts;
+               z.atr_m5          = atr5;
+               z.direction       = gapDir;
+               z.regime_context  = env.era_label_v1;
+               z.is_active       = false;
+               z.is_expired      = false;
+               z.is_invalidated  = false;
+               z.has_triggered   = false;
+               z.age_bars        = 0;
+
+               sZones[sZoneCount++] = z;
+            }
+         }
+      }
+   }
+
+   // --- Step 2: Update zone states on each M1 bar ---
+   double m1Close1 = iClose(_Symbol, PERIOD_M1, 1); // completed M1 bar close; no bar[0]
+
+   if(m1Close1 > 0.0)
+   {
+      for(int zi = 0; zi < sZoneCount; zi++)
+      {
+         if(sZones[zi].is_expired || sZones[zi].is_invalidated)
+            continue;
+
+         // Activate if time has passed
+         if(!sZones[zi].is_active && nowTime >= sZones[zi].activation_time)
+            sZones[zi].is_active = true;
+
+         if(!sZones[zi].is_active)
+            continue;
+
+         sZones[zi].age_bars++;
+
+         // Check expiry
+         if(nowTime >= sZones[zi].expiry_time)
+         {
+            sZones[zi].is_expired = true;
+            continue;
+         }
+
+         // Check invalidation:
+         // Bullish (BUY) FVG: invalidated if M1 close < fvg_lo
+         // Bearish (SELL) FVG: invalidated if M1 close > fvg_hi
+         if(sZones[zi].direction == 1  && m1Close1 < sZones[zi].fvg_lo)
+            sZones[zi].is_invalidated = true;
+         else if(sZones[zi].direction == -1 && m1Close1 > sZones[zi].fvg_hi)
+            sZones[zi].is_invalidated = true;
+      }
+
+      // Compact expired/invalidated/triggered zones
+      int writeIdx = 0;
+      for(int zi = 0; zi < sZoneCount; zi++)
+      {
+         if(!sZones[zi].is_expired &&
+            !sZones[zi].is_invalidated &&
+            !sZones[zi].has_triggered)
+         {
+            if(writeIdx != zi)
+               sZones[writeIdx] = sZones[zi];
+            writeIdx++;
+         }
+      }
+      sZoneCount = writeIdx;
+   }
+
+   // --- Step 3: Detect M1 entry trigger (FIFO — oldest active zone first) ---
+   int activeCount = 0;
+   for(int zi = 0; zi < sZoneCount; zi++)
+      if(sZones[zi].is_active) activeCount++;
+
+   g_fvg_attribution.fvg_active_zone_count = activeCount;
+
+   // If OBSERVE_ONLY or BLOCKED, do not fire trigger
+   if(r.eligibility_state == COUNCIL_ELIGIBILITY_OBSERVE_ONLY ||
+      r.eligibility_state == COUNCIL_ELIGIBILITY_BLOCKED)
+   {
+      r.decision       = COUNCIL_DECISION_WAIT;
+      r.short_reason   = "FVG_TPB observe/blocked by zone";
+      r.explanation    = "fvg_tpb IFR | zone=" + env.zone_name + " | eligibility=" + r.eligibility_text;
+      r.score_final    = 0.0;
+      r.vote_weight    = 0.0;
+      CouncilFinalizeStrategyReport(r);
+      return;
+   }
+
+   if(m1Close1 <= 0.0 || _Point <= 0.0)
+   {
+      r.decision     = COUNCIL_DECISION_WAIT;
+      r.short_reason = "FVG_TPB no M1 close";
+      r.explanation  = "fvg_tpb IFR | M1 close unavailable";
+      r.score_final  = 0.0;
+      r.vote_weight  = CouncilApplyEligibilityWeight(r, r.vote_weight);
+      CouncilFinalizeStrategyReport(r);
+      return;
+   }
+
+   int triggeredIdx = -1;
+   for(int zi = 0; zi < sZoneCount; zi++)
+   {
+      if(!sZones[zi].is_active) continue;
+
+      // Entry: M1 close falls within [fvg_lo, fvg_hi]
+      if(m1Close1 >= sZones[zi].fvg_lo && m1Close1 <= sZones[zi].fvg_hi)
+      {
+         triggeredIdx = zi;
+         break; // FIFO: take the oldest active zone
+      }
+   }
+
+   if(triggeredIdx < 0)
+   {
+      // No trigger
+      r.trigger_present = false;
+      r.decision        = COUNCIL_DECISION_WAIT;
+      r.short_reason    = "FVG_TPB no M1 fill";
+      r.explanation     = "fvg_tpb IFR | no active FVG fill | zones=" + IntegerToString(activeCount);
+      r.environment_fit = env.total_score;
+      r.score_final     = 0.0;
+      r.vote_weight     = CouncilApplyEligibilityWeight(r, r.vote_weight);
+      CouncilFinalizeStrategyReport(r);
+      return;
+   }
+
+   SFVGZone tz = sZones[triggeredIdx];
+
+   // --- Step 4: Hostile gate — SELL + TREND_DOWN = EDGE_NOT_CONFIRMED (E[R]=-0.041R) ---
+   bool sellTrendDown = (tz.direction == -1 &&
+                         StringFind(env.era_label_v1, "TREND_DOWN") >= 0);
+
+   if(sellTrendDown)
+   {
+      if(triggeredIdx >= 0 && triggeredIdx < sZoneCount)
+         sZones[triggeredIdx].has_triggered = true;
+
+      // Suppress trigger; record hostile gate activation in attribution
+      g_fvg_attribution.has_data                  = true;
+      g_fvg_attribution.fvg_direction             = "SELL";
+      g_fvg_attribution.fvg_gap_low              = tz.fvg_lo;
+      g_fvg_attribution.fvg_gap_high             = tz.fvg_hi;
+      g_fvg_attribution.fvg_regime_context       = env.era_label_v1;
+      g_fvg_attribution.fvg_subset_classification = "SELL_TREND_DOWN";
+      g_fvg_attribution.fvg_hostile_gate_fired   = true;
+      g_fvg_attribution.fvg_size_atr             =
+         (tz.atr_m5 > 0.0 && _Point > 0.0) ? tz.gap_size_pts / (tz.atr_m5 / _Point) : 0.0;
+      g_fvg_attribution.fvg_age_bars             = tz.age_bars;
+      g_fvg_attribution.fvg_active_zone_count    = activeCount;
+      double gapRange = tz.fvg_hi - tz.fvg_lo;
+      g_fvg_attribution.fvg_mitigation_pct =
+         (gapRange > 0.0) ? (m1Close1 - tz.fvg_lo) / gapRange : 0.0;
+
+      // Hostile FVG is attribution-only. Do not emit a normal trigger that
+      // downstream aggregation can treat as strategy support.
+      r.trigger_present = false;
+      r.decision        = COUNCIL_DECISION_WAIT;
+      r.short_reason    = "FVG_TPB hostile: SELL_TREND_DOWN";
+      r.explanation     = "fvg_tpb IFR | HOSTILE gate fired | SELL+TREND_DOWN E[R]=-0.041R | zone=" +
+                           env.zone_name + " | regime=" + env.era_label_v1;
+      r.score_final     = 0.0;
+      r.vote_weight     = 0.0;
+      r.blocked_by_filter = true;
+      r.eligibility_state = COUNCIL_ELIGIBILITY_BLOCKED;
+      r.eligibility_text  = CouncilEligibilityStateToText(r.eligibility_state);
+      CouncilFinalizeStrategyReport(r);
+      r.trigger_present = false;
+      r.score_final     = 0.0;
+      r.vote_weight     = 0.0;
+      return;
+   }
+
+   // --- Step 5: Valid trigger — build report ---
+   sZones[triggeredIdx].has_triggered = true;
+
+   CouncilDecision trigDir = (tz.direction == 1) ? COUNCIL_DECISION_BUY : COUNCIL_DECISION_SELL;
+   r.decision        = trigDir;
+   r.trigger_present = true;
+   r.counter_trend   = RT_IsCounterTrendTrade(
+      (tz.direction == 1) ? CORE_BUY : CORE_SELL);
+
+   // Trigger quality: scaled by ATR size ratio (larger gap = stronger imbalance)
+   double atrRatio = 0.0;
+   if(tz.atr_m5 > 0.0 && _Point > 0.0)
+      atrRatio = tz.gap_size_pts / (tz.atr_m5 / _Point);
+   r.trigger_quality = CouncilClamp01_Strategy(0.60 + MathMin(atrRatio * 0.10, 0.25));
+
+   r.confirmation_quality = 0.55; // no separate confirmation condition; FVG fill is self-confirming
+   r.environment_fit      = (trigDir == COUNCIL_DECISION_BUY)
+                             ? CouncilEnvironmentFitBuy(env)
+                             : CouncilEnvironmentFitSell(env);
+   r.conflict_score       = CouncilConflictFromDirectionBias(r.direction_bias, r.decision);
+
+   if(!env.tradable)
+      r.blocked_by_filter = true;
+
+   double rawScore =
+      (r.trigger_quality      * 0.45) +
+      (r.confirmation_quality * 0.25) +
+      (r.environment_fit      * 0.25) -
+      (r.conflict_score       * 0.10);
+
+   r.score_final = CouncilApplyZoneAdjustedScore(r, rawScore);
+   r.vote_weight = CouncilApplyEligibilityWeight(r, r.vote_weight);
+
+   string subClass = FVG_SubsetClassification(tz.direction, env.era_label_v1);
+
+   r.short_reason = "FVG_TPB " + ((trigDir == COUNCIL_DECISION_BUY) ? "BUY" : "SELL") +
+                    " | " + subClass;
+   r.explanation  = "fvg_tpb IFR | fill at [" + DoubleToString(tz.fvg_lo, _Digits) +
+                    "," + DoubleToString(tz.fvg_hi, _Digits) + "]" +
+                    " | regime=" + env.era_label_v1 +
+                    " | subset=" + subClass +
+                    " | age=" + IntegerToString(tz.age_bars) +
+                    " | zones=" + IntegerToString(activeCount) +
+                    " | eligibility=" + r.eligibility_text;
+
+   // Populate attribution for V1C ledger
+   double gapRange2 = tz.fvg_hi - tz.fvg_lo;
+   g_fvg_attribution.has_data                  = true;
+   g_fvg_attribution.fvg_direction             = (tz.direction == 1) ? "BUY" : "SELL";
+   g_fvg_attribution.fvg_gap_low              = tz.fvg_lo;
+   g_fvg_attribution.fvg_gap_high             = tz.fvg_hi;
+   g_fvg_attribution.fvg_regime_context       = env.era_label_v1;
+   g_fvg_attribution.fvg_subset_classification = subClass;
+   g_fvg_attribution.fvg_hostile_gate_fired   = false;
+   g_fvg_attribution.fvg_size_atr             =
+      (tz.atr_m5 > 0.0 && _Point > 0.0) ? tz.gap_size_pts / (tz.atr_m5 / _Point) : 0.0;
+   g_fvg_attribution.fvg_age_bars             = tz.age_bars;
+   g_fvg_attribution.fvg_active_zone_count    = activeCount;
+   g_fvg_attribution.fvg_mitigation_pct       =
+      (gapRange2 > 0.0) ? (m1Close1 - tz.fvg_lo) / gapRange2 : 0.0;
+
+   CouncilFinalizeStrategyReport(r);
+}
+
+
 void RunCouncilStrategySet(
    CouncilEnvironmentReport &env,
    CouncilStrategyReport &s1,
@@ -2858,7 +3342,8 @@ void RunCouncilStrategySet(
    CouncilStrategyReport &s14,
    CouncilStrategyReport &s15,
    CouncilStrategyReport &s16,
-   CouncilStrategyReport &s17
+   CouncilStrategyReport &s17,
+   CouncilStrategyReport &s18
 )
 {
    BuildCouncilStrategy_SweepReversal(env, s1);
@@ -2911,6 +3396,9 @@ void RunCouncilStrategySet(
 
    BuildCouncilStrategy_MicroRangeExpansion(env, s17);
    if(StringLen(TrimString(s17.strategy_name)) == 0) s17.strategy_name = s17.strategy_id;
+
+   BuildCouncilStrategy_FVG_TPB(env, s18);
+   if(StringLen(TrimString(s18.strategy_name)) == 0) s18.strategy_name = s18.strategy_id;
 }
 
 

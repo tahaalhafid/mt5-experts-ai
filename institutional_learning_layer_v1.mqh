@@ -38,7 +38,8 @@ struct ILV1_DecisionContext
    string   strategy_id;
    string   strategy_family;
    string   direction;
-   string   regime_bucket;
+   string   regime_bucket;   // ERA / gRegime admission context
+   string   zone_bucket;     // ExRA / council zone routing context
    string   volatility_bucket;
    string   structure_bucket;
    string   setup_quality_bucket;
@@ -227,6 +228,7 @@ void ILV1_TrimRecentOutcomes(string &s)
 
 string ILV1_InferStrategyFamily(string strategy_id)
 {
+   if(strategy_id == "bollinger_reclaim") return "MEAN_RECLAIM";
    string s = TrimString(strategy_id);
    StringToLower(s);
    if(StringLen(s) <= 0) return "UNKNOWN";
@@ -333,9 +335,11 @@ int ILV1_DecisionIdMatchScore(const string left_id, const string right_id)
 string ILV1_BuildMotifKey(const ILV1_DecisionContext &ctx)
 {
    return
-      "strategy=" + ctx.strategy_id +
+      "keyver=2" +
+      "|strategy=" + ctx.strategy_id +
       "|direction=" + ctx.direction +
       "|regime=" + ctx.regime_bucket +
+      "|zone=" + ctx.zone_bucket +
       "|vol=" + ctx.volatility_bucket +
       "|struct=" + ctx.structure_bucket +
       "|setup=" + ctx.setup_quality_bucket +
@@ -353,6 +357,7 @@ void ILV1_InitDecisionContext(ILV1_DecisionContext &ctx)
    ctx.strategy_family = "";
    ctx.direction = "";
    ctx.regime_bucket = "UNKNOWN_REGIME";
+   ctx.zone_bucket = "";
    ctx.volatility_bucket = "UNKNOWN_VOL";
    ctx.structure_bucket = "UNKNOWN_STRUCTURE";
    ctx.setup_quality_bucket = "SETUP_NEUTRAL";
@@ -522,6 +527,7 @@ string ILV1_ContextToJson(const ILV1_DecisionContext &ctx)
    j += ",\"strategy_family\":\"" + ILV1_EscapeJson(ctx.strategy_family) + "\"";
    j += ",\"direction\":\"" + ILV1_EscapeJson(ctx.direction) + "\"";
    j += ",\"regime_bucket\":\"" + ILV1_EscapeJson(ctx.regime_bucket) + "\"";
+   j += ",\"zone_bucket\":\"" + ILV1_EscapeJson(ctx.zone_bucket) + "\"";
    j += ",\"volatility_bucket\":\"" + ILV1_EscapeJson(ctx.volatility_bucket) + "\"";
    j += ",\"structure_bucket\":\"" + ILV1_EscapeJson(ctx.structure_bucket) + "\"";
    j += ",\"setup_quality_bucket\":\"" + ILV1_EscapeJson(ctx.setup_quality_bucket) + "\"";
@@ -565,6 +571,7 @@ bool ILV1_ParseContextLine(string ln, ILV1_DecisionContext &ctx)
    ExtractJsonStringField(ln, "strategy_family", ctx.strategy_family);
    ExtractJsonStringField(ln, "direction", ctx.direction);
    ExtractJsonStringField(ln, "regime_bucket", ctx.regime_bucket);
+   ExtractJsonStringField(ln, "zone_bucket", ctx.zone_bucket);
    ExtractJsonStringField(ln, "volatility_bucket", ctx.volatility_bucket);
    ExtractJsonStringField(ln, "structure_bucket", ctx.structure_bucket);
    ExtractJsonStringField(ln, "setup_quality_bucket", ctx.setup_quality_bucket);
@@ -1309,6 +1316,8 @@ bool ILV1_BuildContextFromRouted(const string decision_id,
       ctx.direction = "UNKNOWN";
 
    ctx.regime_bucket = (StringLen(TrimString(reg.regime_label)) > 0 ? reg.regime_label : "UNKNOWN_REGIME");
+   if(routed.active_mode == "COUNCIL" && routed.council.valid)
+      ctx.zone_bucket = CouncilZoneTypeToText(routed.council.env.zone_type);
    ctx.volatility_bucket = (StringLen(TrimString(reg.volatility_state)) > 0 ? reg.volatility_state : "UNKNOWN_VOL");
    ctx.structure_bucket = (StringLen(TrimString(reg.structure_state)) > 0 ? reg.structure_state : "UNKNOWN_STRUCTURE");
    ctx.setup_quality_bucket = ILV1_BucketSetupQuality(conf.decision_quality_label, conf.entry_edge_label, conf.follow_through_quality_label);

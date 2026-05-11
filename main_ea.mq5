@@ -2,6 +2,7 @@
 
 #include <Trade/Trade.mqh>
 
+#include "mt5_io_reduction_v1.mqh"
 #include "trade_feedback.mqh"
 #include "market_regime.mqh"
 #include "regime_classification_layer_v1.mqh"
@@ -10,6 +11,7 @@
 #include "unified_confidence.mqh"
 #include "institutional_learning_layer_v1.mqh"
 #include "performance_journal.mqh"
+#include "council_v1_state_composer.mqh"
 #include "level_awareness_brake.mqh"
 #include "storage_reset_pre_strategy_memory_v1.mqh"
 #include "strategy_confidence_memory_v1.mqh"
@@ -35,6 +37,7 @@
 #include "strategy_compiler.mqh"
 #include "strategy_runtime.mqh"
 #include "decision_mode_router.mqh"
+#include "authority_stack_pilot.mqh"
 #include "atas_governed_advisory_contract.mqh"
 #include "atas_governed_advisory_artifacts.mqh"
 #include "atas_governed_advisory_layer.mqh"
@@ -55,6 +58,7 @@
 CTrade trade;
 
 SCM_StrategyStats gSCMCache[];
+AuthorityResult gAuthorityStackPilotResult;
 
 
 //---------------------------------------------------------
@@ -84,11 +88,30 @@ input double CouncilMaxCrowdingConcentration                = 0.82;
 
 // Council dirty / transitional environment tightening (opt-in, COUNCIL only)
 input bool   EnableCouncilDirtyEnvironmentTightening      = false;
+input bool   EnableAuthorityStackPilot                    = true;
+input bool   AuthorityStack_EnableP4                      = true;
+input bool   AuthorityStack_EnableDQ                      = false;
+input bool   AuthorityStack_EnableV1                      = true;
+input double AuthorityStack_DQProxyThreshold              = 0.34;
 input double CouncilDirtyTradabilityFloor                = 0.55;
 input double CouncilCompressionTradabilityFloor          = 0.58;
 input double CouncilReversalRiskTradabilityFloor         = 0.52;
 input double CouncilDirtyMinEnvironmentScore             = 0.74;
 input double CouncilTransitionalMinCouncilQuality        = 0.72;
+
+// V1 family soft-weight live influence spine (opt-in, COUNCIL only)
+input bool   EnableV1LiveInfluencePhase1                = true;
+input bool   EnableV1PolicyGuidedParticipation          = true;
+input bool   EnableV1ScoreQuarantineDiagnostics         = true;
+input bool   EnableV1ConstructivePolicyEligibility      = true;
+
+input bool   EnableIRREWDevelopmentConsumption          = false;
+input bool   EnableIRREWPhase4ADev                      = false;
+input bool   EnableIRREWPhase4BDev                      = false;
+input bool   EnableIRREWPhase4CDev                      = false;
+input bool   EnableIRREWRCEMDev                         = false;
+input bool   EnableIRREWExecutionGeometryDev            = false;
+input bool   EnableIRREWPlaybookAdvisoryDev             = false;
 
 
 
@@ -100,7 +123,7 @@ input double CouncilExitGivebackTriggerProgress     = 0.55;
 input double CouncilExitGivebackRetainedFloor       = 0.20;
 
 // AI intelligence & oversight layer (H6 authority-gated; never direct trading control)
-input bool   EnableAIEvolution       = true;
+input bool   EnableAIEvolution       = false;
 input int    EvolutionEveryNBars     = 30;
 input bool   EnableAutoApplyPlan     = true;
 input int    EvolutionCooldownBars   = 10;
@@ -126,14 +149,14 @@ input bool   EnableOpenPositionManagementInBlockedSafeMode = true;
 input int    AIGateMinDecisions                    = 300;
 input int    AIGateMinTradeOpens                   = 30;
 input int    AIGateMinClosedOutcomes               = 20;
-input bool   AIGateSecurityClearanceForShadow      = true;
+input bool   AIGateSecurityClearanceForShadow      = false;
 input bool   AIGateSecurityClearanceForAdvisory    = false;
 input int    AIHourlyRunCap                        = 6;
 input int    AIDeepInvestigationDailyCap           = 4;
 input int    AITriggerCooldownMinutes              = 30;
 
 // AI council contextual advisory integration (A6)
-input bool   EnableAICouncilContextualAdvisory       = true;
+input bool   EnableAICouncilContextualAdvisory       = false;
 input int    AICouncilHoldBars                       = 1;
 input int    AICouncilMaxHoldsPerSignature           = 1;
 input bool   EnableAICandidateBlock                  = false;
@@ -167,12 +190,14 @@ input int    SupportResistanceOverlayVisualOffsetPoints = 2;
 
 // Internal MT5 dashboard chart UI (visual path only; collectors remain active)
 input bool   EnableInternalDashboardChartUI = false;
+input bool   EnableDashboardRuntimeCollector = false; // [DCSDG-V1] allow dashboard collector/page-build while chart UI is disabled
 
 // Trade engine risk settings
 input double TradeRR               = 1.50;
 input double TradeATRMultiplier    = 1.20;
 input int    TradeATRPeriod        = 14;
 input double ExtraStopBufferPoints = 50.0;
+input double TradeM5AtrFloorFraction = 0.70;
 
 // Runtime logging
 input bool   LogRuntimeDecision         = true;
@@ -288,6 +313,9 @@ static RuntimeGovernanceState gRuntimeGovernance;
 static bool gRuntimeGovernanceInitialized = false;
 static bool gRuntimeGovernanceStartupComplete = false;
 static bool gRuntimeGovernanceRollbackRecoveryPending = false;
+string   gLastSavedGovernanceStateKey = "";
+datetime gLastRuntimeGovernanceStatusWrite = 0;
+datetime gLastMT5IOReductionStatusWrite = 0;
 
 //---------------------------------------------------------
 // Runtime risk & safety hardening (H5)
@@ -1697,6 +1725,30 @@ struct DiagnosticRuntimeSummary
    string   zone_coverage_label;
    string   lifecycle_state;
 
+   bool     c1_tc_active;
+   bool     c1_high_conviction_active;
+   bool     c1_overextension_active;
+   bool     c1_pre_governor_candidate;
+   bool     c1_shadowed_by_exhaustion;
+   string   c1_shadow_reason;
+
+   bool     c2_overextension_m5_active;
+   bool     c2_consensus_tightening_applied;
+   double   c2_consensus_tightening_delta;
+   double   c2_pre_consensus_requirement;
+   double   c2_post_consensus_requirement;
+   bool     c2_effective_on_outcome;
+   string   c2_gate_outcome;
+
+   bool     c3_low_structure_tc_active;
+   double   c3_structure_score;
+   bool     c3_logic_applied;
+   bool     c3_effective_on_outcome;
+   string   c3_gate_outcome;
+
+   string   c123_obstacle_summary;
+   string   c123_obstacle_semantics_version;
+
    double   consensus_strength;
    double   conflict_score;
    double   council_quality;
@@ -1741,6 +1793,9 @@ struct ReplayValidationSummary
    string   active_mode;
 
    string   regime_label;
+   string   regime_label_source;
+   string   regime_label_semantics;
+   string   regime_label_time_basis;
    double   regime_confidence;
 
    string   zone_name;
@@ -1883,6 +1938,73 @@ bool WriteTextFileAll(const string rel_path, const string text)
    FileWriteString(h, text);
    FileClose(h);
    return true;
+}
+
+string MT5IO_BoolText(const bool v)
+{
+   return (v ? "true" : "false");
+}
+
+string MT5IO_LongText(const long v)
+{
+   return (string)v;
+}
+
+string BuildMT5IOReductionStatusJson(const string reason)
+{
+   int maxCrashLossRecords = MT5IO_PJBufferCapacity();
+   string j = "{";
+   j += "\"schema_version\":\"MT5_IO_REDUCTION_STATUS_V1\",";
+   j += "\"artifact_role\":\"OBSERVABILITY_ONLY_NON_AUTHORITATIVE\",";
+   j += "\"updated_at\":\"" + JsonEscapeString(TimeToString(TimeCurrent(), TIME_DATE|TIME_MINUTES|TIME_SECONDS)) + "\",";
+   j += "\"update_reason\":\"" + JsonEscapeString(reason) + "\",";
+   j += "\"io_reduction_enabled\":" + MT5IO_BoolText(EnableMT5IOReductionV1) + ",";
+   j += "\"pj_buffer_enabled\":" + MT5IO_BoolText(EnableMT5IOReductionV1 && EnablePJBuffer) + ",";
+   j += "\"pj_buffer_depth\":" + IntegerToString(PJ_BufferDepth()) + ",";
+   j += "\"pj_buffer_max_records\":" + IntegerToString(maxCrashLossRecords) + ",";
+   j += "\"pj_flush_interval_bars\":" + IntegerToString(MT5IO_PJFlushIntervalBars()) + ",";
+   j += "\"max_crash_loss_records_configured\":" + IntegerToString(maxCrashLossRecords) + ",";
+   j += "\"max_crash_loss_scope\":\"NON_CRITICAL_TELEMETRY_ONLY\",";
+   j += "\"buffered_records_total\":" + MT5IO_LongText(g_mt5io_pj_buffered_records_total) + ",";
+   j += "\"flushed_records_total\":" + MT5IO_LongText(g_mt5io_pj_flushed_records_total) + ",";
+   j += "\"immediate_flush_count\":" + MT5IO_LongText(g_mt5io_pj_immediate_flush_count) + ",";
+   j += "\"batched_flush_count\":" + MT5IO_LongText(g_mt5io_pj_batched_flush_count) + ",";
+   j += "\"direct_write_count\":" + MT5IO_LongText(g_mt5io_pj_direct_write_count) + ",";
+   j += "\"direct_write_calls_avoided_estimate\":" + MT5IO_LongText(g_mt5io_pj_direct_write_avoided_estimate) + ",";
+   j += "\"fileopen_calls_actual_after\":" + MT5IO_LongText(g_mt5io_fileopen_calls_actual_after) + ",";
+   j += "\"filewrite_calls_actual_after\":" + MT5IO_LongText(g_mt5io_filewrite_calls_actual_after) + ",";
+   j += "\"summary_write_throttle_count\":" + MT5IO_LongText(g_mt5io_ol_summary_deferred_count) + ",";
+   j += "\"max_buffer_depth_observed\":" + IntegerToString(g_mt5io_max_buffer_depth_observed) + ",";
+   j += "\"io_reduction_error_count\":" + MT5IO_LongText(g_mt5io_io_reduction_error_count) + ",";
+   j += "\"last_flush_reason\":\"" + JsonEscapeString(g_mt5io_last_flush_reason) + "\",";
+   j += "\"last_flush_time\":\"" + JsonEscapeString(g_mt5io_last_flush_time > 0 ? TimeToString(g_mt5io_last_flush_time, TIME_DATE|TIME_MINUTES|TIME_SECONDS) : "") + "\",";
+   j += "\"governance_dirty_flag_enabled\":" + MT5IO_BoolText(EnableMT5IOReductionV1 && EnableGovernanceDirtyFlag) + ",";
+   j += "\"governance_heartbeat_seconds\":" + IntegerToString(MT5IO_RuntimeGovernanceHeartbeatSeconds()) + ",";
+   j += "\"governance_write_count\":" + MT5IO_LongText(g_mt5io_governance_write_count) + ",";
+   j += "\"governance_deferred_count\":" + MT5IO_LongText(g_mt5io_governance_deferred_count) + ",";
+   j += "\"governance_heartbeat_count\":" + MT5IO_LongText(g_mt5io_governance_heartbeat_count) + ",";
+   j += "\"trendcont_gate_enabled\":" + MT5IO_BoolText(EnableMT5IOReductionV1 && EnableTrendContGate) + ",";
+   j += "\"trendcont_write_count\":" + MT5IO_LongText(g_mt5io_trendcont_write_count) + ",";
+   j += "\"trendcont_deferred_count\":" + MT5IO_LongText(g_mt5io_trendcont_deferred_count) + ",";
+   j += "\"ol_summary_rate_limit_enabled\":" + MT5IO_BoolText(EnableMT5IOReductionV1 && EnableOLSummaryRateLimit) + ",";
+   j += "\"ol_summary_write_count\":" + MT5IO_LongText(g_mt5io_ol_summary_write_count) + ",";
+   j += "\"ol_summary_deferred_count\":" + MT5IO_LongText(g_mt5io_ol_summary_deferred_count) + ",";
+   j += "\"ol_summary_last_write_time\":\"" + JsonEscapeString(g_mt5io_last_ol_summary_write_time > 0 ? TimeToString(g_mt5io_last_ol_summary_write_time, TIME_DATE|TIME_MINUTES|TIME_SECONDS) : "") + "\",";
+   j += "\"authority_impact\":\"NONE\",";
+   j += "\"trading_behavior_impact\":\"NONE\",";
+   j += "\"production_ready\":\"false\"";
+   j += "}";
+   return j;
+}
+
+void SaveMT5IOReductionStatusBestEffort(const string reason, bool force = false)
+{
+   datetime now = TimeCurrent();
+   if(!force && gLastMT5IOReductionStatusWrite > 0 && (now - gLastMT5IOReductionStatusWrite) < 60)
+      return;
+
+   if(WriteTextFileAll(MT5IOReductionStatusJsonPath(), BuildMT5IOReductionStatusJson(reason)))
+      gLastMT5IOReductionStatusWrite = now;
 }
 
 
@@ -2205,6 +2327,7 @@ string TruthPreviousPlanBackupPath()  { return "AI\\ai_previous_plan_backup.json
 
 string RuntimeGovernanceStatusTxtPath()   { return "AI\\runtime_governance_status.txt"; }
 string RuntimeGovernanceStatusJsonPath()  { return "AI\\runtime_governance_status.json"; }
+string MT5IOReductionStatusJsonPath()     { return MT5_IO_REDUCTION_STATUS_PATH; }
 
 string RiskSafetyStatusTxtPath()          { return "AI\\risk_safety_status.txt"; }
 string RiskSafetyStatusJsonPath()         { return "AI\\risk_safety_status.json"; }
@@ -2958,8 +3081,13 @@ void RuntimeInferDecisionCandidateFromRouted(const RoutedRuntimeEvaluation &rout
 
    if(routed.active_mode == "COUNCIL" && routed.council.valid)
    {
-      candidateName = TrimString(routed.council.aggregate.best_strategy_id);
-      candidateFamily = LAB_InferFamilyFromStrategyId(candidateName);
+      candidateName = TrimString(routed.council.aggregate.primary_thesis_strategy_id);
+      if(StringLen(candidateName) <= 0)
+         candidateName = TrimString(routed.council.aggregate.best_strategy_id);
+
+      candidateFamily = TrimString(routed.council.aggregate.execution_admission_family);
+      if(StringLen(candidateFamily) <= 0)
+         candidateFamily = LAB_InferFamilyFromStrategyId(routed.council.aggregate.best_strategy_id);
    }
    else
    {
@@ -2970,6 +3098,88 @@ void RuntimeInferDecisionCandidateFromRouted(const RoutedRuntimeEvaluation &rout
    candidateFamily = OperatingCohortNormalizeFamily(candidateFamily);
    if(StringLen(candidateName) == 0 && StringLen(candidateFamily) > 0)
       candidateName = candidateFamily;
+}
+
+string IRREW_NormalizeExecutionGeometryState(const string label)
+{
+   string v = TrimString(label);
+   StringToUpper(v);
+
+   if(v == "STRONG_EXECUTION_GEOMETRY" || v == "ACCEPTABLE_EXECUTION_GEOMETRY")
+      return "EXECUTION_GEOMETRY_CLEAR";
+   if(v == "THIN_EXECUTION_GEOMETRY")
+      return "THIN_EXECUTION_GEOMETRY";
+   if(v == "POOR_EXECUTION_GEOMETRY")
+      return "POOR_EXECUTION_GEOMETRY";
+   if(v == "ADVERSE_EXECUTION_GEOMETRY")
+      return "ADVERSE_EXECUTION_GEOMETRY";
+   return "EXECUTION_GEOMETRY_UNKNOWN";
+}
+
+bool IRREW_EvaluateExecutionGeometryDev(string &state, string &reason)
+{
+   state = "EXECUTION_GEOMETRY_UNKNOWN";
+   reason = "";
+
+   if(!IRREW_SubFlagActive(EnableIRREWDevelopmentConsumption, EnableIRREWExecutionGeometryDev))
+      return false;
+
+   if(!gHasExecEstimation || !gExecEstimation.valid)
+   {
+      reason = "execution_geometry_unavailable_warning_only";
+      return false;
+   }
+
+   state = IRREW_NormalizeExecutionGeometryState(gExecEstimation.execution_geometry_label);
+   if(state == "ADVERSE_EXECUTION_GEOMETRY" || state == "POOR_EXECUTION_GEOMETRY")
+   {
+      reason = "IRREW_EXECUTION_GEOMETRY_DEV_WAIT|" + state + "|" + gExecEstimation.execution_geometry_reason;
+      return true;
+   }
+
+   if(state == "THIN_EXECUTION_GEOMETRY" || state == "EXECUTION_GEOMETRY_UNKNOWN")
+      reason = "execution_geometry_warning_only|" + state;
+
+   return false;
+}
+
+bool IRREW_ApplyExecutionGeometryPreOrderWait(RoutedRuntimeEvaluation &routed,
+                                             RuntimeEvaluation &eval,
+                                             const string direction)
+{
+   if(eval.decision != RUNTIME_ENTER_BUY && eval.decision != RUNTIME_ENTER_SELL)
+      return false;
+
+   string geometryState = "";
+   string geometryReason = "";
+   if(!IRREW_EvaluateExecutionGeometryDev(geometryState, geometryReason))
+      return false;
+
+   eval.decision = RUNTIME_WAIT;
+   if(StringLen(TrimString(eval.reason)) > 0)
+      eval.reason += " | ";
+   eval.reason += geometryReason;
+
+   if(routed.active_mode == "COUNCIL" && routed.council.valid)
+   {
+      CouncilIRREWDevelopmentActionReport action;
+      action = routed.council.irrew_development;
+      IRREW_AddDevelopmentWaitReason(
+         action,
+         "IRREW_EXECUTION_GEOMETRY_DEV_WAIT",
+         "EnableIRREWExecutionGeometryDev"
+      );
+      action.final_decision_after_irrew_dev = "WAIT";
+      action.advisory_wait_preference = true;
+      action.risk_warning_present = true;
+      routed.council.irrew_development = action;
+      routed.council.summary = "IRREW execution geometry WAIT | " + routed.council.summary;
+      routed.council.detailed_reason += " | irrew_execution_geometry_state=" + geometryState +
+                                        " | irrew_execution_geometry_direction=" + direction +
+                                        " | irrew_execution_geometry_reason=" + geometryReason;
+   }
+
+   return true;
 }
 
 bool RuntimeOperatingCohortAdmissionAllowsExecution(const string candidateName,
@@ -3059,6 +3269,30 @@ void InitDiagnosticRuntimeSummary(DiagnosticRuntimeSummary &st)
    st.zone_coverage_label = "";
    st.lifecycle_state = "";
 
+   st.c1_tc_active = false;
+   st.c1_high_conviction_active = false;
+   st.c1_overextension_active = false;
+   st.c1_pre_governor_candidate = false;
+   st.c1_shadowed_by_exhaustion = false;
+   st.c1_shadow_reason = "";
+
+   st.c2_overextension_m5_active = false;
+   st.c2_consensus_tightening_applied = false;
+   st.c2_consensus_tightening_delta = 0.0;
+   st.c2_pre_consensus_requirement = 0.0;
+   st.c2_post_consensus_requirement = 0.0;
+   st.c2_effective_on_outcome = false;
+   st.c2_gate_outcome = "NOT_APPLICABLE";
+
+   st.c3_low_structure_tc_active = false;
+   st.c3_structure_score = 0.0;
+   st.c3_logic_applied = false;
+   st.c3_effective_on_outcome = false;
+   st.c3_gate_outcome = "NOT_APPLICABLE";
+
+   st.c123_obstacle_summary = "";
+   st.c123_obstacle_semantics_version = CouncilC123ObstacleSemanticsVersion();
+
    st.consensus_strength = 0.0;
    st.conflict_score = 0.0;
    st.council_quality = 0.0;
@@ -3127,6 +3361,30 @@ void DiagnosticRuntimeSeedCycleBase(const string updateSource)
    gDiagnosticRuntimeSummary.zone_coverage_label = "";
    gDiagnosticRuntimeSummary.lifecycle_state = "";
 
+   gDiagnosticRuntimeSummary.c1_tc_active = false;
+   gDiagnosticRuntimeSummary.c1_high_conviction_active = false;
+   gDiagnosticRuntimeSummary.c1_overextension_active = false;
+   gDiagnosticRuntimeSummary.c1_pre_governor_candidate = false;
+   gDiagnosticRuntimeSummary.c1_shadowed_by_exhaustion = false;
+   gDiagnosticRuntimeSummary.c1_shadow_reason = "";
+
+   gDiagnosticRuntimeSummary.c2_overextension_m5_active = false;
+   gDiagnosticRuntimeSummary.c2_consensus_tightening_applied = false;
+   gDiagnosticRuntimeSummary.c2_consensus_tightening_delta = 0.0;
+   gDiagnosticRuntimeSummary.c2_pre_consensus_requirement = 0.0;
+   gDiagnosticRuntimeSummary.c2_post_consensus_requirement = 0.0;
+   gDiagnosticRuntimeSummary.c2_effective_on_outcome = false;
+   gDiagnosticRuntimeSummary.c2_gate_outcome = "NOT_APPLICABLE";
+
+   gDiagnosticRuntimeSummary.c3_low_structure_tc_active = false;
+   gDiagnosticRuntimeSummary.c3_structure_score = 0.0;
+   gDiagnosticRuntimeSummary.c3_logic_applied = false;
+   gDiagnosticRuntimeSummary.c3_effective_on_outcome = false;
+   gDiagnosticRuntimeSummary.c3_gate_outcome = "NOT_APPLICABLE";
+
+   gDiagnosticRuntimeSummary.c123_obstacle_summary = "";
+   gDiagnosticRuntimeSummary.c123_obstacle_semantics_version = CouncilC123ObstacleSemanticsVersion();
+
    gDiagnosticRuntimeSummary.consensus_strength = 0.0;
    gDiagnosticRuntimeSummary.conflict_score = 0.0;
    gDiagnosticRuntimeSummary.council_quality = 0.0;
@@ -3172,6 +3430,26 @@ void DiagnosticRuntimeApplyRoutedContext(const RoutedRuntimeEvaluation &routed)
       gDiagnosticRuntimeSummary.best_strategy_id = routed.council.aggregate.best_strategy_id;
       gDiagnosticRuntimeSummary.consensus_label = routed.council.aggregate.consensus_label;
       gDiagnosticRuntimeSummary.zone_coverage_label = routed.council.zone_coverage.coverage_label;
+      gDiagnosticRuntimeSummary.c1_tc_active = routed.council.c1_tc_active;
+      gDiagnosticRuntimeSummary.c1_high_conviction_active = routed.council.c1_high_conviction_active;
+      gDiagnosticRuntimeSummary.c1_overextension_active = routed.council.c1_overextension_active;
+      gDiagnosticRuntimeSummary.c1_pre_governor_candidate = routed.council.c1_pre_governor_candidate;
+      gDiagnosticRuntimeSummary.c1_shadowed_by_exhaustion = routed.council.c1_shadowed_by_exhaustion;
+      gDiagnosticRuntimeSummary.c1_shadow_reason = routed.council.c1_shadow_reason;
+      gDiagnosticRuntimeSummary.c2_overextension_m5_active = routed.council.pre_ai_gate.c2_overextension_m5_active;
+      gDiagnosticRuntimeSummary.c2_consensus_tightening_applied = routed.council.pre_ai_gate.c2_consensus_tightening_applied;
+      gDiagnosticRuntimeSummary.c2_consensus_tightening_delta = routed.council.pre_ai_gate.c2_consensus_tightening_delta;
+      gDiagnosticRuntimeSummary.c2_pre_consensus_requirement = routed.council.pre_ai_gate.c2_pre_consensus_requirement;
+      gDiagnosticRuntimeSummary.c2_post_consensus_requirement = routed.council.pre_ai_gate.c2_post_consensus_requirement;
+      gDiagnosticRuntimeSummary.c2_effective_on_outcome = routed.council.pre_ai_gate.c2_effective_on_outcome;
+      gDiagnosticRuntimeSummary.c2_gate_outcome = routed.council.pre_ai_gate.c2_gate_outcome;
+      gDiagnosticRuntimeSummary.c3_low_structure_tc_active = routed.council.pre_ai_gate.c3_low_structure_tc_active;
+      gDiagnosticRuntimeSummary.c3_structure_score = routed.council.pre_ai_gate.c3_structure_score;
+      gDiagnosticRuntimeSummary.c3_logic_applied = routed.council.pre_ai_gate.c3_logic_applied;
+      gDiagnosticRuntimeSummary.c3_effective_on_outcome = routed.council.pre_ai_gate.c3_effective_on_outcome;
+      gDiagnosticRuntimeSummary.c3_gate_outcome = routed.council.pre_ai_gate.c3_gate_outcome;
+      gDiagnosticRuntimeSummary.c123_obstacle_summary = BuildC123ObstacleSummaryFromRuntimeResult(routed.council);
+      gDiagnosticRuntimeSummary.c123_obstacle_semantics_version = CouncilC123ObstacleSemanticsVersion();
       gDiagnosticRuntimeSummary.consensus_strength = routed.council.aggregate.consensus_strength;
       gDiagnosticRuntimeSummary.conflict_score = routed.council.aggregate.conflict_score;
       gDiagnosticRuntimeSummary.council_quality = routed.council.aggregate.council_quality;
@@ -3375,6 +3653,26 @@ string BuildDiagnosticRuntimeSummaryText(const DiagnosticRuntimeSummary &st)
    s += "governor_state=" + st.governor_state + "\n";
    s += "zone_coverage_label=" + st.zone_coverage_label + "\n";
    s += "lifecycle_state=" + st.lifecycle_state + "\n";
+   s += "c1_tc_active=" + DiagnosticBoolText(st.c1_tc_active) + "\n";
+   s += "c1_high_conviction_active=" + DiagnosticBoolText(st.c1_high_conviction_active) + "\n";
+   s += "c1_overextension_active=" + DiagnosticBoolText(st.c1_overextension_active) + "\n";
+   s += "c1_pre_governor_candidate=" + DiagnosticBoolText(st.c1_pre_governor_candidate) + "\n";
+   s += "c1_shadowed_by_exhaustion=" + DiagnosticBoolText(st.c1_shadowed_by_exhaustion) + "\n";
+   s += "c1_shadow_reason=" + st.c1_shadow_reason + "\n";
+   s += "c2_overextension_m5_active=" + DiagnosticBoolText(st.c2_overextension_m5_active) + "\n";
+   s += "c2_consensus_tightening_applied=" + DiagnosticBoolText(st.c2_consensus_tightening_applied) + "\n";
+   s += "c2_consensus_tightening_delta=" + DoubleToString(st.c2_consensus_tightening_delta, 4) + "\n";
+   s += "c2_pre_consensus_requirement=" + DoubleToString(st.c2_pre_consensus_requirement, 4) + "\n";
+   s += "c2_post_consensus_requirement=" + DoubleToString(st.c2_post_consensus_requirement, 4) + "\n";
+   s += "c2_effective_on_outcome=" + DiagnosticBoolText(st.c2_effective_on_outcome) + "\n";
+   s += "c2_gate_outcome=" + st.c2_gate_outcome + "\n";
+   s += "c3_low_structure_tc_active=" + DiagnosticBoolText(st.c3_low_structure_tc_active) + "\n";
+   s += "c3_structure_score=" + DoubleToString(st.c3_structure_score, 4) + "\n";
+   s += "c3_logic_applied=" + DiagnosticBoolText(st.c3_logic_applied) + "\n";
+   s += "c3_effective_on_outcome=" + DiagnosticBoolText(st.c3_effective_on_outcome) + "\n";
+   s += "c3_gate_outcome=" + st.c3_gate_outcome + "\n";
+   s += "c123_obstacle_summary=" + st.c123_obstacle_summary + "\n";
+   s += "c123_obstacle_semantics_version=" + st.c123_obstacle_semantics_version + "\n";
    s += "consensus_strength=" + DoubleToString(st.consensus_strength, 3) + "\n";
    s += "conflict_score=" + DoubleToString(st.conflict_score, 3) + "\n";
    s += "council_quality=" + DoubleToString(st.council_quality, 3) + "\n";
@@ -3425,6 +3723,26 @@ string BuildDiagnosticRuntimeSummaryJson(const DiagnosticRuntimeSummary &st)
    j += ",\"governor_state\":\"" + JsonEscapeString(st.governor_state) + "\"";
    j += ",\"zone_coverage_label\":\"" + JsonEscapeString(st.zone_coverage_label) + "\"";
    j += ",\"lifecycle_state\":\"" + JsonEscapeString(st.lifecycle_state) + "\"";
+   j += ",\"c1_tc_active\":" + string(st.c1_tc_active ? "true" : "false");
+   j += ",\"c1_high_conviction_active\":" + string(st.c1_high_conviction_active ? "true" : "false");
+   j += ",\"c1_overextension_active\":" + string(st.c1_overextension_active ? "true" : "false");
+   j += ",\"c1_pre_governor_candidate\":" + string(st.c1_pre_governor_candidate ? "true" : "false");
+   j += ",\"c1_shadowed_by_exhaustion\":" + string(st.c1_shadowed_by_exhaustion ? "true" : "false");
+   j += ",\"c1_shadow_reason\":\"" + JsonEscapeString(st.c1_shadow_reason) + "\"";
+   j += ",\"c2_overextension_m5_active\":" + string(st.c2_overextension_m5_active ? "true" : "false");
+   j += ",\"c2_consensus_tightening_applied\":" + string(st.c2_consensus_tightening_applied ? "true" : "false");
+   j += ",\"c2_consensus_tightening_delta\":" + DoubleToString(st.c2_consensus_tightening_delta, 4);
+   j += ",\"c2_pre_consensus_requirement\":" + DoubleToString(st.c2_pre_consensus_requirement, 4);
+   j += ",\"c2_post_consensus_requirement\":" + DoubleToString(st.c2_post_consensus_requirement, 4);
+   j += ",\"c2_effective_on_outcome\":" + string(st.c2_effective_on_outcome ? "true" : "false");
+   j += ",\"c2_gate_outcome\":\"" + JsonEscapeString(st.c2_gate_outcome) + "\"";
+   j += ",\"c3_low_structure_tc_active\":" + string(st.c3_low_structure_tc_active ? "true" : "false");
+   j += ",\"c3_structure_score\":" + DoubleToString(st.c3_structure_score, 4);
+   j += ",\"c3_logic_applied\":" + string(st.c3_logic_applied ? "true" : "false");
+   j += ",\"c3_effective_on_outcome\":" + string(st.c3_effective_on_outcome ? "true" : "false");
+   j += ",\"c3_gate_outcome\":\"" + JsonEscapeString(st.c3_gate_outcome) + "\"";
+   j += ",\"c123_obstacle_summary\":\"" + JsonEscapeString(st.c123_obstacle_summary) + "\"";
+   j += ",\"c123_obstacle_semantics_version\":\"" + JsonEscapeString(st.c123_obstacle_semantics_version) + "\"";
    j += ",\"consensus_strength\":" + DoubleToString(st.consensus_strength, 3);
    j += ",\"conflict_score\":" + DoubleToString(st.conflict_score, 3);
    j += ",\"council_quality\":" + DoubleToString(st.council_quality, 3);
@@ -3553,6 +3871,9 @@ void InitReplayValidationSummary(ReplayValidationSummary &st)
    st.active_mode = "";
 
    st.regime_label = "";
+   st.regime_label_source = "";
+   st.regime_label_semantics = "";
+   st.regime_label_time_basis = "";
    st.regime_confidence = 0.0;
 
    st.zone_name = "";
@@ -3649,6 +3970,24 @@ ulong ReplayExtractJsonULongFlexible(const string json, const string key)
       return 0;
 
    return (ulong)StringToInteger(raw);
+}
+
+void ReplayApplyRegimeLabelProvenanceFallback(ReplayValidationSummary &st,
+                                              const string defaultSource,
+                                              const string defaultSemantics,
+                                              const string defaultTimeBasis)
+{
+   if(StringLen(TrimString(st.regime_label)) <= 0)
+      return;
+
+   if(StringLen(TrimString(st.regime_label_source)) <= 0)
+      st.regime_label_source = defaultSource;
+
+   if(StringLen(TrimString(st.regime_label_semantics)) <= 0)
+      st.regime_label_semantics = defaultSemantics;
+
+   if(StringLen(TrimString(st.regime_label_time_basis)) <= 0)
+      st.regime_label_time_basis = defaultTimeBasis;
 }
 
 int ReplayConfidenceScore(const string confidence)
@@ -3876,7 +4215,14 @@ bool ReplayBuildCandidateFromLatestBlockedDecision(ReplayValidationSummary &st)
    st.active_plan_id = JA_ExtractJsonString(latestLine, "plan_id");
    st.active_mode = JA_ExtractJsonString(latestLine, "active_mode");
    st.regime_label = JA_ExtractJsonString(latestLine, "regime_label");
+   st.regime_label_source = JA_ExtractJsonString(latestLine, "regime_label_source");
+   st.regime_label_semantics = JA_ExtractJsonString(latestLine, "regime_label_semantics");
+   st.regime_label_time_basis = JA_ExtractJsonString(latestLine, "regime_label_time_basis");
    st.regime_confidence = JA_ExtractJsonDouble(latestLine, "regime_confidence");
+   ReplayApplyRegimeLabelProvenanceFallback(st,
+      "REGIME_CLASSIFICATION_V1_DECISION_TIME",
+      "REGIME_CLASSIFICATION_LABEL",
+      "DECISION_TIME_M1_M5_SNAPSHOT");
    st.dominant_failure = JA_ExtractJsonString(latestLine, "dominant_failure_class");
    if(StringLen(TrimString(st.dominant_failure)) <= 0)
       st.dominant_failure = JA_ExtractJsonString(latestLine, "failure_class");
@@ -3957,7 +4303,14 @@ bool ReplayBuildCandidateFromLatestTradeOpen(ReplayValidationSummary &st)
    st.active_plan_id = JA_ExtractJsonString(matchedDecision, "plan_id");
    st.active_mode = JA_ExtractJsonString(matchedDecision, "active_mode");
    st.regime_label = JA_ExtractJsonString(matchedDecision, "regime_label");
+   st.regime_label_source = JA_ExtractJsonString(matchedDecision, "regime_label_source");
+   st.regime_label_semantics = JA_ExtractJsonString(matchedDecision, "regime_label_semantics");
+   st.regime_label_time_basis = JA_ExtractJsonString(matchedDecision, "regime_label_time_basis");
    st.regime_confidence = JA_ExtractJsonDouble(matchedDecision, "regime_confidence");
+   ReplayApplyRegimeLabelProvenanceFallback(st,
+      "REGIME_CLASSIFICATION_V1_DECISION_TIME",
+      "REGIME_CLASSIFICATION_LABEL",
+      "DECISION_TIME_M1_M5_SNAPSHOT");
    st.final_decision = JA_ExtractJsonString(matchedDecision, "final_decision");
    if(StringLen(TrimString(st.final_decision)) <= 0)
       st.final_decision = JA_ExtractJsonString(latestOpen, "executed_direction");
@@ -4027,7 +4380,14 @@ bool ReplayBuildCandidateFromLatestClosedTrade(ReplayValidationSummary &st)
    st.active_plan_id = JA_ExtractJsonString(latestClose, "plan_id");
    st.active_mode = JA_ExtractJsonString(latestClose, "active_mode");
    st.regime_label = JA_ExtractJsonString(latestClose, "regime_label");
+   st.regime_label_source = JA_ExtractJsonString(latestClose, "regime_label_source");
+   st.regime_label_semantics = JA_ExtractJsonString(latestClose, "regime_label_semantics");
+   st.regime_label_time_basis = JA_ExtractJsonString(latestClose, "regime_label_time_basis");
    st.regime_confidence = JA_ExtractJsonDouble(latestClose, "regime_confidence");
+   ReplayApplyRegimeLabelProvenanceFallback(st,
+      "REGIME_CLASSIFICATION_V1_CLOSE_TIME",
+      "REGIME_CLASSIFICATION_LABEL",
+      "TRADE_CLOSE_TIME_M1_M5_SNAPSHOT");
    st.dominant_failure = JA_ExtractJsonString(latestClose, "failure_class");
    st.dominant_failure_source = JA_ExtractJsonString(latestClose, "failure_basis");
    st.dominant_failure_pressure = DoubleToString(JA_ExtractJsonDouble(latestClose, "failure_severity"), 3);
@@ -4139,6 +4499,9 @@ string BuildReplayValidationSummaryText(const ReplayValidationSummary &st)
    s += "active_plan_id=" + st.active_plan_id + "\n";
    s += "active_mode=" + st.active_mode + "\n";
    s += "regime_label=" + st.regime_label + "\n";
+   s += "regime_label_source=" + st.regime_label_source + "\n";
+   s += "regime_label_semantics=" + st.regime_label_semantics + "\n";
+   s += "regime_label_time_basis=" + st.regime_label_time_basis + "\n";
    s += "regime_confidence=" + DoubleToString(st.regime_confidence, 3) + "\n";
    s += "zone_name=" + st.zone_name + "\n";
    s += "best_strategy_id=" + st.best_strategy_id + "\n";
@@ -4185,6 +4548,9 @@ string BuildReplayValidationSummaryJson(const ReplayValidationSummary &st)
    j += ",\"active_plan_id\":\"" + JsonEscapeString(st.active_plan_id) + "\"";
    j += ",\"active_mode\":\"" + JsonEscapeString(st.active_mode) + "\"";
    j += ",\"regime_label\":\"" + JsonEscapeString(st.regime_label) + "\"";
+   j += ",\"regime_label_source\":\"" + JsonEscapeString(st.regime_label_source) + "\"";
+   j += ",\"regime_label_semantics\":\"" + JsonEscapeString(st.regime_label_semantics) + "\"";
+   j += ",\"regime_label_time_basis\":\"" + JsonEscapeString(st.regime_label_time_basis) + "\"";
    j += ",\"regime_confidence\":" + DoubleToString(st.regime_confidence, 3);
    j += ",\"zone_name\":\"" + JsonEscapeString(st.zone_name) + "\"";
    j += ",\"best_strategy_id\":\"" + JsonEscapeString(st.best_strategy_id) + "\"";
@@ -4897,6 +5263,69 @@ string ValidationRejectionFamilyForJournal(const string finalBlockingLayer)
    return ValidationInferRejectionFamilyFromBlockingLayer(finalBlockingLayer);
 }
 
+bool AuthorityStackPilotHasActiveBlock()
+{
+   return (gAuthorityStackPilotResult.blocked &&
+           gAuthorityStackPilotResult.changed_outcome &&
+           gAuthorityStackPilotResult.adjusted_decision == "REJECT");
+}
+
+string AuthorityStackPilotBlockCode()
+{
+   if(!AuthorityStackPilotHasActiveBlock())
+      return "";
+
+   if(gAuthorityStackPilotResult.primary_layer == "P4")
+      return "AUTHORITY_STACK_P4";
+   if(gAuthorityStackPilotResult.primary_layer == "V1")
+      return "AUTHORITY_STACK_V1";
+
+   return "AUTHORITY_STACK_UNKNOWN";
+}
+
+string AuthorityStackPilotAppendReason(const string existingReason)
+{
+   string code = AuthorityStackPilotBlockCode();
+   if(StringLen(code) <= 0)
+      return existingReason;
+
+   if(StringLen(TrimString(existingReason)) <= 0)
+      return code;
+
+   if(StringFind(existingReason, code) >= 0)
+      return existingReason;
+
+   return existingReason + " | " + code;
+}
+
+void ApplyAuthorityStackPilotSnapshotForJournal()
+{
+   PJ_SetAuthorityStackSnapshot(
+      gAuthorityStackPilotResult.version,
+      gAuthorityStackPilotResult.enabled,
+      gAuthorityStackPilotResult.order,
+      gAuthorityStackPilotResult.enabled_layers,
+      gAuthorityStackPilotResult.status,
+      gAuthorityStackPilotResult.primary_layer,
+      gAuthorityStackPilotResult.blocking_authority,
+      gAuthorityStackPilotResult.blocking_reason,
+      gAuthorityStackPilotResult.baseline_decision,
+      gAuthorityStackPilotResult.adjusted_decision,
+      gAuthorityStackPilotResult.changed_outcome,
+      gAuthorityStackPilotResult.triggered_layers,
+      gAuthorityStackPilotResult.reason_codes,
+      gAuthorityStackPilotResult.trace,
+      gAuthorityStackPilotResult.p4_divergence_observed,
+      gAuthorityStackPilotResult.p4_would_block,
+      gAuthorityStackPilotResult.dq_proxy_score,
+      gAuthorityStackPilotResult.dq_threshold,
+      gAuthorityStackPilotResult.dq_would_block,
+      gAuthorityStackPilotResult.v1_posture_observed,
+      gAuthorityStackPilotResult.v1_state_observed,
+      gAuthorityStackPilotResult.v1_would_block
+   );
+}
+
 void AppendValidationDecisionJournal(
    RoutedRuntimeEvaluation &routed,
    TimeframeSnapshot &m1,
@@ -4932,7 +5361,25 @@ void AppendValidationDecisionJournal(
       ValidationRejectionFamilyForJournal(finalBlockingLayer)
    );
 
+   PJ_SetC123ObstacleSnapshot(routed);
    string pjLog = "";
+   PJ_SetP2BDualTruthBridgeSnapshot(routed);
+   ApplyP4DirtyEnvironmentObservationSnapshot(routed);
+   ApplyV1ShadowStateAnnotation(routed);
+   ApplyV1FswDecisionSnapshot(routed);
+   ApplyV1ConstructivePolicySnapshot(routed);
+   ApplyAuthorityStackPilotSnapshotForJournal();
+   PJ_SetChokeAttributionV1(
+      routed.council.pre_ai_gate.structural_reject_gate,
+      routed.council.pre_ai_gate.structural_reject_gate_detail,
+      routed.council.aggregate.dominant_side,
+      routed.council.aggregate.confirm_role_present,
+      routed.council.aggregate.family_diversity_score,
+      gRegime.regime_label,
+      routed.council.env.zone_name,
+      false,
+      "STRATEGY_REPORTS_NOT_IN_AGGREGATE"
+   );
    JournalAppendDecisionV3(
       gCurrentDecisionId,
       gPlan,
@@ -4960,7 +5407,8 @@ void AppendValidationDecisionJournal(
       (gHasFailureCluster ? gFailureCluster.failure_cluster_score : 0.0),
       (gHasFailureCluster ? gFailureCluster.dominant_regime_if_any : ""),
       (gHasRegimePerf ? gRegimePerf.summary_reason : ""),
-      pjLog
+      pjLog,
+      routed.council.aggregate.best_strategy_id
    );
    LogStateOnce(pjLog);
 
@@ -5495,10 +5943,72 @@ string BuildRuntimeGovernanceStatusJson(const RuntimeGovernanceState &st)
    return j;
 }
 
-void SaveRuntimeGovernanceStatusBestEffort(const RuntimeGovernanceState &st)
+string RuntimeGovernanceDirtyKey(const RuntimeGovernanceState &st)
 {
+   // Deliberately excludes evaluated_at/current timestamp so stable state can be
+   // heartbeat-refreshed without defeating dirty-flag suppression.
+   string key = "";
+   key += st.governance_state + "|";
+   key += (st.trading_allowed ? "1" : "0");
+   key += "|";
+   key += (st.degraded_mode ? "1" : "0");
+   key += "|";
+   key += (st.truth_ready ? "1" : "0");
+   key += "|";
+   key += (st.diagnostics_ready ? "1" : "0");
+   key += "|";
+   key += (st.rollback_recently_applied ? "1" : "0");
+   key += "|";
+   key += st.reason_code + "|";
+   key += st.active_plan_id + "|";
+   key += st.active_mode + "|";
+   key += st.operating_risk_envelope_state + "|";
+   key += st.current_guardrail_block_reason_code + "|";
+   key += st.current_guardrail_owner + "|";
+   key += st.execution_authority_source + "|";
+   key += st.execution_authority_cutover_state + "|";
+   key += st.active_operating_cohort_id + "|";
+   key += IntegerToString(st.active_operating_candidate_count) + "|";
+   key += (st.execution_allowed_only_through_active_operating_cohort ? "1" : "0");
+   return key;
+}
+
+bool RuntimeGovernanceRequiresImmediateStatusWrite(const RuntimeGovernanceState &st)
+{
+   if(st.governance_state == "TRUTH_NOT_READY") return true;
+   if(st.governance_state == "ROLLBACK_RECOVERED") return true;
+   string reason = st.reason_code;
+   StringToUpper(reason);
+   if(StringFind(reason, "ABNORMAL") >= 0) return true;
+   if(StringFind(reason, "GUARDRAIL") >= 0) return true;
+   if(StringFind(reason, "EXECUTION") >= 0) return true;
+   if(StringFind(reason, "RISK") >= 0) return true;
+   return false;
+}
+
+void SaveRuntimeGovernanceStatusBestEffort(const RuntimeGovernanceState &st, bool force = false)
+{
+   string key = RuntimeGovernanceDirtyKey(st);
+   bool dirty = (key != gLastSavedGovernanceStateKey);
+   bool heartbeat = false;
+   datetime now = TimeCurrent();
+   if(gLastRuntimeGovernanceStatusWrite <= 0 ||
+      (now - gLastRuntimeGovernanceStatusWrite) >= MT5IO_RuntimeGovernanceHeartbeatSeconds())
+      heartbeat = true;
+
+   if(EnableMT5IOReductionV1 && EnableGovernanceDirtyFlag && !force && !dirty && !heartbeat && !RuntimeGovernanceRequiresImmediateStatusWrite(st))
+   {
+      g_mt5io_governance_deferred_count++;
+      return;
+   }
+
    WriteTextFileAll(RuntimeGovernanceStatusTxtPath(), BuildRuntimeGovernanceStatusText(st));
    WriteTextFileAll(RuntimeGovernanceStatusJsonPath(), BuildRuntimeGovernanceStatusJson(st));
+   gLastSavedGovernanceStateKey = key;
+   gLastRuntimeGovernanceStatusWrite = now;
+   g_mt5io_governance_write_count++;
+   if(heartbeat && !dirty && !force)
+      g_mt5io_governance_heartbeat_count++;
 }
 
 bool RuntimeGovernanceAllowsTrading(string &reasonCode)
@@ -7514,9 +8024,11 @@ string CouncilAIAdvisoryNormalizeReasonFamiliesCsv(const string src)
 
 string CouncilAIAdvisoryBuildCandidateScope(const RoutedRuntimeEvaluation &routed, const string direction)
 {
-   string scope = "COUNCIL|" + direction + "|" + gRegime.regime_label;
-   if(StringLen(TrimString(routed.council.zone_coverage.zone_semantic)) > 0)
-      scope += "|" + routed.council.zone_coverage.zone_semantic;
+   string zone_key = (routed.active_mode == "COUNCIL" && routed.council.valid)
+      ? CouncilZoneTypeToText(routed.council.env.zone_type)
+      : gRegime.regime_label;
+
+   string scope = "COUNCIL|V2|" + direction + "|" + zone_key;
    if(StringLen(TrimString(routed.council.aggregate.best_strategy_id)) > 0)
       scope += "|" + routed.council.aggregate.best_strategy_id;
    return scope;
@@ -7524,8 +8036,11 @@ string CouncilAIAdvisoryBuildCandidateScope(const RoutedRuntimeEvaluation &route
 
 string CouncilAIAdvisoryBuildCandidateSignature(const RoutedRuntimeEvaluation &routed, const string direction)
 {
-   string signature = direction + "|" + gRegime.regime_label;
-   signature += "|" + routed.council.zone_coverage.zone_semantic;
+   string zone_key = (routed.active_mode == "COUNCIL" && routed.council.valid)
+      ? CouncilZoneTypeToText(routed.council.env.zone_type)
+      : gRegime.regime_label;
+
+   string signature = "V2|" + direction + "|" + zone_key;
    signature += "|" + LAB_InferFamilyFromStrategyId(routed.council.aggregate.best_strategy_id);
    signature += "|" + routed.council.aggregate.best_strategy_id;
    return signature;
@@ -9519,6 +10034,13 @@ void EvaluateCouncilDirtyEnvironmentTightening(const RoutedRuntimeEvaluation &ro
                                               CouncilDirtyEnvironmentAssessment &out)
 {
    InitCouncilDirtyEnvironmentAssessment(out);
+
+   // NO-SCORE HARD-LOCK:
+   // Legacy dirty environment tightening is quarantined.
+   // Dirty-context authority is P4-only and categorical.
+   // This function cannot block even if the EA input is enabled.
+   return;
+
    out.active_mode = routed.active_mode;
    out.decision_direction = direction;
    out.evaluated_bar_time = iTime(_Symbol, PERIOD_M1, 0);
@@ -9603,6 +10125,334 @@ void EvaluateCouncilDirtyEnvironmentTightening(const RoutedRuntimeEvaluation &ro
    out.pass=true;
    out.verdict="PASS";
    out.reason_code="";
+}
+
+string P4DirtyEnvironmentDivergenceState(const string regime, const CouncilZoneType zoneType, const bool assessmentAvailable)
+{
+   string state = "UNKNOWN";
+   if(assessmentAvailable)
+   {
+      bool eraDegraded = (regime == "RANGE_DIRTY" || regime == "COMPRESSION" || regime == "REVERSAL_RISK");
+      bool exraDegraded = (zoneType == COUNCIL_ZONE_NO_TRADE ||
+                           zoneType == COUNCIL_ZONE_RANGE_MEAN_RECLAIM ||
+                           zoneType == COUNCIL_ZONE_COMPRESSION ||
+                           zoneType == COUNCIL_ZONE_RANGE_BALANCED ||
+                           zoneType == COUNCIL_ZONE_RANGE_DIRTY);
+      bool exraRouteNative = (zoneType == COUNCIL_ZONE_TREND_CONTINUATION ||
+                              zoneType == COUNCIL_ZONE_BREAKOUT_EXPANSION ||
+                              zoneType == COUNCIL_ZONE_EXPANSION_CONTINUATION ||
+                              zoneType == COUNCIL_ZONE_REVERSAL_EXHAUSTION);
+
+      if(eraDegraded && exraDegraded)
+         state = "ERA_EXRA_AGREE_DEGRADED";
+      else if(eraDegraded && exraRouteNative)
+         state = "ERA_DIRTY_EXRA_CLEAN_OR_ROUTE_NATIVE";
+      else if(!eraDegraded && exraDegraded)
+         state = "ERA_CLEAN_EXRA_DEGRADED";
+      else if(!eraDegraded && !exraDegraded)
+         state = "NO_DIRTY_CONTEXT";
+   }
+   return state;
+}
+
+void ApplyP4DirtyEnvironmentObservationSnapshot(const RoutedRuntimeEvaluation &routed)
+{
+   bool assessmentAvailable = false;
+   bool wouldBlock = false;
+   string reasonCode = "NOT_APPLICABLE";
+   string eraRegimeLabel = "";
+   double eraTradability = 0.0;
+   double eraConfidence = 0.0;
+   string exraZoneName = "";
+   int exraZoneType = -1;
+   double exraZoneConfidence = 0.0;
+   double environmentScore = 0.0;
+   double councilQuality = 0.0;
+   double tradabilityFloorUsed = 0.0;
+   double environmentScoreFloorUsed = 0.0;
+   double councilQualityFloorUsed = 0.0;
+   string thresholdProfile = "NONE";
+   string divergenceState = "UNKNOWN";
+
+   if(routed.active_mode == "COUNCIL" && routed.council.valid)
+   {
+      eraRegimeLabel = gRegime.regime_label;
+      eraTradability = gRegime.tradability_score;
+      eraConfidence = (MathIsValidNumber(gRegime.regime_confidence) ? gRegime.regime_confidence : 0.0);
+      exraZoneName = CouncilZoneTypeToText(routed.council.env.zone_type);
+      exraZoneType = (int)routed.council.env.zone_type;
+      exraZoneConfidence = (MathIsValidNumber(routed.council.env.zone_confidence) ? routed.council.env.zone_confidence : 0.0);
+      environmentScore = routed.council.aggregate.environment_score;
+      councilQuality = routed.council.aggregate.council_quality;
+
+      assessmentAvailable = (StringLen(eraRegimeLabel) > 0 &&
+                             MathIsValidNumber(eraTradability) && eraTradability >= 0.0 &&
+                             MathIsValidNumber(environmentScore) && environmentScore >= 0.0 &&
+                             MathIsValidNumber(councilQuality) && councilQuality >= 0.0);
+
+      if(assessmentAvailable)
+      {
+         reasonCode = "PASS";
+         const double dirtyTradFloor = ClampRange(CouncilDirtyTradabilityFloor, 0.0, 1.0);
+         const double compTradFloor = ClampRange(CouncilCompressionTradabilityFloor, 0.0, 1.0);
+         const double revTradFloor = ClampRange(CouncilReversalRiskTradabilityFloor, 0.0, 1.0);
+         const double dirtyEnvMin = ClampRange(CouncilDirtyMinEnvironmentScore, 0.0, 1.0);
+         const double transCouncilQMin = ClampRange(CouncilTransitionalMinCouncilQuality, 0.0, 1.0);
+
+         if(eraRegimeLabel == "RANGE_DIRTY" && eraTradability < dirtyTradFloor)
+         {
+            wouldBlock = true;
+            reasonCode = "DIRTY_LOW_TRADABILITY";
+            tradabilityFloorUsed = dirtyTradFloor;
+            thresholdProfile = "DIRTY_TRADABILITY";
+         }
+         else if(eraRegimeLabel == "COMPRESSION" && eraTradability < compTradFloor)
+         {
+            wouldBlock = true;
+            reasonCode = "COMPRESSION_LOW_TRADABILITY";
+            tradabilityFloorUsed = compTradFloor;
+            thresholdProfile = "COMPRESSION_TRADABILITY";
+         }
+         else if(eraRegimeLabel == "REVERSAL_RISK" && eraTradability < revTradFloor)
+         {
+            wouldBlock = true;
+            reasonCode = "REVERSAL_RISK_LOW_TRADABILITY";
+            tradabilityFloorUsed = revTradFloor;
+            thresholdProfile = "REVERSAL_RISK_TRADABILITY";
+         }
+         else if(eraRegimeLabel == "RANGE_DIRTY" && environmentScore < dirtyEnvMin)
+         {
+            wouldBlock = true;
+            reasonCode = "DIRTY_LOW_ENVIRONMENT_SCORE";
+            environmentScoreFloorUsed = dirtyEnvMin;
+            thresholdProfile = "DIRTY_ENVIRONMENT_SCORE";
+         }
+         else if((eraRegimeLabel == "RANGE_DIRTY" || eraRegimeLabel == "COMPRESSION" || eraRegimeLabel == "REVERSAL_RISK") &&
+                 councilQuality < transCouncilQMin)
+         {
+            wouldBlock = true;
+            reasonCode = "TRANSITIONAL_LOW_COUNCIL_QUALITY";
+            councilQualityFloorUsed = transCouncilQMin;
+            thresholdProfile = "TRANSITIONAL_COUNCIL_QUALITY";
+         }
+
+         divergenceState = P4DirtyEnvironmentDivergenceState(eraRegimeLabel, routed.council.env.zone_type, true);
+      }
+   }
+
+   PJ_SetP4DirtyEnvironmentObservationSnapshot(
+      assessmentAvailable,
+      EnableCouncilDirtyEnvironmentTightening,
+      wouldBlock,
+      reasonCode,
+      eraRegimeLabel,
+      eraTradability,
+      eraConfidence,
+      exraZoneName,
+      exraZoneType,
+      exraZoneConfidence,
+      environmentScore,
+      councilQuality,
+      tradabilityFloorUsed,
+      environmentScoreFloorUsed,
+      councilQualityFloorUsed,
+      thresholdProfile,
+      divergenceState
+   );
+}
+
+void ApplyV1ShadowStateAnnotation(const RoutedRuntimeEvaluation &routed)
+{
+   CouncilV1ShadowStatePolicyAnnotation annotation;
+   string liveFamily = "NOT_AVAILABLE";
+   if(routed.active_mode == "COUNCIL" && routed.council.valid)
+   {
+      string sid = TrimString(routed.council.aggregate.best_strategy_id);
+      if(StringLen(sid) > 0)
+         liveFamily = LAB_InferFamilyFromStrategyId(sid);
+      if(StringLen(TrimString(liveFamily)) <= 0)
+         liveFamily = "NOT_AVAILABLE";
+   }
+   else
+   {
+      liveFamily = "NON_COUNCIL_MODE";
+   }
+
+   CouncilV1_BuildShadowStatePolicyAnnotation(
+      routed.active_mode,
+      routed.council.valid,
+      gRegime.regime_label,
+      routed.council.env.zone_type,
+      annotation
+   );
+
+   CouncilV1_EnrichShadowStatePolicyAnnotation(
+      annotation,
+      routed.active_mode,
+      routed.council.valid,
+      liveFamily,
+      gPlan.decision_quality_policy_enabled,
+      gPlan.strategy_intelligence_enabled,
+      gPlan.entry_quality_scoring_enabled,
+      gPlan.execution_estimation_enabled,
+      EnableInstitutionalSelfLearning,
+      EnableAICandidateBlock,
+      EnableCouncilDirtyEnvironmentTightening,
+      EnableATASGovernedAdvisory,
+      ATASAdvisoryRolloutMode
+   );
+
+   PJ_SetV1ShadowStateSnapshot(
+      annotation.state_label,
+      annotation.era_posture,
+      annotation.exra_posture,
+      annotation.divergence_class,
+      annotation.policy_posture,
+      annotation.policy_allowed_families,
+      annotation.policy_deprioritized_families,
+      annotation.policy_conditional_families,
+      annotation.policy_reason_code,
+      annotation.authority_class,
+      annotation.action_taken,
+      annotation.policy_is_shadow,
+      annotation.policy_specialist_version,
+      annotation.role_native_families,
+      annotation.role_conditional_families,
+      annotation.role_deprioritized_families,
+      annotation.role_informational_families,
+      annotation.live_family,
+      annotation.live_family_role,
+      annotation.policy_live_alignment,
+      annotation.counterfactual_action,
+      annotation.counterfactual_reason_code,
+      annotation.promotion_readiness,
+      annotation.scoring_quarantine_version,
+      annotation.dq_policy_enabled,
+      annotation.dq_score_role,
+      annotation.entry_quality_role,
+      annotation.execution_geometry_role,
+      annotation.learning_role,
+      annotation.advisory_role,
+      annotation.score_authority_warning
+   );
+}
+
+void ApplyV1FswDecisionSnapshot(const RoutedRuntimeEvaluation &routed)
+{
+   PJ_SetV1ScoreQuarantineSnapshot(EnableV1ScoreQuarantineDiagnostics);
+
+   if(routed.active_mode == "COUNCIL" && routed.council.valid)
+   {
+      CouncilAggregateReport agg = routed.council.aggregate;
+      PJ_SetV1FswSnapshot(
+         agg.v1_fsw_enabled,
+         agg.v1_fsw_phase2_active,
+         agg.v1_fsw_version,
+         agg.v1_fsw_authority_class,
+         agg.v1_fsw_action_taken,
+         agg.v1_fsw_state_label,
+         agg.v1_fsw_policy_posture,
+         agg.v1_fsw_native_families,
+         agg.v1_fsw_conditional_families,
+         agg.v1_fsw_deprioritized_families,
+         agg.v1_fsw_bypass_reason,
+         agg.v1_fsw_influenced_strategy_count,
+         agg.v1_fsw_mapped_strategy_count,
+         agg.v1_fsw_nonzero_impact_count,
+         agg.v1_fsw_native_nonzero_count,
+         agg.v1_fsw_conditional_nonzero_count,
+         agg.v1_fsw_deprioritized_nonzero_count,
+         agg.v1_fsw_native_weight_delta,
+         agg.v1_fsw_conditional_weight_delta,
+         agg.v1_fsw_deprioritized_weight_delta,
+         agg.v1_fsw_total_weight_delta,
+         agg.v1_fsw_strategy_attributions,
+         agg.v1_fsw_unknown_family_warning,
+         agg.v1_fsw_no_veto,
+         agg.v1_fsw_no_final_permission_effect,
+         agg.v1_fsw_was_active_at_decision
+      );
+      return;
+   }
+
+   PJ_SetV1FswSnapshot(
+      EnableV1LiveInfluencePhase1,
+      false,
+      "V1_FSW_PHASE1",
+      "BOUNDED_PARTICIPATION_INFLUENCE_ONLY",
+      (EnableV1LiveInfluencePhase1 ? "OBSERVED_NO_ADJUSTMENT" : "DISABLED_NO_ADJUSTMENT"),
+      "V1_NOT_APPLICABLE_NON_COUNCIL",
+      "OBSERVE_ONLY",
+      "",
+      "",
+      "",
+      (EnableV1LiveInfluencePhase1 ? "NON_COUNCIL_MODE" : "FLAG_DISABLED"),
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      "",
+      "",
+      true,
+      true,
+      false
+   );
+}
+
+void ApplyV1ConstructivePolicySnapshot(const RoutedRuntimeEvaluation &routed)
+{
+   if(routed.active_mode == "COUNCIL" && routed.council.valid)
+   {
+      CouncilAggregateReport agg = routed.council.aggregate;
+      PJ_SetV1ConstructivePolicySnapshot(
+         agg.v1_constructive_policy_version,
+         agg.v1_policy_constructive_active,
+         agg.v1_policy_state_label,
+         agg.v1_policy_posture,
+         agg.v1_policy_native_families,
+         agg.v1_policy_conditional_families,
+         agg.v1_policy_deprioritized_families,
+         agg.v1_policy_informational_families,
+         agg.v1_policy_eligible_strategy_count,
+         agg.v1_policy_suppressed_strategy_count,
+         agg.v1_policy_informational_strategy_count,
+         agg.v1_policy_unknown_strategy_count,
+         agg.v1_policy_score_sovereignty_blocked,
+         agg.v1_policy_score_role,
+         agg.v1_policy_score_could_not_admit_suppressed,
+         agg.v1_policy_score_could_not_override_state,
+         agg.v1_policy_authority_class,
+         agg.v1_policy_strategy_attributions
+      );
+      return;
+   }
+
+   PJ_SetV1ConstructivePolicySnapshot(
+      "DISABLED",
+      false,
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      0,
+      0,
+      0,
+      0,
+      false,
+      "PRE_EXISTING_SCORE_AGGREGATION",
+      false,
+      false,
+      "V1_CONSTRUCTIVE_ELIGIBILITY_DISABLED",
+      ""
+   );
 }
 
 string InferDominantFamilyFromStrategyId(const string sid)
@@ -9960,7 +10810,8 @@ bool EvolutionProducedFreshProposal(string evoLog)
 void LogPlanArchitectureSummary()
 {
    LogInfo("Loaded plan: " + gPlan.plan_id);
-   LogInfo("Main trigger: " + gPlan.main_trigger_name);
+   LogInfo("Compiled-plan diagnostic main trigger: " + gPlan.main_trigger_name +
+           " | active routing field=decision_engine_mode");
 
    LogInfo("Plan mode: " + gPlan.plan_mode +
            " | Decision engine: " + gPlan.decision_engine_mode +
@@ -9974,8 +10825,9 @@ void LogPlanArchitectureSummary()
 LogInfo("Triggerless entry: " + (gPlan.allow_triggerless_entry ? "true" : "false") +
 " | Require main trigger: " + (gPlan.require_main_trigger ? "true" : "false"));
 
-   LogInfo("Score entry threshold: " + DoubleToString(gPlan.score_entry_threshold, 2) +
-           " | Score reject threshold: " + DoubleToString(gPlan.score_reject_threshold, 2));
+   LogInfo("Compiled-plan score thresholds (diagnostic when decision_engine_mode=COUNCIL): entry=" +
+           DoubleToString(gPlan.score_entry_threshold, 2) +
+           " | reject=" + DoubleToString(gPlan.score_reject_threshold, 2));
 }
 
 void LogCompiledArchitectureSummary()
@@ -10155,12 +11007,12 @@ int ComputeSmartSessionCap()
    else if(winRate >= 55.0)
       smartCap = baseCap + 5;
    else if(winRate <= 30.0)
-      smartCap = 5;
+      smartCap = 10;
    else if(winRate <= 40.0)
       smartCap = baseCap - 5;
 
-   if(smartCap < 5)
-      smartCap = 5;
+   if(smartCap < 10)
+      smartCap = 10;
 
    return smartCap;
 }
@@ -10185,30 +11037,33 @@ bool CooldownAllowsNewTrade(string &reason)
    }
 
    // Strategy Intelligence / Decision Quality policy hooks (optional, conservative)
+   // NO-SCORE HARD-LOCK: DQ/strategy intelligence policy gates quarantined as dormant score-authority surfaces.
+   // These score-based thresholds cannot block trades even if policy flags are enabled.
+   // Reactivation requires source review, code change, recompile, and No-Score compliance audit.
    if(gPlan.decision_quality_policy_enabled && gPlan.strategy_intelligence_enabled && gHasStrategyIntel)
    {
       if(gPlan.minimum_entry_quality_score > 0.0 && gEntryQuality.entry_quality_score < gPlan.minimum_entry_quality_score)
       {
          reason = "dq_policy_entry_quality_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.minimum_strategy_regime_fit_score > 0.0 && gStrategyFit.strategy_regime_fit_score < gPlan.minimum_strategy_regime_fit_score)
       {
          reason = "dq_policy_regime_fit_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.minimum_entry_edge_score > 0.0 && gEntryEdge.entry_edge_score < gPlan.minimum_entry_edge_score)
       {
          reason = "dq_policy_entry_edge_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.minimum_follow_through_quality_score > 0.0 && gFollowThrough.follow_through_quality_score < gPlan.minimum_follow_through_quality_score)
       {
          reason = "dq_policy_follow_through_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gHasExecEstimation)
@@ -10216,13 +11071,13 @@ bool CooldownAllowsNewTrade(string &reason)
          if(gPlan.minimum_execution_geometry_score > 0.0 && gExecEstimation.execution_geometry_score < gPlan.minimum_execution_geometry_score)
          {
             reason = "dq_policy_execution_geometry_below_min";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
 
          if(gPlan.minimum_expected_rr_estimate > 0.0 && gExecEstimation.expected_rr_estimate < gPlan.minimum_expected_rr_estimate)
          {
             reason = "dq_policy_expected_rr_below_min";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
 
          if(gPlan.block_adverse_execution_geometry)
@@ -10230,7 +11085,7 @@ bool CooldownAllowsNewTrade(string &reason)
             if(gExecEstimation.execution_geometry_label == "ADVERSE_EXECUTION_GEOMETRY" || gExecEstimation.execution_geometry_label == "POOR_EXECUTION_GEOMETRY")
             {
                reason = "dq_policy_adverse_execution_geometry";
-               return false;
+               // return false; // [NO-SCORE HARD-LOCKED]
             }
          }
       }
@@ -10240,7 +11095,7 @@ bool CooldownAllowsNewTrade(string &reason)
          if(gEntryQuality.entry_quality_label == "POOR_ENTRY" || gEntryQuality.entry_quality_label == "NO_ENTRY_EDGE")
          {
             reason = "dq_policy_block_poor_entry_label";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
       }
 
@@ -10249,7 +11104,7 @@ bool CooldownAllowsNewTrade(string &reason)
          if(gEntryEdge.entry_edge_label == "NEGATIVE_ENTRY_EDGE")
          {
             reason = "dq_policy_block_negative_entry_edge";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
       }
    }
@@ -10284,30 +11139,33 @@ bool SessionAllowsNewTrade(string &reason)
    }
 
    // Strategy Intelligence / Decision Quality policy hooks (optional, conservative)
+   // NO-SCORE HARD-LOCK: DQ/strategy intelligence policy gates quarantined as dormant score-authority surfaces.
+   // These score-based thresholds cannot block trades even if policy flags are enabled.
+   // Reactivation requires source review, code change, recompile, and No-Score compliance audit.
    if(gPlan.decision_quality_policy_enabled && gPlan.strategy_intelligence_enabled && gHasStrategyIntel)
    {
       if(gPlan.minimum_entry_quality_score > 0.0 && gEntryQuality.entry_quality_score < gPlan.minimum_entry_quality_score)
       {
          reason = "dq_policy_entry_quality_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.minimum_strategy_regime_fit_score > 0.0 && gStrategyFit.strategy_regime_fit_score < gPlan.minimum_strategy_regime_fit_score)
       {
          reason = "dq_policy_regime_fit_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.minimum_entry_edge_score > 0.0 && gEntryEdge.entry_edge_score < gPlan.minimum_entry_edge_score)
       {
          reason = "dq_policy_entry_edge_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.minimum_follow_through_quality_score > 0.0 && gFollowThrough.follow_through_quality_score < gPlan.minimum_follow_through_quality_score)
       {
          reason = "dq_policy_follow_through_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gHasExecEstimation)
@@ -10315,13 +11173,13 @@ bool SessionAllowsNewTrade(string &reason)
          if(gPlan.minimum_execution_geometry_score > 0.0 && gExecEstimation.execution_geometry_score < gPlan.minimum_execution_geometry_score)
          {
             reason = "dq_policy_execution_geometry_below_min";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
 
          if(gPlan.minimum_expected_rr_estimate > 0.0 && gExecEstimation.expected_rr_estimate < gPlan.minimum_expected_rr_estimate)
          {
             reason = "dq_policy_expected_rr_below_min";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
 
          if(gPlan.block_adverse_execution_geometry)
@@ -10329,7 +11187,7 @@ bool SessionAllowsNewTrade(string &reason)
             if(gExecEstimation.execution_geometry_label == "ADVERSE_EXECUTION_GEOMETRY" || gExecEstimation.execution_geometry_label == "POOR_EXECUTION_GEOMETRY")
             {
                reason = "dq_policy_adverse_execution_geometry";
-               return false;
+               // return false; // [NO-SCORE HARD-LOCKED]
             }
          }
       }
@@ -10339,7 +11197,7 @@ bool SessionAllowsNewTrade(string &reason)
          if(gEntryQuality.entry_quality_label == "POOR_ENTRY" || gEntryQuality.entry_quality_label == "NO_ENTRY_EDGE")
          {
             reason = "dq_policy_block_poor_entry_label";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
       }
 
@@ -10348,7 +11206,7 @@ bool SessionAllowsNewTrade(string &reason)
          if(gEntryEdge.entry_edge_label == "NEGATIVE_ENTRY_EDGE")
          {
             reason = "dq_policy_block_negative_entry_edge";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
       }
    }
@@ -10386,30 +11244,33 @@ bool CapacityAllowsNewTrade(CoreDirection dir, string &reason)
    }
 
    // Strategy Intelligence / Decision Quality policy hooks (optional, conservative)
+   // NO-SCORE HARD-LOCK: DQ/strategy intelligence policy gates quarantined as dormant score-authority surfaces.
+   // These score-based thresholds cannot block trades even if policy flags are enabled.
+   // Reactivation requires source review, code change, recompile, and No-Score compliance audit.
    if(gPlan.decision_quality_policy_enabled && gPlan.strategy_intelligence_enabled && gHasStrategyIntel)
    {
       if(gPlan.minimum_entry_quality_score > 0.0 && gEntryQuality.entry_quality_score < gPlan.minimum_entry_quality_score)
       {
          reason = "dq_policy_entry_quality_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.minimum_strategy_regime_fit_score > 0.0 && gStrategyFit.strategy_regime_fit_score < gPlan.minimum_strategy_regime_fit_score)
       {
          reason = "dq_policy_regime_fit_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.minimum_entry_edge_score > 0.0 && gEntryEdge.entry_edge_score < gPlan.minimum_entry_edge_score)
       {
          reason = "dq_policy_entry_edge_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.minimum_follow_through_quality_score > 0.0 && gFollowThrough.follow_through_quality_score < gPlan.minimum_follow_through_quality_score)
       {
          reason = "dq_policy_follow_through_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gHasExecEstimation)
@@ -10417,13 +11278,13 @@ bool CapacityAllowsNewTrade(CoreDirection dir, string &reason)
          if(gPlan.minimum_execution_geometry_score > 0.0 && gExecEstimation.execution_geometry_score < gPlan.minimum_execution_geometry_score)
          {
             reason = "dq_policy_execution_geometry_below_min";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
 
          if(gPlan.minimum_expected_rr_estimate > 0.0 && gExecEstimation.expected_rr_estimate < gPlan.minimum_expected_rr_estimate)
          {
             reason = "dq_policy_expected_rr_below_min";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
 
          if(gPlan.block_adverse_execution_geometry)
@@ -10431,7 +11292,7 @@ bool CapacityAllowsNewTrade(CoreDirection dir, string &reason)
             if(gExecEstimation.execution_geometry_label == "ADVERSE_EXECUTION_GEOMETRY" || gExecEstimation.execution_geometry_label == "POOR_EXECUTION_GEOMETRY")
             {
                reason = "dq_policy_adverse_execution_geometry";
-               return false;
+               // return false; // [NO-SCORE HARD-LOCKED]
             }
          }
       }
@@ -10441,7 +11302,7 @@ bool CapacityAllowsNewTrade(CoreDirection dir, string &reason)
          if(gEntryQuality.entry_quality_label == "POOR_ENTRY" || gEntryQuality.entry_quality_label == "NO_ENTRY_EDGE")
          {
             reason = "dq_policy_block_poor_entry_label";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
       }
 
@@ -10450,7 +11311,7 @@ bool CapacityAllowsNewTrade(CoreDirection dir, string &reason)
          if(gEntryEdge.entry_edge_label == "NEGATIVE_ENTRY_EDGE")
          {
             reason = "dq_policy_block_negative_entry_edge";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
       }
    }
@@ -10489,50 +11350,56 @@ bool RuntimePolicyAllowsTrade(CoreDirection dir, string &reason)
 
    if(gPlan.regime_policy_enabled && gHasRegime)
    {
+      // NO-SCORE HARD-LOCK: regime policy gate quarantined as dormant score-authority surface.
+      // regime_confidence and tradability_score are score-like fields that must not block live trades.
+      // Reactivation requires source review, code change, recompile, and No-Score compliance audit.
       if(gPlan.regime_confidence_min > 0.0 && gRegime.regime_confidence < gPlan.regime_confidence_min)
       {
          reason = "regime_policy_confidence_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.regime_tradability_min > 0.0 && gRegime.tradability_score < gPlan.regime_tradability_min)
       {
          reason = "regime_policy_tradability_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(!RegimeCsvAllows(gPlan.allowed_regimes, gRegime.regime_label))
       {
          reason = "regime_policy_not_allowed";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
    }
 
    // Strategy Intelligence / Decision Quality policy hooks (optional, conservative)
+   // NO-SCORE HARD-LOCK: DQ/strategy intelligence policy gates quarantined as dormant score-authority surfaces.
+   // These score-based thresholds cannot block trades even if policy flags are enabled.
+   // Reactivation requires source review, code change, recompile, and No-Score compliance audit.
    if(gPlan.decision_quality_policy_enabled && gPlan.strategy_intelligence_enabled && gHasStrategyIntel)
    {
       if(gPlan.minimum_entry_quality_score > 0.0 && gEntryQuality.entry_quality_score < gPlan.minimum_entry_quality_score)
       {
          reason = "dq_policy_entry_quality_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.minimum_strategy_regime_fit_score > 0.0 && gStrategyFit.strategy_regime_fit_score < gPlan.minimum_strategy_regime_fit_score)
       {
          reason = "dq_policy_regime_fit_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.minimum_entry_edge_score > 0.0 && gEntryEdge.entry_edge_score < gPlan.minimum_entry_edge_score)
       {
          reason = "dq_policy_entry_edge_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.minimum_follow_through_quality_score > 0.0 && gFollowThrough.follow_through_quality_score < gPlan.minimum_follow_through_quality_score)
       {
          reason = "dq_policy_follow_through_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gHasExecEstimation)
@@ -10540,13 +11407,13 @@ bool RuntimePolicyAllowsTrade(CoreDirection dir, string &reason)
          if(gPlan.minimum_execution_geometry_score > 0.0 && gExecEstimation.execution_geometry_score < gPlan.minimum_execution_geometry_score)
          {
             reason = "dq_policy_execution_geometry_below_min";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
 
          if(gPlan.minimum_expected_rr_estimate > 0.0 && gExecEstimation.expected_rr_estimate < gPlan.minimum_expected_rr_estimate)
          {
             reason = "dq_policy_expected_rr_below_min";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
 
          if(gPlan.block_adverse_execution_geometry)
@@ -10554,7 +11421,7 @@ bool RuntimePolicyAllowsTrade(CoreDirection dir, string &reason)
             if(gExecEstimation.execution_geometry_label == "ADVERSE_EXECUTION_GEOMETRY" || gExecEstimation.execution_geometry_label == "POOR_EXECUTION_GEOMETRY")
             {
                reason = "dq_policy_adverse_execution_geometry";
-               return false;
+               // return false; // [NO-SCORE HARD-LOCKED]
             }
          }
       }
@@ -10564,7 +11431,7 @@ bool RuntimePolicyAllowsTrade(CoreDirection dir, string &reason)
          if(gEntryQuality.entry_quality_label == "POOR_ENTRY" || gEntryQuality.entry_quality_label == "NO_ENTRY_EDGE")
          {
             reason = "dq_policy_block_poor_entry_label";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
       }
 
@@ -10573,7 +11440,7 @@ bool RuntimePolicyAllowsTrade(CoreDirection dir, string &reason)
          if(gEntryEdge.entry_edge_label == "NEGATIVE_ENTRY_EDGE")
          {
             reason = "dq_policy_block_negative_entry_edge";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
       }
    }
@@ -10591,49 +11458,55 @@ bool RegimeFilterAllows(RuntimePlan &plan, RegimeClassification &reg, string &re
    if(!plan.enable_regime_filter)
       return true;
 
+   // NO-SCORE HARD-LOCK: RegimeFilterAllows regime gates quarantined as dormant score-authority surfaces.
+   // regime_confidence and tradability_score are score-like fields that must not block live trades.
+   // Reactivation requires source review, code change, recompile, and No-Score compliance audit.
    if(plan.regime_confidence_min > 0.0 && reg.regime_confidence < plan.regime_confidence_min)
    {
       reason = "regime_confidence_below_min";
-      return false;
+      // return false; // [NO-SCORE HARD-LOCKED]
    }
 
    if(plan.regime_tradability_min > 0.0 && reg.tradability_score < plan.regime_tradability_min)
    {
       reason = "regime_tradability_below_min";
-      return false;
+      // return false; // [NO-SCORE HARD-LOCKED]
    }
 
    if(!RegimeCsvAllows(plan.allowed_regimes, reg.regime_label))
    {
       reason = "regime_not_allowed";
-      return false;
+      // return false; // [NO-SCORE HARD-LOCKED]
    }
 
    // Strategy Intelligence / Decision Quality policy hooks (optional, conservative)
+   // NO-SCORE HARD-LOCK: DQ/strategy intelligence policy gates quarantined as dormant score-authority surfaces.
+   // These score-based thresholds cannot block trades even if policy flags are enabled.
+   // Reactivation requires source review, code change, recompile, and No-Score compliance audit.
    if(gPlan.decision_quality_policy_enabled && gPlan.strategy_intelligence_enabled && gHasStrategyIntel)
    {
       if(gPlan.minimum_entry_quality_score > 0.0 && gEntryQuality.entry_quality_score < gPlan.minimum_entry_quality_score)
       {
          reason = "dq_policy_entry_quality_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.minimum_strategy_regime_fit_score > 0.0 && gStrategyFit.strategy_regime_fit_score < gPlan.minimum_strategy_regime_fit_score)
       {
          reason = "dq_policy_regime_fit_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.minimum_entry_edge_score > 0.0 && gEntryEdge.entry_edge_score < gPlan.minimum_entry_edge_score)
       {
          reason = "dq_policy_entry_edge_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gPlan.minimum_follow_through_quality_score > 0.0 && gFollowThrough.follow_through_quality_score < gPlan.minimum_follow_through_quality_score)
       {
          reason = "dq_policy_follow_through_below_min";
-         return false;
+         // return false; // [NO-SCORE HARD-LOCKED]
       }
 
       if(gHasExecEstimation)
@@ -10641,13 +11514,13 @@ bool RegimeFilterAllows(RuntimePlan &plan, RegimeClassification &reg, string &re
          if(gPlan.minimum_execution_geometry_score > 0.0 && gExecEstimation.execution_geometry_score < gPlan.minimum_execution_geometry_score)
          {
             reason = "dq_policy_execution_geometry_below_min";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
 
          if(gPlan.minimum_expected_rr_estimate > 0.0 && gExecEstimation.expected_rr_estimate < gPlan.minimum_expected_rr_estimate)
          {
             reason = "dq_policy_expected_rr_below_min";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
 
          if(gPlan.block_adverse_execution_geometry)
@@ -10655,7 +11528,7 @@ bool RegimeFilterAllows(RuntimePlan &plan, RegimeClassification &reg, string &re
             if(gExecEstimation.execution_geometry_label == "ADVERSE_EXECUTION_GEOMETRY" || gExecEstimation.execution_geometry_label == "POOR_EXECUTION_GEOMETRY")
             {
                reason = "dq_policy_adverse_execution_geometry";
-               return false;
+               // return false; // [NO-SCORE HARD-LOCKED]
             }
          }
       }
@@ -10665,7 +11538,7 @@ bool RegimeFilterAllows(RuntimePlan &plan, RegimeClassification &reg, string &re
          if(gEntryQuality.entry_quality_label == "POOR_ENTRY" || gEntryQuality.entry_quality_label == "NO_ENTRY_EDGE")
          {
             reason = "dq_policy_block_poor_entry_label";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
       }
 
@@ -10674,7 +11547,7 @@ bool RegimeFilterAllows(RuntimePlan &plan, RegimeClassification &reg, string &re
          if(gEntryEdge.entry_edge_label == "NEGATIVE_ENTRY_EDGE")
          {
             reason = "dq_policy_block_negative_entry_edge";
-            return false;
+            // return false; // [NO-SCORE HARD-LOCKED]
          }
       }
    }
@@ -12053,8 +12926,8 @@ void BuildUnifiedDecisionConfidence(
 
    if(gPlan.strategy_intelligence_enabled && gPlan.entry_quality_scoring_enabled && gHasLastSnapshots)
    {
-      ComputeEntryQualityV1(gLastM1Snapshot, reg, routed.active_mode, eval.decision, gEntryQuality);
-      ComputeStrategyRegimeFitV1(reg, routed.active_mode, eval.decision, gStrategyFit);
+      ComputeEntryQualityV1(gLastM1Snapshot, reg, routed.active_mode, eval.decision, routed.council.env.zone_type, gEntryQuality);
+      ComputeStrategyRegimeFitV1(reg, routed.active_mode, eval.decision, routed.council.env.zone_type, gStrategyFit);
       ComputeEntryEdgeV1(gLastM1Snapshot, reg, eval.decision, gEntryEdge);
       ComputeFollowThroughQualityV1(gLastM1Snapshot, reg, eval.decision, gFollowThrough);
 
@@ -12101,6 +12974,14 @@ void BuildUnifiedDecisionConfidence(
             out.policy_risk_score,
             gDecisionQuality);
          out.decision_quality_version = "DQ_V3";
+         out.expected_stop_distance              = gExecEstimation.expected_stop_distance;
+         out.expected_target_distance            = gExecEstimation.expected_target_distance;
+         out.expected_rr_estimate                = gExecEstimation.expected_rr_estimate;
+         out.adverse_excursion_risk_score        = gExecEstimation.adverse_excursion_risk_score;
+         out.favorable_excursion_potential_score = gExecEstimation.favorable_excursion_potential_score;
+         out.execution_geometry_score            = gExecEstimation.execution_geometry_score;
+         out.execution_geometry_label            = gExecEstimation.execution_geometry_label;
+         out.execution_geometry_reason           = gExecEstimation.execution_geometry_reason;
       }
       else
       {
@@ -12191,6 +13072,7 @@ bool ExecuteRuntimeBuy(const UnifiedDecisionConfidence &entryConf)
          TradeATRMultiplier,
          TradeATRPeriod,
          ExtraStopBufferPoints,
+         TradeM5AtrFloorFraction,
          levels))
    {
       LogWarn("Runtime BUY levels failed: " + levels.reason);
@@ -12308,6 +13190,7 @@ bool ExecuteRuntimeSell(const UnifiedDecisionConfidence &entryConf)
          TradeATRMultiplier,
          TradeATRPeriod,
          ExtraStopBufferPoints,
+         TradeM5AtrFloorFraction,
          levels))
    {
       LogWarn("Runtime SELL levels failed: " + levels.reason);
@@ -12622,11 +13505,12 @@ int OnInit()
    BuildFilterLibrary();
 
    LogInfo("Libraries initialized successfully");
-   LogInfo("Indicators loaded: " + IntegerToString(gIndicatorCount));
-   LogInfo("Strategies loaded: " + IntegerToString(gStrategyCount));
-   LogInfo("Entry patterns loaded: " + IntegerToString(gEntryPatternCount));
-   LogInfo("Risk models loaded: " + IntegerToString(gRiskModelCount));
-   LogInfo("Filters loaded: " + IntegerToString(gFilterCount));
+   LogInfo("Legacy compiled-plan indicator library loaded: " + IntegerToString(gIndicatorCount));
+   LogInfo("Legacy compiled-plan strategy library loaded: " + IntegerToString(gStrategyCount) +
+           " | council strategy universe is reported separately by COUNCIL_MAX_STRATEGIES/OL active_strategies_count");
+   LogInfo("Legacy compiled-plan entry pattern library loaded: " + IntegerToString(gEntryPatternCount));
+   LogInfo("Legacy compiled-plan risk model library loaded: " + IntegerToString(gRiskModelCount));
+   LogInfo("Legacy compiled-plan filter library loaded: " + IntegerToString(gFilterCount));
 
    if(!CompileRuntimePlan(gPlan, gCompiledPlan))
    {
@@ -12656,6 +13540,7 @@ int OnInit()
    {
       LogWarn("Performance journal bootstrap degraded | reason=" + performanceJournalBootstrapLog);
    }
+   SaveMT5IOReductionStatusBestEffort("ea_startup", true);
 
    gRuntimeGovernanceStartupComplete = true;
    RefreshRuntimeGovernanceAndSafetyStatusBestEffort();
@@ -12767,6 +13652,9 @@ int OnInit()
 void OnDeinit(const int reason)
 {
    EventKillTimer();
+   PJ_FlushAllBuffers("on_deinit");
+   SaveRuntimeGovernanceStatusBestEffort(gRuntimeGovernance, true);
+   SaveMT5IOReductionStatusBestEffort("on_deinit", true);
    SRVIZ_ClearAll();
    DashboardPhase1Shutdown();
    LogInfo("EA deinitialized");
@@ -12805,8 +13693,20 @@ void OnTimer()
       return;
    }
 
-   DashboardProcessPendingActions();
-   DashboardRemoveAllRendering();
+   // [DCSDG-V1] When chart UI is disabled, keep dashboard collector/page-build
+   // dormant unless explicitly enabled. ATAS heartbeat remains active; stale
+   // chart rendering cleanup runs once per EA load. This is operational
+   // containment only; no trading authority, execution, risk, journal, P4/V1/DQ,
+   // Level Brake, or No-Score logic changes.
+   if(EnableDashboardRuntimeCollector)
+      DashboardProcessPendingActions();
+
+   static bool dashboardDisabledCleanupDone = false;
+   if(!dashboardDisabledCleanupDone)
+   {
+      DashboardRemoveAllRendering();
+      dashboardDisabledCleanupDone = true;
+   }
 }
 
 void OnChartEvent(const int id, const long &lparam, const double &dparam, const string &sparam)
@@ -12841,6 +13741,11 @@ void OnTick()
 
       return;
    }
+
+   gLastM1Snapshot = m1;
+   gLastM5Snapshot = m5;
+   gHasLastSnapshots = true;
+   InitAuthorityStackPilotResult(gAuthorityStackPilotResult);
 
    RefreshRuntimeGovernanceAndSafetyStatusBestEffort();
    RefreshAIActivationReadinessStatusBestEffort();
@@ -12900,6 +13805,8 @@ bool newBar = IsNewM1Bar();
    if(newBar)
    {
       gM1BarCounter++;
+      PJ_FlushOnM1Bar(gM1BarCounter);
+      SaveMT5IOReductionStatusBestEffort("m1_bar_heartbeat", false);
 
       RuntimeHonestyEmitSurfacesBestEffort(
          gPlan.plan_id,
@@ -12926,17 +13833,30 @@ bool newBar = IsNewM1Bar();
       //---------------------------------------------------
       // Performance snapshot
       //---------------------------------------------------
-      PerformanceSnapshot perf;
-      bool perfOk = BuildPerformanceSnapshot(Magic, perf);
+      bool aiValidationOff =
+         (!EnableAIEvolution &&
+          !EnableAICouncilContextualAdvisory &&
+          !EnableAICandidateBlock &&
+          !AIGateSecurityClearanceForShadow &&
+          !AIGateSecurityClearanceForAdvisory);
 
+      bool aiH6RuntimeEnabled = (EnableAIEvolution && !aiValidationOff);
       bool timeTrigger = (EvolutionEveryNBars > 0 && (gM1BarCounter % EvolutionEveryNBars == 0));
-      bool perfTrigger = (perfOk && perf.underperformance);
       bool cooldownOk  = ((gM1BarCounter - gLastEvolutionBar) >= EvolutionCooldownBars);
+
+      PerformanceSnapshot perf;
+      bool perfOk = false;
+      bool perfTrigger = false;
+      if(aiH6RuntimeEnabled && cooldownOk)
+      {
+         perfOk = BuildPerformanceSnapshot(Magic, perf);
+         perfTrigger = (perfOk && perf.underperformance);
+      }
 
       //---------------------------------------------------
       // AI Intelligence & Oversight gate (H6)
       //---------------------------------------------------
-      if(EnableAIEvolution && cooldownOk && (timeTrigger || perfTrigger))
+      if(aiH6RuntimeEnabled && cooldownOk && (timeTrigger || perfTrigger))
       {
          RefreshAIActivationReadinessStatusBestEffort();
 
@@ -13160,7 +14080,6 @@ bool newBar = IsNewM1Bar();
             RefreshExecutionQualityValidationArtifactsBestEffort();
 
             DiagnosticRuntimeRecordTradeClose(fb);
-            SaveDiagnosticRuntimeSummaryBestEffort();
             UpdateLastMeaningfulRuntimeEventBestEffort("TRADE_CLOSED",
                                                        fb.main_trigger_name,
                                                        LAB_InferFamilyFromStrategyId(fb.main_trigger_name),
@@ -13180,7 +14099,10 @@ bool newBar = IsNewM1Bar();
           LogStateOnce(feedbackLog);
       }
       if(processedClosedDeal)
+      {
          FinalizeCouncilClosedTradeIfEnabled();
+         SaveDiagnosticRuntimeSummaryBestEffort();
+      }
       
       
   
@@ -13373,6 +14295,24 @@ string regimeBlockReason = "";
             "BLOCKED",
             ""
          );
+         PJ_SetC123ObstacleSnapshot(dummyRouted);
+         PJ_SetP2BDualTruthBridgeSnapshot(dummyRouted);
+         ApplyP4DirtyEnvironmentObservationSnapshot(dummyRouted);
+         ApplyV1ShadowStateAnnotation(dummyRouted);
+         ApplyV1FswDecisionSnapshot(dummyRouted);
+         ApplyV1ConstructivePolicySnapshot(dummyRouted);
+         ApplyAuthorityStackPilotSnapshotForJournal();
+         PJ_SetChokeAttributionV1(
+            "UPSTREAM_BLOCK",
+            "REGIME_FILTER_BLOCK",
+            "",
+            false,
+            -1.0,
+            gRegime.regime_label,
+            "",
+            false,
+            "UPSTREAM_BLOCK"
+         );
          JournalAppendDecisionV3(
             gCurrentDecisionId,
             gPlan,
@@ -13504,6 +14444,47 @@ string regimeBlockReason = "";
       }
 
       //---------------------------------------------------
+      // Authority Stack Pilot (bounded live authority)
+      //---------------------------------------------------
+      RuntimeDecision authorityBaselineDecision = eval.decision;
+      string authorityP4DivergenceState = AuthorityComputeP4DivergenceStateFromRouted(
+         routed,
+         gRegime.regime_label,
+         gRegime.tradability_score
+      );
+
+      gAuthorityStackPilotResult = ApplyAuthorityStackPilot(
+         routed,
+         eval.decision,
+         authorityBaselineDecision,
+         authorityP4DivergenceState,
+         EnableAuthorityStackPilot,
+         AuthorityStack_EnableP4,
+         AuthorityStack_EnableDQ,
+         AuthorityStack_EnableV1,
+         AuthorityClamp01(AuthorityStack_DQProxyThreshold)
+      );
+
+      if(AuthorityStackPilotHasActiveBlock())
+      {
+         eval.reason = AuthorityStackPilotAppendReason(eval.reason);
+         LogStateOnce("Authority Stack Pilot blocked decision | " +
+                      AuthorityStackPilotBlockCode() +
+                      " | baseline=" + gAuthorityStackPilotResult.baseline_decision +
+                      " | adjusted=" + gAuthorityStackPilotResult.adjusted_decision);
+      }
+
+      string irrewGeometryDirection =
+         (eval.decision == RUNTIME_ENTER_BUY ? "BUY" :
+          (eval.decision == RUNTIME_ENTER_SELL ? "SELL" : "NONE"));
+      if(IRREW_ApplyExecutionGeometryPreOrderWait(routed, eval, irrewGeometryDirection))
+      {
+         LogStateOnce("IRREW development execution-geometry WAIT | " +
+                      gExecEstimation.execution_geometry_label +
+                      " | direction=" + irrewGeometryDirection);
+      }
+
+      //---------------------------------------------------
       // BUY execution path
       //---------------------------------------------------
       if(eval.decision == RUNTIME_ENTER_BUY)
@@ -13616,7 +14597,36 @@ string regimeBlockReason = "";
                   "BLOCKED",
                   ""
                );
-               JournalAppendDecisionV3(
+               PJ_SetC123ObstacleSnapshot(routed);
+               PJ_SetP2BDualTruthBridgeSnapshot(routed);
+                ApplyP4DirtyEnvironmentObservationSnapshot(routed);
+                ApplyV1ShadowStateAnnotation(routed);
+                ApplyV1FswDecisionSnapshot(routed);
+                ApplyV1ConstructivePolicySnapshot(routed);
+                ApplyAuthorityStackPilotSnapshotForJournal();
+                PJ_SetLevelBrakeSnapshot(
+                  brake.brake_verdict,
+                  brake.brake_reason,
+                  brake.brake_reason_code,
+                  brake.obstruction_label,
+                  brake.breakout_room_score,
+                  brake.room_points,
+                  brake.rejection_risk_score,
+                  brake.sr_resolution_count,
+                  brake.location_context_summary
+               );
+                PJ_SetChokeAttributionV1(
+                  routed.council.pre_ai_gate.structural_reject_gate,
+                  routed.council.pre_ai_gate.structural_reject_gate_detail,
+                  routed.council.aggregate.dominant_side,
+                  routed.council.aggregate.confirm_role_present,
+                  routed.council.aggregate.family_diversity_score,
+                  gRegime.regime_label,
+                  routed.council.env.zone_name,
+                  false,
+                  "STRATEGY_REPORTS_NOT_IN_AGGREGATE"
+               );
+                JournalAppendDecisionV3(
                   gCurrentDecisionId,
                   gPlan,
                   routed.active_mode,
@@ -13649,7 +14659,7 @@ string regimeBlockReason = "";
                RefreshExecutionQualityValidationArtifactsBestEffort();
                // Strategy Confidence Memory v1 (observer-only): record level-brake blocked decision
                string brakeDirLabelBuy = "SELL";
-               if(brake.direction_under_review > 0)
+               if(brake.direction_under_review == "BUY")
                   brakeDirLabelBuy = "BUY";
                SCM_RecordDecisionEvent(
                   gSCMCache,
@@ -14107,6 +15117,35 @@ string regimeBlockReason = "";
                            "BLOCKED",
                            ""
                         );
+                        PJ_SetC123ObstacleSnapshot(routed);
+                        PJ_SetP2BDualTruthBridgeSnapshot(routed);
+                        ApplyP4DirtyEnvironmentObservationSnapshot(routed);
+                        ApplyV1ShadowStateAnnotation(routed);
+                        ApplyV1FswDecisionSnapshot(routed);
+                        ApplyV1ConstructivePolicySnapshot(routed);
+                        ApplyAuthorityStackPilotSnapshotForJournal();
+                        PJ_SetLevelBrakeSnapshot(
+                           brake.brake_verdict,
+                           brake.brake_reason,
+                           brake.brake_reason_code,
+                           brake.obstruction_label,
+                           brake.breakout_room_score,
+                           brake.room_points,
+                           brake.rejection_risk_score,
+                           brake.sr_resolution_count,
+                           brake.location_context_summary
+                        );
+                        PJ_SetChokeAttributionV1(
+                           routed.council.pre_ai_gate.structural_reject_gate,
+                           routed.council.pre_ai_gate.structural_reject_gate_detail,
+                           routed.council.aggregate.dominant_side,
+                           routed.council.aggregate.confirm_role_present,
+                           routed.council.aggregate.family_diversity_score,
+                           gRegime.regime_label,
+                           routed.council.env.zone_name,
+                           false,
+                           "STRATEGY_REPORTS_NOT_IN_AGGREGATE"
+                        );
                         JournalAppendDecisionV3(
                            gCurrentDecisionId,
                            gPlan,
@@ -14141,7 +15180,7 @@ string regimeBlockReason = "";
 
                         // Strategy Confidence Memory v1 (observer-only): record level-brake blocked decision
                         string brakeDirLabelSell = "SELL";
-                        if(brake.direction_under_review > 0)
+                        if(brake.direction_under_review == "BUY")
                            brakeDirLabelSell = "BUY";
                         SCM_RecordDecisionEvent(
                            gSCMCache,
@@ -14493,12 +15532,18 @@ gLastEntryDecisionId = gCurrentDecisionId;
          else
             PJ_SetZoneCoverageSnapshot("", 0.0, 0.0);
       
+         bool authorityReject = AuthorityStackPilotHasActiveBlock();
+         string authorityRejectCode = AuthorityStackPilotBlockCode();
+         string rejectPolicyResult = (authorityReject ? authorityRejectCode : "REJECT");
+         string rejectBlockingLayer = (authorityReject ? "authority_stack_pilot" : DiagnosticInferRejectBlockingLayer(routed));
+         string rejectReasonCode = (authorityReject ? authorityRejectCode : DiagnosticInferRejectReasonCode(routed));
+
          UnifiedDecisionConfidence conf;
-         BuildUnifiedDecisionConfidence(routed, gRegime, eval, false, "REJECT", conf);
+         BuildUnifiedDecisionConfidence(routed, gRegime, eval, false, rejectPolicyResult, conf);
 
          gCurrentDecisionId = PJ_MakeDecisionId();
          InitFailureClassification(gDecisionFailure);
-         ClassifyDecisionFailureV1(conf, gRegime, "REJECT", (routed.active_mode == "COUNCIL" ? routed.council.summary : ""), gDecisionFailure);
+         ClassifyDecisionFailureV1(conf, gRegime, rejectPolicyResult, (authorityReject ? authorityRejectCode : (routed.active_mode == "COUNCIL" ? routed.council.summary : "")), gDecisionFailure);
 
 
          string pjLog = "";
@@ -14508,13 +15553,31 @@ gLastEntryDecisionId = gCurrentDecisionId;
          else
             PJ_SetZoneCoverageSnapshot("", 0.0, 0.0);
          PJ_SetDecisionValidationContext(
-            DiagnosticInferRejectBlockingLayer(routed),
-            DiagnosticInferRejectReasonCode(routed),
+            rejectBlockingLayer,
+            rejectReasonCode,
             "DECISION_REJECTED",
             "REJECT",
-            ValidationRejectionFamilyForJournal(DiagnosticInferRejectBlockingLayer(routed))
-         );
-         JournalAppendDecisionV3(
+            ValidationRejectionFamilyForJournal(rejectBlockingLayer)
+          );
+         PJ_SetC123ObstacleSnapshot(routed);
+          PJ_SetP2BDualTruthBridgeSnapshot(routed);
+          ApplyP4DirtyEnvironmentObservationSnapshot(routed);
+          ApplyV1ShadowStateAnnotation(routed);
+          ApplyV1FswDecisionSnapshot(routed);
+          ApplyV1ConstructivePolicySnapshot(routed);
+          ApplyAuthorityStackPilotSnapshotForJournal();
+          PJ_SetChokeAttributionV1(
+            routed.council.pre_ai_gate.structural_reject_gate,
+            routed.council.pre_ai_gate.structural_reject_gate_detail,
+            routed.council.aggregate.dominant_side,
+            routed.council.aggregate.confirm_role_present,
+            routed.council.aggregate.family_diversity_score,
+            gRegime.regime_label,
+            routed.council.env.zone_name,
+            false,
+            "STRATEGY_REPORTS_NOT_IN_AGGREGATE"
+          );
+          JournalAppendDecisionV3(
             gCurrentDecisionId,
             gPlan,
             routed.active_mode,
@@ -14522,7 +15585,7 @@ gLastEntryDecisionId = gCurrentDecisionId;
             gRegime,
             conf,
             eval,
-             "REJECT",
+             rejectPolicyResult,
              (gHasRiskPolicy ? gRiskPolicy.state_text : "NORMAL"),
              (gHasRiskPolicy ? gRiskPolicy.reason : ""),
              gDecisionFailure.failure_class,
@@ -14581,8 +15644,8 @@ gLastEntryDecisionId = gCurrentDecisionId;
          DiagnosticRuntimeSetOutcome(
             "REJECT",
             true,
-            DiagnosticInferRejectBlockingLayer(routed),
-            DiagnosticInferRejectReasonCode(routed),
+            rejectBlockingLayer,
+            rejectReasonCode,
             "DECISION_REJECTED",
             "runtime_reject_visible"
          );
@@ -14616,7 +15679,25 @@ gLastEntryDecisionId = gCurrentDecisionId;
             "WAIT",
             ValidationRejectionFamilyForJournal(DiagnosticInferWaitBlockingLayer(routed))
          );
-         JournalAppendDecisionV3(
+         PJ_SetC123ObstacleSnapshot(routed);
+          PJ_SetP2BDualTruthBridgeSnapshot(routed);
+          ApplyP4DirtyEnvironmentObservationSnapshot(routed);
+          ApplyV1ShadowStateAnnotation(routed);
+          ApplyV1FswDecisionSnapshot(routed);
+          ApplyV1ConstructivePolicySnapshot(routed);
+          ApplyAuthorityStackPilotSnapshotForJournal();
+          PJ_SetChokeAttributionV1(
+            routed.council.pre_ai_gate.structural_reject_gate,
+            routed.council.pre_ai_gate.structural_reject_gate_detail,
+            routed.council.aggregate.dominant_side,
+            routed.council.aggregate.confirm_role_present,
+            routed.council.aggregate.family_diversity_score,
+            gRegime.regime_label,
+            routed.council.env.zone_name,
+            false,
+            "STRATEGY_REPORTS_NOT_IN_AGGREGATE"
+          );
+          JournalAppendDecisionV3(
             gCurrentDecisionId,
             gPlan,
             routed.active_mode,
@@ -14830,6 +15911,129 @@ bool FinalizeCouncilClosedTrade(
       r.final_decision = r.executed_direction;
 
    NormalizeCouncilFeedbackRecordSemantics(r);
+
+   // Patch 4A: enrich best_strategy_id from TRADE_OPEN journal record (by position_id)
+   if(r.position_id > 0 && StringLen(r.best_strategy_id) == 0)
+   {
+      string domStratId = "", aligned_ids = "", opposing_ids = "", neutral_ids = "", compact = "";
+      int aligned_c = 0, opposing_c = 0, neutral_c = 0;
+      double attr_conf = 0.0;
+      if(PJ_LoadCouncilAttributionMetaByPositionId(
+            PERF_JOURNAL_PATH, r.position_id, 2000,
+            domStratId, aligned_c, opposing_c, neutral_c,
+            attr_conf, aligned_ids, opposing_ids, neutral_ids, compact))
+      {
+         if(StringLen(domStratId) > 0)
+            r.best_strategy_id = domStratId;
+         if(StringLen(compact) > 0)
+            r.support_strategy_ids = compact;
+      }
+   }
+
+   // Patch 4B (repaired): raw-content scan — tolerates JSON array and broker-truncated decision_id
+   if(StringLen(r.decision_id) > 0 && r.council_quality == 0.0)
+   {
+      string _cfBuf[];
+      if(JA_ReadAllLines(feedbackPath, _cfBuf) && ArraySize(_cfBuf) > 0)
+      {
+         string _raw    = _cfBuf[0]; // full file concat (JA_ReadAllLines strips \n; fine for raw scan)
+         int    _rawLen = StringLen(_raw);
+         if(_rawLen > 0)
+         {
+            string _didNeedle = "\"decision_id\":\"" + r.decision_id;
+            string _recAnchor = "{\"symbol\":";
+            string _dsMarker  = "\"record_type\":\"DECISION_SNAPSHOT\"";
+            int    _bestPos   = -1;
+            int    _scanPos   = 0;
+
+            while(true)
+            {
+               int _hit = StringFind(_raw, _didNeedle, _scanPos);
+               if(_hit < 0) break;
+               _scanPos = _hit + 1;
+
+               // Find the opening {"symbol": of the enclosing record (backward in 2000-char window)
+               int    _wBk  = MathMax(0, _hit - 2000);
+               string _bk   = StringSubstr(_raw, _wBk, _hit - _wBk + 1);
+               int    _anch = -1;
+               int    _bp   = 0;
+               while(true)
+               {
+                  int _fa = StringFind(_bk, _recAnchor, _bp);
+                  if(_fa < 0) break;
+                  _anch = _fa;
+                  _bp   = _fa + 1;
+               }
+               if(_anch < 0) continue;
+               int _recStart = _wBk + _anch;
+
+               // Extract forward window from record start (4000 chars covers any record)
+               string _win = StringSubstr(_raw, _recStart, MathMin(4000, _rawLen - _recStart));
+
+               // Must be DECISION_SNAPSHOT
+               if(StringFind(_win, _dsMarker) < 0) continue;
+
+               // Verify decision_id prefix match
+               string _snapDid = JA_ExtractJsonString(_win, "decision_id");
+               if(StringFind(_snapDid, r.decision_id) != 0) continue;
+
+               // Causal filter: DS must predate trade close and match executed direction
+               datetime _snapCt = (datetime)JA_ExtractJsonULong(_win, "close_time");
+               if(_snapCt <= 0 || _snapCt >= r.close_time) continue;
+               string _snapDir = JA_ExtractJsonString(_win, "final_decision");
+               if(StringLen(r.executed_direction) > 0 && _snapDir != r.executed_direction) continue;
+               // Keep latest pre-close direction-matched DS
+               _bestPos = _recStart;
+            }
+
+            if(_bestPos >= 0)
+            {
+               string _rec = StringSubstr(_raw, _bestPos, MathMin(4000, _rawLen - _bestPos));
+               CouncilFeedbackRecord snap;
+               if(ParseCouncilFeedbackRecordFromJson(_rec, snap))
+               {
+                  r.zone_name            = snap.zone_name;
+                  r.zone_confidence      = snap.zone_confidence;
+                  r.council_quality      = snap.council_quality;
+                  r.conflict_score       = snap.conflict_score;
+                  r.consensus_label      = snap.consensus_label;
+                  r.consensus_strength   = snap.consensus_strength;
+                  r.confirm_role_present = snap.confirm_role_present;
+                  r.environment_score    = snap.environment_score;
+                  r.preferred_style      = snap.preferred_style;
+                  r.regime_summary       = snap.regime_summary;
+                  r.c1_tc_active         = snap.c1_tc_active;
+                  r.c1_high_conviction_active = snap.c1_high_conviction_active;
+                  r.c1_overextension_active = snap.c1_overextension_active;
+                  r.c1_pre_governor_candidate = snap.c1_pre_governor_candidate;
+                  r.c1_shadowed_by_exhaustion = snap.c1_shadowed_by_exhaustion;
+                  r.c1_shadow_reason = snap.c1_shadow_reason;
+                  r.c2_overextension_m5_active = snap.c2_overextension_m5_active;
+                  r.c2_consensus_tightening_applied = snap.c2_consensus_tightening_applied;
+                  r.c2_consensus_tightening_delta = snap.c2_consensus_tightening_delta;
+                  r.c2_pre_consensus_requirement = snap.c2_pre_consensus_requirement;
+                  r.c2_post_consensus_requirement = snap.c2_post_consensus_requirement;
+                  r.c2_effective_on_outcome = snap.c2_effective_on_outcome;
+                  r.c2_gate_outcome = snap.c2_gate_outcome;
+                  r.c3_low_structure_tc_active = snap.c3_low_structure_tc_active;
+                  r.c3_structure_score = snap.c3_structure_score;
+                  r.c3_logic_applied = snap.c3_logic_applied;
+                  r.c3_effective_on_outcome = snap.c3_effective_on_outcome;
+                  r.c3_gate_outcome = snap.c3_gate_outcome;
+                  r.c123_obstacle_summary = snap.c123_obstacle_summary;
+                  r.c123_obstacle_semantics_version = snap.c123_obstacle_semantics_version;
+                  // Patch 4B+: also carry strategy attribution fields from the matched DS
+                  if(StringLen(snap.best_strategy_id) > 0)
+                     r.best_strategy_id     = snap.best_strategy_id;
+                  if(StringLen(snap.support_strategy_ids) > 0)
+                     r.support_strategy_ids = snap.support_strategy_ids;
+                  if(StringLen(snap.quality_band) > 0)
+                     r.quality_band         = snap.quality_band;
+               }
+            }
+         }
+      }
+   }
 
    string fbLog = "";
    if(SaveCouncilFeedbackRecord(feedbackPath, r, fbLog))

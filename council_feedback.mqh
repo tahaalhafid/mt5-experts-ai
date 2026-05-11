@@ -74,7 +74,7 @@ string CouncilFeedbackInferFailureTag(CouncilFeedbackRecord &r)
    if(r.conflict_score >= 0.40)
       return "HIGH_CONFLICT_FAILURE";
 
-   if(r.confirm_role_present == false)
+   if(r.confirm_role_present == false && r.council_quality > 0.0)
       return "NO_CONFIRM_ROLE_FAILURE";
 
    if(r.council_quality < 0.55)
@@ -111,6 +111,37 @@ bool AppendCouncilFeedbackJsonObject(string relativePath, string oneObjectJson)
    if(StringLen(relativePath) <= 0)
       return true;
 
+   // -----------------------------------------------------------------
+   // FAST PATH: O(1) tail-append for normal existing file.
+   // Opens in binary mode for byte-precise seek.
+   // Verifies the last byte is ] before overwriting it.
+   // Falls through to safe path on any edge case or malformed tail.
+   // File format confirmed: ends with \r\n] (CRLF, ] at sz-1).
+   // -----------------------------------------------------------------
+   int hb = FileOpen(relativePath, FILE_READ | FILE_WRITE | FILE_BIN | FILE_ANSI);
+   if(hb != INVALID_HANDLE)
+   {
+      int sz = (int)FileSize(hb);
+      if(sz > 5)
+      {
+         FileSeek(hb, sz - 1, SEEK_SET);
+         int lastByte = FileReadInteger(hb, CHAR_VALUE);
+         if(lastByte == ']')
+         {
+            FileSeek(hb, sz - 1, SEEK_SET);
+            FileWriteString(hb, ",\r\n" + oneObjectJson + "\r\n]");
+            FileClose(hb);
+            return true;
+         }
+      }
+      FileClose(hb);
+      // Fall through: file missing, empty, too small, or malformed tail.
+   }
+
+   // -----------------------------------------------------------------
+   // SAFE PATH: full read + rebuild + rewrite.
+   // Handles first record, empty file, bare [] array, and malformed tail.
+   // -----------------------------------------------------------------
    int h = FileOpen(relativePath, FILE_READ | FILE_WRITE | FILE_TXT | FILE_ANSI);
    if(h == INVALID_HANDLE)
    {
@@ -164,6 +195,9 @@ bool AppendCouncilFeedbackJsonObject(string relativePath, string oneObjectJson)
 void FinalizeCouncilFeedbackMemoryFields(CouncilFeedbackRecord &r)
 {
    NormalizeCouncilFeedbackRecordSemantics(r);
+
+   if(StringLen(TrimString(r.c123_obstacle_semantics_version)) <= 0)
+      r.c123_obstacle_semantics_version = CouncilC123ObstacleSemanticsVersion();
 
    if(StringLen(TrimString(r.quality_band)) <= 0 && r.council_quality > 0.0)
       r.quality_band = CouncilFeedbackQualityBandFromScore(r.council_quality);
@@ -276,6 +310,20 @@ void FillCouncilFeedbackFromPreAIFilter(
    CouncilFeedbackRecord &r
 )
 {
+   r.c2_overextension_m5_active      = gate.c2_overextension_m5_active;
+   r.c2_consensus_tightening_applied = gate.c2_consensus_tightening_applied;
+   r.c2_consensus_tightening_delta   = gate.c2_consensus_tightening_delta;
+   r.c2_pre_consensus_requirement    = gate.c2_pre_consensus_requirement;
+   r.c2_post_consensus_requirement   = gate.c2_post_consensus_requirement;
+   r.c2_effective_on_outcome         = gate.c2_effective_on_outcome;
+   r.c2_gate_outcome                 = gate.c2_gate_outcome;
+
+   r.c3_low_structure_tc_active      = gate.c3_low_structure_tc_active;
+   r.c3_structure_score              = gate.c3_structure_score;
+   r.c3_logic_applied                = gate.c3_logic_applied;
+   r.c3_effective_on_outcome         = gate.c3_effective_on_outcome;
+   r.c3_gate_outcome                 = gate.c3_gate_outcome;
+
    if(StringLen(TrimString(r.explanation)) > 0)
       r.explanation += " || ";
 
@@ -291,6 +339,12 @@ void FillCouncilFeedbackFromGovernor(
 )
 {
    r.governor_state = gov.target_operating_state_text;
+   r.c1_tc_active              = gov.c1_tc_active;
+   r.c1_high_conviction_active = gov.c1_high_conviction_active;
+   r.c1_overextension_active   = gov.c1_overextension_active;
+   r.c1_pre_governor_candidate = gov.c1_pre_governor_candidate;
+   r.c1_shadowed_by_exhaustion = gov.c1_shadowed_by_exhaustion;
+   r.c1_shadow_reason          = gov.c1_shadow_reason;
 
    if(StringLen(TrimString(r.explanation)) > 0)
       r.explanation += " || ";
@@ -370,6 +424,26 @@ string CouncilFeedbackRecordToJson(CouncilFeedbackRecord &r)
    json += "\"confirm_role_present\":" + CouncilFeedbackBoolText(r.confirm_role_present) + ",";
    json += "\"trend_judge_supportive\":" + CouncilFeedbackBoolText(r.trend_judge_supportive) + ",";
    json += "\"exhaustion_warning\":" + CouncilFeedbackBoolText(r.exhaustion_warning) + ",";
+   json += "\"c1_tc_active\":" + CouncilFeedbackBoolText(r.c1_tc_active) + ",";
+   json += "\"c1_high_conviction_active\":" + CouncilFeedbackBoolText(r.c1_high_conviction_active) + ",";
+   json += "\"c1_overextension_active\":" + CouncilFeedbackBoolText(r.c1_overextension_active) + ",";
+   json += "\"c1_pre_governor_candidate\":" + CouncilFeedbackBoolText(r.c1_pre_governor_candidate) + ",";
+   json += "\"c1_shadowed_by_exhaustion\":" + CouncilFeedbackBoolText(r.c1_shadowed_by_exhaustion) + ",";
+   json += "\"c1_shadow_reason\":\"" + CouncilFeedbackEscape(r.c1_shadow_reason) + "\",";
+   json += "\"c2_overextension_m5_active\":" + CouncilFeedbackBoolText(r.c2_overextension_m5_active) + ",";
+   json += "\"c2_consensus_tightening_applied\":" + CouncilFeedbackBoolText(r.c2_consensus_tightening_applied) + ",";
+   json += "\"c2_consensus_tightening_delta\":" + DoubleToString(r.c2_consensus_tightening_delta, 4) + ",";
+   json += "\"c2_pre_consensus_requirement\":" + DoubleToString(r.c2_pre_consensus_requirement, 4) + ",";
+   json += "\"c2_post_consensus_requirement\":" + DoubleToString(r.c2_post_consensus_requirement, 4) + ",";
+   json += "\"c2_effective_on_outcome\":" + CouncilFeedbackBoolText(r.c2_effective_on_outcome) + ",";
+   json += "\"c2_gate_outcome\":\"" + CouncilFeedbackEscape(r.c2_gate_outcome) + "\",";
+   json += "\"c3_low_structure_tc_active\":" + CouncilFeedbackBoolText(r.c3_low_structure_tc_active) + ",";
+   json += "\"c3_structure_score\":" + DoubleToString(r.c3_structure_score, 4) + ",";
+   json += "\"c3_logic_applied\":" + CouncilFeedbackBoolText(r.c3_logic_applied) + ",";
+   json += "\"c3_effective_on_outcome\":" + CouncilFeedbackBoolText(r.c3_effective_on_outcome) + ",";
+   json += "\"c3_gate_outcome\":\"" + CouncilFeedbackEscape(r.c3_gate_outcome) + "\",";
+   json += "\"c123_obstacle_summary\":\"" + CouncilFeedbackEscape(r.c123_obstacle_summary) + "\",";
+   json += "\"c123_obstacle_semantics_version\":\"" + CouncilFeedbackEscape(r.c123_obstacle_semantics_version) + "\",";
 
    json += "\"close_time\":" + IntegerToString((int)r.close_time);
 
@@ -408,6 +482,7 @@ bool SaveCouncilFeedbackRecord(
       " | band=" + r.quality_band +
       " | setup=" + r.setup_type +
       " | failure=" + r.failure_tag +
+      " | obstacles=" + r.c123_obstacle_summary +
       " | best_strategy=" + r.best_strategy_id;
 
    return true;
@@ -461,6 +536,26 @@ string BuildCouncilFeedbackSummary(CouncilFeedbackRecord &r)
    s += "confirm_role_present: " + string(r.confirm_role_present ? "true" : "false") + "\n";
    s += "trend_judge_supportive: " + string(r.trend_judge_supportive ? "true" : "false") + "\n";
    s += "exhaustion_warning: " + string(r.exhaustion_warning ? "true" : "false") + "\n";
+   s += "c1_tc_active: " + string(r.c1_tc_active ? "true" : "false") + "\n";
+   s += "c1_high_conviction_active: " + string(r.c1_high_conviction_active ? "true" : "false") + "\n";
+   s += "c1_overextension_active: " + string(r.c1_overextension_active ? "true" : "false") + "\n";
+   s += "c1_pre_governor_candidate: " + string(r.c1_pre_governor_candidate ? "true" : "false") + "\n";
+   s += "c1_shadowed_by_exhaustion: " + string(r.c1_shadowed_by_exhaustion ? "true" : "false") + "\n";
+   s += "c1_shadow_reason: " + r.c1_shadow_reason + "\n";
+   s += "c2_overextension_m5_active: " + string(r.c2_overextension_m5_active ? "true" : "false") + "\n";
+   s += "c2_consensus_tightening_applied: " + string(r.c2_consensus_tightening_applied ? "true" : "false") + "\n";
+   s += "c2_consensus_tightening_delta: " + DoubleToString(r.c2_consensus_tightening_delta, 4) + "\n";
+   s += "c2_pre_consensus_requirement: " + DoubleToString(r.c2_pre_consensus_requirement, 4) + "\n";
+   s += "c2_post_consensus_requirement: " + DoubleToString(r.c2_post_consensus_requirement, 4) + "\n";
+   s += "c2_effective_on_outcome: " + string(r.c2_effective_on_outcome ? "true" : "false") + "\n";
+   s += "c2_gate_outcome: " + r.c2_gate_outcome + "\n";
+   s += "c3_low_structure_tc_active: " + string(r.c3_low_structure_tc_active ? "true" : "false") + "\n";
+   s += "c3_structure_score: " + DoubleToString(r.c3_structure_score, 4) + "\n";
+   s += "c3_logic_applied: " + string(r.c3_logic_applied ? "true" : "false") + "\n";
+   s += "c3_effective_on_outcome: " + string(r.c3_effective_on_outcome ? "true" : "false") + "\n";
+   s += "c3_gate_outcome: " + r.c3_gate_outcome + "\n";
+   s += "c123_obstacle_summary: " + r.c123_obstacle_summary + "\n";
+   s += "c123_obstacle_semantics_version: " + r.c123_obstacle_semantics_version + "\n";
 
    s += "explanation: " + r.explanation + "\n";
 

@@ -4,8 +4,9 @@
 #include "council_mode_types.mqh"
 
 // Structural ownership note:
-// AI governor thresholds in this module are post-filter policy-producing/advisory in current runtime order.
-// Live council pass/fail enforcement owner remains RunCouncilPreAIFilter(...) plus final env.tradable/pre.passed branching.
+// This governor is a categorical context observer. Live council pass/fail
+// enforcement remains owned by RunCouncilPreAIFilter(...) plus final
+// env.tradable/pre.passed branching.
 
 //---------------------------------------------------------
 // Helpers
@@ -29,7 +30,7 @@ void CouncilAIGovReset(CouncilPolicyAdjustment &a)
 }
 
 //---------------------------------------------------------
-// Internal ranking helper
+// Internal context helpers
 //---------------------------------------------------------
 void CouncilAIGovPickBestStrategy(
    CouncilAggregateReport &agg,
@@ -45,6 +46,26 @@ void CouncilAIGovPickBestStrategy(
 
    if(StringLen(secondaryHint) <= 0)
       secondaryHint = "";
+}
+
+bool CouncilAIGovC1PreGovernorCandidate(
+   CouncilEnvironmentReport &env,
+   CouncilAggregateReport &agg
+)
+{
+   return (env.tradable &&
+           env.zone_type == COUNCIL_ZONE_TREND_CONTINUATION &&
+           agg.consensus_type == COUNCIL_CONSENSUS_HIGH_CONVICTION &&
+           agg.two_or_more_dominant_families);
+}
+
+bool CouncilAIGovExhaustionPrecedenceActive(
+   CouncilEnvironmentReport &env,
+   CouncilAggregateReport &agg
+)
+{
+   return (env.zone_type == COUNCIL_ZONE_REVERSAL_EXHAUSTION ||
+           agg.exhaustion_warning);
 }
 
 //---------------------------------------------------------
@@ -67,16 +88,16 @@ CouncilGovernorOperatingState CouncilAIGovSelectOperatingState(
 
    if(env.zone_type == COUNCIL_ZONE_TREND_CONTINUATION &&
       agg.consensus_type == COUNCIL_CONSENSUS_HIGH_CONVICTION &&
-      agg.family_diversity_score >= 0.60 &&
-      agg.conflict_score <= 0.20 &&
-      gate.passed)
+      agg.two_or_more_dominant_families &&
+      gate.passed &&
+      !env.ceis_overextension_m5)
    {
       return COUNCIL_GOV_STATE_AGGRESSIVE;
    }
 
-   if(agg.conflict_score >= 0.40 ||
-      agg.consensus_type == COUNCIL_CONSENSUS_NARROW ||
-      env.zone_confidence < 0.50)
+   if(agg.consensus_type == COUNCIL_CONSENSUS_NARROW ||
+      env.zone_type == COUNCIL_ZONE_RANGE_MEAN_RECLAIM ||
+      env.zone_type == COUNCIL_ZONE_COMPRESSION)
    {
       return COUNCIL_GOV_STATE_DEFENSIVE;
    }
@@ -135,10 +156,9 @@ void BuildCouncilGovernorStateReport(
       "Governor state selected"
       " | state=" + st.operating_state_text +
       " | zone=" + env.zone_name +
-      " | zone_conf=" + DoubleToString(env.zone_confidence, 2) +
       " | consensus=" + agg.consensus_label +
-      " | diversity=" + DoubleToString(agg.family_diversity_score, 2) +
-      " | conflict=" + DoubleToString(agg.conflict_score, 2) +
+      " | two_families=" + string(agg.two_or_more_dominant_families ? "true" : "false") +
+      " | tradable=" + string(env.tradable ? "true" : "false") +
       " | exhaustion=" + string(agg.exhaustion_warning ? "true" : "false");
 
    st.summary =
@@ -174,36 +194,54 @@ bool EvaluateCouncilAIGovernor(
    string secondaryHint  = "";
    CouncilAIGovPickBestStrategy(agg, bestStrategyId, secondaryHint);
 
+   outAction.c1_tc_active              = (env.zone_type == COUNCIL_ZONE_TREND_CONTINUATION);
+   outAction.c1_high_conviction_active = (agg.consensus_type == COUNCIL_CONSENSUS_HIGH_CONVICTION);
+   outAction.c1_overextension_active   = env.ceis_overextension_m5;
+   outAction.c1_pre_governor_candidate = CouncilAIGovC1PreGovernorCandidate(env, agg);
+
    CouncilGovernorStateReport state;
    BuildCouncilGovernorStateReport(env, agg, gate, state);
 
    outAction.change_operating_state      = true;
    outAction.target_operating_state      = state.operating_state;
    outAction.target_operating_state_text = state.operating_state_text;
+   outAction.c1_shadowed_by_exhaustion   =
+      (outAction.c1_pre_governor_candidate &&
+       outAction.c1_overextension_active &&
+       CouncilAIGovExhaustionPrecedenceActive(env, agg) &&
+       state.operating_state == COUNCIL_GOV_STATE_EXHAUSTION_SENSITIVE);
+   outAction.c1_shadow_reason =
+      (outAction.c1_shadowed_by_exhaustion ? "OVEREXTENSION_EXHAUSTION_PRECEDENCE" : "");
 
    //------------------------------------------------------
-   // Case 0: failure detector severe pressure
+   // Case 0: failure detector pressure context
    //------------------------------------------------------
    if(failDet.pressure_level == COUNCIL_FAILURE_PRESSURE_CRITICAL ||
       failDet.pressure_level == COUNCIL_FAILURE_PRESSURE_HIGH)
    {
-      outAction.change_pre_ai_thresholds = true;
-      outAction.target_strategy_id       = bestStrategyId;
-      outAction.target_operating_state   = COUNCIL_GOV_STATE_DEFENSIVE;
-      outAction.target_operating_state_text = CouncilGovernorOperatingStateToText(COUNCIL_GOV_STATE_DEFENSIVE);
+      outAction.target_strategy_id = bestStrategyId;
+      outAction.reason_code        = "CRIT_PRESSURE";
+      outAction.source_flags       = "FAILDET";
 
-      outAction.new_min_consensus         = 0.68;
-      outAction.new_max_conflict          = 0.22;
-      outAction.new_min_environment_score = 0.58;
-      outAction.new_min_council_quality   = 0.66;
+      if(failDet.pressure_level == COUNCIL_FAILURE_PRESSURE_CRITICAL)
+      {
+         outAction.target_operating_state      = COUNCIL_GOV_STATE_CRITICAL_DEFENSIVE;
+         outAction.target_operating_state_text = CouncilGovernorOperatingStateToText(COUNCIL_GOV_STATE_CRITICAL_DEFENSIVE);
+      }
+      else
+      {
+         outAction.target_operating_state      = COUNCIL_GOV_STATE_DEFENSIVE;
+         outAction.target_operating_state_text = CouncilGovernorOperatingStateToText(COUNCIL_GOV_STATE_DEFENSIVE);
+      }
 
       outAction.adjustment_reason =
          "Failure detector pressure elevated"
          " | pressure=" + failDet.pressure_label +
+         " | state=" + outAction.target_operating_state_text +
          " | dominant_failure=" + failDet.dominant_failure_tag;
 
       outAction.summary =
-         "AI Governor: failure detector defensive override"
+         "AI Governor: failure detector " + outAction.target_operating_state_text + " context"
          " | pressure=" + failDet.pressure_label +
          " | dominant_failure=" + failDet.dominant_failure_tag +
          " | recommended_state=" + failDet.recommended_state +
@@ -217,30 +255,16 @@ bool EvaluateCouncilAIGovernor(
    //------------------------------------------------------
    if(!gate.passed)
    {
-      outAction.change_pre_ai_thresholds = true;
-      outAction.target_strategy_id       = bestStrategyId;
-
-      if(state.operating_state == COUNCIL_GOV_STATE_EXHAUSTION_SENSITIVE)
-      {
-         outAction.new_min_consensus         = 0.62;
-         outAction.new_max_conflict          = 0.25;
-         outAction.new_min_environment_score = 0.50;
-         outAction.new_min_council_quality   = 0.60;
-      }
-      else
-      {
-         outAction.new_min_consensus         = 0.60;
-         outAction.new_max_conflict          = 0.35;
-         outAction.new_min_environment_score = 0.55;
-         outAction.new_min_council_quality   = 0.60;
-      }
+      outAction.target_strategy_id = bestStrategyId;
+      outAction.reason_code        = "GATE_FAIL";
+      outAction.source_flags       = "GATE";
 
       outAction.adjustment_reason =
-         "Pre-AI gate failed; tighten thresholds"
+         "Pre-AI gate failed"
          " | state=" + state.operating_state_text;
 
       outAction.summary =
-         "AI Governor: tightened council thresholds"
+         "AI Governor: pre-AI gate context"
          " | state=" + state.operating_state_text +
          " | filtered_decision=" + CouncilAIGovDecisionText(gate.filtered_decision) +
          " | best_strategy=" + bestStrategyId +
@@ -250,33 +274,24 @@ bool EvaluateCouncilAIGovernor(
    }
 
    //------------------------------------------------------
-   // Case 2: narrow or conflicted consensus
+   // Case 2: narrow consensus context
    //------------------------------------------------------
-   if(agg.consensus_type == COUNCIL_CONSENSUS_NARROW ||
-      agg.conflict_score >= 0.50 ||
-      agg.family_diversity_score < 0.45)
+   if(agg.consensus_type == COUNCIL_CONSENSUS_NARROW)
    {
-      outAction.change_pre_ai_thresholds = true;
-      outAction.change_vote_weights      = true;
-      outAction.target_strategy_id       = bestStrategyId;
-
-      outAction.new_vote_weight           = 1.08;
-      outAction.new_min_consensus         = 0.64;
-      outAction.new_max_conflict          = 0.28;
-      outAction.new_min_environment_score = MathMax(0.50, gate.min_required_environment_score);
-      outAction.new_min_council_quality   = 0.62;
+      outAction.target_strategy_id = bestStrategyId;
+      outAction.reason_code        = "NARROW_CONTEXT";
+      outAction.source_flags       = "AGG";
 
       outAction.adjustment_reason =
-         "Narrow/conflicted council consensus"
+         "Narrow council consensus"
          " | state=" + state.operating_state_text;
 
       outAction.summary =
-         "AI Governor: narrow or conflicted consensus, tightened gate and nudged leader"
+         "AI Governor: narrow consensus context"
          " | state=" + state.operating_state_text +
          " | best_strategy=" + bestStrategyId +
          " | consensus=" + agg.consensus_label +
-         " | diversity=" + DoubleToString(agg.family_diversity_score, 2) +
-         " | conflict=" + DoubleToString(agg.conflict_score, 2);
+         " | two_families=" + string(agg.two_or_more_dominant_families ? "true" : "false");
 
       return true;
    }
@@ -286,22 +301,17 @@ bool EvaluateCouncilAIGovernor(
    //------------------------------------------------------
    if(failDet.confirmation_gap_detected)
    {
-      outAction.change_pre_ai_thresholds = true;
-      outAction.target_strategy_id       = bestStrategyId;
-      outAction.target_operating_state   = COUNCIL_GOV_STATE_DEFENSIVE;
+      outAction.target_strategy_id = bestStrategyId;
+      outAction.target_operating_state = COUNCIL_GOV_STATE_DEFENSIVE;
       outAction.target_operating_state_text = CouncilGovernorOperatingStateToText(COUNCIL_GOV_STATE_DEFENSIVE);
-
-      outAction.new_min_consensus         = 0.66;
-      outAction.new_max_conflict          = 0.25;
-      outAction.new_min_environment_score = 0.55;
-      outAction.new_min_council_quality   = 0.64;
+      outAction.reason_code        = "CONFIRM_GAP";
+      outAction.source_flags       = "FAILDET";
 
       outAction.adjustment_reason =
          "Confirmation gap detected by failure detector";
 
       outAction.summary =
-         "AI Governor: confirmation gap defensive tightening"
-         " | confirm_gap_risk=" + DoubleToString(failDet.confirm_gap_risk_score, 2) +
+         "AI Governor: confirmation gap context"
          " | dominant_failure=" + failDet.dominant_failure_tag;
 
       return true;
@@ -312,15 +322,9 @@ bool EvaluateCouncilAIGovernor(
    //------------------------------------------------------
    if(state.operating_state == COUNCIL_GOV_STATE_EXHAUSTION_SENSITIVE)
    {
-      outAction.change_pre_ai_thresholds = true;
-      outAction.change_vote_weights      = true;
-      outAction.target_strategy_id       = bestStrategyId;
-
-      outAction.new_vote_weight           = 1.10;
-      outAction.new_min_consensus         = 0.58;
-      outAction.new_max_conflict          = 0.25;
-      outAction.new_min_environment_score = 0.45;
-      outAction.new_min_council_quality   = 0.58;
+      outAction.target_strategy_id = bestStrategyId;
+      outAction.reason_code        = "EXHAUST_SENSITIVE";
+      outAction.source_flags       = "FAILDET|ENV";
 
       outAction.adjustment_reason =
          "Exhaustion-sensitive operating state active";
@@ -329,7 +333,6 @@ bool EvaluateCouncilAIGovernor(
          "AI Governor: exhaustion-sensitive mode"
          " | zone=" + env.zone_name +
          " | best_strategy=" + bestStrategyId +
-         " | quality=" + DoubleToString(agg.council_quality, 2) +
          " | exhaustion=" + string(agg.exhaustion_warning ? "true" : "false");
 
       return true;
@@ -340,9 +343,7 @@ bool EvaluateCouncilAIGovernor(
    //------------------------------------------------------
    if(state.operating_state == COUNCIL_GOV_STATE_AGGRESSIVE)
    {
-      outAction.change_vote_weights      = true;
-      outAction.target_strategy_id       = bestStrategyId;
-      outAction.new_vote_weight          = 1.06;
+      outAction.target_strategy_id = bestStrategyId;
 
       outAction.adjustment_reason =
          "Aggressive continuation state active";
@@ -351,8 +352,7 @@ bool EvaluateCouncilAIGovernor(
          "AI Governor: aggressive continuation mode"
          " | zone=" + env.zone_name +
          " | best_strategy=" + bestStrategyId +
-         " | quality=" + DoubleToString(agg.council_quality, 2) +
-         " | consensus=" + DoubleToString(agg.consensus_strength, 2);
+         " | two_families=" + string(agg.two_or_more_dominant_families ? "true" : "false");
 
       return true;
    }
@@ -362,12 +362,8 @@ bool EvaluateCouncilAIGovernor(
    //------------------------------------------------------
    if(state.operating_state == COUNCIL_GOV_STATE_DEFENSIVE)
    {
-      outAction.change_pre_ai_thresholds = true;
-
-      outAction.new_min_consensus         = 0.62;
-      outAction.new_max_conflict          = 0.30;
-      outAction.new_min_environment_score = 0.55;
-      outAction.new_min_council_quality   = 0.60;
+      outAction.reason_code  = "DEFENSIVE";
+      outAction.source_flags = "FAILDET";
 
       outAction.adjustment_reason =
          "Defensive operating state active";
@@ -376,54 +372,29 @@ bool EvaluateCouncilAIGovernor(
          "AI Governor: defensive mode"
          " | zone=" + env.zone_name +
          " | consensus=" + agg.consensus_label +
-         " | conflict=" + DoubleToString(agg.conflict_score, 2) +
-         " | zone_conf=" + DoubleToString(env.zone_confidence, 2);
+         " | tradable=" + string(env.tradable ? "true" : "false");
 
       return true;
    }
 
    //------------------------------------------------------
-   // Case 7: high-conviction pass with clear leader
+   // Case 7: directionless or empty council context
    //------------------------------------------------------
-   if(gate.passed &&
-      agg.consensus_type == COUNCIL_CONSENSUS_HIGH_CONVICTION &&
-      agg.consensus_strength >= 0.70 &&
-      agg.council_quality >= 0.65 &&
-      StringLen(bestStrategyId) > 0)
-   {
-      outAction.change_vote_weights = true;
-      outAction.target_strategy_id  = bestStrategyId;
-      outAction.new_vote_weight     = 1.05;
-
-      outAction.adjustment_reason =
-         "Promote strongest aligned strategy slightly"
-         " | state=" + state.operating_state_text;
-
-      outAction.summary =
-         "AI Governor: slight preference to best strategy"
-         " | state=" + state.operating_state_text +
-         " | best_strategy=" + bestStrategyId +
-         " | council_quality=" + DoubleToString(agg.council_quality, 2) +
-         " | consensus=" + DoubleToString(agg.consensus_strength, 2);
-
-      return true;
-   }
-
-   //------------------------------------------------------
-   // Case 8: council too weak
-   //------------------------------------------------------
-   if(agg.council_quality < 0.40)
+   if(agg.dominant_side == "NONE" || agg.active_strategies <= 0)
    {
       outAction.suggest_mode_exit = true;
+      outAction.reason_code       = "NO_DIRECTIONAL_CONTEXT";
+      outAction.source_flags      = "AGG";
+
       outAction.adjustment_reason =
-         "Council quality too weak"
+         "Council lacks directional context"
          " | state=" + state.operating_state_text;
 
       outAction.summary =
          "AI Governor: council mode may be unsuitable right now"
          " | state=" + state.operating_state_text +
-         " | quality=" + DoubleToString(agg.council_quality, 2) +
-         " | dominant=" + agg.dominant_side;
+         " | dominant=" + agg.dominant_side +
+         " | active_strategies=" + IntegerToString(agg.active_strategies);
 
       return true;
    }
@@ -440,10 +411,8 @@ bool EvaluateCouncilAIGovernor(
       " | state=" + state.operating_state_text +
       " | dominant=" + agg.dominant_side +
       " | best_strategy=" + bestStrategyId +
-      " | quality=" + DoubleToString(agg.council_quality, 2) +
-      " | consensus=" + DoubleToString(agg.consensus_strength, 2) +
-      " | conflict=" + DoubleToString(agg.conflict_score, 2) +
-      " | diversity=" + DoubleToString(agg.family_diversity_score, 2) +
+      " | consensus=" + agg.consensus_label +
+      " | two_families=" + string(agg.two_or_more_dominant_families ? "true" : "false") +
       " | fail_pressure=" + failDet.pressure_label;
 
    return true;

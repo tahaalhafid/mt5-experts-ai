@@ -663,7 +663,21 @@ TriggerResult DetectEMATrendAlignmentTrigger()
    double ema20  = 0.0;
    RT_GetEMA(PERIOD_M1, 20, 1, ema20);
 
-   if(bullM1 && bullM5 && close1 >= ema20)
+   // --- Trend-Momentum Entry-Quality Guard V1 (not_late) ---
+   // Prevents late-continuation entries where close is already extended
+   // beyond 1.20*ATR(M1,14) from EMA20_M1 in the trade direction.
+   // Mirrors DetectTrendPullbackContinuationTrigger() not_late clause.
+   // ATR fail-open: guard does not fire if ATR is unavailable.
+   double atrM1Guard = 0.0;
+   bool   atrOk      = RT_GetATR(PERIOD_M1, 14, 1, atrM1Guard);
+   const double TM_NOT_LATE_MULT = 1.20;
+   bool notLateBuy  = (!atrOk || atrM1Guard <= 0.0) ? true
+                      : ((close1 - ema20) <= atrM1Guard * TM_NOT_LATE_MULT);
+   bool notLateSell = (!atrOk || atrM1Guard <= 0.0) ? true
+                      : ((ema20 - close1) <= atrM1Guard * TM_NOT_LATE_MULT);
+   // --- END Entry-Quality Guard V1 ---
+
+   if(bullM1 && bullM5 && close1 >= ema20 && notLateBuy)
    {
       tr.dir = CORE_BUY;
       tr.quality = 0.72;
@@ -672,7 +686,7 @@ TriggerResult DetectEMATrendAlignmentTrigger()
       return tr;
    }
 
-   if(bearM1 && bearM5 && close1 <= ema20)
+   if(bearM1 && bearM5 && close1 <= ema20 && notLateSell)
    {
       tr.dir = CORE_SELL;
       tr.quality = 0.72;
@@ -681,7 +695,18 @@ TriggerResult DetectEMATrendAlignmentTrigger()
       return tr;
    }
 
-   tr.reason = "No EMA trend alignment";
+   if(bullM1 && bullM5 && close1 >= ema20 && !notLateBuy)
+   {
+      double ratio = (atrM1Guard > 0.0) ? ((close1 - ema20) / atrM1Guard) : 0.0;
+      tr.reason = "EMA aligned BUY but late: dist>ATR*1.20 ratio=" + DoubleToString(ratio, 2);
+   }
+   else if(bearM1 && bearM5 && close1 <= ema20 && !notLateSell)
+   {
+      double ratio = (atrM1Guard > 0.0) ? ((ema20 - close1) / atrM1Guard) : 0.0;
+      tr.reason = "EMA aligned SELL but late: dist>ATR*1.20 ratio=" + DoubleToString(ratio, 2);
+   }
+   else
+      tr.reason = "No EMA trend alignment";
    return tr;
 }
 
