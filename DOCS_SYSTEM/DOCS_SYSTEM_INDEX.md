@@ -3,7 +3,7 @@
 **Root:** `MQL5/Experts/AI/DOCS_SYSTEM/`
 **Created:** 2026-05-10
 **Context:** POST_FORCED_ACTIVATION_CORRECTION_AND_DOC_NETWORK_V1
-**Total documents:** 33 (+ 2 index files in this folder)
+**Total documents:** 36 (+ 2 index files in this folder)
 
 ---
 
@@ -32,7 +32,7 @@ Registry, manifest, and backlog documents governing system state.
 
 ---
 
-## 01_ARCHITECTURE/ — 7 files + 1 AI-root architecture doc
+## 01_ARCHITECTURE/ — 11 files + 1 AI-root architecture doc
 
 Design packages, architecture specs, and implementation blueprints.
 
@@ -45,6 +45,10 @@ Design packages, architecture specs, and implementation blueprints.
 | `FVG_TPB_MT5_ADMISSION_DESIGN_PACKAGE_V1.md` | FVG-TPB MT5 admission design package |
 | `IMBALANCE_FILL_REVERSAL_PLAYBOOK_DESIGN_PACKAGE_V1.md` | IFR playbook architecture design package |
 | `MT5_EXE_RAM_SIDECAR_ALIGNMENT_AND_PACKAGE2_EXECUTION_SPEC_V1.md` | EXE/RAM sidecar Package 1 spec — 15 questions answered + Codex Package 2 brief (SECONDARY) |
+| `GEMINI_DELEGATED_EXTERNAL_XAUUSD_STRATEGY_DISCOVERY_AND_INEC_PIPELINE_V1.md` | Four-gate pipeline spec for external XAUUSD strategy discovery → INEC certification; authority model, gap analysis, candidate requirements, INEC framework (Gate 0 authorized; Gate 1 pending) |
+| `NR7_VCR_GATE2_DESIGN_AND_EXECUTION_FEASIBILITY_REVIEW_V1.md` | NR7 Gate 2 architecture review — Verdict: NR7_GATE2_DESIGN_READY_FOR_GATE3_PACKET_ONLY; OCO blocked (market-order-only trade engine); STOP_GEOMETRY + LOCATION packets ready; ALPHA_TRIGGER deferred; 4 required matrices |
+| `NR7_SHADOW_ATTRIBUTION_AND_EDGE_QUALITY_INTEGRATION_DESIGN_V1.md` | NR7 Gate 3 shadow-attribution design — Verdict: NR7_SHADOW_ATTRIBUTION_OFFLINE_FIRST_RECOMMENDED; zero new runtime fields; Gate 3A0 + 3B (offline Python) authorized immediately; Gate 3A1/3C/3D/3E deferred; 4 required matrices |
+| `NR7_UNIFIED_SHADOW_RUNTIME_INTEGRATION_SPEC_V1.md` | NR7 unified shadow runtime integration spec — Verdict: NR7_SHADOW_RUNTIME_SPEC_READY_FOR_CODEX; one `nr7_shadow_state` string field in CouncilEnvironmentReport; computed in BuildCouncilEnvironmentReport; OL JSONL field; zero live influence; Codex implementation pending operator confirmation |
 
 **AI-root architecture document (not in DOCS_SYSTEM/ folder):**
 
@@ -71,7 +75,7 @@ Implementation execution reports and fix verification reports.
 
 ---
 
-## 03_RUNTIME_VALIDATION/ — 9 files
+## 03_RUNTIME_VALIDATION/ — 10 files
 
 Runtime sanity reviews, post-reload validation, and operational audit docs.
 
@@ -86,6 +90,7 @@ Runtime sanity reviews, post-reload validation, and operational audit docs.
 | `MT5_PRE_MARKET_FULL_SYSTEM_TESTER_VALIDATION_V1.md` | MT5 Strategy Tester validation + static IRREW architecture analysis (Verdict: TESTER_PARTIAL_EVIDENCE_REQUIRES_LIVE_XAUUSD) |
 | `MT5_IO_REDUCTION_RUNTIME_EVIDENCE_DOSSIER_V1.md` | IO Reduction Package 2 runtime proof dossier (Verdict: IO_REDUCTION_PROVEN_ACTIVE_1 — OL_RATE proven 83%; PJ_BUFFER zero-activity anomaly requires source investigation) |
 | `RAM_IO_REDUCTION_AND_PENDING_ACTIVATION_PHASES_READINESS_REVIEW_V1.md` | Post-fix IO/RAM proof + trade-quality phase readiness (Verdict: RAM_IO_VALIDATION_PASS_PJ_BUFFER_PROVEN + TRADE_QUALITY_PHASES_NOT_READY_DO_NOT_ENABLE) |
+| `POST_COMPILE_RUNTIME_FLAGS_AND_GIT_STATE_VERIFICATION_V1.md` | Compile verification (0 errors/warnings) + IRREW dev flags (all disabled confirmed) + IO reduction continuation + binary load + Git state (Verdict: VERIFIED_WITH_CAVEATS — BINARY_MTIME_DISCREPANCY_NOTED; runtime consistent with fix compile) |
 
 ---
 
@@ -115,7 +120,7 @@ Development completion declarations, PCEA reviews, and handover packages.
 
 ---
 
-## 06_AUDITS_AND_REVIEWS/ — 5 files
+## 06_AUDITS_AND_REVIEWS/ — 7 files
 
 Standalone audit reports and external review documents.
 
@@ -126,6 +131,8 @@ Standalone audit reports and external review documents.
 | `UNEXPECTED_BTCUSD_DEMO_TRADES_AFTER_IO_REDUCTION_RELOAD_FORENSIC_V1.md` | Emergency forensic investigation of 2 unexpected BTCUSD demo trades — Verdict: TRADES_CAUSED_BY_RUNTIME_EXECUTION_ENABLED_ON_BTCUSD / NO_ROLLBACK_NEEDED_IO_REDUCTION_SAFE |
 | `LEGACY_SURFACE_DEAD_CODE_AND_OBSOLETE_FIELD_CLEANUP_AUDIT_V1.md` | Legacy/dead-code/obsolete-field cleanup audit — Verdict: CLEANUP_REQUIRED_HIGH_VALUE; 25 items classified; Package A COMPLETED; Package B design complete |
 | `DECISION_MODE_ROUTER_AND_ZONE2_DEPENDENCY_MATRIX_DEEP_REVIEW_V1.md` | Deep dependency matrix review of EvaluateCompiledPlan/Zone 2/router — Verdict: PACKAGE_B_READY_BUT_STUB_REQUIRED; Codex package ZONE2_COMPILE_ISOLATION_V1 specified |
+| `GEMINI_EXTERNAL_XAUUSD_STRATEGY_CANDIDATE_RESEARCH_V1.md` | Gemini external research dossier — 12 candidates, 4 eliminated, top 3 ranked (NR7 #1, TTM Squeeze #2, RSI Divergence+Candlestick #3 per Gemini); full source citations with quality ratings |
+| `CLAUDE_EXTERNAL_STRATEGY_SELECTION_AND_INEC_PLAN_V1.md` | Claude independent evaluation + INEC plan — re-ranked TTM Squeeze to #1 (ALPHA_TRIGGER + LOCATION dual role, resolves event_order_valid=false); full INEC plan E1–E10; Gate 1 PENDING |
 
 ---
 
@@ -145,7 +152,7 @@ Reserved for documents that have been superseded or deprecated but retained for 
 INDEX_ID:       DOCS_SYSTEM_INDEX_V1
 CREATED:        2026-05-10
 CONTEXT:        POST_FORCED_ACTIVATION_CORRECTION_AND_DOC_NETWORK_V1
-FILES_INDEXED:  36 (DOCS_SYSTEM/) + 1 AI-root architecture doc
+FILES_INDEXED:  37 (DOCS_SYSTEM/) + 1 AI-root architecture doc
 ROOT_KEPT:      3 (AGENTS.md, OPERATION_GUARDRAILS.md, PROJECT_INTELLIGENCE_MEMORY_LAYER.md)
-LAST_UPDATED:   2026-05-11 — added RAM_IO_REDUCTION_AND_PENDING_ACTIVATION_PHASES_READINESS_REVIEW_V1 (PJ_BUFFER_PROVEN_ACTIVE post-fix; all trade-quality phases NOT_READY); 03_RUNTIME_VALIDATION now 9 files
+LAST_UPDATED:   2026-05-11 — added NR7_UNIFIED_SHADOW_RUNTIME_INTEGRATION_SPEC_V1 to 01_ARCHITECTURE (now 11 files; total 36); Verdict: NR7_SHADOW_RUNTIME_SPEC_READY_FOR_CODEX; one nr7_shadow_state string field; computed in BuildCouncilEnvironmentReport; OL field; zero live influence; Codex pending operator confirmation
 ```
