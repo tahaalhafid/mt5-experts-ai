@@ -3,7 +3,7 @@
 **Root:** `MQL5/Experts/AI/DOCS_SYSTEM/`
 **Created:** 2026-05-10
 **Context:** POST_FORCED_ACTIVATION_CORRECTION_AND_DOC_NETWORK_V1
-**Total documents:** 52 (+ 2 index files in this folder)
+**Total documents:** 53 (+ 2 index files in this folder)
 
 ---
 
@@ -123,7 +123,7 @@ Development completion declarations, PCEA reviews, and handover packages.
 
 ---
 
-## 06_AUDITS_AND_REVIEWS/ — 8 files
+## 06_AUDITS_AND_REVIEWS/ — 9 files
 
 Standalone audit reports and external review documents.
 
@@ -137,6 +137,7 @@ Standalone audit reports and external review documents.
 | `GEMINI_EXTERNAL_XAUUSD_STRATEGY_CANDIDATE_RESEARCH_V1.md` | Gemini external research dossier — 12 candidates, 4 eliminated, top 3 ranked (NR7 #1, TTM Squeeze #2, RSI Divergence+Candlestick #3 per Gemini); full source citations with quality ratings |
 | `CLAUDE_EXTERNAL_STRATEGY_SELECTION_AND_INEC_PLAN_V1.md` | Claude independent evaluation + INEC plan — re-ranked TTM Squeeze to #1 (ALPHA_TRIGGER + LOCATION dual role, resolves event_order_valid=false); full INEC plan E1–E10; Gate 1 PENDING |
 | `BLOCKER_CLOSURE_PACKAGE_1_GIT_HYGIENE_AND_TRADE_STARVATION_FORENSICS_V1.md` | BUILD_FREEZE forensics — Verdict: BLOCKER_CLOSURE_PACKAGE_1_FORENSICS_COMPLETE; actual_trade=0 is CORRECT_SYSTEM_BEHAVIOR (CONFIRM triggers require price at BB band or range extreme); event_order_valid=false hardcoded by design; playbook shadow naming confusion resolved; 10 blockers classified; next: GEMINI re-brief for CONFIRMATION_PACKET |
+| `CONFIRMATION_PACKET_CANDIDATE_DISCOVERY_AND_INEC_SCREEN_V1.md` | Three-iteration INEC co-presence screen (V1/V2/V3, 9 candidates) — Verdict: CONFIRMATION_PACKET_GAP_REMAINS_OPEN_NEEDS_NEW_SEARCH; all candidates with large lifts disqualified (artifacts, look-ahead, trigger-quality filters); only independent signals (PTBM, PTAI) rejected weak; M5BC_CORR +3pp SR at 93% starvation — RESEARCH_ONLY; TBB reveals critical SR trigger bifurcation (57.3% vs 21.2% WR) as TRIGGER_REFINEMENT finding; next: Gemini Gate 1 |
 
 ---
 
@@ -156,7 +157,7 @@ Reserved for documents that have been superseded or deprecated but retained for 
 INDEX_ID:       DOCS_SYSTEM_INDEX_V1
 CREATED:        2026-05-10
 CONTEXT:        POST_FORCED_ACTIVATION_CORRECTION_AND_DOC_NETWORK_V1
-FILES_INDEXED:  53 (DOCS_SYSTEM/) + 1 AI-root architecture doc
+FILES_INDEXED:  54 (DOCS_SYSTEM/) + 1 AI-root architecture doc
 ROOT_KEPT:      3 (AGENTS.md, OPERATION_GUARDRAILS.md, PROJECT_INTELLIGENCE_MEMORY_LAYER.md)
-LAST_UPDATED:   2026-05-12 — added BLOCKER_CLOSURE_PACKAGE_1 to 06_AUDITS_AND_REVIEWS (now 8 files); total 52 docs; CONFIRM trigger forensics complete (CORRECT_SYSTEM_BEHAVIOR); event_order_valid/playbook shadow anomalies resolved; 10 blockers classified; next: GEMINI re-brief for CONFIRMATION_PACKET
+LAST_UPDATED:   2026-05-12 — added CONFIRMATION_PACKET_CANDIDATE_DISCOVERY_AND_INEC_SCREEN_V1 to 06_AUDITS_AND_REVIEWS (now 9 files); total 53 docs; INEC V1/V2/V3 complete; gap remains open; TBB reveals SR trigger bifurcation; next: Gemini Gate 1
 ```
