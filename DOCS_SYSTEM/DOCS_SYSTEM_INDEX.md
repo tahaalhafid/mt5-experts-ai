@@ -3,7 +3,7 @@
 **Root:** `MQL5/Experts/AI/DOCS_SYSTEM/`
 **Created:** 2026-05-10
 **Context:** POST_FORCED_ACTIVATION_CORRECTION_AND_DOC_NETWORK_V1
-**Total documents:** 36 (+ 2 index files in this folder)
+**Total documents:** 37 (+ 2 index files in this folder)
 
 ---
 
@@ -32,7 +32,7 @@ Registry, manifest, and backlog documents governing system state.
 
 ---
 
-## 01_ARCHITECTURE/ — 11 files + 1 AI-root architecture doc
+## 01_ARCHITECTURE/ — 12 files + 1 AI-root architecture doc
 
 Design packages, architecture specs, and implementation blueprints.
 
@@ -49,6 +49,7 @@ Design packages, architecture specs, and implementation blueprints.
 | `NR7_VCR_GATE2_DESIGN_AND_EXECUTION_FEASIBILITY_REVIEW_V1.md` | NR7 Gate 2 architecture review — Verdict: NR7_GATE2_DESIGN_READY_FOR_GATE3_PACKET_ONLY; OCO blocked (market-order-only trade engine); STOP_GEOMETRY + LOCATION packets ready; ALPHA_TRIGGER deferred; 4 required matrices |
 | `NR7_SHADOW_ATTRIBUTION_AND_EDGE_QUALITY_INTEGRATION_DESIGN_V1.md` | NR7 Gate 3 shadow-attribution design — Verdict: NR7_SHADOW_ATTRIBUTION_OFFLINE_FIRST_RECOMMENDED; zero new runtime fields; Gate 3A0 + 3B (offline Python) authorized immediately; Gate 3A1/3C/3D/3E deferred; 4 required matrices |
 | `NR7_UNIFIED_SHADOW_RUNTIME_INTEGRATION_SPEC_V1.md` | NR7 unified shadow runtime integration spec — Verdict: NR7_SHADOW_RUNTIME_SPEC_READY_FOR_CODEX; one `nr7_shadow_state` string field in CouncilEnvironmentReport; computed in BuildCouncilEnvironmentReport; OL JSONL field; zero live influence; Codex implementation pending operator confirmation |
+| `SYSTEM_INTELLIGENCE_OBSERVABILITY_LAYER_V1_DESIGN.md` | System intelligence observability layer architecture design — 8 modules; offline-first Python scanner (nautilus_lab/system_intelligence/); 5-phase roadmap; 4 active anomalies (1 CRITICAL: actual_trade=0 in all OL records); Verdict: SYSTEM_INTELLIGENCE_OBSERVABILITY_LAYER_DESIGN_READY; Phase 1 pending operator confirmation |
 
 **AI-root architecture document (not in DOCS_SYSTEM/ folder):**
 
@@ -152,7 +153,7 @@ Reserved for documents that have been superseded or deprecated but retained for 
 INDEX_ID:       DOCS_SYSTEM_INDEX_V1
 CREATED:        2026-05-10
 CONTEXT:        POST_FORCED_ACTIVATION_CORRECTION_AND_DOC_NETWORK_V1
-FILES_INDEXED:  37 (DOCS_SYSTEM/) + 1 AI-root architecture doc
+FILES_INDEXED:  38 (DOCS_SYSTEM/) + 1 AI-root architecture doc
 ROOT_KEPT:      3 (AGENTS.md, OPERATION_GUARDRAILS.md, PROJECT_INTELLIGENCE_MEMORY_LAYER.md)
-LAST_UPDATED:   2026-05-11 — added NR7_UNIFIED_SHADOW_RUNTIME_INTEGRATION_SPEC_V1 to 01_ARCHITECTURE (now 11 files; total 36); Verdict: NR7_SHADOW_RUNTIME_SPEC_READY_FOR_CODEX; one nr7_shadow_state string field; computed in BuildCouncilEnvironmentReport; OL field; zero live influence; Codex pending operator confirmation
+LAST_UPDATED:   2026-05-12 — added SYSTEM_INTELLIGENCE_OBSERVABILITY_LAYER_V1_DESIGN.md to 01_ARCHITECTURE (now 12 files; total 37); 8-module read-only observability layer; offline-first Python scanner; 4 active anomalies; VERDICT: SYSTEM_INTELLIGENCE_OBSERVABILITY_LAYER_DESIGN_READY; Phase 1 pending operator confirmation
 ```

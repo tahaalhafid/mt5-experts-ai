@@ -83,6 +83,8 @@ Every major node should support cross-links using stable IDs such as:
 > Fast-read state surface. For status, next-step, waiting-condition, or frozen-boundary questions — read this block first. Do not read deeper sections unless this block is insufficient.
 > Update immediately after any execution that changes project truth at this level.
 
+- **SYSTEM_INTELLIGENCE_OBSERVABILITY_LAYER_V1 — DESIGN_COMPLETE_PHASE1_PENDING (2026-05-12):** Read-only observability layer architecture designed for MT5 council system. **VERDICT: `SYSTEM_INTELLIGENCE_OBSERVABILITY_LAYER_DESIGN_READY`**. **8 modules specified:** DATAFLOW_MAP (producer-consumer chain), PACKET_LIFECYCLE_MONITOR (packet/playbook per-record tracking), RAW_DATA_HEALTH_MONITOR (file freshness, schema, field completeness), ACTIVITY_LAYER_MONITOR (strategy fire rates, filter pass rates, execution gate blocking), EVENT_ORDER_MONITOR (event_order_valid flag, LOCATION/TIMING packet absence tracking), CONTRADICTION_DETECTOR (cross-surface inconsistency), SHADOW_EFFECT_TRACKER (nr7_shadow_state lift analysis), READINESS_GATE_MONITOR (17 gates, blocked/unblocked status). **Recommended architecture:** Offline-first Python scanner (`nautilus_lab/system_intelligence/siol_scanner.py`). Zero MT5 IO burden. Output: `system_intelligence_snapshot.json`, `system_intelligence_report.md`, `readiness_gate_state.json` in `nautilus_lab/outputs/`. **Critical anomaly detected during design:** actual_trade=true=0 across all 57 OL records — 32 have filter_passed=true but zero have actual_trade=true; system structurally approves trades but executes none. Likely causes: EnableRuntimeExecution=false, OneTradeAttemptPerBar, open position management, post-filter execution gate blockage. **4 active anomalies:** (1) CRITICAL: actual_trade=true=0; (2) HIGH: WriteOpportunityLedgerRecord absent from current source (source-binary divergence — binary writes OL, source does not); (3) HIGH: OL schema OL_V1C_IRREW_DEV_V1 claims rbsr/tpc/vcr/ifr playbook shadow fields; 0 of 57 records contain them; (4) MEDIUM: PJ buffer stall — 6 records buffered, 0 flushed in current session. **5-phase roadmap:** Phase 1 (core scanner, 7 modules) → Phase 2 (SHADOW_EFFECT_TRACKER requires NR7 shadow data) → Phase 3 (auto-contradiction detection, scheduling) → Phase 4 (predictive readiness gates, cross-session trend) → Phase 5 (optional realtime MT5 monitoring). **Phase 1 authorized: PENDING OPERATOR CONFIRMATION.** No source changes. No compile. No MT5 reload. No INEC. Design: `DOCS_SYSTEM/01_ARCHITECTURE/SYSTEM_INTELLIGENCE_OBSERVABILITY_LAYER_V1_DESIGN.md`. Production Ready: FALSE. Runtime authority: NONE.
+
 - **NR7_UNIFIED_SHADOW_RUNTIME_INTEGRATION_SPEC_V1 — SPEC_COMPLETE_AWAITING_CODEX (2026-05-11):** Codex-ready specification for NR7 shadow integration as unified shadow packet in MT5 council system. **VERDICT: `NR7_SHADOW_RUNTIME_SPEC_READY_FOR_CODEX`**. **Management decision (simplified development rule):** Research → INEC → Shadow Integration → Runtime Evidence → Live Influence Later. NR7 INEC accepted; shadow integration is the authorized next step; live influence NOT authorized. **Field minimalism (maximum): one `string nr7_shadow_state` in `CouncilEnvironmentReport`**. Values: NONE | RAW | ATR_FILTERED | SERIES | FILTERED_SERIES. No box high/low/range fields. No bool fields. Zero live influence — nr7_shadow_state must NOT be read by council_aggregator, council_pre_ai_filter, council_ai_governor, council_strategies, or core_trade_engine. **Computation location:** `BuildCouncilEnvironmentReport()` in `council_environment.mqh`, after `ClassifyCouncilZone()` and before ATAS shadow block. Uses direct `iHigh`/`iLow` API calls for M5 shifts 1–7. Reuses `CouncilGetATR(PERIOD_M1, 14, 1)`. **Struct changes:** `council_mode_types.mqh:203` (add field) + `council_mode_types.mqh:833` (add init `r.nr7_shadow_state = "NONE"`). **OL JSONL field:** `"nr7_shadow_state":"<value>"` in `WriteOpportunityLedgerRecord()` — **DEPENDENCY NOTED:** OL writer not in current source (source-binary divergence — see spec Section H). Codex must locate/re-establish OL write path before Change 4. **Forbidden files (no changes permitted):** core_trade_engine.mqh, council_aggregator.mqh, council_strategies.mqh, council_pre_ai_filter.mqh, council_ai_governor.mqh, all risk/execution/cohort files. **Codex package:** NR7_UNIFIED_SHADOW_RUNTIME_INTEGRATION_PACKAGE_V1. **Gate 3A1:** DEFERRED — requires N_nr7_context ≥ 20 actual trades in OL after shadow deployed. **Gate 3B:** DEFERRED — requires ai_performance_journal.jsonl V3 schema with MAE fields. **No source changes. No compile. No reload (spec only).** Spec: `DOCS_SYSTEM/01_ARCHITECTURE/NR7_UNIFIED_SHADOW_RUNTIME_INTEGRATION_SPEC_V1.md`. Codex implementation: NOT_YET_AUTHORIZED — operator must confirm. Production Ready: FALSE. Runtime authority: NONE.
 
 - **NR7_GATE3A0_OFFLINE_ATTRIBUTION_AND_STOP_GEOMETRY_COUNTERFACTUAL_EXECUTION_V1 — COMPLETE (2026-05-11):** Gate 3A0 + Gate 3B (partial) executed. **VERDICT: `NR7_GATE3A0_ATTRIBUTION_INCONCLUSIVE_SMALL_SAMPLE`**. **Data constraint:** 0 actual trade outcomes in current council OL system (all 53 OL records have actual_trade=false). **OL NR7 context:** 4/53 = 7.5% NR7-active; only 1 passes ATR filter (box_pct_atr=0.335). **Quality signals:** environment_score +4.8pp and zone_confidence +6.3pp when NR7 active (supports LOCATION_PACKET mechanism); council_quality −5.6pp (N=4, not significant). Filter_passed rate 25% NR7-ON vs 63.3% NR7-OFF — council already self-protective during compression. **Journal trade proxy (old S4 system, N=15 NR7-ON, N=118 NR7-OFF):** WR NR7-ON=13.3% vs NR7-OFF=44.9% → −31.6pp. CONTAMINATED — all 15 NR7-ON trades have box_pct_atr>0.40 (mean=0.634, unfiltered junk subset); old plan_v076 COUNCIL system not current architecture; market-order execution not OCO. Mechanistic explanation valid: NR7 compression = hostile to directional momentum strategies (consistent with INEC Variant B market-order WR=40.2%). **Stop geometry (Gate 3B): BLOCKED** — S4 journal schema has no entry_price/sl_price/mae_pts. Box stops in current period (unfiltered): ~2.1× wider than ATR stops (harmful without ATR filter). With ATR filter (box<40%ATR): box_stop provides structural placement but wider in absolute terms due to 12pt cost overlay. **Gate 3A1: REMAIN DEFERRED** — N=4 < 20 threshold; ETA ~90 days at current NR7 rate. **Gate 3B: REMAIN DEFERRED** — requires ai_performance_journal.jsonl (V3 schema, device busy) with MAE data. **No source changes. No compile. No reload.** Artifacts: `nautilus_lab/certifications/nr7_gate3a0_offline_attribution_v1.md`, 4 CSV/JSON outputs in `nautilus_lab/outputs/`. PIML update: Gate 3A0 complete; all instrumentation still unjustified; rerun monthly as OL accumulates. Next milestone: OL reaches 100+ records OR actual_trade=true entries appear. Runtime authority: NONE.
@@ -9456,3 +9458,57 @@ PRODUCTION_READY_CLAIMED:     NO
 SYSTEM_STATUS:                DEVELOPMENT_COMPLETE / PRODUCTION_ACCEPTANCE_PENDING
 NEXT_OPERATOR_ACTION:         Run tester from terminal UI using .set files in MQL5/Profiles/Tester/; then attach EA to XAUUSD M5 per XAUUSD_ATTACH_RUNTIME_VALIDATION_INSTRUCTIONS_V1.md
 ```
+
+---
+
+## SYSTEM_INTELLIGENCE_OBSERVABILITY_LAYER_V1
+
+**Purpose:** Read-only observer layer for dataflow, packet lifecycle, anomaly detection, contradiction detection, readiness gate monitoring, shadow effect tracking, and system intelligence reporting. NOT a trading decision engine. MT5 remains runtime authority.
+
+**Authority boundary:**
+- All outputs: OBSERVABILITY_ONLY_NON_AUTHORITATIVE
+- runtime_authority_status: NONE for all artifacts
+- Production Ready: FALSE (of the layer itself)
+- No output may be consumed by any MT5 decision path
+
+**Active modules:** 8 defined; 0 implemented (Phase 0 complete only)
+
+**Monitored files:**
+- ai_opportunity_ledger.jsonl (primary)
+- ai_opportunity_summary.json
+- ai_performance_journal.jsonl
+- mt5_io_reduction_status.json
+- runtime_governance_status.json
+- execution_authority_status.json
+- Experts logs
+- PIML, DOCS_SYSTEM, source files (static)
+
+**Readiness thresholds tracked:**
+- actual_trade=true ≥ 1 (CRITICAL BLOCKER — currently 0)
+- NR7 Gate 3A1: N_nr7_actual_trade ≥ 20 (currently 0)
+- NR7 Gate 3B: PJ V3 MAE schema accessible (currently BLOCKED)
+- Phase 4A/4B: IRREW flags remain FALSE (NOT_AUTHORIZED)
+- COUNCIL_MAX_STRATEGIES: at 17/17 capacity (NOT_AUTHORIZED to increase)
+
+**Latest snapshot:** None (Phase 1 not yet implemented)
+
+**Active anomalies:**
+1. CRITICAL: actual_trade=true = 0 across all 57 OL records (32 filter_passed=true)
+2. HIGH: WriteOpportunityLedgerRecord absent from current source (source-binary divergence)
+3. HIGH: OL schema OL_V1C_IRREW_DEV_V1 claims playbook shadow fields; 0 of 57 records contain them
+4. MEDIUM: PJ buffer stall — 6 records buffered, 0 flushed in current session
+
+**Blocked phases:** IRREW (all phases), Phase 4A/4B/4C/RCEM/ExecutionGeometry/PlaybookAdvisory, OCO infrastructure, COUNCIL_MAX_STRATEGIES increase, Cleanup Package B
+
+**Next recommended review:** After Phase 1 scanner is implemented and first run completes
+
+**Forbidden actions:**
+- Do not connect observability outputs to any MT5 decision path
+- Do not use READINESS_GATE_MONITOR output as automatic activation permission
+- Do not treat SHADOW_EFFECT_TRACKER lift as implementation authorization
+- Do not increase IO burden without explicit Phase 5 gate authorization
+- Do not use PLAYBOOK_VALID state as permission gate
+
+**Design report:** DOCS_SYSTEM/01_ARCHITECTURE/SYSTEM_INTELLIGENCE_OBSERVABILITY_LAYER_V1_DESIGN.md
+**Phase 0 complete:** 2026-05-12
+**Phase 1 authorized:** PENDING OPERATOR CONFIRMATION
