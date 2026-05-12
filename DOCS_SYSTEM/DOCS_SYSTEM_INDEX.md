@@ -3,7 +3,7 @@
 **Root:** `MQL5/Experts/AI/DOCS_SYSTEM/`
 **Created:** 2026-05-10
 **Context:** POST_FORCED_ACTIVATION_CORRECTION_AND_DOC_NETWORK_V1
-**Total documents:** 55 (+ 2 index files in this folder)
+**Total documents:** 56 (+ 2 index files in this folder)
 
 ---
 
@@ -123,7 +123,7 @@ Development completion declarations, PCEA reviews, and handover packages.
 
 ---
 
-## 06_AUDITS_AND_REVIEWS/ — 11 files
+## 06_AUDITS_AND_REVIEWS/ — 12 files
 
 Standalone audit reports and external review documents.
 
@@ -140,6 +140,7 @@ Standalone audit reports and external review documents.
 | `CONFIRMATION_PACKET_CANDIDATE_DISCOVERY_AND_INEC_SCREEN_V1.md` | Three-iteration INEC co-presence screen (V1/V2/V3, 9 candidates) — Verdict: CONFIRMATION_PACKET_GAP_REMAINS_OPEN_NEEDS_NEW_SEARCH; all candidates with large lifts disqualified (artifacts, look-ahead, trigger-quality filters); only independent signals (PTBM, PTAI) rejected weak; M5BC_CORR +3pp SR at 93% starvation — RESEARCH_ONLY; TBB reveals critical SR trigger bifurcation (57.3% vs 21.2% WR) as TRIGGER_REFINEMENT finding; next: Gemini Gate 1 |
 | `GEMINI_GATE1_INTERIOR_RANGE_CONFIRMATION_SEARCH_V1.md` | Gate 1 INEC co-presence screen (H1DA, BBMP, RMDM) with mandatory RMR interior subset filter — Verdict: CONFIRMATION_GAP_REMAINS_OPEN_AFTER_GATE1; all 3 candidates failed interior subset (H1DA harmful, RMDM starvation/flat, BBMP RESEARCH_ONLY aggregate); BBMP BUY TM interior STRONG_ACCEPT statistically but monthly inconsistent; Gemini fallback triggered; 8 candidates generated; top 3 selected (BBMP3, M5MP, M52MP) for Gate 2; next: GEMINI_GATE2_INTERIOR_RANGE_CONFIRMATION_SEARCH_V1 |
 | `GEMINI_GATE2_INTERIOR_RANGE_CONFIRMATION_SEARCH_V1.md` | Gate 2 INEC co-presence screen (BBMP3, M5MP, M52MP primary; M15MP, H1MP diagnostic) — Verdict: CONFIRMATION_GAP_REMAINS_OPEN_AFTER_GATE2; BBMP3 April-driven (ex-Apr +0.44pp); M5MP/M52MP directional asymmetry (SELL-direction STRONG_ACCEPT for reversal but BUY HARMFUL — structural selectivity artifact); M15MP uniformly harmful; H1MP flat; new finding: M5 midpoint signal is direction-selective not truly confirmatory; 14 mechanisms tested total; 3 paths recommended (Gate 3 FCM/HLMA/CBAR, gate architecture review, asymmetric CONFIRM); operator must select |
+| `GEMINI_GATE3_FAILED_CONTINUATION_PULLBACK_CONFIRMATION_SEARCH_V1.md` | Gate 3 INEC co-presence screen (FCM, HLMA, CBAR, FCPB, PBR — bars[2]–[4] only) — Verdict: CONFIRMATION_GAP_REMAINS_OPEN_AFTER_GATE3; HLMA geometrically incompatible with SR interior (N=0); CBAR/FCPB harmful for reversal strategies; pullback anti-prediction structural finding confirmed (FCPB/PBR present for SR/BR BUY selects atypical approach → lower WR); PBR TM BUY STRONG_ACCEPT (+2.05pp/+0.0512R, 54% co-pres) but TM-specific, April harmful, monthly instability; FCM TM SELL ACCEPT (+1.81pp) but Jan+Apr harmful; 19 mechanisms tested total; zero certifiable general interior CONFIRM source; 3 paths for operator selection |
 
 ---
 
