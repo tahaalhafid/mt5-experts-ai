@@ -41,6 +41,55 @@ double CouncilGetATR(ENUM_TIMEFRAMES tf, int period, int shift)
    return result;
 }
 
+double CouncilM5ClosedBarRange(int shift)
+{
+   double h = iHigh(_Symbol, PERIOD_M5, shift);
+   double l = iLow(_Symbol, PERIOD_M5, shift);
+   if(h <= 0.0 || l <= 0.0 || h <= l)
+      return 0.0;
+   return h - l;
+}
+
+bool CouncilIsNR7ClosedM5Bar(int shift)
+{
+   double candidateRange = CouncilM5ClosedBarRange(shift);
+   if(candidateRange <= 0.0)
+      return false;
+
+   for(int i = shift + 1; i <= shift + 6; i++)
+   {
+      double priorRange = CouncilM5ClosedBarRange(i);
+      if(priorRange <= 0.0)
+         return false;
+      if(candidateRange >= priorRange)
+         return false;
+   }
+   return true;
+}
+
+string CouncilBuildNR7ShadowState()
+{
+   if(Bars(_Symbol, PERIOD_M5) < 9)
+      return "NONE";
+
+   bool currentNR7 = CouncilIsNR7ClosedM5Bar(1);
+   if(!currentNR7)
+      return "NONE";
+
+   double currentRange = CouncilM5ClosedBarRange(1);
+   double atr = CouncilGetATR(PERIOD_M1, 14, 1);
+   bool atrOk = (atr > 0.0 && currentRange > 0.0 && currentRange <= 0.40 * atr);
+   bool series = CouncilIsNR7ClosedM5Bar(2);
+
+   if(series && atrOk)
+      return "FILTERED_SERIES";
+   if(series)
+      return "SERIES";
+   if(atrOk)
+      return "ATR_FILTERED";
+   return "RAW";
+}
+
 double CouncilGetEMA(ENUM_TIMEFRAMES tf, int period, int shift)
 {
    int handle = iMA(_Symbol, tf, period, 0, MODE_EMA, PRICE_CLOSE);
@@ -547,6 +596,7 @@ bool BuildCouncilEnvironmentReport(
    EvaluateCouncilExhaustionHint(m1, reg, r);
    EvaluateCEISSourceSignals(r);
    ClassifyCouncilZone(reg, r);
+   r.nr7_shadow_state = CouncilBuildNR7ShadowState();
 
    r.summary =
       "EnvScore=" + DoubleToString(r.total_score, 2) +

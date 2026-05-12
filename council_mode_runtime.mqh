@@ -1671,6 +1671,7 @@ bool WriteOpportunityLedgerRecord(
    j += "\"bar_time\":\"" + OpportunityJsonEscape(current_bar_str) + "\",";
    j += "\"symbol\":\"" + OpportunityJsonEscape(_Symbol) + "\",";
    j += "\"record_version\":\"OL_V1C_IRREW_DEV_V1\",";
+   j += "\"nr7_shadow_state\":\"" + OpportunityJsonEscape(runtime.env.nr7_shadow_state) + "\",";
    j += "\"zone\":\"" + OpportunityJsonEscape(runtime.env.zone_name) + "\",";
    j += "\"zone_type_int\":" + IntegerToString((int)runtime.env.zone_type) + ",";
    j += "\"zone_confidence\":" + DoubleToString(runtime.env.zone_confidence, 4) + ",";

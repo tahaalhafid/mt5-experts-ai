@@ -170,6 +170,7 @@ struct CouncilEnvironmentReport
    string blocked_style_text;
 
    string regime_summary;
+   string nr7_shadow_state;
    string summary;
    string reject_reason;
    string era_label_v1;     // V1 ERA posture from gRegime.regime_label (per-decision, not cached)
@@ -1035,6 +1036,7 @@ void InitCouncilEnvironmentReport(CouncilEnvironmentReport &r)
    r.blocked_style_text   = "UNSPECIFIED";
 
    r.regime_summary       = "";
+   r.nr7_shadow_state     = "NONE";
    r.summary              = "";
    r.reject_reason        = "";
    r.era_label_v1         = "";
