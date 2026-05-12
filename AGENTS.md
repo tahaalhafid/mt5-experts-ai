@@ -75,6 +75,15 @@ If backup/archive is required during live operation:
 If this file is needed later:
 - capture it only in a cold snapshot after MT5 is stopped
 
+### Rule 3) Documentation checkpoint before branch-sensitive Git operations
+Before any AI agent runs `git switch`, `git merge`, `git pull`, `git rebase`, or another branch-sensitive Git operation, it must first run:
+
+```powershell
+.\scripts\git-docs-checkpoint.ps1
+```
+
+This checkpoint is documentation/archive-only. It must never stage or commit `.mq5`, `.mqh`, `.ex5`, runtime JSON/JSONL, logs, backups, zip archives, or files under `MQL5/Files/AI`.
+
 ---
 
 ## Mandatory Workflow Before Any Edit
